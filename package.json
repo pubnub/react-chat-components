@@ -1,0 +1,40 @@
+{
+  "name": "chat-components",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "module": "build/index.es.js",
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "@svgr/rollup": "^5.4.0",
+    "@types/react": "^16.9.53",
+    "node-sass": "^4.14.1",
+    "rollup": "^2.32.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^3.1.8",
+    "rollup-plugin-typescript2": "^0.28.0",
+    "tslib": "^2.0.3",
+    "typescript": "^4.0.3"
+  },
+  "peerDependencies": {
+    "pubnub": "^4.29.9",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "emoji-mart": "^3.0.0"
+  },
+  "dependencies": {
+    "pubnub": "^4.29.9",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
+    "emoji-mart": "^3.0.0"
+  }
+}
