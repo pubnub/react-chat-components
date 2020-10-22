@@ -6,6 +6,8 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker, EmojiData, PickerProps } from "emoji-mart";
 
 export interface MessageInputProps {
+  /* Select one of predefined themes */
+  theme?: "default" | "dark";
   /* Set the input placeholder */
   placeholder: string;
   /* Set the initial value for the input */
@@ -42,6 +44,7 @@ export class MessageInput extends React.Component<
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
+    theme: "default",
     emojiMartOptions: { emoji: "", title: "", native: true },
     initialValue: "",
     placeholder: "Type Message",
@@ -157,32 +160,35 @@ export class MessageInput extends React.Component<
       sendButtonContent,
       placeholder,
       disableEmojiPicker,
+      theme,
     } = this.props;
 
     return (
-      <div className="pn-msg-input">
-        <div className="pn-msg-input__spacer">
-          <textarea
-            className="pn-msg-input__textarea"
-            placeholder={placeholder}
-            rows={1}
-            value={text}
-            onChange={(e) => this.handleChange(e)}
-            onKeyPress={(e) => this.handleKeyPress(e)}
-            ref={inputRef}
-          />
+      <div className={`pn-msg-input pn-msg-input--${theme}`}>
+        <div className="pn-msg-input__wrapper">
+          <div className="pn-msg-input__spacer">
+            <textarea
+              className="pn-msg-input__textarea"
+              placeholder={placeholder}
+              rows={1}
+              value={text}
+              onChange={(e) => this.handleChange(e)}
+              onKeyPress={(e) => this.handleKeyPress(e)}
+              ref={inputRef}
+            />
+          </div>
+
+          {!disableEmojiPicker && this.renderEmojiPicker()}
+
+          {!hideSendButton && (
+            <button
+              className="pn-msg-input__send"
+              onClick={() => this.handleSend()}
+            >
+              {sendButtonContent}
+            </button>
+          )}
         </div>
-
-        {!disableEmojiPicker && this.renderEmojiPicker()}
-
-        {!hideSendButton && (
-          <button
-            className="pn-msg-input__send"
-            onClick={() => this.handleSend()}
-          >
-            {sendButtonContent}
-          </button>
-        )}
       </div>
     );
   }

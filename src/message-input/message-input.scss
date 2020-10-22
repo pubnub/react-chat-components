@@ -2,7 +2,8 @@
 ** Variables
 ** ********************* */
 :root {
-  --msg-input__margin: 24px;
+  --msg-input__background: transparent;
+  --msg-input__padding: 0 24px;
   --msg-input__emoji-picker__bottom: 0;
   --msg-input__emoji-picker__right: 0;
   --msg-input__icon__color: #585858;
@@ -21,6 +22,7 @@
   --msg-input__textarea--focus__border: 1px solid #9b9b9b;
   --msg-input__textarea--focus__outline: none;
   --msg-input__textarea__background: transparent;
+  --msg-input__textarea__boxShadow: none;
   --msg-input__textarea__border: 1px solid #9b9b9b;
   --msg-input__textarea__borderRadius: 5px;
   --msg-input__textarea__color: #585858;
@@ -38,16 +40,21 @@
 ** ********************* */
 
 .pn-msg-input {
-  background: var(--msg-input__textarea__background);
-  border-radius: var(--msg-input__textarea__borderRadius);
-  border: var(--msg-input__textarea__border);
-  display: flex;
-  margin: var(--msg-input__margin);
-  position: relative;
+  background: var(--msg-input__background);
+  padding: var(--msg-input__padding);
 
-  &:focus-within {
-    outline: var(--msg-input__textarea--focus__outline);
-    border: var(--msg-input__textarea--focus__border);
+  &__wrapper {
+    background: var(--msg-input__textarea__background);
+    border-radius: var(--msg-input__textarea__borderRadius);
+    border: var(--msg-input__textarea__border);
+    box-shadow: var(--msg-input__textarea__boxShadow);
+    display: flex;
+    position: relative;
+
+    &:focus-within {
+      outline: var(--msg-input__textarea--focus__outline);
+      border: var(--msg-input__textarea--focus__border);
+    }
   }
 
   &__spacer {
@@ -100,4 +107,18 @@
     margin: var(--msg-input__icon__margin);
     height: var(--msg-input__icon__size);
   }
+}
+
+/* ************************
+** Themes
+** ********************* */
+
+.pn-msg-input--dark {
+  --msg-input__background: #2f3136;
+  --msg-input__icon__color: #dcddde;
+  --msg-input__textarea__background: #36393f;
+  --msg-input__textarea__border: 1px solid #36393f;
+  --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
+  --msg-input__textarea__color: #dcddde;
+  --msg-input__textarea--focus__border: 1px solid #36393f;
 }

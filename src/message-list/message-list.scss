@@ -4,6 +4,7 @@
 
 :root {
   --msg-list__background: #f8f6fd;
+  --msg-list__padding: 0 0 10px;
   --msg-list__unread__background: #9b9b9b;
   --msg-list__unread__borderRadius: 20px;
   --msg-list__unread__color: #ffffff;
@@ -24,7 +25,7 @@
   --msg__avatar__size: 36px;
   --msg__avatar__borderRadius: 36px;
   --msg__bubble__background: #ffffff;
-  --msg__bubble__shadow: 0 6px 10px rgba(103, 19, 176, 0.06);
+  --msg__bubble__boxShadow: 0 6px 10px rgba(103, 19, 176, 0.06);
   --msg__bubble__borderRadius: 0 10px 10px 10px;
   --msg__bubble__color: #585858;
   --msg__bubble__fontSize: 13px;
@@ -53,6 +54,7 @@
   background: var(--msg-list__background);
   height: 100%;
   overflow: scroll;
+  padding: var(--msg-list__padding);
   width: 100%;
 
   &__wrapper {
@@ -106,7 +108,7 @@
 
   &__bubble {
     background: var(--msg__bubble__background);
-    box-shadow: var(--msg__bubble__shadow);
+    box-shadow: var(--msg__bubble__boxShadow);
     border-radius: var(--msg__bubble__borderRadius);
     color: var(--msg__bubble__color);
     display: inline-block;
@@ -147,6 +149,14 @@
 ** Themes
 ** ********************* */
 
+.pn-msg-list--group-dark {
+  --msg-list__background: #2f3136;
+  --msg__author__color: #dcddde;
+  --msg__bubble__background: #36393f;
+  --msg__bubble__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
+  --msg__bubble__color: #dcddde;
+}
+
 .pn-msg-list--support {
   --msg__title__display: none;
 
@@ -165,7 +175,7 @@
   --msg__author__fontSize: 13px;
   --msg__bubble__background: transparent;
   --msg__bubble__padding: 0;
-  --msg__bubble__shadow: none;
+  --msg__bubble__boxShadow: none;
   --msg__avatar__display: none;
   --msg__time__display: none;
 

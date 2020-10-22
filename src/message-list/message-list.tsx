@@ -5,8 +5,8 @@ import SpinnerIcon from "./spinner.svg";
 import "./message-list.scss";
 
 export interface MessageListProps {
-  /* Theme of chat will influence how the messages look */
-  theme?: "default" | "group" | "event" | "support";
+  /* Select one of predefined themes */
+  theme?: "default" | "group" | "group-dark" | "event" | "support";
   /* Disable fetching of the users data */
   disableUserFetch?: boolean;
   /* Provide user data for message display */
