@@ -7,7 +7,7 @@ import { Picker, EmojiData, PickerProps } from "emoji-mart";
 
 export interface MessageInputProps {
   /* Select one of predefined themes */
-  theme?: "default" | "dark";
+  theme?: "light" | "dark";
   /* Set the input placeholder */
   placeholder: string;
   /* Set the initial value for the input */
@@ -31,10 +31,7 @@ interface MessageInputState {
   emojiPickerShown: boolean;
 }
 
-export class MessageInput extends React.Component<
-  MessageInputProps,
-  MessageInputState
-> {
+export class MessageInput extends React.Component<MessageInputProps, MessageInputState> {
   private inputRef: React.RefObject<HTMLTextAreaElement>;
   private pickerRef: React.RefObject<HTMLDivElement>;
 
@@ -44,7 +41,7 @@ export class MessageInput extends React.Component<
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "default",
+    theme: "light",
     emojiMartOptions: { emoji: "", title: "", native: true },
     initialValue: "",
     placeholder: "Type Message",
@@ -59,8 +56,12 @@ export class MessageInput extends React.Component<
     };
     this.inputRef = React.createRef();
     this.pickerRef = React.createRef();
-    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleClosePicker = this.handleClosePicker.bind(this);
   }
+
+  /*
+  /* Helper functions
+  */
 
   autoSize() {
     const input = this.inputRef.current;
@@ -73,10 +74,30 @@ export class MessageInput extends React.Component<
   }
 
   /*
+  /* Commands
+  */
+
+  async sendMessage() {
+    try {
+      if (!this.state.text) return;
+      const message = { type: "text", text: this.state.text };
+
+      await this.context.pubnub.publish({
+        channel: this.context.channel,
+        message,
+      });
+      this.props.onSend && this.props.onSend(message);
+      this.setState({ text: "" });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  /*
   /* Event handlers
   */
 
-  handleEmoji(emoji: EmojiData) {
+  handleEmojiInsertion(emoji: EmojiData) {
     if (!("native" in emoji)) return;
     this.setState({
       text: this.state.text + emoji.native,
@@ -86,18 +107,23 @@ export class MessageInput extends React.Component<
 
   handleOpenPicker() {
     this.setState({ emojiPickerShown: true });
-    document.addEventListener("mousedown", this.handleClickOutside);
+    document.addEventListener("mousedown", this.handleClosePicker);
+  }
+
+  handleClosePicker(event: any) {
+    if (this.pickerRef?.current?.contains(event.target)) return;
+    this.setState({ emojiPickerShown: false });
+    document.removeEventListener("mousedown", this.handleClosePicker);
   }
 
   handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
-      this.handleSend();
-      return;
+      this.sendMessage();
     }
   }
 
-  handleChange(event: any) {
+  handleInputChange(event: any) {
     const textArea = event.target as HTMLTextAreaElement;
     const text = textArea.value;
 
@@ -106,53 +132,31 @@ export class MessageInput extends React.Component<
     this.setState({ text });
   }
 
-  handleSend() {
-    const { text } = this.state;
-    const { pubnub, channel } = this.context;
-    const message = { type: "text", text };
+  /*
+  /* Lifecycle
+  */
 
-    if (!text) return;
-
-    pubnub?.publish({ channel, message }).then(() => {
-      this.props.onSend && this.props.onSend(message);
-      this.setState({ text: "" });
-    });
+  componentWillUnmount() {
+    document.removeEventListener("mousedown", this.handleClosePicker);
   }
 
-  handleClickOutside(event: any) {
-    if (!this.pickerRef?.current?.contains(event.target)) {
-      this.setState({ emojiPickerShown: false });
-      document.removeEventListener("mousedown", this.handleClickOutside);
+  componentDidMount() {
+    try {
+      if (!this.context.pubnub)
+        throw "Message Input has no access to context. Please make sure to wrap the components around with PubNubProvider.";
+      if (!this.context.channel.length)
+        throw "PubNubProvider was initialized with an empty channel name.";
+    } catch (e) {
+      console.error(e);
     }
   }
 
   /*
-  /* Lifecycle
+  /* Renderers
   */
-  componentWillUnmount() {
-    document.removeEventListener("mousedown", this.handleClickOutside);
-  }
-
-  renderEmojiPicker() {
-    return (
-      <>
-        <div className="pn-msg-input__icon">
-          <EmojiIcon onClick={() => this.handleOpenPicker()} />
-        </div>
-
-        {this.state.emojiPickerShown && (
-          <div className="pn-msg-input__emoji-picker" ref={this.pickerRef}>
-            <Picker
-              {...this.props.emojiMartOptions}
-              onSelect={(e: EmojiData) => this.handleEmoji(e)}
-            />
-          </div>
-        )}
-      </>
-    );
-  }
 
   render() {
+    if (!this.context.pubnub || !this.context.channel.length) return null;
     const { inputRef } = this;
     const { text } = this.state;
     const {
@@ -172,7 +176,7 @@ export class MessageInput extends React.Component<
               placeholder={placeholder}
               rows={1}
               value={text}
-              onChange={(e) => this.handleChange(e)}
+              onChange={(e) => this.handleInputChange(e)}
               onKeyPress={(e) => this.handleKeyPress(e)}
               ref={inputRef}
             />
@@ -181,15 +185,31 @@ export class MessageInput extends React.Component<
           {!disableEmojiPicker && this.renderEmojiPicker()}
 
           {!hideSendButton && (
-            <button
-              className="pn-msg-input__send"
-              onClick={() => this.handleSend()}
-            >
+            <button className="pn-msg-input__send" onClick={() => this.sendMessage()}>
               {sendButtonContent}
             </button>
           )}
         </div>
       </div>
+    );
+  }
+
+  renderEmojiPicker() {
+    return (
+      <>
+        <div className="pn-msg-input__icon">
+          <EmojiIcon onClick={() => this.handleOpenPicker()} />
+        </div>
+
+        {this.state.emojiPickerShown && (
+          <div className="pn-msg-input__emoji-picker" ref={this.pickerRef}>
+            <Picker
+              {...this.props.emojiMartOptions}
+              onSelect={(e: EmojiData) => this.handleEmojiInsertion(e)}
+            />
+          </div>
+        )}
+      </>
     );
   }
 }

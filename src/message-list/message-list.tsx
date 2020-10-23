@@ -1,12 +1,12 @@
 import React from "react";
 import { FetchMessagesResponse, MessageEvent } from "pubnub";
-import { PubNubContext } from "../pubnub-provider/pubnub-provider";
+import { PubNubContext } from "../pubnub-provider";
 import SpinnerIcon from "./spinner.svg";
 import "./message-list.scss";
 
 export interface MessageListProps {
   /* Select one of predefined themes */
-  theme?: "default" | "group" | "group-dark" | "event" | "support";
+  theme?: "group" | "group-dark" | "event" | "support";
   /* Disable fetching of the users data */
   disableUserFetch?: boolean;
   /* Provide user data for message display */
@@ -63,10 +63,7 @@ export interface MessageListMessage {
   };
 }
 
-export class MessageList extends React.Component<
-  MessageListProps,
-  MessageListState
-> {
+export class MessageList extends React.Component<MessageListProps, MessageListState> {
   private spinnerRef: React.RefObject<HTMLDivElement>;
   private listRef: React.RefObject<HTMLDivElement>;
   private endRef: React.RefObject<HTMLDivElement>;
@@ -79,7 +76,7 @@ export class MessageList extends React.Component<
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "default",
+    theme: "group",
     users: [],
   };
 
@@ -98,15 +95,15 @@ export class MessageList extends React.Component<
     this.listRef = React.createRef();
     this.spinnerRef = React.createRef();
     this.bottomObserver = new IntersectionObserver((e) =>
-      this.handleBottomObserver(e[0].isIntersecting)
+      this.handleBottomScroll(e[0].isIntersecting)
     );
     this.spinnerObserver = new IntersectionObserver(
-      (e) => e[0].isIntersecting === true && this.handleSpinnerObserver()
+      (e) => e[0].isIntersecting === true && this.fetchMoreHistory()
     );
   }
 
   /*
-  /* Helper functions / commands
+  /* Helper functions
   */
 
   getTime(timestamp: number) {
@@ -134,8 +131,7 @@ export class MessageList extends React.Component<
 
   getUser(uuid: string) {
     return (
-      this.props.users.find((u) => u.id === uuid) ||
-      this.state.users.find((u) => u.id === uuid)
+      this.props.users.find((u) => u.id === uuid) || this.state.users.find((u) => u.id === uuid)
     );
   }
 
@@ -144,54 +140,58 @@ export class MessageList extends React.Component<
   }
 
   /*
-  /* Event handlers
+  /* Commands
   */
 
-  handleFetchUsers(messages: MessageListMessage[]) {
+  async fetchMessageSenders(messages: MessageListMessage[]) {
     if (this.props.disableUserFetch) return;
 
-    const uniqueUuids = Array.from(
-      new Set(messages.map((m) => m.uuid || m.publisher))
-    );
+    try {
+      const uniqueUuids = new Set(messages.map((m) => m.uuid || m.publisher));
+      const uniqueUuidsArr = Array.from(uniqueUuids);
 
-    uniqueUuids.forEach((uuid) => {
-      if (!uuid || this.getUser(uuid)) return;
-
-      this.context.pubnub?.objects.getUUIDMetadata({ uuid }).then((user) => {
+      for (let uuid of uniqueUuidsArr) {
+        if (!uuid || this.getUser(uuid)) return;
+        const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid });
         if (!user?.data) return;
         this.setState({ users: [...this.state.users, user.data] });
-      });
-    });
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  handleSpinnerObserver() {
-    const firstMessage = this.listRef.current?.querySelector("div");
-
-    this.context.pubnub
-      ?.fetchMessages({
+  async fetchMoreHistory() {
+    try {
+      const firstMessage = this.listRef.current?.querySelector("div");
+      const response = await this.context.pubnub.fetchMessages({
         channels: [this.context.channel],
         count: this.state.messagesPerPage,
         start: this.state.pagination,
-      })
-      .then((r) => this.handleFetchMessages(r))
-      .then(() => firstMessage && firstMessage.scrollIntoView());
+      });
+      this.handleHistoryFetch(response);
+      if (firstMessage) firstMessage.scrollIntoView();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
-  handleBottomObserver(scrolledBottom: boolean) {
+  /*
+  /* Event handlers
+  */
+
+  handleBottomScroll(scrolledBottom: boolean) {
     if (scrolledBottom) this.setState({ unreadMessages: 0 });
     this.setState({ scrolledBottom });
   }
 
-  handleFetchMessages(response: FetchMessagesResponse) {
-    const newMessages =
-      (response.channels[this.context.channel || ""] as MessageListMessage[]) ||
-      [];
+  handleHistoryFetch(response: FetchMessagesResponse) {
+    const newMessages = (response.channels[this.context.channel] as MessageListMessage[]) || [];
     const allMessages = [...this.state.messages, ...newMessages].sort(
       (a, b) => (a.timetoken as number) - (b.timetoken as number)
     );
 
-    this.handleFetchUsers(newMessages);
-
+    this.fetchMessageSenders(newMessages);
     this.setState({
       messages: allMessages,
       pagination: allMessages[0].timetoken as number,
@@ -200,10 +200,10 @@ export class MessageList extends React.Component<
   }
 
   handleOnMessage(message: MessageEvent) {
-    this.handleFetchUsers([message]);
+    this.fetchMessageSenders([message]);
     this.setState({ messages: [...this.state.messages, message] });
     this.setupBottomObserver();
-    this.props.onMessage && this.props.onMessage(message);
+    if (this.props.onMessage) this.props.onMessage(message);
 
     if (this.state.scrolledBottom) {
       this.scrollToBottom();
@@ -216,26 +216,72 @@ export class MessageList extends React.Component<
   /* Lifecycle
   */
 
-  componentDidMount() {
-    if (!this.props.disableHistoryFetch) {
-      this.context.pubnub
-        ?.fetchMessages({
-          channels: [this.context.channel],
-          count: this.state.messagesPerPage,
-        })
-        .then((r) => this.handleFetchMessages(r))
-        .then(() => this.scrollToBottom())
-        .then(() => this.setupSpinnerObserver())
-        .then(() => this.setupBottomObserver());
+  async componentDidMount() {
+    try {
+      if (!this.context.pubnub)
+        throw "Message List has no access to context. Please make sure to wrap the components around with PubNubProvider.";
+      if (!this.context.channel.length)
+        throw "PubNubProvider was initialized with an empty channel name.";
+
+      this.context.pubnub.addListener({ message: (m) => this.handleOnMessage(m) });
+      this.context.pubnub.subscribe({ channels: [this.context.channel] });
+
+      if (this.props.disableHistoryFetch) return;
+      const history = await this.context.pubnub.fetchMessages({
+        channels: [this.context.channel],
+        count: this.state.messagesPerPage,
+      });
+      this.handleHistoryFetch(history);
+      this.scrollToBottom();
+      this.setupSpinnerObserver();
+      this.setupBottomObserver();
+    } catch (e) {
+      console.error(e);
     }
+  }
 
-    this.context.pubnub?.addListener({
-      message: (m) => this.handleOnMessage(m),
-    });
+  /*
+  /* Renderers
+  */
 
-    this.context.pubnub?.subscribe({
-      channels: [this.context.channel || ""],
-    });
+  render() {
+    if (!this.context.pubnub || !this.context.channel.length) return null;
+    const { listRef, spinnerRef, endRef } = this;
+    const { disableHistoryFetch, theme, onScroll } = this.props;
+    const { paginationEnd, messages, unreadMessages } = this.state;
+
+    return (
+      <div className={`pn-msg-list pn-msg-list--${theme}`} onScroll={onScroll}>
+        <div className="pn-msg-list__wrapper" ref={listRef}>
+          {!disableHistoryFetch && !paginationEnd && (
+            <span ref={spinnerRef} className="pn-msg-list__spinner">
+              <SpinnerIcon />
+            </span>
+          )}
+
+          {messages.map((m) => this.renderItem(m))}
+
+          <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+
+          {unreadMessages > 0 && (
+            <div className="pn-msg-list__unread" onClick={() => this.scrollToBottom()}>
+              {unreadMessages} new messages ↓
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  renderItem(message: MessageListMessage) {
+    const uuid = message.uuid || message.publisher || "";
+    const currentUserClass = this.isOwnMessage(uuid) ? "pn-msg--own" : "";
+
+    return (
+      <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
+        {this.renderMessage(message)}
+      </div>
+    );
   }
 
   renderMessage(message: MessageListMessage) {
@@ -256,60 +302,12 @@ export class MessageList extends React.Component<
         )}
         <div className="pn-msg__main">
           <div className="pn-msg__title">
-            <span className="pn-msg__author">
-              {user?.name || "Unknown User"}
-            </span>
+            <span className="pn-msg__author">{user?.name || "Unknown User"}</span>
             <span className="pn-msg__time">{time}</span>
           </div>
           <div className="pn-msg__bubble">{message.message.text}</div>
         </div>
       </>
-    );
-  }
-
-  renderItem(message: MessageListMessage) {
-    const uuid = message.uuid || message.publisher || "";
-    const currentUserClass = this.isOwnMessage(uuid) ? "pn-msg--own" : "";
-
-    return (
-      <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
-        {this.renderMessage(message)}
-      </div>
-    );
-  }
-
-  render() {
-    const { listRef, spinnerRef, endRef } = this;
-    const { disableHistoryFetch, theme, onScroll } = this.props;
-    const { paginationEnd, messages, unreadMessages } = this.state;
-
-    return (
-      <div className="pn-msg-list__wrapper">
-        <div
-          className={`pn-msg-list pn-msg-list--${theme}`}
-          ref={listRef}
-          onScroll={onScroll}
-        >
-          {!disableHistoryFetch && !paginationEnd && (
-            <span ref={spinnerRef} className="pn-msg-list__spinner">
-              <SpinnerIcon />
-            </span>
-          )}
-
-          {messages.map((m) => this.renderItem(m))}
-
-          <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
-
-          {unreadMessages > 0 && (
-            <div
-              className="pn-msg-list__unread"
-              onClick={() => this.scrollToBottom()}
-            >
-              {unreadMessages} new messages ↓
-            </div>
-          )}
-        </div>
-      </div>
     );
   }
 }

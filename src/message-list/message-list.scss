@@ -53,14 +53,14 @@
 .pn-msg-list {
   background: var(--msg-list__background);
   height: 100%;
-  overflow: scroll;
-  padding: var(--msg-list__padding);
-  width: 100%;
+  overflow: hidden;
+  transform: translateZ(0);
 
   &__wrapper {
     height: 100%;
-    overflow: hidden;
-    transform: translateZ(0);
+    overflow: scroll;
+    padding: var(--msg-list__padding);
+    width: 100%;
   }
 
   &__spinner {
