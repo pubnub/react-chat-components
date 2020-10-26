@@ -21,9 +21,9 @@ export interface MessageInputProps {
   /* Pass options to emoji-mart picker */
   emojiMartOptions: PickerProps;
   /* Callback to handle value changes */
-  onChange?: (value: string) => any;
+  onChange?: (value: string) => unknown;
   /* Callback for extra actions while sending the message */
-  onSend?: (value: any) => any; //TODO: figure out the message format customization
+  onSend?: (value: unknown) => unknown; //TODO: figure out the message format customization
 }
 
 interface MessageInputState {
@@ -63,7 +63,7 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   /* Helper functions
   */
 
-  autoSize() {
+  private autoSize() {
     const input = this.inputRef.current;
     if (!input) return;
 
@@ -77,7 +77,7 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   /* Commands
   */
 
-  async sendMessage() {
+  private async sendMessage() {
     try {
       if (!this.state.text) return;
       const message = { type: "text", text: this.state.text };
@@ -97,7 +97,7 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   /* Event handlers
   */
 
-  handleEmojiInsertion(emoji: EmojiData) {
+  private handleEmojiInsertion(emoji: EmojiData) {
     if (!("native" in emoji)) return;
     this.setState({
       text: this.state.text + emoji.native,
@@ -105,25 +105,25 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
     });
   }
 
-  handleOpenPicker() {
+  private handleOpenPicker() {
     this.setState({ emojiPickerShown: true });
     document.addEventListener("mousedown", this.handleClosePicker);
   }
 
-  handleClosePicker(event: any) {
-    if (this.pickerRef?.current?.contains(event.target)) return;
+  private handleClosePicker(event: MouseEvent) {
+    if (this.pickerRef?.current?.contains(event.target as Node)) return;
     this.setState({ emojiPickerShown: false });
     document.removeEventListener("mousedown", this.handleClosePicker);
   }
 
-  handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>) {
+  private handleKeyPress(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
       this.sendMessage();
     }
   }
 
-  handleInputChange(event: any) {
+  private handleInputChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
     const textArea = event.target as HTMLTextAreaElement;
     const text = textArea.value;
 
@@ -136,11 +136,11 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   /* Lifecycle
   */
 
-  componentWillUnmount() {
+  componentWillUnmount(): void {
     document.removeEventListener("mousedown", this.handleClosePicker);
   }
 
-  componentDidMount() {
+  componentDidMount(): void {
     try {
       if (!this.context.pubnub)
         throw "Message Input has no access to context. Please make sure to wrap the components around with PubNubProvider.";
@@ -155,7 +155,7 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   /* Renderers
   */
 
-  render() {
+  render(): JSX.Element {
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { inputRef } = this;
     const { text } = this.state;
@@ -194,7 +194,7 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
     );
   }
 
-  renderEmojiPicker() {
+  private renderEmojiPicker() {
     return (
       <>
         <div className="pn-msg-input__icon">

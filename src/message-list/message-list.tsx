@@ -16,9 +16,9 @@ export interface MessageListProps {
   /* Provide custom message renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /* A callback run on new messages */
-  onMessage?: (message: MessageListMessage) => any;
+  onMessage?: (message: MessageListMessage) => unknown;
   /* A callback run on list scroll */
-  onScroll?: (event: React.UIEvent<HTMLElement>) => any;
+  onScroll?: (event: React.UIEvent<HTMLElement>) => unknown;
 }
 
 export interface MessageRendererProps {
@@ -46,12 +46,15 @@ export interface MessageListUser {
 
 export interface MessageListMessage {
   channel: string;
-  message: any;
+  message: {
+    text: string;
+    [key: string]: unknown;
+  };
   timetoken: string | number;
   publisher?: string;
   uuid?: string;
   meta?: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
   actions?: {
     [type: string]: {
@@ -106,36 +109,36 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   /* Helper functions
   */
 
-  getTime(timestamp: number) {
+  private getTime(timestamp: number) {
     const ts = String(timestamp);
     const date = new Date(parseInt(ts) / 10000);
     const minutes = date.getMinutes();
     return `${date.getHours()}:${minutes > 9 ? minutes : "0" + minutes}`;
   }
 
-  scrollToBottom() {
+  private scrollToBottom() {
     if (!this.endRef.current) return;
     this.endRef.current.scrollIntoView();
   }
 
-  setupSpinnerObserver() {
+  private setupSpinnerObserver() {
     if (!this.spinnerRef.current) return;
     this.spinnerObserver.observe(this.spinnerRef.current);
   }
 
-  setupBottomObserver() {
+  private setupBottomObserver() {
     if (!this.endRef.current) return;
     this.bottomObserver.disconnect();
     this.bottomObserver.observe(this.endRef.current);
   }
 
-  getUser(uuid: string) {
+  private getUser(uuid: string) {
     return (
       this.props.users.find((u) => u.id === uuid) || this.state.users.find((u) => u.id === uuid)
     );
   }
 
-  isOwnMessage(uuid: string) {
+  private isOwnMessage(uuid: string) {
     return this.context.pubnub?.getUUID() === uuid;
   }
 
@@ -143,14 +146,14 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   /* Commands
   */
 
-  async fetchMessageSenders(messages: MessageListMessage[]) {
+  private async fetchMessageSenders(messages: MessageListMessage[]) {
     if (this.props.disableUserFetch) return;
 
     try {
       const uniqueUuids = new Set(messages.map((m) => m.uuid || m.publisher));
       const uniqueUuidsArr = Array.from(uniqueUuids);
 
-      for (let uuid of uniqueUuidsArr) {
+      for (const uuid of uniqueUuidsArr) {
         if (!uuid || this.getUser(uuid)) return;
         const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid });
         if (!user?.data) return;
@@ -161,7 +164,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     }
   }
 
-  async fetchMoreHistory() {
+  private async fetchMoreHistory() {
     try {
       const firstMessage = this.listRef.current?.querySelector("div");
       const response = await this.context.pubnub.fetchMessages({
@@ -180,12 +183,12 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   /* Event handlers
   */
 
-  handleBottomScroll(scrolledBottom: boolean) {
+  private handleBottomScroll(scrolledBottom: boolean) {
     if (scrolledBottom) this.setState({ unreadMessages: 0 });
     this.setState({ scrolledBottom });
   }
 
-  handleHistoryFetch(response: FetchMessagesResponse) {
+  private handleHistoryFetch(response: FetchMessagesResponse) {
     const newMessages = (response.channels[this.context.channel] as MessageListMessage[]) || [];
     const allMessages = [...this.state.messages, ...newMessages].sort(
       (a, b) => (a.timetoken as number) - (b.timetoken as number)
@@ -199,7 +202,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     });
   }
 
-  handleOnMessage(message: MessageEvent) {
+  private handleOnMessage(message: MessageEvent) {
     this.fetchMessageSenders([message]);
     this.setState({ messages: [...this.state.messages, message] });
     this.setupBottomObserver();
@@ -216,7 +219,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   /* Lifecycle
   */
 
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     try {
       if (!this.context.pubnub)
         throw "Message List has no access to context. Please make sure to wrap the components around with PubNubProvider.";
@@ -244,7 +247,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   /* Renderers
   */
 
-  render() {
+  render(): JSX.Element {
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { listRef, spinnerRef, endRef } = this;
     const { disableHistoryFetch, theme, onScroll } = this.props;
@@ -273,7 +276,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     );
   }
 
-  renderItem(message: MessageListMessage) {
+  private renderItem(message: MessageListMessage) {
     const uuid = message.uuid || message.publisher || "";
     const currentUserClass = this.isOwnMessage(uuid) ? "pn-msg--own" : "";
 
@@ -284,7 +287,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     );
   }
 
-  renderMessage(message: MessageListMessage) {
+  private renderMessage(message: MessageListMessage) {
     const uuid = message.uuid || message.publisher || "";
     const user = this.getUser(uuid);
     const time = this.getTime(message.timetoken as number);

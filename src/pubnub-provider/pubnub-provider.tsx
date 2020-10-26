@@ -11,20 +11,17 @@ const defaultContext = {
   channel: "",
 } as PubNubContextProps;
 
-export const PubNubContext = React.createContext<PubNubContextProps>(
-  defaultContext
-);
+export const PubNubContext = React.createContext<PubNubContextProps>(defaultContext);
 
 export interface PubNubProviderProps {
   publishKey: string;
   subscribeKey: string;
   uuid: string;
   channel: string;
+  children: JSX.Element;
 }
 
-export const PubNubProvider: React.ComponentType<PubNubProviderProps> = (
-  props
-) => {
+export function PubNubProvider(props: PubNubProviderProps): React.ReactElement {
   const { children, publishKey, subscribeKey, channel, uuid } = props;
 
   const pubnub = new PubNub({
@@ -33,9 +30,5 @@ export const PubNubProvider: React.ComponentType<PubNubProviderProps> = (
     uuid,
   });
 
-  return (
-    <PubNubContext.Provider value={{ pubnub, channel }}>
-      {children}
-    </PubNubContext.Provider>
-  );
-};
+  return <PubNubContext.Provider value={{ pubnub, channel }}>{children}</PubNubContext.Provider>;
+}
