@@ -21,12 +21,5 @@ export default {
       sourcemap: true,
     },
   ],
-  plugins: [
-    peerDepsExternal(),
-    resolve(),
-    commonjs(),
-    postcss(),
-    svgr(),
-    typescript(),
-  ],
+  plugins: [peerDepsExternal(), resolve(), commonjs(), postcss(), svgr(), typescript()],
 };

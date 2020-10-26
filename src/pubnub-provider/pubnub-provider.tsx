@@ -18,7 +18,7 @@ export interface PubNubProviderProps {
   subscribeKey: string;
   uuid: string;
   channel: string;
-  children: JSX.Element;
+  children: React.ReactNode;
 }
 
 export function PubNubProvider(props: PubNubProviderProps): React.ReactElement {
