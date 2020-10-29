@@ -1,5 +1,6 @@
 import React from "react";
 import { PubNubContext } from "../pubnub-provider";
+import "./members-list.scss";
 
 export interface MembersListProps {
   /* Select one of predefined themes */
@@ -16,8 +17,22 @@ export interface MembersListProps {
   // onMessage?: (message: MessageListMessage) => unknown;
 }
 
+export interface MembersListMember {
+  custom: {
+    title: string;
+    [key: string]: unknown;
+  };
+  eTag?: string;
+  email?: string;
+  externalId?: string;
+  id: string;
+  name: string;
+  profileUrl: string;
+  updated: string;
+}
+
 interface MembersListState {
-  members: any[];
+  members: MembersListMember[];
 }
 
 export class MembersList extends React.Component<MembersListProps, MembersListState> {
@@ -28,6 +43,10 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   // https://github.com/facebook/create-react-app/issues/8918
   context!: React.ContextType<typeof PubNubContext>;
 
+  static defaultProps = {
+    theme: "light",
+  };
+
   constructor(props: MembersListProps) {
     super(props);
     this.state = {
@@ -36,20 +55,32 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   }
 
   /*
+  /* Helper functions
+  */
+
+  private isOwnMember(uuid: string) {
+    return this.context.pubnub?.getUUID() === uuid;
+  }
+
+  /*
   /* Commands
   */
+
   private async fetchMembers(pagination?: string) {
     try {
       const channel = this.context.channel;
       const response = await this.context.pubnub.objects.getChannelMembers({
         channel,
-        limit: 50,
-        page: { prev: pagination },
+        sort: { "uuid.name": "asc" },
+        page: { next: pagination },
         include: { totalCount: true, UUIDFields: true, customUUIDFields: true },
       });
       const fetchedMembers = response.data.map((u) => u.uuid);
-      this.setState({ members: [...this.state.members, ...fetchedMembers] });
-      console.log(fetchedMembers);
+      const currentMember = fetchedMembers.find((m) => this.isOwnMember(m.id));
+      const currentMemberIndex = fetchedMembers.indexOf(currentMember);
+      fetchedMembers.splice(currentMemberIndex, 1);
+
+      this.setState({ members: [currentMember, ...this.state.members, ...fetchedMembers] });
 
       if (this.state.members.length < response.totalCount) {
         this.fetchMembers(response.next);
@@ -81,11 +112,34 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   */
 
   render(): JSX.Element {
+    if (!this.context.pubnub || !this.context.channel.length) return null;
     const { members } = this.state;
-    return <div>{members.map((m) => this.renderMember(m))}</div>;
+    const { theme } = this.props;
+
+    return (
+      <div className={`pn-member-list pn-member-list--${theme}`}>
+        {members.map((m) => this.renderMember(m))}
+      </div>
+    );
   }
 
   private renderMember(member) {
-    return <div key={member.uuid}>{member.name}</div>;
+    const youString = this.isOwnMember(member.id) ? "(You)" : "";
+
+    return (
+      <div key={member.id} className="pn-member">
+        {member.profileUrl && (
+          <div className="pn-member__avatar">
+            <img src={member.profileUrl} alt="User avatar " />
+          </div>
+        )}
+        <div className="pn-member__main">
+          <p className="pn-member__name">
+            {member.name} {youString}
+          </p>
+          <p className="pn-member__title">{member?.custom?.title}</p>
+        </div>
+      </div>
+    );
   }
 }

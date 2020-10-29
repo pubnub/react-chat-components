@@ -1,0 +1,65 @@
+/* ************************
+** Variables
+** ********************* */
+
+:root {
+  --member__padding: 9px 24px;
+  --member__background: transparent;
+  --member--hover__background: #f8f6fd;
+  --member__avatar__display: block;
+  --member__avatar__margin: 0 24px 0 0;
+  --member__avatar__size: 36px;
+  --member__avatar__borderRadius: 36px;
+  --member__name__color: #585858;
+  --member__name__fontSize: 15px;
+  --member__name__fontWeight: 500;
+  --member__name__padding: 0;
+  --member__title__color: #9b9b9b;
+  --member__title__fontSize: 13px;
+  --member__title__fontWeight: 400;
+  --member__title__padding: 5px 0 0;
+}
+
+/* ************************
+** Styles
+** ********************* */
+
+.pn-member-list {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.pn-member {
+  background: var(--member__background);
+  display: flex;
+  padding: var(--member__padding);
+
+  &:hover {
+    background: var(--member--hover__background);
+  }
+
+  &__avatar {
+    display: var(--member__avatar__display);
+    margin: var(--member__avatar__margin);
+    width: var(--member__avatar__size);
+
+    img {
+      border-radius: var(--member__avatar__borderRadius);
+      width: 100%;
+    }
+  }
+
+  &__name {
+    color: var(--member__name__color);
+    font-size: var(--member__name__fontSize);
+    font-weight: var(--member__name__fontWeight);
+    padding: var(--member__name__padding);
+  }
+
+  &__title {
+    color: var(--member__title__color);
+    font-size: var(--member__title__fontSize);
+    font-weight: var(--member__title__fontWeight);
+    padding: var(--member__title__padding);
+  }
+}
