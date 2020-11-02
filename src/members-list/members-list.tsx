@@ -33,6 +33,7 @@ export interface MembersListMember {
 
 interface MembersListState {
   members: MembersListMember[];
+  presentMembers: string[];
 }
 
 export class MembersList extends React.Component<MembersListProps, MembersListState> {
@@ -51,6 +52,7 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
     super(props);
     this.state = {
       members: [],
+      presentMembers: [],
     };
   }
 
@@ -62,31 +64,80 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
     return this.context.pubnub?.getUUID() === uuid;
   }
 
+  private memberSorter(a, b) {
+    const pres = this.state?.presentMembers;
+
+    if (this.isOwnMember(a.id)) return -1;
+    if (this.isOwnMember(b.id)) return 1;
+
+    if (pres.includes(a.id) && !pres.includes(b.id)) return -1;
+    if (pres.includes(b.id) && !pres.includes(a.id)) return 1;
+
+    if (a.name > b.name) return 1;
+    if (b.name > a.name) return -1;
+  }
+
   /*
   /* Commands
   */
 
   private async fetchMembers(pagination?: string) {
     try {
-      const channel = this.context.channel;
+      const { channel } = this.context;
       const response = await this.context.pubnub.objects.getChannelMembers({
         channel,
         sort: { "uuid.name": "asc" },
         page: { next: pagination },
         include: { totalCount: true, UUIDFields: true, customUUIDFields: true },
       });
-      const fetchedMembers = response.data.map((u) => u.uuid);
-      const currentMember = fetchedMembers.find((m) => this.isOwnMember(m.id));
-      const currentMemberIndex = fetchedMembers.indexOf(currentMember);
-      fetchedMembers.splice(currentMemberIndex, 1);
-
-      this.setState({ members: [currentMember, ...this.state.members, ...fetchedMembers] });
+      const fetchedMembers = response.data.map((user) => user.uuid);
+      this.setState({ members: [...this.state.members, ...fetchedMembers] });
 
       if (this.state.members.length < response.totalCount) {
         this.fetchMembers(response.next);
       }
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  private async fetchPresence() {
+    try {
+      const { channel } = this.context;
+      const response = await this.context.pubnub.hereNow({ channels: [channel] });
+      const presentMembers = response.channels[channel].occupants.map((u) => u.uuid);
+      this.setState({ presentMembers });
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  private setupPresenceEvents() {
+    this.context.pubnub.addListener({
+      presence: (e) => this.handlePresenceEvent(e),
+    });
+
+    this.context.pubnub.subscribe({
+      channels: [`${this.context.channel}-pnpres`],
+    });
+  }
+
+  /*
+  /* Event handlers
+  */
+
+  private handlePresenceEvent(event) {
+    if (event.channel !== this.context.channel) return;
+    const currentlyPresent = this.state.presentMembers;
+
+    if (event.action === "join") {
+      if (currentlyPresent.includes(event.uuid)) return;
+      this.setState({ presentMembers: [...currentlyPresent, event.uuid] });
+    }
+
+    if (["leave", "timeout"].includes(event.action)) {
+      if (!currentlyPresent.includes(event.uuid)) return;
+      this.setState({ presentMembers: currentlyPresent.filter((member) => member !== event.uuid) });
     }
   }
 
@@ -102,6 +153,8 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
         throw "PubNubProvider was initialized with an empty channel name.";
 
       this.fetchMembers();
+      this.fetchPresence();
+      this.setupPresenceEvents();
     } catch (e) {
       console.error(e);
     }
@@ -118,13 +171,14 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
 
     return (
       <div className={`pn-member-list pn-member-list--${theme}`}>
-        {members.map((m) => this.renderMember(m))}
+        {members.sort((a, b) => this.memberSorter(a, b)).map((m) => this.renderMember(m))}
       </div>
     );
   }
 
   private renderMember(member) {
     const youString = this.isOwnMember(member.id) ? "(You)" : "";
+    const memberPresent = this.state.presentMembers.includes(member.id);
 
     return (
       <div key={member.id} className="pn-member">
@@ -133,6 +187,7 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
             <img src={member.profileUrl} alt="User avatar " />
           </div>
         )}
+        {memberPresent && <span className="pn-member__presence" />}
         <div className="pn-member__main">
           <p className="pn-member__name">
             {member.name} {youString}

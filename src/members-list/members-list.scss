@@ -14,10 +14,18 @@
   --member__name__fontSize: 15px;
   --member__name__fontWeight: 500;
   --member__name__padding: 0;
+  --member__name__margin: 0;
   --member__title__color: #9b9b9b;
   --member__title__fontSize: 13px;
   --member__title__fontWeight: 400;
   --member__title__padding: 5px 0 0;
+  --member__title__margin: 0;
+  --member__presence__borderRadius: 5px;
+  --member__presence__color: #62e905;
+  --member__presence__left: 58px;
+  --member__presence__position: absolute;
+  --member__presence__size: 6px;
+  --member__presence__top: 6px;
 }
 
 /* ************************
@@ -27,12 +35,14 @@
 .pn-member-list {
   height: 100%;
   overflow-y: auto;
+  width: 100%;
 }
 
 .pn-member {
   background: var(--member__background);
   display: flex;
   padding: var(--member__padding);
+  position: relative;
 
   &:hover {
     background: var(--member--hover__background);
@@ -53,13 +63,27 @@
     color: var(--member__name__color);
     font-size: var(--member__name__fontSize);
     font-weight: var(--member__name__fontWeight);
+    margin: var(--member__name__margin);
     padding: var(--member__name__padding);
+    text-align: left;
   }
 
   &__title {
     color: var(--member__title__color);
     font-size: var(--member__title__fontSize);
     font-weight: var(--member__title__fontWeight);
+    margin: var(--member__title__margin);
     padding: var(--member__title__padding);
+    text-align: left;
+  }
+
+  &__presence {
+    background: var(--member__presence__color);
+    border-radius: var(--member__presence__borderRadius);
+    height: var(--member__presence__size);
+    left: var(--member__presence__left);
+    position: var(--member__presence__position);
+    top: var(--member__presence__top);
+    width: var(--member__presence__size);
   }
 }
