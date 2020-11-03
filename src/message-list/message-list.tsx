@@ -229,18 +229,27 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       this.context.pubnub.addListener({ message: (m) => this.handleOnMessage(m) });
       this.context.pubnub.subscribe({ channels: [this.context.channel] });
 
-      if (this.props.disableHistoryFetch) return;
-      const history = await this.context.pubnub.fetchMessages({
-        channels: [this.context.channel],
-        count: this.state.messagesPerPage,
+      window.addEventListener("beforeunload", () => {
+        this.context.pubnub.unsubscribeAll();
       });
-      this.handleHistoryFetch(history);
-      this.scrollToBottom();
-      this.setupSpinnerObserver();
-      this.setupBottomObserver();
+
+      if (!this.props.disableHistoryFetch) {
+        const history = await this.context.pubnub.fetchMessages({
+          channels: [this.context.channel],
+          count: this.state.messagesPerPage,
+        });
+        this.handleHistoryFetch(history);
+        this.scrollToBottom();
+        this.setupSpinnerObserver();
+        this.setupBottomObserver();
+      }
     } catch (e) {
       console.error(e);
     }
+  }
+
+  componentWillUnmount(): void {
+    this.context.pubnub.unsubscribeAll();
   }
 
   /*
