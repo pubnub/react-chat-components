@@ -150,7 +150,7 @@
 ** Themes
 ** ********************* */
 
-.pn-msg-list--group-dark {
+.pn-msg-list--dark {
   --msg-list__background: #2f3136;
   --msg__author__color: #dcddde;
   --msg__bubble__background: #36393f;
@@ -167,6 +167,20 @@
   }
 }
 
+.pn-msg-list--support-dark {
+  --msg-list__background: #2f3136;
+  --msg__author__color: #dcddde;
+  --msg__bubble__background: #36393f;
+  --msg__bubble__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
+  --msg__bubble__color: #dcddde;
+  --msg__title__display: none;
+
+  .pn-msg--own {
+    --msg__flexDirection: row-reverse;
+    --msg__avatar__display: none;
+  }
+}
+
 .pn-msg-list--event {
   --msg__padding: 4px 12px;
   --msg__main__alignItems: baseline;
@@ -175,6 +189,29 @@
   --msg__title__margin: 0 6px 0 0;
   --msg__author__fontSize: 13px;
   --msg__bubble__background: transparent;
+  --msg__bubble__padding: 0;
+  --msg__bubble__boxShadow: none;
+  --msg__avatar__display: none;
+  --msg__time__display: none;
+
+  .pn-msg {
+    &__author:after {
+      content: ":";
+    }
+  }
+}
+
+.pn-msg-list--event-dark {
+  --msg-list__background: #2f3136;
+  --msg__padding: 4px 12px;
+  --msg__main__alignItems: baseline;
+  --msg__main__flexDirection: row;
+  --msg__main__margin: 0;
+  --msg__title__margin: 0 6px 0 0;
+  --msg__author__color: #dcddde;
+  --msg__author__fontSize: 13px;
+  --msg__bubble__background: transparent;
+  --msg__bubble__color: #dcddde;
   --msg__bubble__padding: 0;
   --msg__bubble__boxShadow: none;
   --msg__avatar__display: none;

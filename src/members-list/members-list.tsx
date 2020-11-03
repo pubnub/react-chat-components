@@ -1,20 +1,15 @@
 import React from "react";
 import { PubNubContext } from "../pubnub-provider";
+import { PresenceEvent } from "pubnub";
 import "./members-list.scss";
 
 export interface MembersListProps {
   /* Select one of predefined themes */
   theme?: "light" | "dark";
-  // /* Disable fetching of the users data */
-  // disableUserFetch?: boolean;
-  // /* Provide user data for message display */
-  // users: MessageListUser[];
-  /* Disable fetching of messages stored in the history */
-  // disableHistoryFetch?: boolean;
   /* Provide custom member renderer if themes and CSS variables aren't enough */
-  // messageRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /* A callback run on new messages */
-  // onMessage?: (message: MessageListMessage) => unknown;
+  memberRenderer?: (props: MemberRendererProps) => JSX.Element;
+  /* A callback run on presence status changes */
+  onPresence?: (event: PresenceEvent) => unknown;
 }
 
 export interface MembersListMember {
@@ -31,14 +26,17 @@ export interface MembersListMember {
   updated: string;
 }
 
+export interface MemberRendererProps {
+  member: MembersListMember;
+  memberPresent: boolean;
+}
+
 interface MembersListState {
   members: MembersListMember[];
   presentMembers: string[];
 }
 
 export class MembersList extends React.Component<MembersListProps, MembersListState> {
-  // private someRef: React.RefObject<HTMLDivElement>;
-
   static contextType = PubNubContext;
   // This is needed to have context correctly typed
   // https://github.com/facebook/create-react-app/issues/8918
@@ -73,8 +71,7 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
     if (pres.includes(a.id) && !pres.includes(b.id)) return -1;
     if (pres.includes(b.id) && !pres.includes(a.id)) return 1;
 
-    if (a.name > b.name) return 1;
-    if (b.name > a.name) return -1;
+    return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   }
 
   /*
@@ -126,7 +123,8 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   /* Event handlers
   */
 
-  private handlePresenceEvent(event) {
+  private handlePresenceEvent(event: PresenceEvent) {
+    if (this.props.onPresence) this.props.onPresence(event);
     if (event.channel !== this.context.channel) return;
     const currentlyPresent = this.state.presentMembers;
 
@@ -179,6 +177,8 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   private renderMember(member) {
     const youString = this.isOwnMember(member.id) ? "(You)" : "";
     const memberPresent = this.state.presentMembers.includes(member.id);
+
+    if (this.props.memberRenderer) return this.props.memberRenderer({ member, memberPresent });
 
     return (
       <div key={member.id} className="pn-member">

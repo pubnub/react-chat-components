@@ -3,6 +3,8 @@
 ** ********************* */
 
 :root {
+  --member-list__background: transparent;
+
   --member__padding: 9px 24px;
   --member__background: transparent;
   --member--hover__background: #f8f6fd;
@@ -36,6 +38,7 @@
   height: 100%;
   overflow-y: auto;
   width: 100%;
+  background: var(--member-list__background);
 }
 
 .pn-member {
@@ -86,4 +89,14 @@
     top: var(--member__presence__top);
     width: var(--member__presence__size);
   }
+}
+
+/* ************************
+** Themes
+** ********************* */
+
+.pn-member-list--dark {
+  --member-list__background: #2f3136;
+  --member--hover__background: #36393f;
+  --member__name__color: #dcddde;
 }

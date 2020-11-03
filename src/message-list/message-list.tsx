@@ -6,7 +6,7 @@ import "./message-list.scss";
 
 export interface MessageListProps {
   /* Select one of predefined themes */
-  theme?: "group" | "group-dark" | "event" | "support";
+  theme?: "light" | "dark" | "event" | "event-dark" | "support" | "support-dark";
   /* Disable fetching of the users data */
   disableUserFetch?: boolean;
   /* Provide user data for message display */
@@ -79,7 +79,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "group",
+    theme: "light",
     users: [],
   };
 
