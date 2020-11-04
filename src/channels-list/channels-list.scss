@@ -1,0 +1,102 @@
+/* ************************
+** Variables
+** ********************* */
+
+:root {
+  --channel-list__background: transparent;
+
+  --channel__padding: 9px 24px;
+  --channel__background: transparent;
+  --channel--hover__background: #f8f6fd;
+  --channel__avatar__display: block;
+  --channel__avatar__margin: 0 24px 0 0;
+  --channel__avatar__size: 36px;
+  --channel__avatar__borderRadius: 36px;
+  --channel__name__color: #585858;
+  --channel__name__fontSize: 15px;
+  --channel__name__fontWeight: 500;
+  --channel__name__padding: 0;
+  --channel__name__margin: 0;
+  --channel__description__color: #9b9b9b;
+  --channel__description__fontSize: 13px;
+  --channel__description__fontWeight: 400;
+  --channel__description__padding: 5px 0 0;
+  --channel__description__margin: 0;
+  --channel__presence__borderRadius: 5px;
+  --channel__presence__color: #62e905;
+  --channel__presence__left: 58px;
+  --channel__presence__position: absolute;
+  --channel__presence__size: 6px;
+  --channel__presence__top: 6px;
+}
+
+/* ************************
+** Styles
+** ********************* */
+
+.pn-channel-list {
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  background: var(--channel-list__background);
+}
+
+.pn-channel {
+  background: var(--channel__background);
+  display: flex;
+  padding: var(--channel__padding);
+  position: relative;
+
+  &:hover {
+    background: var(--channel--hover__background);
+  }
+
+  &__avatar {
+    display: var(--channel__avatar__display);
+    margin: var(--channel__avatar__margin);
+    width: var(--channel__avatar__size);
+
+    img {
+      border-radius: var(--channel__avatar__borderRadius);
+      width: 100%;
+    }
+  }
+
+  &__name {
+    color: var(--channel__name__color);
+    font-size: var(--channel__name__fontSize);
+    font-weight: var(--channel__name__fontWeight);
+    margin: var(--channel__name__margin);
+    padding: var(--channel__name__padding);
+    text-align: left;
+  }
+
+  &__description {
+    color: var(--channel__description__color);
+    font-size: var(--channel__description__fontSize);
+    font-weight: var(--channel__description__fontWeight);
+    margin: var(--channel__description__margin);
+    padding: var(--channel__description__padding);
+    text-align: left;
+  }
+
+  &__presence {
+    background: var(--channel__presence__color);
+    border-radius: var(--channel__presence__borderRadius);
+    height: var(--channel__presence__size);
+    left: var(--channel__presence__left);
+    position: var(--channel__presence__position);
+    top: var(--channel__presence__top);
+    width: var(--channel__presence__size);
+  }
+}
+
+/* ************************
+** Themes
+** ********************* */
+
+.pn-channel-list--dark {
+  --channel-list__background: #2f3136;
+  --channel--hover__background: #36393f;
+  --channel__name__color: #dcddde;
+}
