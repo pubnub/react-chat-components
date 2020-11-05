@@ -72,6 +72,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   private endRef: React.RefObject<HTMLDivElement>;
   private spinnerObserver: IntersectionObserver;
   private bottomObserver: IntersectionObserver;
+  private previousChannel: string;
 
   static contextType = PubNubContext;
   // This is needed to have context correctly typed
@@ -164,6 +165,22 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     }
   }
 
+  private async fetchHistory() {
+    if (this.props.disableHistoryFetch) return;
+    try {
+      const history = await this.context.pubnub.fetchMessages({
+        channels: [this.context.channel],
+        count: this.state.messagesPerPage,
+      });
+      this.handleHistoryFetch(history);
+      this.scrollToBottom();
+      this.setupSpinnerObserver();
+      this.setupBottomObserver();
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   private async fetchMoreHistory() {
     try {
       const firstMessage = this.listRef.current?.querySelector("div");
@@ -197,8 +214,8 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     this.fetchMessageSenders(newMessages);
     this.setState({
       messages: allMessages,
-      pagination: allMessages[0].timetoken as number,
-      paginationEnd: newMessages.length !== this.state.messagesPerPage,
+      pagination: allMessages.length ? (allMessages[0].timetoken as number) : undefined,
+      paginationEnd: !allMessages.length || newMessages.length !== this.state.messagesPerPage,
     });
   }
 
@@ -226,25 +243,32 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       if (!this.context.channel.length)
         throw "PubNubProvider was initialized with an empty channel name.";
 
+      this.previousChannel = this.context.channel;
       this.context.pubnub.addListener({ message: (m) => this.handleOnMessage(m) });
       this.context.pubnub.subscribe({ channels: [this.context.channel] });
+      this.fetchHistory();
 
       window.addEventListener("beforeunload", () => {
         this.context.pubnub.unsubscribeAll();
       });
-
-      if (!this.props.disableHistoryFetch) {
-        const history = await this.context.pubnub.fetchMessages({
-          channels: [this.context.channel],
-          count: this.state.messagesPerPage,
-        });
-        this.handleHistoryFetch(history);
-        this.scrollToBottom();
-        this.setupSpinnerObserver();
-        this.setupBottomObserver();
-      }
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  componentDidUpdate(): void {
+    if (this.context.channel !== this.previousChannel) {
+      this.previousChannel = this.context.channel;
+      this.setState({
+        messages: [],
+        pagination: undefined,
+        paginationEnd: false,
+        scrolledBottom: true,
+        unreadMessages: 0,
+      });
+      this.context.pubnub.unsubscribeAll();
+      this.context.pubnub.subscribe({ channels: [this.context.channel] });
+      this.fetchHistory();
     }
   }
 
