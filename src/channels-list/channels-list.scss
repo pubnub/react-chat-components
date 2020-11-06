@@ -107,10 +107,12 @@
 ** Themes
 ** ********************* */
 
-.pn-channel-list--dark {
-  --channel-list__background: #2f3136;
+.pn-channel-list--dark,
+.pn-channel-list--event-dark,
+.pn-channel-list--support-dark {
+  --channel-list__background: #292b2f;
   --channel--hover__background: #36393f;
-  --channel--active__background: #3e4046;
+  --channel--active__background: #2f3136;
   --channel__name__color: #dcddde;
   --channel__leave__color: #dcddde;
 }

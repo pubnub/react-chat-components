@@ -5,8 +5,6 @@ import LeaveIcon from "./leave.svg";
 import "./channels-list.scss";
 
 export interface ChannelsListProps {
-  /* Select one of predefined themes */
-  theme?: "light" | "dark";
   /* Show all, joined or unjoined channels only */
   show?: "all" | "joined" | "unjoined";
   /* Provide custom channel renderer if themes and CSS variables aren't enough */
@@ -40,13 +38,14 @@ interface ChannelsListState {
 }
 
 export class ChannelsList extends React.Component<ChannelsListProps, ChannelsListState> {
+  private previousUser: string;
+
   static contextType = PubNubContext;
   // This is needed to have context correctly typed
   // https://github.com/facebook/create-react-app/issues/8918
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "light",
     show: "all",
   };
 
@@ -124,7 +123,8 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
     try {
       await this.context.pubnub.objects.setMemberships({ channels: [channel.id] });
       this.setState({ joinedChannels: [...this.state.joinedChannels, channel.id] });
-      this.props?.onChannelJoined(channel);
+      if (this.props.onChannelJoined) this.props.onChannelJoined(channel);
+      this.switchChannel(channel);
     } catch (e) {
       console.error(e);
     }
@@ -136,25 +136,14 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
       this.setState({
         joinedChannels: [...this.state.joinedChannels.filter((id) => id !== channel.id)],
       });
-      this.props?.onChannelLeft(channel);
+      if (this.props.onChannelLeft) this.props.onChannelLeft(channel);
     } catch (e) {
       console.error(e);
     }
   }
 
   private switchChannel(channel: ChannelsListChannel) {
-    this.props?.onChannelSwitched(channel);
-  }
-
-  private setupMembershipEvents() {
-    this.context.pubnub.addListener({
-      objects: (e) => this.handleMembershipEvent(e),
-    });
-
-    console.log("hooking up events for: ", this.context.pubnub.getUUID());
-    this.context.pubnub.subscribe({
-      channels: [this.context.pubnub.getUUID()],
-    });
+    if (this.props.onChannelSwitched) this.props.onChannelSwitched(channel);
   }
 
   /*
@@ -164,8 +153,6 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
   private handleMembershipEvent(event: BaseObjectsEvent) {
     const msg = event.message;
     const eventChannel = msg.data.channel.id;
-
-    console.log("handling membership event: ", event);
 
     if (msg.type !== "membership") return;
     if (msg.data.uuid.id !== this.context.pubnub.getUUID()) return;
@@ -191,12 +178,28 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
       if (!this.context.channel.length)
         throw "PubNubProvider was initialized with an empty channel name.";
 
+      this.context.pubnub.addListener({ objects: (e) => this.handleMembershipEvent(e) });
+      this.context.pubnub.subscribe({ channels: [this.context.pubnub.getUUID()] });
       this.fetchChannels();
       this.fetchMemberships();
-      this.setupMembershipEvents();
+      this.previousUser = this.context.pubnub.getUUID();
     } catch (e) {
       console.error(e);
     }
+  }
+
+  componentDidUpdate(): void {
+    if (this.context.pubnub.getUUID() !== this.previousUser) {
+      this.context.pubnub.subscribe({ channels: [this.context.pubnub.getUUID()] });
+      this.context.pubnub.unsubscribe({ channels: [this.previousUser] });
+      this.fetchChannels();
+      this.fetchMemberships();
+      this.previousUser = this.context.pubnub.getUUID();
+    }
+  }
+
+  componentWillUnmount(): void {
+    this.context.pubnub.unsubscribe({ channels: [this.context.pubnub.getUUID()] });
   }
 
   /*
@@ -206,7 +209,7 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
   render(): JSX.Element {
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { channels } = this.state;
-    const { theme } = this.props;
+    const { theme } = this.context;
 
     return (
       <div className={`pn-channel-list pn-channel-list--${theme}`}>

@@ -113,7 +113,9 @@
 ** Themes
 ** ********************* */
 
-.pn-msg-input--dark {
+.pn-msg-input--dark,
+.pn-msg-input--event-dark,
+.pn-msg-input--support-dark {
   --msg-input__background: #2f3136;
   --msg-input__icon__color: #dcddde;
   --msg-input__textarea__background: #36393f;

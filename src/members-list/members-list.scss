@@ -95,8 +95,10 @@
 ** Themes
 ** ********************* */
 
-.pn-member-list--dark {
-  --member-list__background: #2f3136;
+.pn-member-list--dark,
+.pn-member-list--event-dark,
+.pn-member-list--support-dark {
+  --member-list__background: #292b2f;
   --member--hover__background: #36393f;
   --member__name__color: #dcddde;
 }

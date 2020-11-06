@@ -6,8 +6,6 @@ import "emoji-mart/css/emoji-mart.css";
 import { Picker, EmojiData, PickerProps } from "emoji-mart";
 
 export interface MessageInputProps {
-  /* Select one of predefined themes */
-  theme?: "light" | "dark";
   /* Set the input placeholder */
   placeholder: string;
   /* Set the initial value for the input */
@@ -23,7 +21,7 @@ export interface MessageInputProps {
   /* Callback to handle value changes */
   onChange?: (value: string) => unknown;
   /* Callback for extra actions while sending the message */
-  onSend?: (value: unknown) => unknown; //TODO: figure out the message format customization
+  onSend?: (value: unknown) => unknown;
 }
 
 interface MessageInputState {
@@ -41,7 +39,6 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "light",
     emojiMartOptions: { emoji: "", title: "", native: true },
     initialValue: "",
     placeholder: "Type Message",
@@ -159,13 +156,8 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { inputRef } = this;
     const { text } = this.state;
-    const {
-      hideSendButton,
-      sendButtonContent,
-      placeholder,
-      disableEmojiPicker,
-      theme,
-    } = this.props;
+    const { hideSendButton, sendButtonContent, placeholder, disableEmojiPicker } = this.props;
+    const { theme } = this.context;
 
     return (
       <div className={`pn-msg-input pn-msg-input--${theme}`}>

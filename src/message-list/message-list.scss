@@ -52,17 +52,13 @@
 
 .pn-msg-list {
   background: var(--msg-list__background);
+  display: flex;
+  flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  overflow: auto;
+  padding: var(--msg-list__padding);
   transform: translateZ(0);
   width: 100%;
-
-  &__wrapper {
-    height: 100%;
-    overflow: auto;
-    padding: var(--msg-list__padding);
-    width: 100%;
-  }
 
   &__spinner {
     color: var(--msg-list__spinner__color);
@@ -85,6 +81,10 @@
   &__bottom-ref {
     width: 100%;
     height: 1px;
+  }
+
+  &__spacer {
+    flex: 1 1 auto;
   }
 }
 
@@ -143,6 +143,13 @@
       border-radius: var(--msg__avatar__borderRadius);
       width: 100%;
     }
+  }
+
+  &__avatar-placeholder {
+    background: var(--msg__bubble__background);
+    border-radius: var(--msg__avatar__borderRadius);
+    height: var(--msg__avatar__size);
+    width: var(--msg__avatar__size);
   }
 }
 

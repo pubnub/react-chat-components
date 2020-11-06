@@ -1,12 +1,11 @@
 import React from "react";
-import { FetchMessagesResponse, MessageEvent } from "pubnub";
+import { FetchMessagesResponse, MessageEvent, ListenerParameters } from "pubnub";
 import { PubNubContext } from "../pubnub-provider";
 import SpinnerIcon from "./spinner.svg";
+import LogoIcon from "./logo.svg";
 import "./message-list.scss";
 
 export interface MessageListProps {
-  /* Select one of predefined themes */
-  theme?: "light" | "dark" | "event" | "event-dark" | "support" | "support-dark";
   /* Disable fetching of the users data */
   disableUserFetch?: boolean;
   /* Provide user data for message display */
@@ -36,6 +35,7 @@ interface MessageListState {
   scrolledBottom: boolean;
   unreadMessages: number;
   users: MessageListUser[];
+  fetchingMessages: boolean;
 }
 
 export interface MessageListUser {
@@ -80,7 +80,6 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   context!: React.ContextType<typeof PubNubContext>;
 
   static defaultProps = {
-    theme: "light",
     users: [],
   };
 
@@ -94,6 +93,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       scrolledBottom: true,
       unreadMessages: 0,
       users: [],
+      fetchingMessages: false,
     };
     this.endRef = React.createRef();
     this.listRef = React.createRef();
@@ -155,9 +155,9 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       const uniqueUuidsArr = Array.from(uniqueUuids);
 
       for (const uuid of uniqueUuidsArr) {
-        if (!uuid || this.getUser(uuid)) return;
+        if (!uuid || this.getUser(uuid)) continue;
         const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid });
-        if (!user?.data) return;
+        if (!user?.data) continue;
         this.setState({ users: [...this.state.users, user.data] });
       }
     } catch (e) {
@@ -168,6 +168,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   private async fetchHistory() {
     if (this.props.disableHistoryFetch) return;
     try {
+      this.setState({ fetchingMessages: true });
       const history = await this.context.pubnub.fetchMessages({
         channels: [this.context.channel],
         count: this.state.messagesPerPage,
@@ -178,6 +179,8 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       this.setupBottomObserver();
     } catch (e) {
       console.error(e);
+    } finally {
+      this.setState({ fetchingMessages: false });
     }
   }
 
@@ -243,14 +246,10 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       if (!this.context.channel.length)
         throw "PubNubProvider was initialized with an empty channel name.";
 
-      this.previousChannel = this.context.channel;
       this.context.pubnub.addListener({ message: (m) => this.handleOnMessage(m) });
       this.context.pubnub.subscribe({ channels: [this.context.channel] });
       this.fetchHistory();
-
-      window.addEventListener("beforeunload", () => {
-        this.context.pubnub.unsubscribeAll();
-      });
+      this.previousChannel = this.context.channel;
     } catch (e) {
       console.error(e);
     }
@@ -258,7 +257,6 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
 
   componentDidUpdate(): void {
     if (this.context.channel !== this.previousChannel) {
-      this.previousChannel = this.context.channel;
       this.setState({
         messages: [],
         pagination: undefined,
@@ -266,14 +264,16 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
         scrolledBottom: true,
         unreadMessages: 0,
       });
-      this.context.pubnub.unsubscribeAll();
+
       this.context.pubnub.subscribe({ channels: [this.context.channel] });
+      this.context.pubnub.unsubscribe({ channels: [this.previousChannel] });
       this.fetchHistory();
+      this.previousChannel = this.context.channel;
     }
   }
 
   componentWillUnmount(): void {
-    this.context.pubnub.unsubscribeAll();
+    this.context.pubnub.unsubscribe({ channels: [this.context.channel] });
   }
 
   /*
@@ -283,27 +283,49 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   render(): JSX.Element {
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { listRef, spinnerRef, endRef } = this;
-    const { disableHistoryFetch, theme, onScroll } = this.props;
-    const { paginationEnd, messages, unreadMessages } = this.state;
+    const { disableHistoryFetch, onScroll } = this.props;
+    const { paginationEnd, messages, unreadMessages, fetchingMessages } = this.state;
+    const { theme } = this.context;
 
     return (
-      <div className={`pn-msg-list pn-msg-list--${theme}`} onScroll={onScroll}>
-        <div className="pn-msg-list__wrapper" ref={listRef}>
-          {!disableHistoryFetch && !paginationEnd && (
-            <span ref={spinnerRef} className="pn-msg-list__spinner">
-              <SpinnerIcon />
-            </span>
-          )}
+      <div className={`pn-msg-list pn-msg-list--${theme}`} onScroll={onScroll} ref={listRef}>
+        {!disableHistoryFetch && !paginationEnd && (
+          <span ref={spinnerRef} className="pn-msg-list__spinner">
+            <SpinnerIcon />
+          </span>
+        )}
 
-          {messages.map((m) => this.renderItem(m))}
+        <div className="pn-msg-list__spacer" />
 
-          <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+        {messages.map((m) => this.renderItem(m))}
+        {!messages.length && !fetchingMessages && this.renderWelcomeMessage()}
 
-          {unreadMessages > 0 && (
-            <div className="pn-msg-list__unread" onClick={() => this.scrollToBottom()}>
-              {unreadMessages} new messages ↓
-            </div>
-          )}
+        <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+
+        {unreadMessages > 0 && (
+          <div className="pn-msg-list__unread" onClick={() => this.scrollToBottom()}>
+            {unreadMessages} new messages ↓
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  private renderWelcomeMessage() {
+    return (
+      <div className="pn-msg">
+        <div className="pn-msg__avatar">
+          <LogoIcon />
+        </div>
+        <div className="pn-msg__main">
+          <div className="pn-msg__title">
+            <span className="pn-msg__author">PubNub Bot</span>
+            <span className="pn-msg__time">00:00</span>
+          </div>
+          <div className="pn-msg__bubble">
+            Welcome to PubNub Chat Components demo application 👋 <br />
+            Send a message now to start interacting with other users in the app ⬇️
+          </div>
         </div>
       </div>
     );
@@ -331,11 +353,10 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
 
     return (
       <>
-        {user && user.profileUrl && (
-          <div className="pn-msg__avatar">
-            <img src={user?.profileUrl} alt="User avatar " />
-          </div>
-        )}
+        <div className="pn-msg__avatar">
+          {user?.profileUrl && <img src={user.profileUrl} alt="User avatar " />}
+          {!user?.profileUrl && <div className="pn-msg__avatar-placeholder" />}
+        </div>
         <div className="pn-msg__main">
           <div className="pn-msg__title">
             <span className="pn-msg__author">{user?.name || "Unknown User"}</span>

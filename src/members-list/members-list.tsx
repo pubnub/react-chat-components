@@ -4,8 +4,6 @@ import { PresenceEvent } from "pubnub";
 import "./members-list.scss";
 
 export interface MembersListProps {
-  /* Select one of predefined themes */
-  theme?: "light" | "dark";
   /* Provide custom member renderer if themes and CSS variables aren't enough */
   memberRenderer?: (props: MemberRendererProps) => JSX.Element;
   /* A callback run on presence status changes */
@@ -37,14 +35,14 @@ interface MembersListState {
 }
 
 export class MembersList extends React.Component<MembersListProps, MembersListState> {
+  private previousChannel: string;
+
   static contextType = PubNubContext;
   // This is needed to have context correctly typed
   // https://github.com/facebook/create-react-app/issues/8918
   context!: React.ContextType<typeof PubNubContext>;
 
-  static defaultProps = {
-    theme: "light",
-  };
+  static defaultProps = {};
 
   constructor(props: MembersListProps) {
     super(props);
@@ -109,16 +107,6 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
     }
   }
 
-  private setupPresenceEvents() {
-    this.context.pubnub.addListener({
-      presence: (e) => this.handlePresenceEvent(e),
-    });
-
-    this.context.pubnub.subscribe({
-      channels: [`${this.context.channel}-pnpres`],
-    });
-  }
-
   /*
   /* Event handlers
   */
@@ -150,12 +138,33 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
       if (!this.context.channel.length)
         throw "PubNubProvider was initialized with an empty channel name.";
 
+      this.context.pubnub.addListener({ presence: (e) => this.handlePresenceEvent(e) });
+      this.context.pubnub.subscribe({ channels: [`${this.context.channel}-pnpres`] });
       this.fetchMembers();
       this.fetchPresence();
-      this.setupPresenceEvents();
+      this.previousChannel = this.context.channel;
     } catch (e) {
       console.error(e);
     }
+  }
+
+  componentDidUpdate(): void {
+    if (this.context.channel !== this.previousChannel) {
+      this.setState({
+        members: [],
+        presentMembers: [],
+      });
+
+      this.context.pubnub.subscribe({ channels: [`${this.context.channel}-pnpres`] });
+      this.context.pubnub.unsubscribe({ channels: [`${this.previousChannel}-pnpres`] });
+      this.fetchMembers();
+      this.fetchPresence();
+      this.previousChannel = this.context.channel;
+    }
+  }
+
+  componentWillUnmount(): void {
+    this.context.pubnub.unsubscribe({ channels: [`${this.context.channel}-pnpres`] });
   }
 
   /*
@@ -165,10 +174,11 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
   render(): JSX.Element {
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { members } = this.state;
-    const { theme } = this.props;
+    const { theme } = this.context;
 
     return (
       <div className={`pn-member-list pn-member-list--${theme}`}>
+        <span></span>
         {members.sort((a, b) => this.memberSorter(a, b)).map((m) => this.renderMember(m))}
       </div>
     );
