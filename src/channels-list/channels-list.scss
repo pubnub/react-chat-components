@@ -3,27 +3,29 @@
 ** ********************* */
 
 :root {
-  --channel-list__background: transparent;
+  --channel-list__background: linear-gradient(rgb(142, 45, 226) 0%, rgb(74, 0, 224) 100%);
 
   --channel__alignItems: center;
-  --channel__padding: 12px 24px;
+  --channel__padding: 12px 40px 12px 24px;
   --channel__justifyContent: space-between;
   --channel__background: transparent;
-  --channel--hover__background: #f8f6fd;
-  --channel--active__background: #efefef;
-  --channel__name__color: #585858;
+  --channel--hover__background: rgba(255, 255, 255, 0.1);
+  --channel--active__background: rgba(0, 0, 0, 0.1);
+  --channel__name__color: white;
   --channel__name__fontSize: 15px;
   --channel__name__fontWeight: 500;
   --channel__name__padding: 0;
   --channel__name__margin: 0;
-  --channel__description__color: #9b9b9b;
+  --channel__description__color: #c7c7c7;
   --channel__description__display: inline-block;
   --channel__description__fontSize: 13px;
   --channel__description__fontWeight: 400;
   --channel__description__padding: 3px 0 0;
   --channel__description__margin: 0;
-  --channel__leave__color: #585858;
+  --channel__leave__color: white;
   --channel__leave__size: 20px;
+  --channel__leave__right: 20px;
+  --channel__leave__top: auto;
   --channel__membership__borderRadius: 5px;
   --channel__membership__color: #62e905;
   --channel__membership__display: inline-block;
@@ -85,9 +87,12 @@
   }
 
   &__leave {
-    display: none;
     color: var(--channel__leave__color);
+    display: none;
     height: var(--channel__leave__size);
+    position: absolute;
+    right: var(--channel__leave__right);
+    top: var(--channel__leave__top);
     width: var(--channel__leave__size);
   }
 
@@ -110,9 +115,10 @@
 .pn-channel-list--dark,
 .pn-channel-list--event-dark,
 .pn-channel-list--support-dark {
-  --channel-list__background: #292b2f;
+  --channel-list__background: linear-gradient(rgb(41 43 47) 0%, rgb(47 49 54) 100%);
   --channel--hover__background: #36393f;
   --channel--active__background: #2f3136;
+  --channel__description__color: #929292;
   --channel__name__color: #dcddde;
   --channel__leave__color: #dcddde;
 }
