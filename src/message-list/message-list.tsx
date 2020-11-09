@@ -1,5 +1,5 @@
 import React from "react";
-import { FetchMessagesResponse, MessageEvent, ListenerParameters } from "pubnub";
+import { FetchMessagesResponse, MessageEvent } from "pubnub";
 import { PubNubContext } from "../pubnub-provider";
 import SpinnerIcon from "./spinner.svg";
 import LogoIcon from "./logo.svg";

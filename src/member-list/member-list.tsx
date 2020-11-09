@@ -1,16 +1,16 @@
 import React from "react";
 import { PubNubContext } from "../pubnub-provider";
 import { PresenceEvent } from "pubnub";
-import "./members-list.scss";
+import "./member-list.scss";
 
-export interface MembersListProps {
+export interface MemberListProps {
   /* Provide custom member renderer if themes and CSS variables aren't enough */
   memberRenderer?: (props: MemberRendererProps) => JSX.Element;
   /* A callback run on presence status changes */
   onPresence?: (event: PresenceEvent) => unknown;
 }
 
-export interface MembersListMember {
+export interface MemberListMember {
   custom: {
     title: string;
     [key: string]: unknown;
@@ -25,16 +25,16 @@ export interface MembersListMember {
 }
 
 export interface MemberRendererProps {
-  member: MembersListMember;
+  member: MemberListMember;
   memberPresent: boolean;
 }
 
-interface MembersListState {
-  members: MembersListMember[];
+interface MemberListState {
+  members: MemberListMember[];
   presentMembers: string[];
 }
 
-export class MembersList extends React.Component<MembersListProps, MembersListState> {
+export class MemberList extends React.Component<MemberListProps, MemberListState> {
   private previousChannel: string;
 
   static contextType = PubNubContext;
@@ -44,7 +44,7 @@ export class MembersList extends React.Component<MembersListProps, MembersListSt
 
   static defaultProps = {};
 
-  constructor(props: MembersListProps) {
+  constructor(props: MemberListProps) {
     super(props);
     this.state = {
       members: [],

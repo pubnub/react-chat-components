@@ -2,22 +2,22 @@ import React from "react";
 import { PubNubContext } from "../pubnub-provider";
 import { BaseObjectsEvent } from "pubnub";
 import LeaveIcon from "./leave.svg";
-import "./channels-list.scss";
+import "./channel-list.scss";
 
-export interface ChannelsListProps {
+export interface ChannelListProps {
   /* Show all, joined or unjoined channels only */
   show?: "all" | "joined" | "unjoined";
   /* Provide custom channel renderer if themes and CSS variables aren't enough */
   channelRenderer?: (props: ChannelRendererProps) => JSX.Element;
   /* A callback run when user joined a channel */
-  onChannelJoined?: (channel: ChannelsListChannel) => unknown;
+  onChannelJoined?: (channel: ChannelListChannel) => unknown;
   /* A callback run when user left a channel */
-  onChannelLeft?: (channel: ChannelsListChannel) => unknown;
+  onChannelLeft?: (channel: ChannelListChannel) => unknown;
   /* A callback run when user switched to a channel */
-  onChannelSwitched?: (channel: ChannelsListChannel) => unknown;
+  onChannelSwitched?: (channel: ChannelListChannel) => unknown;
 }
 
-export interface ChannelsListChannel {
+export interface ChannelListChannel {
   custom: {
     [key: string]: unknown;
   };
@@ -29,15 +29,15 @@ export interface ChannelsListChannel {
 }
 
 export interface ChannelRendererProps {
-  channel: ChannelsListChannel;
+  channel: ChannelListChannel;
 }
 
-interface ChannelsListState {
-  channels: ChannelsListChannel[];
+interface ChannelListState {
+  channels: ChannelListChannel[];
   joinedChannels: string[];
 }
 
-export class ChannelsList extends React.Component<ChannelsListProps, ChannelsListState> {
+export class ChannelList extends React.Component<ChannelListProps, ChannelListState> {
   private previousUser: string;
 
   static contextType = PubNubContext;
@@ -49,7 +49,7 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
     show: "all",
   };
 
-  constructor(props: ChannelsListProps) {
+  constructor(props: ChannelListProps) {
     super(props);
     this.state = {
       channels: [],
@@ -61,11 +61,11 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
   /* Helper functions
   */
 
-  private isChannelJoined(channel: ChannelsListChannel) {
+  private isChannelJoined(channel: ChannelListChannel) {
     return this.state.joinedChannels.includes(channel.id);
   }
 
-  private isChannelActive(channel: ChannelsListChannel) {
+  private isChannelActive(channel: ChannelListChannel) {
     return this.context.channel === channel.id;
   }
 
@@ -119,7 +119,7 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
     }
   }
 
-  private async joinChannel(channel: ChannelsListChannel) {
+  private async joinChannel(channel: ChannelListChannel) {
     try {
       await this.context.pubnub.objects.setMemberships({ channels: [channel.id] });
       this.setState({ joinedChannels: [...this.state.joinedChannels, channel.id] });
@@ -130,7 +130,7 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
     }
   }
 
-  private async leaveChannel(channel: ChannelsListChannel) {
+  private async leaveChannel(channel: ChannelListChannel) {
     try {
       await this.context.pubnub.objects.removeMemberships({ channels: [channel.id] });
       this.setState({
@@ -142,7 +142,7 @@ export class ChannelsList extends React.Component<ChannelsListProps, ChannelsLis
     }
   }
 
-  private switchChannel(channel: ChannelsListChannel) {
+  private switchChannel(channel: ChannelListChannel) {
     if (this.props.onChannelSwitched) this.props.onChannelSwitched(channel);
   }
 
