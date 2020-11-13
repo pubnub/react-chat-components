@@ -189,17 +189,18 @@
 }
 
 .pn-msg-list--event {
-  --msg__padding: 4px 12px;
+  --msg__author__fontSize: 13px;
+  --msg__avatar__display: none;
+  --msg__bubble__background: transparent;
+  --msg__bubble__boxShadow: none;
+  --msg__bubble__padding: 0;
   --msg__main__alignItems: baseline;
   --msg__main__flexDirection: row;
   --msg__main__margin: 0;
-  --msg__title__margin: 0 6px 0 0;
-  --msg__author__fontSize: 13px;
-  --msg__bubble__background: transparent;
-  --msg__bubble__padding: 0;
-  --msg__bubble__boxShadow: none;
-  --msg__avatar__display: none;
+  --msg__main__maxWidth: 100%;
+  --msg__padding: 4px 12px;
   --msg__time__display: none;
+  --msg__title__margin: 0 6px 0 0;
 
   .pn-msg {
     &__author:after {
@@ -210,19 +211,20 @@
 
 .pn-msg-list--event-dark {
   --msg-list__background: #2f3136;
-  --msg__padding: 4px 12px;
+  --msg__author__color: #dcddde;
+  --msg__author__fontSize: 13px;
+  --msg__avatar__display: none;
+  --msg__bubble__background: transparent;
+  --msg__bubble__boxShadow: none;
+  --msg__bubble__color: #dcddde;
+  --msg__bubble__padding: 0;
   --msg__main__alignItems: baseline;
   --msg__main__flexDirection: row;
   --msg__main__margin: 0;
-  --msg__title__margin: 0 6px 0 0;
-  --msg__author__color: #dcddde;
-  --msg__author__fontSize: 13px;
-  --msg__bubble__background: transparent;
-  --msg__bubble__color: #dcddde;
-  --msg__bubble__padding: 0;
-  --msg__bubble__boxShadow: none;
-  --msg__avatar__display: none;
+  --msg__main__maxWidth: 100%;
+  --msg__padding: 4px 12px;
   --msg__time__display: none;
+  --msg__title__margin: 0 6px 0 0;
 
   .pn-msg {
     &__author:after {

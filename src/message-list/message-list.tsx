@@ -1,5 +1,5 @@
 import React from "react";
-import { FetchMessagesResponse, MessageEvent } from "pubnub";
+import { FetchMessagesResponse, MessageEvent, UserData } from "pubnub";
 import { PubNubContext } from "../pubnub-provider";
 import SpinnerIcon from "./spinner.svg";
 import LogoIcon from "./logo.svg";
@@ -8,8 +8,6 @@ import "./message-list.scss";
 export interface MessageListProps {
   /* Disable fetching of the users data */
   disableUserFetch?: boolean;
-  /* Provide user data for message display */
-  users: MessageListUser[];
   /* Disable fetching of messages stored in the history */
   disableHistoryFetch?: boolean;
   /* Provide custom message renderer if themes and CSS variables aren't enough */
@@ -24,7 +22,7 @@ export interface MessageRendererProps {
   isOwnMessage: boolean;
   message: MessageListMessage;
   time: string;
-  user?: MessageListUser;
+  user?: UserData;
 }
 
 interface MessageListState {
@@ -34,14 +32,7 @@ interface MessageListState {
   paginationEnd: boolean;
   scrolledBottom: boolean;
   unreadMessages: number;
-  users: MessageListUser[];
   fetchingMessages: boolean;
-}
-
-export interface MessageListUser {
-  id: string;
-  name?: string | null;
-  profileUrl?: string | null;
 }
 
 export interface MessageListMessage {
@@ -92,7 +83,6 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       paginationEnd: false,
       scrolledBottom: true,
       unreadMessages: 0,
-      users: [],
       fetchingMessages: false,
     };
     this.endRef = React.createRef();
@@ -134,9 +124,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
   }
 
   private getUser(uuid: string) {
-    return (
-      this.props.users.find((u) => u.id === uuid) || this.state.users.find((u) => u.id === uuid)
-    );
+    return this.context.users.find((u) => u.id === uuid);
   }
 
   private isOwnMessage(uuid: string) {
@@ -158,7 +146,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
         if (!uuid || this.getUser(uuid)) continue;
         const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid });
         if (!user?.data) continue;
-        this.setState({ users: [...this.state.users, user.data] });
+        this.context.updateUsers([...this.context.users, user.data]);
       }
     } catch (e) {
       console.error(e);

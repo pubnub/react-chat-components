@@ -4,12 +4,13 @@ import "./message-input.scss";
 import EmojiIcon from "./emoji.svg";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker, EmojiData, PickerProps } from "emoji-mart";
+import { SignalEvent } from "pubnub";
 
 export interface MessageInputProps {
   /* Set the input placeholder */
   placeholder: string;
   /* Set the initial value for the input */
-  iniitialValue?: string;
+  initialValue?: string;
   /* Show the Send button */
   hideSendButton?: boolean;
   /* Send button children */
@@ -27,11 +28,19 @@ export interface MessageInputProps {
 interface MessageInputState {
   text: string;
   emojiPickerShown: boolean;
+  typingIndicatorSent: boolean;
+  typingIndicators: TypingIndicators;
+  typingIndicatorTimeout: number;
 }
+
+type TypingIndicators = {
+  [id: string]: string | null;
+};
 
 export class MessageInput extends React.Component<MessageInputProps, MessageInputState> {
   private inputRef: React.RefObject<HTMLTextAreaElement>;
   private pickerRef: React.RefObject<HTMLDivElement>;
+  private previousChannel: string;
 
   static contextType = PubNubContext;
   // This is needed to have context correctly typed
@@ -48,8 +57,11 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   constructor(props: MessageInputProps) {
     super(props);
     this.state = {
-      text: this.props.iniitialValue || "",
+      text: this.props.initialValue || "",
       emojiPickerShown: false,
+      typingIndicatorSent: false,
+      typingIndicators: {},
+      typingIndicatorTimeout: 10,
     };
     this.inputRef = React.createRef();
     this.pickerRef = React.createRef();
@@ -70,6 +82,26 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
     }, 0);
   }
 
+  private getUser(uuid: string) {
+    return this.context.users.find((u) => u.id === uuid);
+  }
+
+  private getIndicationString() {
+    const indicators = this.state.typingIndicators;
+    const ids = Object.keys(indicators).filter((id) => {
+      return (
+        Date.now() - parseInt(indicators[id]) / 10000 < this.state.typingIndicatorTimeout * 1000
+      );
+    });
+    let indicateStr = "";
+    if (ids.length > 1) indicateStr = "Multiple users are typing...";
+    if (ids.length == 1) {
+      const user = this.getUser(ids[0]);
+      indicateStr = `${user?.name || "Unknown User"} is typing...`;
+    }
+    return indicateStr;
+  }
+
   /*
   /* Commands
   */
@@ -84,9 +116,30 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
         message,
       });
       this.props.onSend && this.props.onSend(message);
+      this.stopTypingIndicator();
       this.setState({ text: "" });
     } catch (e) {
       console.error(e);
+    }
+  }
+
+  private async startTypingIndicator() {
+    if (!this.state.typingIndicatorSent) {
+      this.setState({ typingIndicatorSent: true });
+      const message = { message: "typing_on", channel: this.context.channel };
+      this.context.pubnub.signal(message);
+
+      setTimeout(() => {
+        this.setState({ typingIndicatorSent: false });
+      }, (this.state.typingIndicatorTimeout - 1) * 1000);
+    }
+  }
+
+  private async stopTypingIndicator() {
+    if (this.state.typingIndicatorSent) {
+      this.setState({ typingIndicatorSent: false });
+      const message = { message: "typing_off", channel: this.context.channel };
+      this.context.pubnub.signal(message);
     }
   }
 
@@ -124,18 +177,47 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
     const textArea = event.target as HTMLTextAreaElement;
     const text = textArea.value;
 
+    if (text.length) {
+      this.startTypingIndicator();
+    } else {
+      this.stopTypingIndicator();
+    }
+
     this.props.onChange && this.props.onChange(text);
     this.autoSize();
     this.setState({ text });
   }
 
+  private async handleSignalEvent(signal: SignalEvent) {
+    if (signal.channel !== this.context.channel) return;
+
+    if (["typing_on", "typing_off"].includes(signal.message)) {
+      if (!this.getUser(signal.publisher)) {
+        const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid: signal.publisher });
+        if (user?.data) this.context.updateUsers([...this.context.users, user.data]);
+      }
+
+      this.setState({
+        typingIndicators: {
+          ...this.state.typingIndicators,
+          [`${signal.publisher}`]: signal.message === "typing_on" ? signal.timetoken : null,
+        },
+      });
+
+      setTimeout(() => {
+        this.setState({
+          typingIndicators: {
+            ...this.state.typingIndicators,
+            [`${signal.publisher}`]: null,
+          },
+        });
+      }, this.state.typingIndicatorTimeout * 1000);
+    }
+  }
+
   /*
   /* Lifecycle
   */
-
-  componentWillUnmount(): void {
-    document.removeEventListener("mousedown", this.handleClosePicker);
-  }
 
   componentDidMount(): void {
     try {
@@ -143,9 +225,33 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
         throw "Message Input has no access to context. Please make sure to wrap the components around with PubNubProvider.";
       if (!this.context.channel.length)
         throw "PubNubProvider was initialized with an empty channel name.";
+
+      this.context.pubnub.addListener({ signal: (e) => this.handleSignalEvent(e) });
+      this.context.pubnub.subscribe({ channels: [this.context.channel] });
+      this.previousChannel = this.context.channel;
     } catch (e) {
       console.error(e);
     }
+  }
+
+  componentDidUpdate(): void {
+    if (this.context.channel !== this.previousChannel) {
+      this.setState({
+        text: this.props.initialValue || "",
+        emojiPickerShown: false,
+        typingIndicatorSent: false,
+        typingIndicators: {},
+      });
+
+      this.context.pubnub.subscribe({ channels: [this.context.channel] });
+      this.context.pubnub.unsubscribe({ channels: [this.previousChannel] });
+      this.previousChannel = this.context.channel;
+    }
+  }
+
+  componentWillUnmount(): void {
+    document.removeEventListener("mousedown", this.handleClosePicker);
+    this.context.pubnub.unsubscribe({ channels: [this.context.channel] });
   }
 
   /*
@@ -182,6 +288,8 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
             </button>
           )}
         </div>
+
+        <div className="pn-msg-input__indicator">{this.getIndicationString()}</div>
       </div>
     );
   }
