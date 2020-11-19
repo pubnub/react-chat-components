@@ -10,27 +10,13 @@ export interface MemberListProps {
   onPresence?: (event: PresenceEvent) => unknown;
 }
 
-export interface MemberListMember {
-  custom: {
-    title: string;
-    [key: string]: unknown;
-  };
-  eTag?: string;
-  email?: string;
-  externalId?: string;
-  id: string;
-  name: string;
-  profileUrl: string;
-  updated: string;
-}
-
 export interface MemberRendererProps {
-  member: MemberListMember;
+  member: string;
   memberPresent: boolean;
 }
 
 interface MemberListState {
-  members: MemberListMember[];
+  members: string[];
   presentMembers: string[];
 }
 
@@ -85,8 +71,15 @@ export class MemberList extends React.Component<MemberListProps, MemberListState
         page: { next: pagination },
         include: { totalCount: true, UUIDFields: true, customUUIDFields: true },
       });
-      const fetchedMembers = response.data.map((user) => user.uuid);
-      this.setState({ members: [...this.state.members, ...fetchedMembers] });
+
+      const existingUsers = this.context.users;
+      const existingUsersIds = existingUsers.map((user) => user.id);
+      const fethcedMembers = response.data.map((item) => item.uuid);
+      const fethcedMembersIds = fethcedMembers.map((member) => member.id);
+      const newUsers = fethcedMembers.filter((member) => !existingUsersIds.includes(member.id));
+
+      this.context.updateUsers([...this.context.users, ...newUsers]);
+      this.setState({ members: [...this.state.members, ...fethcedMembersIds] });
 
       if (this.state.members.length < response.totalCount) {
         this.fetchMembers(response.next);
@@ -175,11 +168,11 @@ export class MemberList extends React.Component<MemberListProps, MemberListState
     if (!this.context.pubnub || !this.context.channel.length) return null;
     const { members } = this.state;
     const { theme } = this.context;
+    const memberUsers = this.context.users.filter((u) => members.includes(u.id));
 
     return (
       <div className={`pn-member-list pn-member-list--${theme}`}>
-        <span></span>
-        {members.sort((a, b) => this.memberSorter(a, b)).map((m) => this.renderMember(m))}
+        {memberUsers.sort((a, b) => this.memberSorter(a, b)).map((m) => this.renderMember(m))}
       </div>
     );
   }
