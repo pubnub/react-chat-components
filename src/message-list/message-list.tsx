@@ -145,7 +145,8 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
       for (const uuid of uniqueUuidsArr) {
         if (!uuid || this.getUser(uuid)) continue;
         const user = await this.context.pubnub.objects.getUUIDMetadata({ uuid });
-        if (!user?.data) continue;
+        // Second uniqueness check to ensure context wasn't updated by another component
+        if (!user?.data || this.getUser(uuid)) continue;
         this.context.updateUsers([...this.context.users, user.data]);
       }
     } catch (e) {

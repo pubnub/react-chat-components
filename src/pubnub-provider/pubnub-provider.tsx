@@ -21,12 +21,13 @@ const defaultContext = {
 export const PubNubContext = React.createContext<PubNubContextProps>(defaultContext);
 
 export interface PubNubProviderProps {
+  channel: string;
+  children: React.ReactNode;
   publishKey: string;
   subscribeKey: string;
-  uuid: string;
-  channel: string;
   theme?: Themes;
-  children: React.ReactNode;
+  users?: UserData[];
+  uuid?: string;
 }
 
 interface PubNubProviderState {
@@ -35,15 +36,19 @@ interface PubNubProviderState {
 }
 
 export class PubNubProvider extends React.Component<PubNubProviderProps, PubNubProviderState> {
+  static defaultProps = {
+    users: [],
+  };
+
   constructor(props: PubNubProviderProps) {
     super(props);
-    const { publishKey, subscribeKey, uuid } = props;
+    const { publishKey, subscribeKey, uuid, users } = props;
     const pubnub = new PubNub({
       publishKey,
       subscribeKey,
       uuid,
     });
-    this.state = { pubnub, users: [] };
+    this.state = { pubnub, users: users || [] };
     this.updateUsers = this.updateUsers.bind(this);
   }
 
