@@ -10,8 +10,12 @@ export interface MessageListProps {
   disableUserFetch?: boolean;
   /* Disable fetching of messages stored in the history */
   disableHistoryFetch?: boolean;
-  /* Provide custom message renderer if themes and CSS variables aren't enough */
+  /* Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
+  /* Provide custom message bubble renderer if themes and CSS variables aren't enough */
+  bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
+  /* Use this if you want to render only some of the messages on your own */
+  rendererFilter?: (message: MessageListMessage) => boolean;
   /* A callback run on new messages */
   onMessage?: (message: MessageListMessage) => unknown;
   /* A callback run on list scroll */
@@ -72,6 +76,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
 
   static defaultProps = {
     users: [],
+    rendererFilter: (): boolean => true,
   };
 
   constructor(props: MessageListProps) {
@@ -337,7 +342,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     const time = this.getTime(message.timetoken as number);
     const isOwnMessage = this.isOwnMessage(uuid);
 
-    if (this.props.messageRenderer)
+    if (this.props.messageRenderer && this.props.rendererFilter(message))
       return this.props.messageRenderer({ message, user, time, isOwnMessage });
 
     return (
@@ -351,7 +356,11 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
             <span className="pn-msg__author">{user?.name || "Unknown User"}</span>
             <span className="pn-msg__time">{time}</span>
           </div>
-          <div className="pn-msg__bubble">{message.message.text}</div>
+          {this.props.bubbleRenderer && this.props.rendererFilter(message) ? (
+            this.props.bubbleRenderer({ message, user, time, isOwnMessage })
+          ) : (
+            <div className="pn-msg__bubble">{message.message.text}</div>
+          )}
         </div>
       </>
     );
