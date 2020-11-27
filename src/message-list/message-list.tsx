@@ -42,7 +42,9 @@ interface MessageListState {
 export interface MessageListMessage {
   channel: string;
   message: {
+    type: string;
     text: string;
+    attachments: Array<ImageAttachment | LinkAttachment>;
     [key: string]: unknown;
   };
   timetoken: string | number;
@@ -58,6 +60,29 @@ export interface MessageListMessage {
         actionTimetoken: string | number;
       }>;
     };
+  };
+}
+
+export interface ImageAttachment {
+  type: "image";
+  image: {
+    source: string;
+  };
+}
+
+export interface LinkAttachment {
+  type: "link";
+  description: string;
+  title: string;
+  icon: {
+    source: string;
+  };
+  image: {
+    source: string;
+  };
+  provider: {
+    name: string;
+    url: string;
   };
 }
 
@@ -341,6 +366,7 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
     const user = this.getUser(uuid);
     const time = this.getTime(message.timetoken as number);
     const isOwnMessage = this.isOwnMessage(uuid);
+    const attachments = message.message?.attachments || [];
 
     if (this.props.messageRenderer && this.props.rendererFilter(message))
       return this.props.messageRenderer({ message, user, time, isOwnMessage });
@@ -359,10 +385,37 @@ export class MessageList extends React.Component<MessageListProps, MessageListSt
           {this.props.bubbleRenderer && this.props.rendererFilter(message) ? (
             this.props.bubbleRenderer({ message, user, time, isOwnMessage })
           ) : (
-            <div className="pn-msg__bubble">{message.message.text}</div>
+            <>
+              <div className="pn-msg__bubble">{message.message.text}</div>
+              {attachments.map(this.renderAttachment)}
+            </>
           )}
         </div>
       </>
+    );
+  }
+
+  private renderAttachment(attachment: ImageAttachment | LinkAttachment, key: number) {
+    return (
+      <div key={key}>
+        {attachment.type === "image" && (
+          <img className="pn-msg__image" src={attachment.image?.source} />
+        )}
+
+        {attachment.type === "link" && (
+          <a className="pn-msg__link" href={attachment.provider?.url}>
+            <img src={attachment.image?.source} />
+            <div>
+              <p className="pn-msg__link-name">
+                <img src={attachment.icon?.source} />
+                {attachment.provider?.name}
+              </p>
+              <p className="pn-msg__link-title">{attachment.title}</p>
+              <p className="pn-msg__link-description">{attachment.description}</p>
+            </div>
+          </a>
+        )}
+      </div>
     );
   }
 }

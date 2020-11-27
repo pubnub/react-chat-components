@@ -32,6 +32,13 @@
   --msg__bubble__fontWeight: 400;
   --msg__bubble__margin: 0;
   --msg__bubble__padding: 16px;
+  --msg__image__borderRadius: 10px;
+  --msg__image__margin: 10px 0 0;
+  --msg__link__margin: 10px 0 0;
+  --msg__link__padding: 20px;
+  --msg__link-description__color: #9b9b9b;
+  --msg__link-thumb__maxWidth: 210px;
+  --msg__link-title__color: #8e2de2;
   --msg__main__alignItems: flex-start;
   --msg__main__flexDirection: column;
   --msg__main__margin: 0;
@@ -150,6 +157,57 @@
     border-radius: var(--msg__avatar__borderRadius);
     height: var(--msg__avatar__size);
     width: var(--msg__avatar__size);
+  }
+
+  &__image {
+    border-radius: var(--msg__image__borderRadius);
+    margin: var(--msg__image__margin);
+    max-width: 100%;
+  }
+
+  &__link {
+    background: var(--msg__bubble__background);
+    border-radius: var(--msg__bubble__borderRadius);
+    box-shadow: var(--msg__bubble__boxShadow);
+    color: var(--msg__bubble__color);
+    display: flex;
+    font-size: var(--msg__bubble__fontSize);
+    font-weight: var(--msg__bubble__fontWeight);
+    margin: var(--msg__link__margin);
+    overflow: hidden;
+    text-decoration: none;
+
+    img {
+      max-width: var(--msg__link-thumb__maxWidth);
+    }
+
+    & > div {
+      padding: var(--msg__link__padding);
+    }
+
+    &-name {
+      font-size: 15px;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    &-name img {
+      margin-right: 10px;
+      max-height: 16px;
+      max-width: 16px;
+      vertical-align: bottom;
+    }
+
+    &-title {
+      color: var(--msg__link-title__color);
+      font-weight: 500;
+      margin: 2px 0;
+    }
+
+    &-description {
+      color: var(--msg__link-description__color);
+      margin: 0;
+    }
   }
 }
 
