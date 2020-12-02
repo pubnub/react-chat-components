@@ -6,8 +6,8 @@
   --msg-input__emoji-picker__bottom: 0;
   --msg-input__emoji-picker__right: 0;
   --msg-input__icon__color: #585858;
-  --msg-input__icon__margin: 10px;
-  --msg-input__icon__size: 18px;
+  --msg-input__icon__margin: 5px 10px;
+  --msg-input__icon__fontSize: 22px;
   --msg-input__indicator__color: #585858;
   --msg-input__indicator__fontFamily: inherit;
   --msg-input__indicator__fontSize: 11px;
@@ -110,9 +110,8 @@
     align-self: center;
     cursor: pointer;
     color: var(--msg-input__icon__color);
-    width: var(--msg-input__icon__size);
+    font-size: var(--msg-input__icon__fontSize);
     margin: var(--msg-input__icon__margin);
-    height: var(--msg-input__icon__size);
   }
 
   &__indicator {

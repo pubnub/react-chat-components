@@ -1,6 +1,6 @@
 import React from "react";
 import { PubNubContext } from "../pubnub-provider";
-import { PresenceEvent } from "pubnub";
+import { PresenceEvent, UserData } from "pubnub";
 import "./member-list.scss";
 
 export interface MemberListProps {
@@ -11,7 +11,7 @@ export interface MemberListProps {
 }
 
 export interface MemberRendererProps {
-  member: string;
+  member: UserData;
   memberPresent: boolean;
 }
 

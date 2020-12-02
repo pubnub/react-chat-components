@@ -14,8 +14,15 @@
   --msg-list__unread__offset: 50px;
   --msg-list__spinner__color: #9b9b9b;
 
+  --msg--hover__background: transparent;
   --msg__flexDirection: row;
   --msg__padding: 10px 24px;
+  --msg__actions--hover__background: #e1dfe6;
+  --msg__actions__background: #ffffff;
+  --msg__actions__color: #585858;
+  --msg__actions__fontSize: 22px;
+  --msg__actions__borderRadius: 10px;
+  --msg__actions__padding: 2px 8px;
   --msg__author__color: #585858;
   --msg__author__fontSize: 15px;
   --msg__author__fontWeight: 500;
@@ -51,6 +58,11 @@
   --msg__title__alignItems: baseline;
   --msg__title__display: flex;
   --msg__title__margin: 0 0 10px;
+  --msg__reaction--hover__background: #e1dfe6;
+  --msg__reaction__background: #ffffff;
+  --msg__reaction__borderRadius: 10px;
+  --msg__reaction__margin: 10px 5px 0 0;
+  --msg__reaction__padding: 7px 10px;
 }
 
 /* ************************
@@ -93,12 +105,47 @@
   &__spacer {
     flex: 1 1 auto;
   }
+
+  &__emoji-picker {
+    position: absolute;
+    bottom: 0px;
+    right: 40px;
+  }
 }
 
 .pn-msg {
   display: flex;
   flex-direction: var(--msg__flexDirection);
   padding: var(--msg__padding);
+  position: relative;
+
+  &:hover {
+    background: var(--msg--hover__background);
+
+    .pn-msg__actions {
+      display: block;
+    }
+  }
+
+  &__actions {
+    color: var(--msg__actions__color);
+    cursor: pointer;
+    display: none;
+    font-size: var(--msg__actions__fontSize);
+    position: absolute;
+    right: 10px;
+    top: 10px;
+
+    & > div {
+      background: var(--msg__actions__background);
+      border-radius: var(--msg__actions__borderRadius);
+      padding: var(--msg__actions__padding);
+    }
+
+    & > div:hover {
+      background: var(--msg__actions--hover__background);
+    }
+  }
 
   &__main {
     align-items: var(--msg__main__alignItems);
@@ -159,6 +206,26 @@
     width: var(--msg__avatar__size);
   }
 
+  &__reaction {
+    background: var(--msg__reaction__background);
+    border-radius: var(--msg__reaction__borderRadius);
+    color: var(--msg__bubble__color);
+    cursor: pointer;
+    display: inline-block;
+    font-size: var(--msg__bubble__fontSize);
+    font-weight: var(--msg__bubble__fontWeight);
+    margin: var(--msg__reaction__margin);
+    padding: var(--msg__reaction__padding);
+
+    &:hover {
+      background: var(--msg__reaction--hover__background);
+    }
+
+    &--active {
+      background: var(--msg__reaction--hover__background);
+    }
+  }
+
   &__image {
     border-radius: var(--msg__image__borderRadius);
     margin: var(--msg__image__margin);
@@ -215,8 +282,18 @@
 ** Themes
 ** ********************* */
 
+.pn-msg-list--light {
+  --msg--hover__background: #f1eff7;
+}
+
 .pn-msg-list--dark {
   --msg-list__background: #2f3136;
+  --msg--hover__background: #2b2d31;
+  --msg__actions--hover__background: #232427;
+  --msg__actions__background: #36393f;
+  --msg__actions__color: #dcddde;
+  --msg__reaction--hover__background: #232427;
+  --msg__reaction__background: #36393f;
   --msg__author__color: #dcddde;
   --msg__bubble__background: #36393f;
   --msg__bubble__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);

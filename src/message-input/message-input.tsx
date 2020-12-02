@@ -1,7 +1,6 @@
 import React from "react";
 import { PubNubContext } from "../pubnub-provider/pubnub-provider";
 import "./message-input.scss";
-import EmojiIcon from "./emoji.svg";
 import "emoji-mart/css/emoji-mart.css";
 import { Picker, EmojiData, PickerProps } from "emoji-mart";
 import { SignalEvent } from "pubnub";
@@ -297,8 +296,8 @@ export class MessageInput extends React.Component<MessageInputProps, MessageInpu
   private renderEmojiPicker() {
     return (
       <>
-        <div className="pn-msg-input__icon">
-          <EmojiIcon onClick={() => this.handleOpenPicker()} />
+        <div className="pn-msg-input__icon" onClick={() => this.handleOpenPicker()}>
+          ☺
         </div>
 
         {this.state.emojiPickerShown && (
