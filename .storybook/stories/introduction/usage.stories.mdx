@@ -1,0 +1,67 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction/Usage" />
+
+# Usage
+
+<br />
+<br />
+
+## PubNub account
+
+Sign in or create an account to create an app on the Admin Portal and get the keys to use in your
+application.
+
+When you create a new app, the first set of keys is generated automatically, but a single app can
+have as many keysets as you like. We recommend that you create separate keysets for production and
+test environments.
+
+## Installation
+
+Install the components and all required dependencies using npm:
+
+> Please note that the components are not deployed to npm yet!
+
+```bash
+npm install --save pubnub pubnub-chat-components emoji-mart
+```
+
+## Usage
+
+1. Import the components
+
+```js
+import {
+  PubNubProvider,
+  MessageList,
+  MessageInput,
+  ChannelList,
+  MemberList,
+} from "chat-components";
+```
+
+2. Configure the PubNubProvider, which serves as a common context for all of the components, by
+   passing your newly created keys, unique user id and current channel name:
+
+```jsx
+const config = {
+  publishKey: "myPublishKey",
+  subscribeKey: "mySubscribeKey",
+  uuid: "myUniqueUUID",
+  channel: "myCurrentChannel",
+};
+```
+
+3. Place the components within the context provider in any order that your app requires. Components
+   can be tweaked later on using option properties and CSS variables.
+
+```jsx
+const MyCommponent = () => {
+  return (
+    <PubNubProvider {...config}>
+      <MessageList>
+      <MessageInput>
+    </PubNubProvider>
+  );
+};
+```

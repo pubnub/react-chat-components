@@ -11,6 +11,6 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", ".storybook/stories"],
   "exclude": ["node_modules", "build", "src/**/*.test.tsx"]
 }

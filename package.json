@@ -9,17 +9,27 @@
   ],
   "scripts": {
     "build": "rollup -c",
-    "watch": "watch \"npm run build\" ./src"
+    "watch": "watch \"npm run build\" ./src",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.12.9",
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-node-resolve": "^9.0.0",
+    "@storybook/addon-actions": "^6.1.9",
+    "@storybook/addon-essentials": "^6.1.9",
+    "@storybook/addon-links": "^6.1.9",
+    "@storybook/addons": "^6.1.9",
+    "@storybook/react": "^6.1.9",
+    "@storybook/theming": "^6.1.9",
     "@svgr/rollup": "^5.4.0",
     "@types/react": "^16.9.53",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
+    "babel-loader": "^8.2.2",
     "emoji-mart": "^3.0.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.14.0",
@@ -36,7 +46,8 @@
     "rollup-plugin-typescript2": "^0.28.0",
     "tslib": "^2.0.3",
     "typescript": "^4.0.3",
-    "watch": "^1.0.2"
+    "watch": "^1.0.2",
+    "sass-loader": "^10.1.0"
   },
   "peerDependencies": {
     "emoji-mart": "^3.0.0",
