@@ -1,13 +1,13 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MessageList, MessageListProps } from "../../../src";
+import { ChannelList, ChannelListProps } from "../../../src";
 
 export default {
-  title: "Components/Message List",
-  component: MessageList,
+  title: "Components/Channel List",
+  component: ChannelList,
 } as Meta;
 
-const Template: Story<MessageListProps> = (args) => <MessageList {...args} />;
+const Template: Story<ChannelListProps> = (args) => <ChannelList {...args} />;
 
 export const Primary = Template.bind({});
 // Primary.args = {

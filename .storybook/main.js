@@ -4,16 +4,21 @@ module.exports = {
   stories: ["./stories/**/*.stories.mdx", "./stories/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: ["@storybook/addon-links", "@storybook/addon-essentials"],
   webpackFinal: async (config, { configType }) => {
-    config.module.rules.push({
+    const rules = config.module.rules;
+
+    const fileLoaderRule = rules.find((rule) => rule.test.test(".svg"));
+    fileLoaderRule.exclude = path.resolve(__dirname, "../src");
+
+    rules.push({
       test: /\.scss$/,
       use: ["style-loader", "css-loader", "sass-loader"],
-      include: path.resolve(__dirname, "../"),
+      include: path.resolve(__dirname, "../src"),
     });
 
-    config.module.rules.push({
+    rules.push({
       test: /\.svg$/,
-      use: [],
-      include: path.resolve(__dirname, "../"),
+      use: ["@svgr/webpack"],
+      include: path.resolve(__dirname, "../src"),
     });
 
     return config;

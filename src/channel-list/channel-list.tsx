@@ -5,15 +5,15 @@ import LeaveIcon from "./leave.svg";
 import "./channel-list.scss";
 
 export interface ChannelListProps {
-  /* Show all, joined or unjoined channels only */
+  /** Show all, joined or unjoined channels only */
   show?: "all" | "joined" | "unjoined";
-  /* Provide custom channel renderer if themes and CSS variables aren't enough */
+  /** Provide custom channel renderer if themes and CSS variables aren't enough */
   channelRenderer?: (props: ChannelRendererProps) => JSX.Element;
-  /* A callback run when user joined a channel */
+  /** A callback run when user joined a channel */
   onChannelJoined?: (channel: ChannelListChannel) => unknown;
-  /* A callback run when user left a channel */
+  /** A callback run when user left a channel */
   onChannelLeft?: (channel: ChannelListChannel) => unknown;
-  /* A callback run when user switched to a channel */
+  /** A callback run when user switched to a channel */
   onChannelSwitched?: (channel: ChannelListChannel) => unknown;
 }
 
@@ -37,6 +37,11 @@ interface ChannelListState {
   joinedChannels: string[];
 }
 
+/**
+ * Fetches all channels saved to the PubNub's Object storage and displays them in a list.
+ * The component also fetches current user's channel memberships and is able to display either
+ * all channels/only joined channels/only unjoined channels.
+ */
 export class ChannelList extends React.Component<ChannelListProps, ChannelListState> {
   private previousUser: string;
 

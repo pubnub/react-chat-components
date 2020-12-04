@@ -8,23 +8,23 @@ import { Picker, EmojiData, PickerProps } from "emoji-mart";
 import "./message-list.scss";
 
 export interface MessageListProps {
-  /* Disable fetching of the users data */
+  /** Disable fetching of the users data */
   disableUserFetch?: boolean;
-  /* Disable fetching of messages stored in the history */
+  /** Disable fetching of messages stored in the history */
   disableHistoryFetch?: boolean;
-  /* Disable message reactions */
+  /** Disable message reactions */
   disableReactions?: boolean;
-  /* Pass options to emoji-mart picker */
+  /** Pass options to emoji-mart picker */
   emojiMartOptions: PickerProps;
-  /* Provide custom message item renderer if themes and CSS variables aren't enough */
+  /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /* Provide custom message bubble renderer if themes and CSS variables aren't enough */
+  /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /* Use this if you want to render only some of the messages on your own */
+  /** Use this if you want to render only some of the messages on your own */
   rendererFilter?: (message: MessageListMessage) => boolean;
-  /* A callback run on new messages */
+  /** A callback run on new messages */
   onMessage?: (message: MessageListMessage) => unknown;
-  /* A callback run on list scroll */
+  /** A callback run on list scroll */
   onScroll?: (event: React.UIEvent<HTMLElement>) => unknown;
 }
 
@@ -94,6 +94,7 @@ export interface LinkAttachment {
   };
 }
 
+/** Component responsible for fetching messages from PubNub channels and displaying them in a list. */
 export class MessageList extends React.Component<MessageListProps, MessageListState> {
   private spinnerRef: React.RefObject<HTMLDivElement>;
   private listRef: React.RefObject<HTMLDivElement>;

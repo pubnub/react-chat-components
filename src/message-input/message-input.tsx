@@ -6,21 +6,21 @@ import { Picker, EmojiData, PickerProps } from "emoji-mart";
 import { SignalEvent } from "pubnub";
 
 export interface MessageInputProps {
-  /* Set the input placeholder */
+  /** Set the input placeholder */
   placeholder: string;
-  /* Set the initial value for the input */
+  /** Set the initial value for the input */
   initialValue?: string;
-  /* Show the Send button */
+  /** Show the Send button */
   hideSendButton?: boolean;
-  /* Send button children */
+  /** Send button children */
   sendButtonContent: JSX.Element | string;
-  /* Disable the built-in emoji picker */
+  /** Disable the built-in emoji picker */
   disableEmojiPicker?: boolean;
-  /* Pass options to emoji-mart picker */
+  /** Pass options to emoji-mart picker */
   emojiMartOptions: PickerProps;
-  /* Callback to handle value changes */
+  /** Callback to handle value changes */
   onChange?: (value: string) => unknown;
-  /* Callback for extra actions while sending the message */
+  /** Callback for extra actions while sending the message */
   onSend?: (value: unknown) => unknown;
 }
 
@@ -36,6 +36,10 @@ type TypingIndicators = {
   [id: string]: string | null;
 };
 
+/**
+ * Allows users to compose messages using text and emojis
+ * and automatically publish them on PubNub channels upon sending.
+ */
 export class MessageInput extends React.Component<MessageInputProps, MessageInputState> {
   private inputRef: React.RefObject<HTMLTextAreaElement>;
   private pickerRef: React.RefObject<HTMLDivElement>;

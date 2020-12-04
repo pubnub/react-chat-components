@@ -1,13 +1,13 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MessageList, MessageListProps } from "../../../src";
+import { MessageInput, MessageInputProps } from "../../../src";
 
 export default {
-  title: "Components/Message List",
-  component: MessageList,
+  title: "Components/Message Input",
+  component: MessageInput,
 } as Meta;
 
-const Template: Story<MessageListProps> = (args) => <MessageList {...args} />;
+const Template: Story<MessageInputProps> = (args) => <MessageInput {...args} />;
 
 export const Primary = Template.bind({});
 // Primary.args = {

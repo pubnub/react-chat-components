@@ -4,9 +4,9 @@ import { PresenceEvent, UserData } from "pubnub";
 import "./member-list.scss";
 
 export interface MemberListProps {
-  /* Provide custom member renderer if themes and CSS variables aren't enough */
+  /** Provide custom member renderer if themes and CSS variables aren't enough */
   memberRenderer?: (props: MemberRendererProps) => JSX.Element;
-  /* A callback run on presence status changes */
+  /** A callback run on presence status changes */
   onPresence?: (event: PresenceEvent) => unknown;
 }
 
@@ -20,6 +20,10 @@ interface MemberListState {
   presentMembers: string[];
 }
 
+/**
+ * Fetches all memberships for the current channel from PubNub Objects storage and displays them as a list of users.
+ * The component also marks currently subscribed users as active.
+ */
 export class MemberList extends React.Component<MemberListProps, MemberListState> {
   private previousChannel: string;
 
