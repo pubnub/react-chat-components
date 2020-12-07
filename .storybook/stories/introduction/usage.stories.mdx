@@ -28,28 +28,30 @@ npm install --save pubnub pubnub-chat-components emoji-mart
 
 ## Usage
 
-1. Import the components
+1. Import PubNub and the components
 
 ```js
+import { PubNub } from "pubnub";
 import {
   PubNubProvider,
   MessageList,
   MessageInput,
   ChannelList,
   MemberList,
-} from "chat-components";
+} from "pubnub-chat-components";
 ```
 
-2. Configure the PubNubProvider, which serves as a common context for all of the components, by
-   passing your newly created keys, unique user id and current channel name:
+2. Create your PubNub client and rest of the configuration for the PubNubProvider, which serves as a
+   common context for all of the components:
 
 ```jsx
-const config = {
+const pubnub = new PubNub({
   publishKey: "myPublishKey",
   subscribeKey: "mySubscribeKey",
   uuid: "myUniqueUUID",
-  channel: "myCurrentChannel",
-};
+});
+const channel = "myCurrentChannel";
+const theme = "light";
 ```
 
 3. Place the components within the context provider in any order that your app requires. Components
@@ -58,7 +60,7 @@ const config = {
 ```jsx
 const MyCommponent = () => {
   return (
-    <PubNubProvider {...config}>
+    <PubNubProvider {...{ pubnub, channel, theme }}>
       <MessageList>
       <MessageInput>
     </PubNubProvider>

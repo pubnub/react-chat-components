@@ -23,15 +23,12 @@ export const PubNubContext = React.createContext<PubNubContextProps>(defaultCont
 export interface PubNubProviderProps {
   channel: string;
   children: React.ReactNode;
-  publishKey: string;
-  subscribeKey: string;
+  pubnub: PubNub;
   theme?: Themes;
   users?: UserData[];
-  uuid?: string;
 }
 
 interface PubNubProviderState {
-  pubnub?: PubNub;
   users: UserData[];
 }
 
@@ -42,13 +39,8 @@ export class PubNubProvider extends React.Component<PubNubProviderProps, PubNubP
 
   constructor(props: PubNubProviderProps) {
     super(props);
-    const { publishKey, subscribeKey, uuid, users } = props;
-    const pubnub = new PubNub({
-      publishKey,
-      subscribeKey,
-      uuid,
-    });
-    this.state = { pubnub, users: users || [] };
+    const { users } = props;
+    this.state = { users: users || [] };
     this.updateUsers = this.updateUsers.bind(this);
   }
 
@@ -58,36 +50,18 @@ export class PubNubProvider extends React.Component<PubNubProviderProps, PubNubP
 
   componentDidMount(): void {
     window.addEventListener("beforeunload", () => {
-      this.state.pubnub.stop();
+      this.props.pubnub.stop();
     });
   }
 
-  componentDidUpdate(prevProps: PubNubProviderProps): void {
-    const { publishKey, subscribeKey, uuid } = this.props;
-
-    if (
-      prevProps.publishKey !== publishKey ||
-      prevProps.subscribeKey !== subscribeKey ||
-      prevProps.uuid !== uuid
-    ) {
-      this.state.pubnub.stop();
-      const pubnub = new PubNub({
-        publishKey,
-        subscribeKey,
-        uuid,
-      });
-      this.setState({ pubnub });
-    }
-  }
-
   componentWillUnmount(): void {
-    this.state.pubnub.stop();
+    this.props.pubnub.stop();
   }
 
   render(): JSX.Element {
     const { updateUsers } = this;
-    const { pubnub, users } = this.state;
-    const { channel, theme, children } = this.props;
+    const { users } = this.state;
+    const { pubnub, channel, theme, children } = this.props;
 
     return (
       <PubNubContext.Provider value={{ pubnub, channel, theme, users, updateUsers }}>

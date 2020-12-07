@@ -1,6 +1,15 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css" rel="stylesheet" />
 
 <style>
+  body {
+    font-family: BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+      "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    --msg-input__padding: 34px 24px 12px;
+  }
+
   .sbdocs-wrapper {
     justify-content: flex-start !important;
     padding: 4rem !important;
@@ -10,14 +19,16 @@
     max-width: 850px !important;
   }
 
-  .sbdocs-content h1,
-  .sbdocs-content h2,
-  .sbdocs-content h3,
-  .sbdocs-content h4,
-  .sbdocs-content h5,
-  .sbdocs-content h6,
-  .sbdocs-content li,
-  .sbdocs-content p {
+  .sbdocs-content > h1,
+  .sbdocs-content > h2,
+  .sbdocs-content > h3,
+  .sbdocs-content > h4,
+  .sbdocs-content > h5,
+  .sbdocs-content > h6,
+  .sbdocs-content > ol > li,
+  .sbdocs-content > ul > li,
+  .sbdocs-content > blockquote > p,
+  .sbdocs-content > p {
     color: #555770 !important;
     font-family: "Open Sans", sans-serif !important;
   }

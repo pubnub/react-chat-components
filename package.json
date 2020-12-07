@@ -1,6 +1,6 @@
 {
-  "name": "chat-components",
-  "version": "1.0.0",
+  "name": "pubnub-chat-components",
+  "version": "0.1.0",
   "description": "",
   "main": "build/index.js",
   "module": "build/index.es.js",

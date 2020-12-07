@@ -1,16 +1,12 @@
 import React from "react";
 import { PubNubProvider } from "../src";
+import { PubNubMock } from "./pubnub-mock";
 
-const config = {
-  publishKey: "demo",
-  subscribeKey: "demo",
-  uuid: "test-id",
-  channel: "test-channel",
-};
+const pubnub = new PubNubMock();
 
 export const decorators = [
   (Story) => (
-    <PubNubProvider {...config}>
+    <PubNubProvider {...{ pubnub, channel: "test-channel", theme: "dark" }}>
       <Story />
     </PubNubProvider>
   ),
