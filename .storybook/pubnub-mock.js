@@ -1,4 +1,4 @@
-const users = [
+const mockUsers = () => [
   {
     uuid: {
       id: "user_fbc9a54790b24ee19441260970b171c0",
@@ -111,7 +111,7 @@ const users = [
   },
 ];
 
-const messages = [
+const mockMessages = () => [
   {
     message: {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -164,7 +164,7 @@ const messages = [
   },
 ];
 
-const channels = [
+const mockChannels = () => [
   {
     id: "space_ce466f2e445c38976168ba78e46",
     name: "Company Culture",
@@ -231,8 +231,13 @@ function sample(arr, n) {
 }
 
 export function PubNubMock() {
+  const listeners = {};
+  const messages = mockMessages();
+  const users = mockUsers();
+  const channels = mockChannels();
+
   return {
-    addListener: () => true,
+    addListener: (obj) => Object.assign(listeners, obj),
     fetchMessages: (args) => ({
       channels: {
         [args.channels[0]]: messages,
@@ -251,7 +256,15 @@ export function PubNubMock() {
         },
       },
     }),
-    publish: () => true,
+    publish: (obj) => {
+      const message = {
+        message: obj.message,
+        timetoken: Date.now() + "0000",
+        uuid: "user_fbc9a54790b24ee19441260970b171c0",
+      };
+      messages.push(message);
+      listeners.message(message);
+    },
     signal: () => true,
     stop: () => true,
     subscribe: () => true,

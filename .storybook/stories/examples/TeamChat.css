@@ -1,0 +1,50 @@
+.pn-channel-list {
+  /* --channel__description__display: none; */
+  --channel__membership__top: 25px;
+  --channel__name__fontSize: 13px;
+  --channel__name__fontWeight: 400;
+  --channel__padding: 20px 24px;
+}
+
+.app {
+  display: flex;
+  height: calc(100vh - 35px);
+  overflow: hidden;
+}
+
+.channels {
+  flex-shrink: 0;
+  width: 250px;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+}
+
+.members {
+  transition: 0.3s ease-in-out;
+  flex-shrink: 0;
+  width: 0;
+  transform: translateX(310px);
+}
+
+.members.shown {
+  transform: none;
+  width: 310px;
+}
+
+.people {
+  color: gray;
+  cursor: pointer;
+  position: absolute;
+  right: 35px;
+  top: 20px;
+  z-index: 1;
+}
+
+.people.active {
+  color: rgb(142, 45, 226);
+}

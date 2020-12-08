@@ -21,10 +21,17 @@ const defaultContext = {
 export const PubNubContext = React.createContext<PubNubContextProps>(defaultContext);
 
 export interface PubNubProviderProps {
+  /** Current channel for the components to operate on (publishing and listening to messages, fetching active users etc.)
+   * Should be stored and updated by logic living outside of the components.
+   * In case ChannelList component is used, its onChannelSwitched callback can be used for that.
+   */
   channel: string;
   children: React.ReactNode;
+  /** Expects a reference to the configured PubNub client. */
   pubnub: PubNub;
+  /** A general theme to be used by the components. Exact looks can be tweaked later on with the use of CSS variables. */
   theme?: Themes;
+  /** Provide external user data in case PubNub Objects storage is not going to be used. */
   users?: UserData[];
 }
 
@@ -32,6 +39,7 @@ interface PubNubProviderState {
   users: UserData[];
 }
 
+/** Context provider that allows for general configurations of Chat Components  */
 export class PubNubProvider extends React.Component<PubNubProviderProps, PubNubProviderState> {
   static defaultProps = {
     users: [],
