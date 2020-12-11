@@ -1,11 +1,3 @@
-.pn-channel-list {
-  /* --channel__description__display: none; */
-  --channel__membership__top: 25px;
-  --channel__name__fontSize: 13px;
-  --channel__name__fontWeight: 400;
-  --channel__padding: 20px 24px;
-}
-
 .app {
   display: flex;
   height: calc(100vh - 35px);
@@ -14,7 +6,7 @@
 
 .channels {
   flex-shrink: 0;
-  width: 250px;
+  width: 300px;
 }
 
 .chat {

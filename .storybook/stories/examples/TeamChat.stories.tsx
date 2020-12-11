@@ -8,7 +8,6 @@ export default {
   parameters: {
     docs: { page: null },
   },
-  decorators: null,
 } as Meta;
 
 const Template: Story = () => {
@@ -42,4 +41,12 @@ const Template: Story = () => {
   );
 };
 
-export const Default = Template.bind({});
+export const Light = Template.bind({});
+Light.parameters = {
+  theme: "light",
+};
+
+export const Dark = Template.bind({});
+Dark.parameters = {
+  theme: "dark",
+};

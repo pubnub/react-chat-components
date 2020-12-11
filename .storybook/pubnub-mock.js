@@ -188,7 +188,7 @@ const mockChannels = () => [
   {
     id: "space_ac4e67b98b34b44c4a39466e93e",
     name: "Introductions",
-    description: "This channel is for company wide chatter",
+    description: "Company wide chatter",
   },
   {
     id: "space_a652eb6cc340334ff0b244c4a39",
@@ -203,7 +203,7 @@ const mockChannels = () => [
   {
     id: "space_a204f87d215a40985d35cf84bf5",
     name: "Off Topic",
-    description: "Non-work banter and water cooler conversation",
+    description: "Water cooler conversations",
   },
   {
     id: "space_c1ee1eda28554d0a34f9b9df5cfe",
@@ -217,42 +217,49 @@ const mockChannels = () => [
   },
 ];
 
-function sample(arr, n) {
-  var result = new Array(n),
-    len = arr.length,
-    taken = new Array(len);
-  if (n > len) throw new RangeError("getRandom: more elements taken than available");
-  while (n--) {
-    var x = Math.floor(Math.random() * len);
-    result[n] = arr[x in taken ? taken[x] : x];
-    taken[x] = --len in taken ? taken[len] : len;
-  }
-  return result;
-}
-
 export function PubNubMock() {
   const listeners = {};
   const messages = mockMessages();
   const users = mockUsers();
   const channels = mockChannels();
+  const actions = [];
+  const uuid = "user_fbc9a54790b24ee19441260970b171c0";
 
   return {
+    addMessageAction: (obj) => {
+      const action = {
+        channel: obj.channel,
+        data: {
+          messageTimetoken: obj.messageTimetoken,
+          actionTimetoken: Date.now() + "0000",
+          type: obj.action.type,
+          uuid,
+          value: obj.action.value,
+        },
+        event: "added",
+        publisher: uuid,
+        timetoken: Date.now() + "0000",
+      };
+      actions.push(action);
+      listeners.messageAction(action);
+    },
     addListener: (obj) => Object.assign(listeners, obj),
     fetchMessages: (args) => ({
       channels: {
         [args.channels[0]]: messages,
       },
     }),
-    getUUID: () => "test-id",
+    getUUID: () => uuid,
     hereNow: (args) => ({
       channels: {
         [args.channels[0]]: {
-          occupants: sample(
-            users.map((u) => ({
-              uuid: u.uuid.id,
-            })),
-            4
-          ),
+          occupants: [
+            { uuid },
+            { uuid: "user_53bbe00387004010a8b9ad5f36bdd4a7" },
+            { uuid: "user_55f74958eb00441f8171f4f8757b0f24" },
+            { uuid: "user_6ef19fcc68824f9f9e3d908d796f21a3" },
+            { uuid: "user_31be78e92e4e4218808007047cbdcebb" },
+          ],
         },
       },
     }),
@@ -260,10 +267,17 @@ export function PubNubMock() {
       const message = {
         message: obj.message,
         timetoken: Date.now() + "0000",
-        uuid: "user_fbc9a54790b24ee19441260970b171c0",
+        uuid,
       };
       messages.push(message);
       listeners.message(message);
+    },
+    removeMessageAction: (obj) => {
+      const action = actions.find((a) => a.data.actionTimetoken === obj.actionTimetoken);
+      const index = actions.indexOf(action);
+      actions.splice(index, 1);
+      action.event = "removed";
+      listeners.messageAction(action);
     },
     signal: () => true,
     stop: () => true,
@@ -277,12 +291,13 @@ export function PubNubMock() {
         data: users,
       }),
       getMemberships: () => ({
-        data: sample(
-          channels.map((c) => ({
-            channel: c,
-          })),
-          5
-        ),
+        data: [
+          { channel: { id: "space_ac4e67b98b34b44c4a39466e93e" } },
+          { channel: { id: "space_c1ee1eda28554d0a34f9b9df5cfe" } },
+          { channel: { id: "space_ce466f2e445c38976168ba78e46" } },
+          { channel: { id: "space_a204f87d215a40985d35cf84bf5" } },
+          { channel: { id: "space_149e60f311749f2a7c6515f7b34" } },
+        ],
       }),
       getUUIDMetadata: (args) => ({
         data: users.find((u) => u.uuid.id === args.uuid).uuid,
