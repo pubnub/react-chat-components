@@ -1,13 +1,25 @@
-import React from "react";
-import { PubNubContext } from "../pubnub-provider";
-import { PresenceEvent, UserData } from "pubnub";
+import React, { FC, useEffect } from "react";
+import { UserData } from "pubnub";
+import { useRecoilState, useRecoilValue } from "recoil";
+import {
+  ThemeAtom,
+  PubnubAtom,
+  CurrentChannelAtom,
+  UsersMetaAtom,
+  CurrentChannelMembershipsAtom,
+  CurrentChannelOccupancyAtom,
+} from "../state-atoms";
+import { getPubnubChannelMembers } from "../commands";
 import "./member-list.scss";
 
 export interface MemberListProps {
+  /** Users to show on the list
+   * "members" (default) = users associated with current channel in PubNub Objects storage
+   * "subscribers" = users subscribed to the current channel (you don't need to be a member to subscribe)
+   */
+  show?: "members" | "subscribers";
   /** Provide custom member renderer if themes and CSS variables aren't enough */
   memberRenderer?: (props: MemberRendererProps) => JSX.Element;
-  /** A callback run on presence status changes */
-  onPresence?: (event: PresenceEvent) => unknown;
 }
 
 export interface MemberRendererProps {
@@ -15,177 +27,80 @@ export interface MemberRendererProps {
   memberPresent: boolean;
 }
 
-interface MemberListState {
-  members: string[];
-  presentMembers: string[];
-}
-
 /**
  * Fetches all memberships for the current channel from PubNub Objects storage and displays them as a list of users.
  * The component also marks currently subscribed users as active.
  */
-export class MemberList extends React.Component<MemberListProps, MemberListState> {
-  private previousChannel: string;
-
-  static contextType = PubNubContext;
-  // This is needed to have context correctly typed
-  // https://github.com/facebook/create-react-app/issues/8918
-  context!: React.ContextType<typeof PubNubContext>;
-
-  static defaultProps = {};
-
-  constructor(props: MemberListProps) {
-    super(props);
-    this.state = {
-      members: [],
-      presentMembers: [],
-    };
-  }
+export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
+  const pubnub = useRecoilValue(PubnubAtom);
+  const channel = useRecoilValue(CurrentChannelAtom);
+  const users = useRecoilValue(UsersMetaAtom);
+  const theme = useRecoilValue(ThemeAtom);
+  const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
+  const [presentMembers, setPresentMembers] = useRecoilState(CurrentChannelOccupancyAtom);
 
   /*
   /* Helper functions
   */
 
-  private isOwnMember(uuid: string) {
-    return this.context.pubnub?.getUUID() === uuid;
-  }
+  const isOwnMember = (uuid: string) => {
+    return pubnub.getUUID() === uuid;
+  };
 
-  private memberSorter(a, b) {
-    const pres = this.state?.presentMembers;
+  const memberSorter = (a, b) => {
+    const pres = presentMembers;
 
-    if (this.isOwnMember(a.id)) return -1;
-    if (this.isOwnMember(b.id)) return 1;
+    if (isOwnMember(a.id)) return -1;
+    if (isOwnMember(b.id)) return 1;
 
     if (pres.includes(a.id) && !pres.includes(b.id)) return -1;
     if (pres.includes(b.id) && !pres.includes(a.id)) return 1;
 
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
-  }
+  };
 
   /*
   /* Commands
   */
 
-  private async fetchMembers(pagination?: string) {
+  const fetchMembers = async () => {
     try {
-      const { channel } = this.context;
-      const response = await this.context.pubnub.objects.getChannelMembers({
-        channel,
-        sort: { "uuid.name": "asc" },
-        page: { next: pagination },
-        include: { totalCount: true, UUIDFields: true, customUUIDFields: true },
-      });
-
-      const existingUsers = this.context.users;
-      const existingUsersIds = existingUsers.map((user) => user.id);
-      const fethcedMembers = response.data.map((item) => item.uuid);
-      const fethcedMembersIds = fethcedMembers.map((member) => member.id);
-      const newUsers = fethcedMembers.filter((member) => !existingUsersIds.includes(member.id));
-
-      this.context.updateUsers([...this.context.users, ...newUsers]);
-      this.setState({ members: [...this.state.members, ...fethcedMembersIds] });
-
-      if (this.state.members.length < response.totalCount) {
-        this.fetchMembers(response.next);
-      }
+      const members = await getPubnubChannelMembers(pubnub, channel);
+      setMembers(members);
     } catch (e) {
       console.error(e);
     }
-  }
+  };
 
-  private async fetchPresence() {
+  const fetchPresence = async () => {
     try {
-      const { channel } = this.context;
-      const response = await this.context.pubnub.hereNow({ channels: [channel] });
+      const response = await pubnub.hereNow({ channels: [channel] });
       const presentMembers = response.channels[channel].occupants.map((u) => u.uuid);
-      this.setState({ presentMembers });
+      setPresentMembers(presentMembers);
     } catch (e) {
       console.error(e);
     }
-  }
-
-  /*
-  /* Event handlers
-  */
-
-  private handlePresenceEvent(event: PresenceEvent) {
-    if (this.props.onPresence) this.props.onPresence(event);
-    if (event.channel !== this.context.channel) return;
-    const currentlyPresent = this.state.presentMembers;
-
-    if (event.action === "join") {
-      if (currentlyPresent.includes(event.uuid)) return;
-      this.setState({ presentMembers: [...currentlyPresent, event.uuid] });
-    }
-
-    if (["leave", "timeout"].includes(event.action)) {
-      if (!currentlyPresent.includes(event.uuid)) return;
-      this.setState({ presentMembers: currentlyPresent.filter((member) => member !== event.uuid) });
-    }
-  }
+  };
 
   /*
   /* Lifecycle
   */
 
-  componentDidMount(): void {
-    try {
-      if (!this.context.pubnub)
-        throw "Members List has no access to context. Please make sure to wrap the components around with PubNubProvider.";
-      if (!this.context.channel.length)
-        throw "PubNubProvider was initialized with an empty channel name.";
-
-      this.context.pubnub.addListener({ presence: (e) => this.handlePresenceEvent(e) });
-      this.context.pubnub.subscribe({ channels: [`${this.context.channel}-pnpres`] });
-      this.fetchMembers();
-      this.fetchPresence();
-      this.previousChannel = this.context.channel;
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  componentDidUpdate(): void {
-    if (this.context.channel !== this.previousChannel) {
-      this.setState({
-        members: [],
-        presentMembers: [],
-      });
-
-      this.context.pubnub.subscribe({ channels: [`${this.context.channel}-pnpres`] });
-      this.context.pubnub.unsubscribe({ channels: [`${this.previousChannel}-pnpres`] });
-      this.fetchMembers();
-      this.fetchPresence();
-      this.previousChannel = this.context.channel;
-    }
-  }
-
-  componentWillUnmount(): void {
-    this.context.pubnub.unsubscribe({ channels: [`${this.context.channel}-pnpres`] });
-  }
+  useEffect(() => {
+    if (!pubnub) return;
+    if (!members.length) fetchMembers();
+    if (!presentMembers.length) fetchPresence();
+  }, [channel]);
 
   /*
   /* Renderers
   */
 
-  render(): JSX.Element {
-    if (!this.context.pubnub || !this.context.channel.length) return null;
-    const { members } = this.state;
-    const { theme } = this.context;
-    const memberUsers = this.context.users.filter((u) => members.includes(u.id));
+  const renderMember = (member) => {
+    const youString = isOwnMember(member.id) ? "(You)" : "";
+    const memberPresent = presentMembers.includes(member.id);
 
-    return (
-      <div className={`pn-member-list pn-member-list--${theme}`}>
-        {memberUsers.sort((a, b) => this.memberSorter(a, b)).map((m) => this.renderMember(m))}
-      </div>
-    );
-  }
-
-  private renderMember(member) {
-    const youString = this.isOwnMember(member.id) ? "(You)" : "";
-    const memberPresent = this.state.presentMembers.includes(member.id);
-
-    if (this.props.memberRenderer) return this.props.memberRenderer({ member, memberPresent });
+    if (props.memberRenderer) return props.memberRenderer({ member, memberPresent });
 
     return (
       <div key={member.id} className="pn-member">
@@ -194,7 +109,7 @@ export class MemberList extends React.Component<MemberListProps, MemberListState
             <img src={member.profileUrl} alt="User avatar " />
           </div>
         )}
-        {memberPresent && <span className="pn-member__presence" />}
+        {props.show !== "subscribers" && memberPresent && <span className="pn-member__presence" />}
         <div className="pn-member__main">
           <p className="pn-member__name">
             {member.name} {youString}
@@ -203,5 +118,24 @@ export class MemberList extends React.Component<MemberListProps, MemberListState
         </div>
       </div>
     );
-  }
-}
+  };
+
+  const renderUsers = ((type) => {
+    switch (type) {
+      case "subscribers":
+        return users.filter((u) => presentMembers.includes(u.id));
+      default:
+        return users.filter((u) => members.includes(u.id));
+    }
+  })(props.show);
+
+  return (
+    <div className={`pn-member-list pn-member-list--${theme}`}>
+      {[...renderUsers].sort((a, b) => memberSorter(a, b)).map((m) => renderMember(m))}
+    </div>
+  );
+};
+
+MemberList.defaultProps = {
+  show: "members",
+};

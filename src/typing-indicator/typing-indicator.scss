@@ -1,0 +1,32 @@
+/* ************************
+** Variables
+** ********************* */
+
+:root {
+  --typing-indicator__background: #f8f6fd;
+  --typing-indicator__color: #9b9b9b;
+  --typing-indicator__display: inline-block;
+  --typing-indicator__fontSize: 11px;
+  --typing-indicator__fontWeight: 500;
+  --typing-indicator__padding: 8px 24px;
+}
+
+/* ************************
+** Styles
+** ********************* */
+
+.pn-typing-indicator {
+  background: var(--typing-indicator__background);
+  color: var(--typing-indicator__color);
+  display: var(--typing-indicator__display);
+  font-size: var(--typing-indicator__fontSize);
+  font-weight: var(--typing-indicator__fontWeight);
+  padding: var(--typing-indicator__padding);
+}
+
+.pn-typing-indicator--dark,
+.pn-typing-indicator--event-dark,
+.pn-typing-indicator--support-dark {
+  --typing-indicator__background: #2f3136;
+  --typing-indicator__color: #9b9b9b;
+}

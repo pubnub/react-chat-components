@@ -55,5 +55,8 @@
     "pubnub": "^4.29.9",
     "react": ">=16.8",
     "react-dom": ">=16.8"
+  },
+  "dependencies": {
+    "recoil": "^0.1.2"
   }
 }

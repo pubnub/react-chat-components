@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Story, Meta } from "@storybook/react";
 import { MessageInput, MessageList, ChannelList, MemberList } from "../../../src";
 import "./TeamChat.css";
@@ -11,7 +11,7 @@ export default {
 } as Meta;
 
 const Template: Story = () => {
-  const [showMembers, setShowMembers] = React.useState(false);
+  const [showMembers, setShowMembers] = useState(false);
 
   return (
     <div className="app">

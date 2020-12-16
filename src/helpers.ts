@@ -11,3 +11,7 @@ export function setDeep(obj: unknown, path: string[], value: unknown): void {
     return a[b];
   }, obj);
 }
+
+export function cloneDeep<T>(obj: T): T {
+  return JSON.parse(JSON.stringify(obj));
+}

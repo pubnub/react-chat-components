@@ -6,11 +6,11 @@ This repository contains a POC of PubNub Chat Components for React.
 
 ## Components
 
-- PubNub Provider
+- ChatComponents (wrapper)
 - Message List
 - Message Input
-- Channel List (TBD)
-- Channel Members (TBD)
+- Channel List
+- Channel Members
 
 ## Usage
 
@@ -25,33 +25,26 @@ npm i -S pubnub chat-components emoji-mart
 2. Import the components
 
 ```js
-import { PubNubProvider, MessageList, MessageInput } from "chat-components";
+import PubNub from "pubnub";
+import { ChatComponents, MessageList, MessageInput } from "chat-components";
 ```
 
 3. Configure the context provider and put the components inside!
 
 ```jsx
 const MyCommponent = () => {
-  const config = {
+  const pubnub = new PubNub({
     publishKey: "your_publish_key",
     subscribeKey: "your_subscribe_key",
     uuid: "custom_user_id",
-    channel: "channel_name",
-  };
+  });
+  const channel = "channel_name";
 
   return (
-    <PubNubProvider {...config}>
+    <ChatComponents {...{pubnub, channel }}>
       <MessageList>
       <MessageInput>
-    </PubNubProvider>
+    </ChatComponents>
   );
 };
 ```
-
-## Component options
-
-TBD
-
-## Theming
-
-TBD
