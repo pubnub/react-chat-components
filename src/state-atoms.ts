@@ -108,11 +108,6 @@ export const CurrentChannelTypingIndicatorAtom = selector<string[]>({
     ),
 });
 
-export const AttachSendersAtom = atom<boolean>({
-  key: "attachSenders",
-  default: false,
-});
-
 export const EmojiMartOptionsAtom = atom<PickerProps>({
   key: "emojiMartOptions",
   default: {},

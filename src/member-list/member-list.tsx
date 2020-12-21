@@ -59,6 +59,11 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
+  const userFromString = (uuid) => ({
+    id: uuid,
+    name: uuid,
+  });
+
   /*
   /* Commands
   */
@@ -123,9 +128,9 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const renderUsers = ((type) => {
     switch (type) {
       case "subscribers":
-        return users.filter((u) => presentMembers.includes(u.id));
+        return presentMembers.map((id) => users.find((u) => u.id === id) || userFromString(id));
       default:
-        return users.filter((u) => members.includes(u.id));
+        return members.map((id) => users.find((u) => u.id === id) || userFromString(id));
     }
   })(props.show);
 

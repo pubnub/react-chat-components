@@ -64,6 +64,11 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
+  const channelFromString = (name) => ({
+    id: name,
+    name,
+  });
+
   /*
   /* Commands
   */
@@ -157,7 +162,9 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   const renderChannels = ((type) => {
     switch (type) {
       case "subscriptions":
-        return channels.filter((c) => subscribeChannels.includes(c.id));
+        return subscribeChannels.map(
+          (name) => channels.find((ch) => ch.name === name) || channelFromString(name)
+        );
       case "memberships":
         return channels.filter((c) => joinedChannels.includes(c.id));
       case "non-memberships":

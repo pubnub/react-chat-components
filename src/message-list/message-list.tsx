@@ -250,7 +250,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const renderMessage = (message: Message) => {
     const uuid = message.uuid || message.publisher || "";
-    const user = getUser(uuid);
+    const user = message.message.sender || getUser(uuid);
     const time = getTime(message.timetoken as number);
     const isOwn = isOwnMessage(uuid);
     const attachments = message.message?.attachments || [];

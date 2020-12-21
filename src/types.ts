@@ -1,3 +1,5 @@
+import { UserData } from "pubnub";
+
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
 export interface Channel {
@@ -14,6 +16,7 @@ export interface Message {
   message: {
     type: string;
     text: string;
+    sender?: UserData;
     attachments?: Array<ImageAttachment | LinkAttachment>;
     [key: string]: unknown;
   };

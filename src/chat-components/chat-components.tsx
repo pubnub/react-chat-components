@@ -12,7 +12,6 @@ import { Themes, Message, Channel } from "../types";
 import { getAllPubnubUsers, getAllPubnubChannels } from "../commands";
 import { setDeep, cloneDeep } from "../helpers";
 import {
-  AttachSendersAtom,
   ChannelsMetaAtom,
   CurrentChannelAtom,
   CurrentUserMembershipsAtom,
@@ -52,8 +51,6 @@ export interface ChatComponentsProps {
   channels?: Channel[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
-  /** Enable this for high-throughput environemnts to attach sender data directly to each message */
-  attachSenders?: boolean;
   /** Pass options to emoji-mart picker. */
   emojiMartOptions?: PickerProps;
   /** A callback run on new messages. */
@@ -71,7 +68,6 @@ export const ChatComponents: FC<ChatComponentsProps> = (props: ChatComponentsPro
 };
 
 ChatComponents.defaultProps = {
-  attachSenders: false,
   emojiMartOptions: { emoji: "", title: "", native: true },
   fetchPubNubObjects: true,
   subscribeChannels: [],
@@ -87,7 +83,6 @@ ChatComponents.defaultProps = {
  *
  */
 export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatComponentsProps) => {
-  const setAttachSenders = useSetRecoilState(AttachSendersAtom);
   const setChannelsMeta = useSetRecoilState(ChannelsMetaAtom);
   const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
   const setJoinedChannels = useSetRecoilState(CurrentUserMembershipsAtom);
@@ -113,7 +108,6 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
     setTheme(props.theme);
     setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
-    setAttachSenders(props.attachSenders);
   }, []);
 
   /**
@@ -134,12 +128,6 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
     if (!pubnub) return;
     if (props.fetchPubNubObjects) getAllPNObjects();
     setupListeners();
-
-    // Immediately subscribe to user id channel for membership events
-    const userId = pubnub.getUUID();
-    if (!subscribeChannels.includes(userId)) {
-      setSubscribeChannels([...subscribeChannels, userId]);
-    }
 
     // Try to unsubscribe beofore window is unloaded
     window.addEventListener("beforeunload", () => {
@@ -178,8 +166,9 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
 
   const setupSubscriptions = () => {
     const currentSubscriptions = pubnub.getSubscribedChannels();
-    const channels = subscribeChannels.filter((c) => !currentSubscriptions.includes(c));
-    pubnub.subscribe({ channels, withPresence: true });
+    const subscribeChannelsWithUserId = [...subscribeChannels, pubnub.getUUID()];
+    const channels = subscribeChannelsWithUserId.filter((c) => !currentSubscriptions.includes(c));
+    if (channels.length) pubnub.subscribe({ channels, withPresence: true });
   };
 
   const getAllPNObjects = async () => {

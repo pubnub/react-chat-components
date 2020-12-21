@@ -7,6 +7,7 @@ import {
   PubnubAtom,
   ThemeAtom,
   TypingIndicatorTimeoutAtom,
+  UsersMetaAtom,
 } from "../state-atoms";
 import "./message-input.scss";
 import "emoji-mart/css/emoji-mart.css";
@@ -16,6 +17,8 @@ export interface MessageInputProps {
   placeholder?: string;
   /** Set the initial value for the input */
   initialValue?: string;
+  /** Enable this for high-throughput environemnts to attach sender data directly to each message */
+  attachSenders?: boolean;
   /** Show the Send button */
   hideSendButton?: boolean;
   /** Send button children */
@@ -37,6 +40,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
 
+  const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
   const pubnub = useRecoilValue(PubnubAtom);
   const channel = useRecoilValue(CurrentChannelAtom);
@@ -67,7 +71,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const sendMessage = async () => {
     try {
       if (!text) return;
-      const message = { type: "text", text };
+      const message = {
+        type: "text",
+        text,
+        ...(props.attachSenders && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+      };
 
       await pubnub.publish({ channel, message });
       props.onSend && props.onSend(message);
