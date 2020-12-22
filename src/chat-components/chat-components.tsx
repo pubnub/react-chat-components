@@ -9,11 +9,13 @@ import PubNub, {
 } from "pubnub";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message, Channel } from "../types";
-import { getAllPubnubUsers, getAllPubnubChannels } from "../commands";
+import { getAllPubnubUsers, getAllPubnubChannels, getPubnubChannelMembers } from "../commands";
 import { setDeep, cloneDeep } from "../helpers";
 import {
   ChannelsMetaAtom,
   CurrentChannelAtom,
+  CurrentChannelMembershipsAtom,
+  CurrentChannelOccupancyAtom,
   CurrentUserMembershipsAtom,
   EmojiMartOptionsAtom,
   MessagesAtom,
@@ -45,6 +47,8 @@ export interface ChatComponentsProps {
   /** By default the components will try to fetch metadata about users, channels and memberships
    * from PubNub objects storage. This behavior can be disabled by setting this to false. */
   fetchPubNubObjects?: boolean;
+  /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
+  enablePresence?: boolean;
   /** Provide external user metadata in case there's any outside of PubNub Objects. */
   users?: UserData[];
   /** Provide external channel metadata in case there's any outside of PubNub Objects. */
@@ -72,6 +76,7 @@ ChatComponents.defaultProps = {
   fetchPubNubObjects: true,
   subscribeChannels: [],
   theme: "light" as const,
+  enablePresence: true,
   typingIndicatorTimeout: 10,
   users: [],
   channels: [],
@@ -91,9 +96,11 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
   const setTheme = useSetRecoilState(ThemeAtom);
   const setTypingIndicator = useSetRecoilState(TypingIndicatorAtom);
   const setUsersMeta = useSetRecoilState(UsersMetaAtom);
+  const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
+  const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
+  const [presentMembers, setPresentMembers] = useRecoilState(CurrentChannelOccupancyAtom);
   const [pubnub, setPubnub] = useRecoilState(PubnubAtom);
   const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
-  const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
   const [typingIndicatorTimeout, setTypingIndicatorTimeout] = useRecoilState(
     TypingIndicatorTimeoutAtom
   );
@@ -126,7 +133,7 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
    */
   useEffect(() => {
     if (!pubnub) return;
-    if (props.fetchPubNubObjects) getAllPNObjects();
+    if (props.fetchPubNubObjects) fetchAllMetadata();
     setupListeners();
 
     // Try to unsubscribe beofore window is unloaded
@@ -144,6 +151,8 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
     if (!subscribeChannels.includes(currentChannel)) {
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
+    if (!members.length) fetchMembers();
+    if (!presentMembers.length && props.enablePresence) fetchPresence();
   }, [currentChannel]);
 
   useEffect(() => {
@@ -168,10 +177,10 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
     const currentSubscriptions = pubnub.getSubscribedChannels();
     const subscribeChannelsWithUserId = [...subscribeChannels, pubnub.getUUID()];
     const channels = subscribeChannelsWithUserId.filter((c) => !currentSubscriptions.includes(c));
-    if (channels.length) pubnub.subscribe({ channels, withPresence: true });
+    if (channels.length) pubnub.subscribe({ channels, withPresence: props.enablePresence });
   };
 
-  const getAllPNObjects = async () => {
+  const fetchAllMetadata = async () => {
     const users = await getAllPubnubUsers(pubnub);
     setUsersMeta((existingUsers) => {
       const existingUsersIds = existingUsers.map((u) => u.id);
@@ -185,6 +194,17 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
       const newChannels = channels.filter((u) => !existingChannelsIds.includes(u.id));
       return [...existingChannels, ...newChannels];
     });
+  };
+
+  const fetchMembers = async () => {
+    const members = await getPubnubChannelMembers(pubnub, currentChannel);
+    setMembers(members);
+  };
+
+  const fetchPresence = async () => {
+    const response = await pubnub.hereNow({ channels: [currentChannel] });
+    const presentMembers = response.channels[currentChannel].occupants.map((u) => u.uuid);
+    setPresentMembers(presentMembers);
   };
 
   /**

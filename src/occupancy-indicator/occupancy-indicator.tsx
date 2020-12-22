@@ -8,6 +8,9 @@ import {
 import "./occupancy-indicator.scss";
 
 export interface OccupancyIndicatorProps {
+  /** Show members currently present/subscribed to the channel */
+  showPresentMembers?: boolean;
+  /** Show number of total memberships to the channel */
   showTotalMembers?: boolean;
   /** A callback run on component click */
   onClick?: () => unknown;
@@ -23,12 +26,13 @@ export const OccupancyIndicator: FC<OccupancyIndicatorProps> = (props: Occupancy
       className={`pn-occupancy-indicator pn-occupancy-indicator--${theme}`}
       onClick={props.onClick}
     >
-      <span>{presentMembers.length}</span>
+      {props.showPresentMembers && <span>{presentMembers.length}</span>}
       {props.showTotalMembers && <span> / {members.length}</span>}
     </div>
   );
 };
 
 OccupancyIndicator.defaultProps = {
+  showPresentMembers: true,
   showTotalMembers: true,
 };

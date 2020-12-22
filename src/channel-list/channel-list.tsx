@@ -135,9 +135,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
           isChannelJoined(channel) ? switchChannel(channel) : joinChannel(channel);
         }}
       >
-        {props.show !== "memberships" && channelJoined && (
-          <span className="pn-channel__membership" />
-        )}
+        {props.show === "all" && channelJoined && <span className="pn-channel__membership" />}
 
         <div className="pn-channel__title">
           <p className="pn-channel__name">{channel.name}</p>

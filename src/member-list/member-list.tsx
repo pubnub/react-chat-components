@@ -1,15 +1,13 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import { UserData } from "pubnub";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue } from "recoil";
 import {
   ThemeAtom,
   PubnubAtom,
-  CurrentChannelAtom,
   UsersMetaAtom,
   CurrentChannelMembershipsAtom,
   CurrentChannelOccupancyAtom,
 } from "../state-atoms";
-import { getPubnubChannelMembers } from "../commands";
 import "./member-list.scss";
 
 export interface MemberListProps {
@@ -33,11 +31,10 @@ export interface MemberRendererProps {
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const pubnub = useRecoilValue(PubnubAtom);
-  const channel = useRecoilValue(CurrentChannelAtom);
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
-  const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
-  const [presentMembers, setPresentMembers] = useRecoilState(CurrentChannelOccupancyAtom);
+  const members = useRecoilValue(CurrentChannelMembershipsAtom);
+  const presentMembers = useRecoilValue(CurrentChannelOccupancyAtom);
 
   /*
   /* Helper functions
@@ -63,39 +60,6 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     id: uuid,
     name: uuid,
   });
-
-  /*
-  /* Commands
-  */
-
-  const fetchMembers = async () => {
-    try {
-      const members = await getPubnubChannelMembers(pubnub, channel);
-      setMembers(members);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchPresence = async () => {
-    try {
-      const response = await pubnub.hereNow({ channels: [channel] });
-      const presentMembers = response.channels[channel].occupants.map((u) => u.uuid);
-      setPresentMembers(presentMembers);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  /*
-  /* Lifecycle
-  */
-
-  useEffect(() => {
-    if (!pubnub) return;
-    if (!members.length) fetchMembers();
-    if (!presentMembers.length) fetchPresence();
-  }, [channel]);
 
   /*
   /* Renderers
