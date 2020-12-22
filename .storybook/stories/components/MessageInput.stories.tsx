@@ -1,6 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { MessageInput, MessageInputProps } from "../../../src";
+import "./preview.css";
 
 export default {
   title: "Components/Message Input",

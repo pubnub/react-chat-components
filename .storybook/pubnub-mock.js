@@ -250,6 +250,7 @@ export function PubNubMock() {
       },
     }),
     getUUID: () => uuid,
+    getSubscribedChannels: () => ["space_ce466f2e445c38976168ba78e46"],
     hereNow: (args) => ({
       channels: {
         [args.channels[0]]: {
@@ -284,6 +285,9 @@ export function PubNubMock() {
     subscribe: () => true,
     unsubscribe: () => true,
     objects: {
+      getAllUUIDMetadata: () => ({
+        data: users.map(u => u.uuid),
+      }),
       getAllChannelMetadata: () => ({
         data: channels,
       }),

@@ -161,7 +161,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
     switch (type) {
       case "subscriptions":
         return subscribeChannels.map(
-          (name) => channels.find((ch) => ch.name === name) || channelFromString(name)
+          (name) => channels.find((ch) => ch.id === name) || channelFromString(name)
         );
       case "memberships":
         return channels.filter((c) => joinedChannels.includes(c.id));

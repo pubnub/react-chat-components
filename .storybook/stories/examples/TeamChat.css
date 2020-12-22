@@ -29,11 +29,13 @@
 }
 
 .people {
+  align-items: center;
   color: gray;
   cursor: pointer;
+  display: flex;
   position: absolute;
-  right: 35px;
-  top: 20px;
+  right: 40px;
+  top: 10px;
   z-index: 1;
 }
 

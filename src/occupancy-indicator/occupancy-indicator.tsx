@@ -27,7 +27,8 @@ export const OccupancyIndicator: FC<OccupancyIndicatorProps> = (props: Occupancy
       onClick={props.onClick}
     >
       {props.showPresentMembers && <span>{presentMembers.length}</span>}
-      {props.showTotalMembers && <span> / {members.length}</span>}
+      {props.showPresentMembers && props.showTotalMembers && " / "}
+      {props.showTotalMembers && <span>{members.length}</span>}
     </div>
   );
 };
