@@ -3,7 +3,7 @@ import { Story, Meta } from "@storybook/react";
 import { ChatComponents, ChatComponentsProps } from "../../../src";
 
 export default {
-  title: "Components/Chat Components (Wrapper)",
+  title: "Components/Chat Components (Provider)",
   component: ChatComponents,
 } as Meta;
 

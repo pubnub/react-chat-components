@@ -8,11 +8,11 @@ import {
 } from "../state-atoms";
 import "./typing-indicator.scss";
 
-export interface TypingIndicatorProps {
-  // showAsMessage?: boolean;
-}
+// export interface TypingIndicatorProps {
+// showAsMessage?: boolean;
+// }
 
-export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicatorProps) => {
+export const TypingIndicator: FC = () => {
   const theme = useRecoilValue(ThemeAtom);
   const users = useRecoilValue(UsersMetaAtom);
   const typingIndicators = useRecoilValue(CurrentChannelTypingIndicatorAtom);
