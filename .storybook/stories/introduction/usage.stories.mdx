@@ -7,7 +7,7 @@ import { Meta } from "@storybook/addon-docs/blocks";
 <br />
 <br />
 
-## PubNub account
+## PubNub Account
 
 Sign in or create an account to create an app on the Admin Portal and get the keys to use in your
 application.
@@ -16,6 +16,9 @@ When you create a new app, the first set of keys is generated automatically, but
 have as many keysets as you like. We recommend that you create separate keysets for production and
 test environments.
 
+Please make sure to enable `Objects` functionality and select a geographical region corresponding to
+most users of your application.
+
 ## Installation
 
 Install the components and all required dependencies using npm:
@@ -23,7 +26,7 @@ Install the components and all required dependencies using npm:
 > Please note that the components are not deployed to npm yet!
 
 ```bash
-npm install --save pubnub pubnub-chat-components emoji-mart
+npm install --save pubnub pubnub-chat-components
 ```
 
 ## Usage
@@ -33,7 +36,7 @@ npm install --save pubnub pubnub-chat-components emoji-mart
 ```js
 import { PubNub } from "pubnub";
 import {
-  PubNubProvider,
+  ChatComponents,
   MessageList,
   MessageInput,
   ChannelList,
@@ -41,7 +44,7 @@ import {
 } from "pubnub-chat-components";
 ```
 
-2. Create your PubNub client and rest of the configuration for the PubNubProvider, which serves as a
+2. Create your PubNub client and rest of the configuration for the ChatComponents, which serves as a
    common context for all of the components:
 
 ```jsx
@@ -54,16 +57,16 @@ const channel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Place the components within the context provider in any order that your app requires. Components
+3. Place the components within the state provider in any order that your app requires. Components
    can be tweaked later on using option properties and CSS variables.
 
 ```jsx
 const MyCommponent = () => {
   return (
-    <PubNubProvider {...{ pubnub, channel, theme }}>
+    <ChatComponents {...{ pubnub, channel, theme }}>
       <MessageList>
       <MessageInput>
-    </PubNubProvider>
+    </ChatComponents>
   );
 };
 ```
