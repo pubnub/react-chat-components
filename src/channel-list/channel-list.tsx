@@ -15,12 +15,12 @@ import "./channel-list.scss";
 
 export interface ChannelListProps {
   /** Channels to show on the list.
-   * "all" (default) = all channels stored in PubNub Objects and/or provided via ChatComponents wrapper
+   * "all" (default) = all channels stored in PubNub Objects and/or provided via Chat wrapper
    * "subscriptions" = only subscribed channels, fed by subscriptionChannels option of the wrapper
    * "memberships" = only channels associated with current user in PubNub Objects storage
    * "non-memberships" = only channels that the current user is not a member of */
   show?: "all" | "subscriptions" | "memberships" | "non-memberships";
-  /** Provide custom channel renderer if themes and CSS variables aren't enough */
+  /** Provide custom channel renderer to override default themes and CSS variables. */
   channelRenderer?: (props: ChannelRendererProps) => JSX.Element;
   /** A callback run when user joined a channel */
   onChannelJoined?: (channel: Channel) => unknown;

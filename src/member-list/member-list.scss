@@ -8,6 +8,7 @@
   --member__padding: 9px 24px;
   --member__background: transparent;
   --member--hover__background: #f8f6fd;
+  --member__avatar__background: #f8f6fd;
   --member__avatar__display: block;
   --member__avatar__margin: 0 24px 0 0;
   --member__avatar__size: 36px;
@@ -62,6 +63,13 @@
     }
   }
 
+  &__avatar-placeholder {
+    background: var(--member__avatar__background);
+    border-radius: var(--member__avatar__borderRadius);
+    height: var(--member__avatar__size);
+    width: var(--member__avatar__size);
+  }
+
   &__name {
     color: var(--member__name__color);
     font-size: var(--member__name__fontSize);
@@ -101,4 +109,5 @@
   --member-list__background: #292b2f;
   --member--hover__background: #36393f;
   --member__name__color: #dcddde;
+  --member__avatar__background: #36393f;
 }

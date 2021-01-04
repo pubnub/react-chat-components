@@ -26,14 +26,14 @@ export interface MessageRendererProps {
 export interface MessageListProps {
   /** Disable fetching of messages stored in the history */
   disableHistoryFetch?: boolean;
-  /** Disable message reactions */
-  disableReactions?: boolean;
+  /** Enable to add emoji reactions on messages. */
+  enableReactions?: boolean;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /** Use this if you want to render only some of the messages on your own */
-  rendererFilter?: (message: Message) => boolean;
+  /** Use this function to render only some of the messages on your own. */
+  filter?: (message: Message) => boolean;
   /** A callback run on list scroll */
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
 }
@@ -239,7 +239,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
-        {!props.disableReactions && (
+        {props.enableReactions && (
           <div className="pn-msg__actions">
             <div onClick={(e) => handleOpenReactions(e, message.timetoken)}>☺</div>
           </div>
@@ -255,7 +255,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const isOwn = isOwnMessage(uuid);
     const attachments = message.message?.attachments || [];
 
-    if (props.messageRenderer && props.rendererFilter(message))
+    if (props.messageRenderer && props.filter(message))
       return props.messageRenderer({ message, user, time, isOwn });
 
     return (
@@ -269,7 +269,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             <span className="pn-msg__author">{user?.name || "Unknown User"}</span>
             <span className="pn-msg__time">{time}</span>
           </div>
-          {props.bubbleRenderer && props.rendererFilter(message) ? (
+          {props.bubbleRenderer && props.filter(message) ? (
             props.bubbleRenderer({ message, user, time, isOwn })
           ) : (
             <>
@@ -277,7 +277,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               {attachments.map(renderAttachment)}
             </>
           )}
-          {!props.disableReactions && renderReactions(message)}
+          {props.enableReactions && renderReactions(message)}
         </div>
       </>
     );
@@ -374,4 +374,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       )}
     </div>
   );
+};
+
+MessageList.defaultProps = {
+  enableReactions: false,
 };

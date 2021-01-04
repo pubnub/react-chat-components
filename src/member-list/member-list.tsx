@@ -16,11 +16,11 @@ export interface MemberListProps {
    * "subscribers" = users subscribed to the current channel (you don't need to be a member to subscribe)
    */
   show?: "members" | "subscribers";
-  /** Provide custom member renderer if themes and CSS variables aren't enough */
-  memberRenderer?: (props: MemberRendererProps) => JSX.Element;
+  /** Provide custom user renderer to override themes and CSS variables. */
+  userRenderer?: (props: UserRendererProps) => JSX.Element;
 }
 
-export interface MemberRendererProps {
+export interface UserRendererProps {
   member: UserData;
   memberPresent: boolean;
 }
@@ -69,15 +69,14 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     const youString = isOwnMember(member.id) ? "(You)" : "";
     const memberPresent = presentMembers.includes(member.id);
 
-    if (props.memberRenderer) return props.memberRenderer({ member, memberPresent });
+    if (props.userRenderer) return props.userRenderer({ member, memberPresent });
 
     return (
       <div key={member.id} className="pn-member">
-        {member.profileUrl && (
-          <div className="pn-member__avatar">
-            <img src={member.profileUrl} alt="User avatar " />
-          </div>
-        )}
+        <div className="pn-member__avatar">
+          {member?.profileUrl && <img src={member.profileUrl} alt="User avatar " />}
+          {!member?.profileUrl && <div className="pn-member__avatar-placeholder" />}
+        </div>
         {props.show !== "subscribers" && memberPresent && <span className="pn-member__presence" />}
         <div className="pn-member__main">
           <p className="pn-member__name">

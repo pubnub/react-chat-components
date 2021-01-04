@@ -29,30 +29,28 @@ import {
 } from "../state-atoms";
 
 /**
- * ChatComponents wrapper is used to configure various common options and feed the components with data.
+ * Chat wrapper is used to configure various common options and feed the components with data.
  * It expects at least a configured PubNub object and a "current" channel to display within components.
  */
-export interface ChatComponentsProps {
+export interface ChatProps {
   children?: ReactNode;
-  /** Expects a reference to the configured PubNub client. */
+  /** Reference to `pubnubClient` with config for publish key, subscribe key and uuid. */
   pubnub: PubNub;
   /** A general theme to be used by the components.
    * Exact looks can be tweaked later on with the use of CSS variables. */
   theme?: Themes;
   /** A "current" channel to display the messages and members from. */
   channel: string;
-  /** Array of channels to subscribe to events from. This gets automatically populated whenever
-   * switching current channel but can also be used to subscirbe to any external channels if needed */
+  /** Array of channels to subscribe to get events. Allows up to 50 channels. */
   subscribeChannels?: string[];
-  /** By default the components will try to fetch metadata about users, channels and memberships
-   * from PubNub objects storage. This behavior can be disabled by setting this to false. */
-  fetchPubNubObjects?: boolean;
+  /** By default the components will fetch metadata for users, channels and memberships from PubNub Objects. */
+  objects?: boolean;
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
-  enablePresence?: boolean;
-  /** Provide external user metadata in case there's any outside of PubNub Objects. */
-  users?: UserData[];
-  /** Provide external channel metadata in case there's any outside of PubNub Objects. */
-  channels?: Channel[];
+  presence?: boolean;
+  /** Provide external list of user metadata. */
+  userList?: UserData[];
+  /** Provide external list of channel metadata. */
+  channelList?: Channel[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
   /** Pass options to emoji-mart picker. */
@@ -63,31 +61,31 @@ export interface ChatComponentsProps {
   onPresence?: (event: PresenceEvent) => unknown;
 }
 
-export const ChatComponents: FC<ChatComponentsProps> = (props: ChatComponentsProps) => {
+export const Chat: FC<ChatProps> = (props: ChatProps) => {
   return (
     <RecoilRoot>
-      <ChatComponentsInternal {...props}></ChatComponentsInternal>
+      <ChatInternal {...props}></ChatInternal>
     </RecoilRoot>
   );
 };
 
-ChatComponents.defaultProps = {
+Chat.defaultProps = {
   emojiMartOptions: { emoji: "", title: "", native: true },
-  fetchPubNubObjects: true,
+  objects: true,
   subscribeChannels: [],
   theme: "light" as const,
-  enablePresence: true,
+  presence: true,
   typingIndicatorTimeout: 10,
-  users: [],
-  channels: [],
+  userList: [],
+  channelList: [],
 };
 
 /**
  *
- *  Internal ChatComponents wrapper with all business logic
+ *  Internal Chat wrapper with all business logic
  *
  */
-export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatComponentsProps) => {
+export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const setChannelsMeta = useSetRecoilState(ChannelsMetaAtom);
   const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
   const setJoinedChannels = useSetRecoilState(CurrentUserMembershipsAtom);
@@ -110,8 +108,8 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
    */
   useEffect(() => {
     setPubnub(props.pubnub);
-    setUsersMeta(props.users);
-    setChannelsMeta(props.channels);
+    setUsersMeta(props.userList);
+    setChannelsMeta(props.channelList);
     setTheme(props.theme);
     setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
@@ -133,7 +131,7 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
    */
   useEffect(() => {
     if (!pubnub) return;
-    if (props.fetchPubNubObjects) fetchAllMetadata();
+    if (props.objects) fetchAllMetadata();
     setupListeners();
 
     // Try to unsubscribe beofore window is unloaded
@@ -152,7 +150,7 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
     if (!members.length) fetchMembers();
-    if (!presentMembers.length && props.enablePresence) fetchPresence();
+    if (!presentMembers.length && props.presence) fetchPresence();
   }, [currentChannel]);
 
   useEffect(() => {
@@ -175,9 +173,16 @@ export const ChatComponentsInternal: FC<ChatComponentsProps> = (props: ChatCompo
 
   const setupSubscriptions = () => {
     const currentSubscriptions = pubnub.getSubscribedChannels();
-    const subscribeChannelsWithUserId = [...subscribeChannels, pubnub.getUUID()];
-    const channels = subscribeChannelsWithUserId.filter((c) => !currentSubscriptions.includes(c));
-    if (channels.length) pubnub.subscribe({ channels, withPresence: props.enablePresence });
+    const userChannel = pubnub.getUUID();
+    const newChannels = subscribeChannels.filter((c) => !currentSubscriptions.includes(c));
+
+    if (!currentSubscriptions.includes(userChannel)) {
+      pubnub.subscribe({ channels: [userChannel] });
+    }
+
+    if (newChannels.length) {
+      pubnub.subscribe({ channels: newChannels, withPresence: props.presence });
+    }
   };
 
   const fetchAllMetadata = async () => {

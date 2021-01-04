@@ -13,21 +13,21 @@ import "./message-input.scss";
 import "emoji-mart/css/emoji-mart.css";
 
 export interface MessageInputProps {
-  /** Set the input placeholder */
+  /** Set a placeholder message display in the text window. */
   placeholder?: string;
-  /** Set the initial value for the input */
-  initialValue?: string;
+  /** Set a draft message to display in the text window. */
+  draftMessage?: string;
   /** Enable this for high-throughput environemnts to attach sender data directly to each message */
-  attachSenders?: boolean;
+  senderInfo?: boolean;
   /** Show the Send button */
   hideSendButton?: boolean;
-  /** Send button children */
-  sendButtonContent?: JSX.Element | string;
-  /** Disable the built-in emoji picker */
-  disableEmojiPicker?: boolean;
-  /** Callback to handle value changes */
+  /** Custom UI component to override default display for the send button. */
+  sendButton?: JSX.Element | string;
+  /** Show the built-in emoji picker in the message input.*/
+  emojiPicker?: boolean;
+  /** Callback to handle event when the text value changes. */
   onChange?: (value: string) => unknown;
-  /** Callback for extra actions while sending the message */
+  /** Callback for extra actions while sending a message */
   onSend?: (value: unknown) => unknown;
 }
 
@@ -74,7 +74,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       const message = {
         type: "text",
         text,
-        ...(props.attachSenders && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+        ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
       };
 
       await pubnub.publish({ channel, message });
@@ -181,11 +181,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           />
         </div>
 
-        {!props.disableEmojiPicker && renderEmojiPicker()}
+        {props.emojiPicker && renderEmojiPicker()}
 
         {!props.hideSendButton && (
           <button className="pn-msg-input__send" onClick={() => sendMessage()}>
-            {props.sendButtonContent}
+            {props.sendButton}
           </button>
         )}
       </div>
@@ -195,5 +195,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
 MessageInput.defaultProps = {
   placeholder: "Type Message",
-  sendButtonContent: "→",
+  sendButton: "Send",
+  senderInfo: false,
+  emojiPicker: false,
 };

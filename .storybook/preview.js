@@ -1,5 +1,5 @@
 import React from "react";
-import { ChatComponents } from "../src";
+import { Chat } from "../src";
 import PubNub from "pubnub";
 import { PubNubMock } from "./pubnub-mock";
 
@@ -13,7 +13,7 @@ const pubnub = new PubNubMock();
 
 export const decorators = [
   (Story, context) => (
-    <ChatComponents
+    <Chat
       {...{
         pubnub,
         channel: "space_ac4e67b98b34b44c4a39466e93e",
@@ -21,7 +21,7 @@ export const decorators = [
       }}
     >
       <Story />
-    </ChatComponents>
+    </Chat>
   ),
 ];
 
@@ -32,7 +32,7 @@ export const parameters = {
       order: [
         "Introduction",
         "Components",
-        ["Chat Components (Provider)"],
+        ["Chat (Provider)"],
         "Examples"
       ]
     },

@@ -64,7 +64,7 @@ npm install --save pubnub pubnub-chat-components
 ```js
 import { PubNub } from "pubnub";
 import {
-  ChatComponents,
+  Chat,
   MessageList,
   MessageInput,
   ChannelList,
@@ -72,7 +72,7 @@ import {
 } from "pubnub-chat-components";
 ```
 
-2. Create your PubNub client and rest of the configuration for the ChatComponents, which serves as a
+2. Create your PubNub client and rest of the configuration for the Chat, which serves as a
    common context for all of the components:
 
 ```jsx
@@ -91,10 +91,10 @@ const theme = "light";
 ```jsx
 const MyCommponent = () => {
   return (
-    <ChatComponents {...{ pubnub, channel, theme }}>
+    <Chat {...{ pubnub, channel, theme }}>
       <MessageList>
       <MessageInput>
-    </ChatComponents>
+    </Chat>
   );
 };
 ```
