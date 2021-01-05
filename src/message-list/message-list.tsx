@@ -1,6 +1,6 @@
 import React, { FC, UIEvent, useRef, useState, useEffect } from "react";
 import { FetchMessagesResponse, UserData } from "pubnub";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilValue, useRecoilCallback } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
 import { Message, ImageAttachment, LinkAttachment } from "../types";
 import {
@@ -24,8 +24,8 @@ export interface MessageRendererProps {
 }
 
 export interface MessageListProps {
-  /** Disable fetching of messages stored in the history */
-  disableHistoryFetch?: boolean;
+  /** Set a number from 0 to 100 to fetch past messages from storage on a channel. Defaults to 0 to fetch no messages from storage. */
+  fetchMessages?: number;
   /** Enable to add emoji reactions on messages. */
   enableReactions?: boolean;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
@@ -44,10 +44,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
   const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
-  const [messages, setMessages] = useRecoilState(CurrentChannelMessagesAtom);
-  const [paginationEnd, setPaginationEnd] = useRecoilState(CurrentChannelPaginationAtom);
+  const messages = useRecoilValue(CurrentChannelMessagesAtom);
+  const paginationEnd = useRecoilValue(CurrentChannelPaginationAtom);
 
-  const [messagesPerPage] = useState(100);
   const [scrolledBottom, setScrolledBottom] = useState(true);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [fetchingMessages, setFetchingMessages] = useState(false);
@@ -58,11 +57,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const listRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
-  const bottomObserver = useRef(
-    new IntersectionObserver((e) => handleBottomScroll(e[0].isIntersecting))
-  );
   const spinnerObserver = useRef(
     new IntersectionObserver((e) => e[0].isIntersecting === true && fetchMoreHistory())
+  );
+  const bottomObserver = useRef(
+    new IntersectionObserver((e) => handleBottomScroll(e[0].isIntersecting))
   );
 
   /*
@@ -105,12 +104,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   */
 
   const fetchHistory = async () => {
-    if (props.disableHistoryFetch) return;
+    if (!props.fetchMessages) return;
     try {
       setFetchingMessages(true);
       const history = await pubnub.fetchMessages({
         channels: [channel],
-        count: messagesPerPage,
+        count: props.fetchMessages,
         includeMessageActions: true,
       });
       handleHistoryFetch(history);
@@ -124,22 +123,29 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const fetchMoreHistory = async () => {
-    if (!pubnub) return;
-    try {
-      const firstMessage = listRef.current?.querySelector("div");
-      const response = await pubnub.fetchMessages({
-        channels: [channel],
-        count: messagesPerPage,
-        start: (messages?.[0].timetoken as number) || undefined,
-        includeMessageActions: true,
-      });
-      handleHistoryFetch(response);
-      if (firstMessage) firstMessage.scrollIntoView();
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  /** useRecoilCallback to accesses recoil atoms inside of a Intersection Observer callback */
+  const fetchMoreHistory = useRecoilCallback(
+    ({ snapshot }) => async () => {
+      const pubnub = await snapshot.getPromise(PubnubAtom);
+      const channel = await snapshot.getPromise(CurrentChannelAtom);
+      const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
+      const firstMessage = listRef.current?.querySelector(".pn-msg");
+
+      try {
+        const history = await pubnub.fetchMessages({
+          channels: [channel],
+          count: props.fetchMessages,
+          start: (messages?.[0].timetoken as number) || undefined,
+          includeMessageActions: true,
+        });
+        handleHistoryFetch(history);
+        if (firstMessage) firstMessage.scrollIntoView();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    []
+  );
 
   const addReaction = (reaction: string, messageTimetoken) => {
     pubnub.addMessageAction({
@@ -165,14 +171,22 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     setScrolledBottom(scrolledBottom);
   };
 
-  const handleHistoryFetch = (response: FetchMessagesResponse) => {
-    const newMessages = (response.channels[channel] as Message[]) || [];
-    const allMessages = [...messages, ...newMessages].sort(
-      (a, b) => (a.timetoken as number) - (b.timetoken as number)
-    );
-    setMessages(allMessages);
-    setPaginationEnd(!allMessages.length || newMessages.length !== messagesPerPage);
-  };
+  const handleHistoryFetch = useRecoilCallback(
+    ({ snapshot, set }) => async (response: FetchMessagesResponse) => {
+      const channel = await snapshot.getPromise(CurrentChannelAtom);
+      const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
+      const newMessages = (response.channels[channel] as Message[]) || [];
+      const allMessages = [...messages, ...newMessages].sort(
+        (a, b) => (a.timetoken as number) - (b.timetoken as number)
+      );
+      set(CurrentChannelMessagesAtom, allMessages);
+      set(
+        CurrentChannelPaginationAtom,
+        !allMessages.length || newMessages.length !== props.fetchMessages
+      );
+    },
+    []
+  );
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
     (event.target as HTMLElement).appendChild(pickerRef.current);
@@ -342,7 +356,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   return (
     <div className={`pn-msg-list pn-msg-list--${theme}`} onScroll={props.onScroll} ref={listRef}>
-      {!props.disableHistoryFetch && !paginationEnd && (
+      {!!props.fetchMessages && !paginationEnd && (
         <span ref={spinnerRef} className="pn-msg-list__spinner">
           <SpinnerIcon />
         </span>
@@ -378,4 +392,5 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
 MessageList.defaultProps = {
   enableReactions: false,
+  fetchMessages: 0,
 };

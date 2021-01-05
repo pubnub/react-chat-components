@@ -1,5 +1,5 @@
 export * from "./types";
-export * from "./chat-components";
+export * from "./chat";
 export * from "./message-input";
 export * from "./message-list";
 export * from "./member-list";

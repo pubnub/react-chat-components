@@ -19,6 +19,8 @@ export interface MessageInputProps {
   draftMessage?: string;
   /** Enable this for high-throughput environemnts to attach sender data directly to each message */
   senderInfo?: boolean;
+  /** Enable/disable firing the typing events when user is typing a message. */
+  typingIndicator?: boolean;
   /** Show the Send button */
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the send button. */
@@ -87,7 +89,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   const startTypingIndicator = async () => {
-    if (!typingIndicatorSent) {
+    if (props.typingIndicator && !typingIndicatorSent) {
       setTypingIndicatorSent(true);
       const message = { message: { type: "typing_on" }, channel };
 
@@ -100,7 +102,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   const stopTypingIndicator = async () => {
-    if (typingIndicatorSent) {
+    if (props.typingIndicator && typingIndicatorSent) {
       setTypingIndicatorSent(false);
       const message = { message: { type: "typing_off" }, channel };
       pubnub.signal(message);
@@ -198,4 +200,5 @@ MessageInput.defaultProps = {
   sendButton: "Send",
   senderInfo: false,
   emojiPicker: false,
+  typingIndicator: false,
 };
