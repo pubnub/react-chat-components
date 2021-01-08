@@ -1,10 +1,10 @@
 import React, { FC, KeyboardEvent, ChangeEvent, useState, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
+import { usePubNub } from "pubnub-react";
 import {
   CurrentChannelAtom,
   EmojiMartOptionsAtom,
-  PubnubAtom,
   ThemeAtom,
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
@@ -38,13 +38,14 @@ export interface MessageInputProps {
  * and automatically publish them on PubNub channels upon sending.
  */
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
+  const pubnub = usePubNub();
+
   const [text, setText] = useState("");
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
 
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
-  const pubnub = useRecoilValue(PubnubAtom);
   const channel = useRecoilValue(CurrentChannelAtom);
   const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
   const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);

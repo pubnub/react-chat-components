@@ -1,9 +1,9 @@
 import React, { FC } from "react";
 import { UserData } from "pubnub";
+import { usePubNub } from "pubnub-react";
 import { useRecoilValue } from "recoil";
 import {
   ThemeAtom,
-  PubnubAtom,
   UsersMetaAtom,
   CurrentChannelMembershipsAtom,
   CurrentChannelOccupancyAtom,
@@ -30,7 +30,8 @@ export interface UserRendererProps {
  * The component also marks currently subscribed users as active.
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
-  const pubnub = useRecoilValue(PubnubAtom);
+  const pubnub = usePubNub();
+
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
   const members = useRecoilValue(CurrentChannelMembershipsAtom);

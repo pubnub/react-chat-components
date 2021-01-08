@@ -1,11 +1,11 @@
 import React, { FC, UIEvent, useRef, useState, useEffect } from "react";
 import { FetchMessagesResponse, UserData } from "pubnub";
+import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
 import { Message, ImageAttachment, LinkAttachment } from "../types";
 import {
   CurrentChannelAtom,
-  PubnubAtom,
   CurrentChannelMessagesAtom,
   CurrentChannelPaginationAtom,
   UsersMetaAtom,
@@ -39,7 +39,8 @@ export interface MessageListProps {
 }
 
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
-  const pubnub = useRecoilValue(PubnubAtom);
+  const pubnub = usePubNub();
+
   const channel = useRecoilValue(CurrentChannelAtom);
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
@@ -126,7 +127,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /** useRecoilCallback to accesses recoil atoms inside of a Intersection Observer callback */
   const fetchMoreHistory = useRecoilCallback(
     ({ snapshot }) => async () => {
-      const pubnub = await snapshot.getPromise(PubnubAtom);
       const channel = await snapshot.getPromise(CurrentChannelAtom);
       const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
       const firstMessage = listRef.current?.querySelector(".pn-msg");
@@ -207,7 +207,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   */
 
   useEffect(() => {
-    if (!pubnub) return;
+    if (!pubnub || !channel) return;
     if (!messages?.length) fetchHistory();
   }, [channel]);
 

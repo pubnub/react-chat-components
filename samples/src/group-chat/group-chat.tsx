@@ -1,6 +1,6 @@
 import React from "react";
 import PubNub from "pubnub";
-import { PubNubProvider, usePubNub } from "pubnub-react";
+import { PubNubProvider } from "pubnub-react";
 import {
   Chat,
   MessageList,
@@ -60,12 +60,6 @@ const pubnub = new PubNub({
 
 const theme = "dark";
 
-function Test() {
-  const pn = usePubNub();
-  console.log("TEST: ", pn)
-  return null;
-}
-
 function GroupChat() {
   const [channel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
   const [showMembers, setShowMembers] = React.useState(false);
@@ -81,10 +75,8 @@ function GroupChat() {
   return (
     <div className="app">
       <PubNubProvider client={pubnub}>
-        <Test></Test>
         <Chat
           {...{
-            pubnub,
             theme,
             // users,
             channel,

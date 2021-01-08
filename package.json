@@ -40,8 +40,9 @@
     "gh-pages": "^3.1.0",
     "node-sass": "^4.14.1",
     "prettier": "^2.1.2",
-    "pubnub": "^4.29.9",
-    "react": ">=16.8",
+    "pubnub": "^4.29.10",
+    "pubnub-react": "^2.1.0",
+    "react": "^17.0.1",
     "react-dom": ">=16.8",
     "rollup": "^2.32.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
@@ -55,6 +56,7 @@
   "peerDependencies": {
     "emoji-mart": "^3.0.0",
     "pubnub": "^4.29.9",
+    "pubnub-react": "^2.1.0",
     "react": ">=16.8",
     "react-dom": ">=16.8"
   },

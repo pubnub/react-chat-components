@@ -1,12 +1,7 @@
 import React, { FC, useEffect, ReactNode } from "react";
 import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
-import PubNub, {
-  BaseObjectsEvent,
-  MessageActionEvent,
-  PresenceEvent,
-  SignalEvent,
-  UserData,
-} from "pubnub";
+import { BaseObjectsEvent, MessageActionEvent, PresenceEvent, SignalEvent, UserData } from "pubnub";
+import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message, Channel } from "../types";
 import { getAllPubnubUsers, getAllPubnubChannels, getPubnubChannelMembers } from "../commands";
@@ -20,7 +15,6 @@ import {
   EmojiMartOptionsAtom,
   MessagesAtom,
   OccupancyAtom,
-  PubnubAtom,
   SubscribeChannelsAtom,
   ThemeAtom,
   TypingIndicatorAtom,
@@ -34,8 +28,6 @@ import {
  */
 export interface ChatProps {
   children?: ReactNode;
-  /** Reference to `pubnubClient` with config for publish key, subscribe key and uuid. */
-  pubnub: PubNub;
   /** A general theme to be used by the components.
    * Exact looks can be tweaked later on with the use of CSS variables. */
   theme?: Themes;
@@ -86,6 +78,7 @@ Chat.defaultProps = {
  *
  */
 export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
+  const pubnub = usePubNub();
   const setChannelsMeta = useSetRecoilState(ChannelsMetaAtom);
   const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
   const setJoinedChannels = useSetRecoilState(CurrentUserMembershipsAtom);
@@ -97,7 +90,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
   const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
   const [presentMembers, setPresentMembers] = useRecoilState(CurrentChannelOccupancyAtom);
-  const [pubnub, setPubnub] = useRecoilState(PubnubAtom);
   const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
   const [typingIndicatorTimeout, setTypingIndicatorTimeout] = useRecoilState(
     TypingIndicatorTimeoutAtom
@@ -107,7 +99,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
-    setPubnub(props.pubnub);
     setUsersMeta(props.userList);
     setChannelsMeta(props.channelList);
     setTheme(props.theme);

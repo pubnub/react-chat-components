@@ -1,9 +1,9 @@
 import React, { FC, useEffect } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import { usePubNub } from "pubnub-react";
 import { Channel } from "../types";
 import {
   ThemeAtom,
-  PubnubAtom,
   CurrentChannelAtom,
   ChannelsMetaAtom,
   CurrentUserMembershipsAtom,
@@ -38,7 +38,8 @@ export interface ChannelRendererProps {
  * Redners an interactive list of channels.
  */
 export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
-  const pubnub = useRecoilValue(PubnubAtom);
+  const pubnub = usePubNub();
+
   const channel = useRecoilValue(CurrentChannelAtom);
   const theme = useRecoilValue(ThemeAtom);
   const channels = useRecoilValue(ChannelsMetaAtom);

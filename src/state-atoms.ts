@@ -1,13 +1,7 @@
 import { atom, selector } from "recoil";
-import { Message, Themes, Channel } from "./types";
-import PubNub, { UserData } from "pubnub";
+import { UserData } from "pubnub";
 import { PickerProps } from "emoji-mart";
-
-export const PubnubAtom = atom<PubNub>({
-  key: "pubnub",
-  default: null,
-  dangerouslyAllowMutability: true,
-});
+import { Message, Themes, Channel } from "./types";
 
 export const ThemeAtom = atom<Themes | "">({
   key: "theme",
