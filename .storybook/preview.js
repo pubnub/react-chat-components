@@ -29,12 +29,7 @@ export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   options: {
     storySort: {
-      order: [
-        "Introduction",
-        "Components",
-        ["Chat (Provider)"],
-        "Examples"
-      ]
+      order: ["Introduction", ["About", "Usage", "Metadata"], "Components", ["Chat (Provider)"], "Examples"],
     },
   },
 };

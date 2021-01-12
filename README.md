@@ -6,6 +6,19 @@ PubNub Chat Components is a development kit of React components that aims to hel
 
 ![PubNub Chat Components](https://i.imgur.com/C0fTWCT.png)
 
+
+## Links
+
+- [PubNub Chat Components Documentation](https://pubnub.github.io/react-chat-components) - describes
+the components' features, options, customizations etc.
+- [PubNub General Documentation](https://www.pubnub.com/docs/platform/home) - look into this first to
+have a general understanding of how PubNub works
+- [PubNub Chat Documentation](https://www.pubnub.com/docs/chat/overview) - might be useful to also
+know how PubNub works in regards to Chat applications
+- [PubNub React Documentation](https://www.pubnub.com/docs/chat/react/setup) - React wrapper can
+be used for other types of applications as well
+
+
 ## Benefits
 
 - Ease of installation and setup
@@ -20,6 +33,7 @@ PubNub Chat Components is a development kit of React components that aims to hel
 
 - `React 16.8+` and `ReactDOM 16.8+`
 - `PubNub JavaScript SDK 4.29+`
+- `PubNub React SDK 2.1.0+`
 
 ## Components
 
@@ -54,15 +68,16 @@ Install the components and all required dependencies using npm:
 > Please note that the components are not deployed to npm yet!
 
 ```bash
-npm install --save pubnub pubnub-chat-components
+npm install --save pubnub pubnub-react pubnub-chat-components
 ```
 
 ## Usage
 
-1. Import PubNub and the components
+1. Import PubNub, PubNub React Provider and the components
 
 ```js
 import { PubNub } from "pubnub";
+import { PubNubProvider } from "pubnub-react";
 import {
   Chat,
   MessageList,
@@ -85,17 +100,29 @@ const channel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Place the components within the state provider in any order that your app requires. Components
+3. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
+
+```jsx
+const MyCommponent = () => {
+  return (
+    <PubNubProvider client={pubnub}>
+    </PubNub>
+  );
+};
+```
+
+4. Place the components within the Chat state provider in any order that your app requires. Components
    can be tweaked later on using option properties and CSS variables.
 
 ```jsx
 const MyCommponent = () => {
   return (
-    <Chat {...{ pubnub, channel, theme }}>
-      <MessageList>
-      <MessageInput>
-    </Chat>
+    <PubNubProvider client={pubnub}>
+      <Chat {...{ channel, theme }}>
+        <MessageList>
+        <MessageInput>
+      </Chat>
+    </PubNub>
   );
 };
 ```
-

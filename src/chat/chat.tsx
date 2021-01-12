@@ -140,7 +140,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (!subscribeChannels.includes(currentChannel)) {
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
-    if (!members.length) fetchMembers();
+    if (!members.length && props.objects) fetchMembers();
     if (!presentMembers.length && props.presence) fetchPresence();
   }, [currentChannel]);
 

@@ -26,15 +26,16 @@ Install the components and all required dependencies using npm:
 > Please note that the components are not deployed to npm yet!
 
 ```bash
-npm install --save pubnub pubnub-chat-components
+npm install --save pubnub pubnub-react pubnub-chat-components
 ```
 
 ## Usage
 
-1. Import PubNub and the components
+1. Import PubNub, PubNub React Provider and the components
 
 ```js
 import { PubNub } from "pubnub";
+import { PubNubProvider } from "pubnub-react";
 import {
   Chat,
   MessageList,
@@ -44,8 +45,7 @@ import {
 } from "pubnub-chat-components";
 ```
 
-2. Create your PubNub client and rest of the configuration for the Chat, which serves as a
-   common context for all of the components:
+2. Create your PubNub client and rest of the configuration for the Chat provider.
 
 ```jsx
 const pubnub = new PubNub({
@@ -57,16 +57,29 @@ const channel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Place the components within the state provider in any order that your app requires. Components
+3. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
+
+```jsx
+const MyCommponent = () => {
+  return (
+    <PubNubProvider client={pubnub}>
+    </PubNub>
+  );
+};
+```
+
+4. Place the components within the Chat state provider in any order that your app requires. Components
    can be tweaked later on using option properties and CSS variables.
 
 ```jsx
 const MyCommponent = () => {
   return (
-    <Chat {...{ pubnub, channel, theme }}>
-      <MessageList>
-      <MessageInput>
-    </Chat>
+    <PubNubProvider client={pubnub}>
+      <Chat {...{ channel, theme }}>
+        <MessageList>
+        <MessageInput>
+      </Chat>
+    </PubNub>
   );
 };
 ```
