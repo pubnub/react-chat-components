@@ -1,6 +1,7 @@
 import React from "react";
 import { Chat } from "../src";
 import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
 import { PubNubMock } from "./pubnub-mock";
 
 const pubnub = new PubNubMock();
@@ -13,15 +14,16 @@ const pubnub = new PubNubMock();
 
 export const decorators = [
   (Story, context) => (
-    <Chat
-      {...{
-        pubnub,
-        channel: "space_ac4e67b98b34b44c4a39466e93e",
-        theme: context.parameters.theme || "dark",
-      }}
-    >
-      <Story />
-    </Chat>
+    <PubNubProvider client={pubnub}>
+      <Chat
+        {...{
+          channel: "space_ac4e67b98b34b44c4a39466e93e",
+          theme: context.parameters.theme || "dark",
+        }}
+      >
+        <Story />
+      </Chat>
+    </PubNubProvider>
   ),
 ];
 

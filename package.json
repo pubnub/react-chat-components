@@ -11,8 +11,8 @@
     "build": "rollup -c",
     "watch": "watch \"npm run build\" ./src",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "deploy-storybook": "gh-pages -d storybook-static"
+    "storybook:build": "build-storybook",
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static"
   },
   "author": "",
   "license": "ISC",
