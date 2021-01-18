@@ -122,19 +122,20 @@ function GroupChat() {
               // rendererFilter={rendererFilter}
               // onMessage={(m) => console.log(`New message: ${m}`)}
               // onScroll={(m) => console.log(`Scroll event: ${m}`)}
-            />
+            >
+              <TypingIndicator showAsMessage />
+            </MessageList>
 
             <MessageInput
-            // typingIndicator
-            // placeholder="Custom placeholder"
-            // initialValue="Initial value"
-            // hideSendButton
-            // sendButtonContent="SEND"
-            // disableEmojiPicker
-            // onChange={(m) => console.log(`Change event: ${m}`)}
-            // onSend={(m) => console.log(`Send event: ${m}`)}
+              typingIndicator
+              // placeholder="Custom placeholder"
+              // initialValue="Initial value"
+              // hideSendButton
+              // sendButtonContent="SEND"
+              // disableEmojiPicker
+              // onChange={(m) => console.log(`Change event: ${m}`)}
+              // onSend={(m) => console.log(`Send event: ${m}`)}
             />
-            <TypingIndicator />
           </div>
 
           <div className={`members ${showMembers && "shown"}`}>
