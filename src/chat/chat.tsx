@@ -99,12 +99,20 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
-    setUsersMeta(props.userList);
-    setChannelsMeta(props.channelList);
+    // setUsersMeta(props.userList);
+    // setChannelsMeta(props.channelList);
     setTheme(props.theme);
     setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
   }, []);
+
+  useEffect(() => {
+    setUsersMeta(props.userList);
+  }, [props.userList]);
+
+  useEffect(() => {
+    setChannelsMeta(props.channelList);
+  }, [props.channelList]);
 
   /**
    * Lifecycle: load updateable props
@@ -177,19 +185,18 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   };
 
   const fetchAllMetadata = async () => {
-    const users = await getAllPubnubUsers(pubnub);
-    setUsersMeta((existingUsers) => {
-      const existingUsersIds = existingUsers.map((u) => u.id);
-      const newUsers = users.filter((u) => !existingUsersIds.includes(u.id));
-      return [...existingUsers, ...newUsers];
-    });
-
-    const channels = await getAllPubnubChannels(pubnub);
-    setChannelsMeta((existingChannels) => {
-      const existingChannelsIds = existingChannels.map((user) => user.id);
-      const newChannels = channels.filter((u) => !existingChannelsIds.includes(u.id));
-      return [...existingChannels, ...newChannels];
-    });
+    // const users = await getAllPubnubUsers(pubnub);
+    // setUsersMeta((existingUsers) => {
+    //   const existingUsersIds = existingUsers.map((u) => u.id);
+    //   const newUsers = users.filter((u) => !existingUsersIds.includes(u.id));
+    //   return [...existingUsers, ...newUsers];
+    // });
+    // const channels = await getAllPubnubChannels(pubnub);
+    // setChannelsMeta((existingChannels) => {
+    //   const existingChannelsIds = existingChannels.map((user) => user.id);
+    //   const newChannels = channels.filter((u) => !existingChannelsIds.includes(u.id));
+    //   return [...existingChannels, ...newChannels];
+    // });
   };
 
   const fetchMembers = async () => {
