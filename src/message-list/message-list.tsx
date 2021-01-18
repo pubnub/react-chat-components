@@ -1,4 +1,4 @@
-import React, { FC, UIEvent, useRef, useState, useEffect } from "react";
+import React, { FC, UIEvent, useRef, useState, useEffect, ReactNode } from "react";
 import { FetchMessagesResponse, UserData } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
@@ -15,7 +15,6 @@ import {
 import SpinnerIcon from "./spinner.svg";
 import LogoIcon from "./logo.svg";
 import "./message-list.scss";
-import { TypingIndicator } from "../typing-indicator";
 
 export interface MessageRendererProps {
   isOwn: boolean;
