@@ -18,6 +18,11 @@ export const SubscribeChannelsAtom = atom<string[]>({
   default: [],
 });
 
+export const SubscribeChannelGroupsAtom = atom<string[]>({
+  key: "subscribeChannelGroups",
+  default: [],
+});
+
 export const ChannelsMetaAtom = atom<Channel[]>({
   key: "channelsMeta",
   default: [],

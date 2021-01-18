@@ -81,6 +81,7 @@ function GroupChat() {
             // users,
             channel,
             // subscribeChannels: ["ch1", "ch2", "ch3"],
+            subscribeChannelGroups: ["gr1"],
             channels,
             // fetchPubNubObjects: false,
             // attachSenders: true,
