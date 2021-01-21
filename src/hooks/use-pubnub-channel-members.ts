@@ -1,37 +1,46 @@
 import { useState, useEffect } from "react";
-import { UserData, GetAllMetadataParameters } from "pubnub";
+import { UserData, GetChannelMembersParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { mergeDeep } from "../helpers";
+import merge from "lodash.merge";
+
+type HookReturnValue = [UserData[], () => Promise<void>, number];
 
 export const usePubNubChannelMembers = (
-  options: GetAllMetadataParameters = {},
+  options: GetChannelMembersParameters = {},
   onError = (e) => console.error(e)
-): UserData[] => {
+): HookReturnValue => {
   const pubnub = usePubNub();
-  const [members, setMembers] = useState([]);
-  const [page, setPage] = useState("");
+
+  const [members, setMembers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const mandatoryOptions = {
+  const [page, setPage] = useState("");
+
+  const paginatedOptions = merge({}, options, {
     page: { next: page },
     include: { totalCount: true },
-  };
-  const mergedOptions = mergeDeep(options, mandatoryOptions);
+  });
 
-  const command = async (): Promise<UserData[]> => {
+  const command = async () => {
     try {
       if (totalCount && members.length >= totalCount) return;
-      const response = await pubnub.objects.getChannelMembers(mergedOptions);
-      setPage(response.next);
-      setTotalCount(response.totalCount);
+      const response = await pubnub.objects.getChannelMembers(paginatedOptions);
       setMembers((members) => [...members, ...response.data.map((m) => m.uuid)]);
+      setTotalCount(response.totalCount);
+      setPage(response.next);
     } catch (e) {
       onError(e);
     }
   };
 
   useEffect(() => {
-    command();
-  }, []);
+    setMembers([]);
+    setTotalCount(0);
+    setPage("");
+  }, [options.channel]);
+
+  useEffect(() => {
+    if (!page) command();
+  }, [page]);
 
   return [members, command, totalCount];
 };

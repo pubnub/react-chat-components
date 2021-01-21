@@ -4,7 +4,7 @@ import { BaseObjectsEvent, MessageActionEvent, PresenceEvent, SignalEvent, UserD
 import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message, Channel } from "../types";
-import { getAllPubnubUsers, getAllPubnubChannels, getPubnubChannelMembers } from "../commands";
+import { getPubnubChannelMembers } from "../commands";
 import { setDeep, cloneDeep } from "../helpers";
 import {
   ChannelsMetaAtom,
@@ -99,8 +99,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
-    // setUsersMeta(props.userList);
-    // setChannelsMeta(props.channelList);
     setTheme(props.theme);
     setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
@@ -130,7 +128,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    */
   useEffect(() => {
     if (!pubnub) return;
-    if (props.objects) fetchAllMetadata();
     setupListeners();
 
     // Try to unsubscribe beofore window is unloaded
@@ -182,21 +179,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (newChannels.length) {
       pubnub.subscribe({ channels: newChannels, withPresence: props.presence });
     }
-  };
-
-  const fetchAllMetadata = async () => {
-    // const users = await getAllPubnubUsers(pubnub);
-    // setUsersMeta((existingUsers) => {
-    //   const existingUsersIds = existingUsers.map((u) => u.id);
-    //   const newUsers = users.filter((u) => !existingUsersIds.includes(u.id));
-    //   return [...existingUsers, ...newUsers];
-    // });
-    // const channels = await getAllPubnubChannels(pubnub);
-    // setChannelsMeta((existingChannels) => {
-    //   const existingChannelsIds = existingChannels.map((user) => user.id);
-    //   const newChannels = channels.filter((u) => !existingChannelsIds.includes(u.id));
-    //   return [...existingChannels, ...newChannels];
-    // });
   };
 
   const fetchMembers = async () => {

@@ -5,6 +5,7 @@ import { PubNubProvider } from "pubnub-react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import TeamChat from "./group-chat/group-chat";
 import EventChat from "./event-chat/event-chat";
+import HooksTest from "./hooks-test/hooks-test";
 import "./index.css";
 
 const userIds = [
@@ -32,6 +33,9 @@ ReactDOM.render(
     <PubNubProvider client={pubnub}>
       <Router>
         <Switch>
+          <Route path="/hooks-test">
+            <HooksTest />
+          </Route>
           <Route path="/team-chat">
             <TeamChat />
           </Route>
@@ -48,6 +52,9 @@ ReactDOM.render(
                 </li>
                 <li>
                   <a href="/event-chat">Live Event Chat</a>
+                </li>
+                <li>
+                  <a href="/hooks-test">Hooks Test</a>
                 </li>
               </ul>
             </div>

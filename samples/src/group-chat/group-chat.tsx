@@ -13,30 +13,30 @@ import {
   usePubNubChannels,
   usePubNubChannelMembers,
   usePubNubUserMemberships,
+  usePubNubMessages,
 } from "pubnub-chat-components";
 import "./group-chat.css";
-import { useEffect } from "react";
 
-const users = [
-  {
-    id: "user_00505cca5b04460fafd716af48665ca1",
-    name: "Provided Name",
-    externalId: null,
-    profileUrl:
-      "https://www.gravatar.com/avatar/b1951c3e65ca6362c465f6ea75f0e86a?s=256&d=identicon",
-    email: null,
-    custom: { title: "Fontend Programmer" },
-    updated: "2020-09-23T09:23:33.232181Z",
-    eTag: "Adbmvd68xZWY/wE",
-  },
-];
+// const users = [
+//   {
+//     id: "user_00505cca5b04460fafd716af48665ca1",
+//     name: "Provided Name",
+//     externalId: null,
+//     profileUrl:
+//       "https://www.gravatar.com/avatar/b1951c3e65ca6362c465f6ea75f0e86a?s=256&d=identicon",
+//     email: null,
+//     custom: { title: "Fontend Programmer" },
+//     updated: "2020-09-23T09:23:33.232181Z",
+//     eTag: "Adbmvd68xZWY/wE",
+//   },
+// ];
 
-const channels = [
-  {
-    id: "space_ac4e67b98b34b44c4a39466e93e",
-    name: "INTRODUCTIONS",
-  },
-];
+// const channels = [
+//   {
+//     id: "space_ac4e67b98b34b44c4a39466e93e",
+//     name: "INTRODUCTIONS",
+//   },
+// ];
 
 const theme = "dark";
 
@@ -45,13 +45,19 @@ function GroupChat() {
   const [showMembers, setShowMembers] = React.useState(false);
 
   const [userList, fetchMoreUsers, totalUsers] = usePubNubUsers({ include: { customFields: true }});
+  // const [members, fetchMoreMembers, totalMembers] = usePubNubChannelMembers({ channel });
+
+  // const [channelList, fetchMoreChannels, totalChannels] = usePubNubUserMemberships({
+  //   uuid: "user_00505cca5b04460fafd716af48665ca1",
+  // });
+
   const [channelList, fetchMoreChannels, totalChannels] = usePubNubChannels({ limit: 2, include: { customFields: true }});
-  const [members, fetchMoreMembers, totalMembers] = usePubNubChannelMembers({ limit: 20, channel: "space_ac4e67b98b34b44c4a39466e93e" });
-  const [joinedChannels, fetchMoreJoinedChannels, totalJoinedChannels] = usePubNubUserMemberships({
-    uuid: "user_00505cca5b04460fafd716af48665ca1",
-  });
+
+
+
   const usr = usePubNubUser({ uuid: "user_00505cca5b04460fafd716af48665ca1" });
-  if (usr) console.log("usr: ", usr);
+  // if (usr) console.log("usr: ", usr);
+  // const [msgs, fetchMsgs] = usePubNubMessages({ channels: [channel], count: 1 })
 
   const handleSwitchChannel = (channel: Channel) => {
     setChannel(channel.id);
@@ -63,10 +69,7 @@ function GroupChat() {
 
   return (
     <div className="app">
-      <button onClick={fetchMoreJoinedChannels}>Click me!</button>
-      <span>
-        joinedChannels: {joinedChannels.length}/{totalJoinedChannels}
-      </span>
+      {/* <span>hook members: {members?.length}</span> */}
       <Chat
         {...{
           theme,
@@ -81,13 +84,18 @@ function GroupChat() {
       >
         <div className="channels">
           <ChannelList
+            channels={channelList}
             onChannelSwitched={handleSwitchChannel}
-            onChannelLeft={handleLeaveChannel}
+            // onChannelLeft={handleLeaveChannel}
             // show="subscriptions"
             // show="memberships"
             // show="non-memberships"
             // channelRenderer={channelRenderer}
-          />
+          >
+            {totalChannels > channelList.length &&
+            <button onClick={fetchMoreChannels}>Fetch more channels</button>
+            }
+          </ChannelList>
         </div>
 
         <div className="chat">

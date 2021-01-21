@@ -1,3 +1,4 @@
+export * from "./use-pubnub-messages";
 export * from "./use-pubnub-user";
 export * from "./use-pubnub-users";
 export * from "./use-pubnub-channels";

@@ -23,3 +23,15 @@ code {
   color: #dcddde;
   text-decoration: none;
 }
+
+.welcome a:hover {
+  text-decoration: underline;
+}
+
+.welcome ul {
+  padding-left: 16px;
+}
+
+.welcome li {
+  margin: 10px 0;
+}
