@@ -44,7 +44,7 @@
 }
 
 .pn-channel-list {
-  --channel__description__display: none;
+  /* --channel__description__display: none; */
   --channel__membership__top: 25px;
   --channel__name__fontSize: 13px;
   --channel__name__fontWeight: 400;

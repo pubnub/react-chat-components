@@ -1,7 +1,7 @@
 import { atom, selector } from "recoil";
 import { UserData } from "pubnub";
 import { PickerProps } from "emoji-mart";
-import { Message, Themes, Channel } from "./types";
+import { Message, Themes } from "./types";
 
 export const ThemeAtom = atom<Themes | "">({
   key: "theme",
@@ -15,11 +15,6 @@ export const CurrentChannelAtom = atom<string>({
 
 export const SubscribeChannelsAtom = atom<string[]>({
   key: "subscribeChannels",
-  default: [],
-});
-
-export const ChannelsMetaAtom = atom<Channel[]>({
-  key: "channelsMeta",
   default: [],
 });
 

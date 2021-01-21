@@ -3,11 +3,10 @@ import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
 import { BaseObjectsEvent, MessageActionEvent, PresenceEvent, SignalEvent, UserData } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
-import { Themes, Message, Channel } from "../types";
+import { Themes, Message } from "../types";
 import { getPubnubChannelMembers } from "../commands";
 import { setDeep, cloneDeep } from "../helpers";
 import {
-  ChannelsMetaAtom,
   CurrentChannelAtom,
   CurrentChannelMembershipsAtom,
   CurrentChannelOccupancyAtom,
@@ -41,8 +40,6 @@ export interface ChatProps {
   presence?: boolean;
   /** Provide external list of user metadata. */
   userList?: UserData[];
-  /** Provide external list of channel metadata. */
-  channelList?: Channel[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
   /** Pass options to emoji-mart picker. */
@@ -69,7 +66,6 @@ Chat.defaultProps = {
   presence: true,
   typingIndicatorTimeout: 10,
   userList: [],
-  channelList: [],
 };
 
 /**
@@ -79,7 +75,6 @@ Chat.defaultProps = {
  */
 export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const pubnub = usePubNub();
-  const setChannelsMeta = useSetRecoilState(ChannelsMetaAtom);
   const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
   const setJoinedChannels = useSetRecoilState(CurrentUserMembershipsAtom);
   const setMessages = useSetRecoilState(MessagesAtom);
@@ -107,10 +102,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   useEffect(() => {
     setUsersMeta(props.userList);
   }, [props.userList]);
-
-  useEffect(() => {
-    setChannelsMeta(props.channelList);
-  }, [props.channelList]);
 
   /**
    * Lifecycle: load updateable props

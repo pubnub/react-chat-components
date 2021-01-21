@@ -17,6 +17,8 @@ import {
 } from "pubnub-chat-components";
 import "./group-chat.css";
 
+// const channelRenderer = (channel: Channel) => <span>{channel.name}</span>
+
 // const users = [
 //   {
 //     id: "user_00505cca5b04460fafd716af48665ca1",
@@ -44,40 +46,28 @@ function GroupChat() {
   const [channel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
   const [showMembers, setShowMembers] = React.useState(false);
 
-  const [userList, fetchMoreUsers, totalUsers] = usePubNubUsers({ include: { customFields: true }});
-  // const [members, fetchMoreMembers, totalMembers] = usePubNubChannelMembers({ channel });
+  const [userList] = usePubNubUsers({ include: { customFields: true } });
+  const [channelList] = usePubNubChannels({ include: { customFields: true } });
 
+  // const [members, fetchMoreMembers, totalMembers] = usePubNubChannelMembers({ channel });
   // const [channelList, fetchMoreChannels, totalChannels] = usePubNubUserMemberships({
   //   uuid: "user_00505cca5b04460fafd716af48665ca1",
   // });
-
-  const [channelList, fetchMoreChannels, totalChannels] = usePubNubChannels({ limit: 2, include: { customFields: true }});
-
-
-
-  const usr = usePubNubUser({ uuid: "user_00505cca5b04460fafd716af48665ca1" });
-  // if (usr) console.log("usr: ", usr);
-  // const [msgs, fetchMsgs] = usePubNubMessages({ channels: [channel], count: 1 })
+  // const usr = usePubNubUser({ uuid: "user_00505cca5b04460fafd716af48665ca1" });
 
   const handleSwitchChannel = (channel: Channel) => {
     setChannel(channel.id);
   };
 
-  const handleLeaveChannel = () => {
-    setChannel("space_ac4e67b98b34b44c4a39466e93e");
-  };
-
   return (
     <div className="app">
-      {/* <span>hook members: {members?.length}</span> */}
       <Chat
         {...{
           theme,
           channel,
           // subscribeChannels: ["ch1", "ch2", "ch3"],
           userList,
-          channelList,
-          // fetchPubNubObjects: false,
+          // objects: false,
           // attachSenders: true,
           // enablePresence: false
         }}
@@ -86,16 +76,10 @@ function GroupChat() {
           <ChannelList
             channels={channelList}
             onChannelSwitched={handleSwitchChannel}
-            // onChannelLeft={handleLeaveChannel}
-            // show="subscriptions"
-            // show="memberships"
-            // show="non-memberships"
+            // sort={(a, b) => 1}
+            // filter={(ch) => ch.name === "What?"}
             // channelRenderer={channelRenderer}
-          >
-            {totalChannels > channelList.length &&
-            <button onClick={fetchMoreChannels}>Fetch more channels</button>
-            }
-          </ChannelList>
+          />
         </div>
 
         <div className="chat">
