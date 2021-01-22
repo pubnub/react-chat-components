@@ -1,28 +1,20 @@
-import React, { FC } from "react";
+import React, { FC, ReactNode } from "react";
 import { UserData } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue } from "recoil";
-import {
-  ThemeAtom,
-  UsersMetaAtom,
-  CurrentChannelMembershipsAtom,
-  CurrentChannelOccupancyAtom,
-} from "../state-atoms";
+import { ThemeAtom } from "../state-atoms";
 import "./member-list.scss";
 
 export interface MemberListProps {
-  /** Users to show on the list
-   * "members" (default) = users associated with current channel in PubNub Objects storage
-   * "subscribers" = users subscribed to the current channel (you don't need to be a member to subscribe)
-   */
-  show?: "members" | "subscribers";
+  children?: ReactNode;
+  /** Pass a list of members, including metadata, to render on the list */
+  memberList: UserData[] | string[];
+  /** Members are sorted alphabetically by default, you can override that by providing a sorter function */
+  sort?: (a: UserData, b: UserData) => -1 | 0 | 1;
+  /** Provide an additional member filter to hide some of the members */
+  filter?: (member: UserData) => boolean;
   /** Provide custom user renderer to override themes and CSS variables. */
-  userRenderer?: (props: UserRendererProps) => JSX.Element;
-}
-
-export interface UserRendererProps {
-  member: UserData;
-  memberPresent: boolean;
+  memberRenderer?: (member: UserData) => JSX.Element;
 }
 
 /**
@@ -31,11 +23,7 @@ export interface UserRendererProps {
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const pubnub = usePubNub();
-
-  const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
-  const members = useRecoilValue(CurrentChannelMembershipsAtom);
-  const presentMembers = useRecoilValue(CurrentChannelOccupancyAtom);
 
   /*
   /* Helper functions
@@ -46,31 +34,36 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   const memberSorter = (a, b) => {
-    const pres = presentMembers;
+    if (props.sort) return props.sort(a, b);
 
     if (isOwnMember(a.id)) return -1;
     if (isOwnMember(b.id)) return 1;
 
-    if (pres.includes(a.id) && !pres.includes(b.id)) return -1;
-    if (pres.includes(b.id) && !pres.includes(a.id)) return 1;
-
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
-  const userFromString = (uuid) => ({
-    id: uuid,
-    name: uuid,
-  });
+  const memberFilter = (member: UserData) => {
+    if (props.filter) return props.filter(member);
+    return true;
+  };
+
+  const memberFromString = (member: UserData | string) => {
+    if (typeof member === "string") {
+      return {
+        id: member,
+        name: member,
+      };
+    }
+    return member;
+  };
 
   /*
   /* Renderers
   */
 
   const renderMember = (member) => {
+    if (props.memberRenderer) return props.memberRenderer(member);
     const youString = isOwnMember(member.id) ? "(You)" : "";
-    const memberPresent = presentMembers.includes(member.id);
-
-    if (props.userRenderer) return props.userRenderer({ member, memberPresent });
 
     return (
       <div key={member.id} className="pn-member">
@@ -78,7 +71,6 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
           {member?.profileUrl && <img src={member.profileUrl} alt="User avatar " />}
           {!member?.profileUrl && <div className="pn-member__avatar-placeholder" />}
         </div>
-        {props.show !== "subscribers" && memberPresent && <span className="pn-member__presence" />}
         <div className="pn-member__main">
           <p className="pn-member__name">
             {member.name} {youString}
@@ -89,22 +81,15 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     );
   };
 
-  const renderUsers = ((type) => {
-    switch (type) {
-      case "subscribers":
-        return presentMembers.map((id) => users.find((u) => u.id === id) || userFromString(id));
-      default:
-        return members.map((id) => users.find((u) => u.id === id) || userFromString(id));
-    }
-  })(props.show);
-
   return (
     <div className={`pn-member-list pn-member-list--${theme}`}>
-      {[...renderUsers].sort((a, b) => memberSorter(a, b)).map((m) => renderMember(m))}
+      {(props.memberList as string[])
+        .map(memberFromString)
+        .filter(memberFilter)
+        .sort(memberSorter)
+        .map(renderMember)}
+
+      <>{props.children}</>
     </div>
   );
-};
-
-MemberList.defaultProps = {
-  show: "members",
 };

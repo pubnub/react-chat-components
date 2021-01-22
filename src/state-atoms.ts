@@ -65,23 +65,6 @@ export const CurrentChannelMembershipsAtom = selector<string[]>({
     ),
 });
 
-export const CurrentUserMembershipsAtom = atom<string[]>({
-  key: "userMemberships",
-  default: [],
-});
-
-export const OccupancyAtom = atom({
-  key: "occupancy",
-  default: {},
-});
-
-export const CurrentChannelOccupancyAtom = selector<string[]>({
-  key: "channelOccupancy",
-  get: ({ get }) => get(OccupancyAtom)[get(CurrentChannelAtom)] || [],
-  set: ({ get, set }, value) =>
-    set(OccupancyAtom, Object.assign({}, get(OccupancyAtom), { [get(CurrentChannelAtom)]: value })),
-});
-
 export const TypingIndicatorAtom = atom({
   key: "typingIndicator",
   default: {},

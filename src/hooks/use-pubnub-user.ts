@@ -9,7 +9,7 @@ export const usePubNubUser = (
   const pubnub = usePubNub();
   const [user, setUser] = useState(null);
 
-  const command = async (): Promise<UserData> => {
+  const command = async () => {
     try {
       const response = await pubnub.objects.getUUIDMetadata(options);
       setUser(response.data);

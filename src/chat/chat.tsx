@@ -9,11 +9,8 @@ import { setDeep, cloneDeep } from "../helpers";
 import {
   CurrentChannelAtom,
   CurrentChannelMembershipsAtom,
-  CurrentChannelOccupancyAtom,
-  CurrentUserMembershipsAtom,
   EmojiMartOptionsAtom,
   MessagesAtom,
-  OccupancyAtom,
   SubscribeChannelsAtom,
   ThemeAtom,
   TypingIndicatorAtom,
@@ -46,8 +43,14 @@ export interface ChatProps {
   emojiMartOptions?: PickerProps;
   /** A callback run on new messages. */
   onMessage?: (message: Message) => unknown;
+  /** A callback run on signals. */
+  onSignal?: (message: SignalEvent) => unknown;
+  /** A callback run on message actions. */
+  onAction?: (event: MessageActionEvent) => unknown;
   /** A callback run on presence events. */
   onPresence?: (event: PresenceEvent) => unknown;
+  /** A callback run on object events. */
+  onObject?: (event: BaseObjectsEvent) => unknown;
 }
 
 export const Chat: FC<ChatProps> = (props: ChatProps) => {
@@ -76,15 +79,12 @@ Chat.defaultProps = {
 export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const pubnub = usePubNub();
   const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
-  const setJoinedChannels = useSetRecoilState(CurrentUserMembershipsAtom);
   const setMessages = useSetRecoilState(MessagesAtom);
-  const setOccupancy = useSetRecoilState(OccupancyAtom);
   const setTheme = useSetRecoilState(ThemeAtom);
   const setTypingIndicator = useSetRecoilState(TypingIndicatorAtom);
   const setUsersMeta = useSetRecoilState(UsersMetaAtom);
   const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
   const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
-  const [presentMembers, setPresentMembers] = useRecoilState(CurrentChannelOccupancyAtom);
   const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
   const [typingIndicatorTimeout, setTypingIndicatorTimeout] = useRecoilState(
     TypingIndicatorTimeoutAtom
@@ -137,7 +137,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
     if (!members.length && props.objects) fetchMembers();
-    if (!presentMembers.length && props.presence) fetchPresence();
   }, [currentChannel]);
 
   useEffect(() => {
@@ -177,17 +176,12 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     setMembers(members);
   };
 
-  const fetchPresence = async () => {
-    const response = await pubnub.hereNow({ channels: [currentChannel] });
-    const presentMembers = response.channels[currentChannel].occupants.map((u) => u.uuid);
-    setPresentMembers(presentMembers);
-  };
-
   /**
    * Event handlers
    */
   const handleMessage = (message: Message) => {
     if (props.onMessage) props.onMessage(message);
+
     setMessages((messages) => {
       const messagesClone = cloneDeep(messages);
       messagesClone[message.channel].push(message);
@@ -195,7 +189,9 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     });
   };
 
-  const handleSignalEvent = async (signal: SignalEvent) => {
+  const handleSignalEvent = (signal: SignalEvent) => {
+    if (props.onSignal) props.onSignal(signal);
+
     if (["typing_on", "typing_off"].includes(signal.message.type)) {
       setTypingIndicator((indicators) => {
         const indicatorsClone = cloneDeep(indicators);
@@ -216,43 +212,15 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   const handlePresenceEvent = (event: PresenceEvent) => {
     if (props.onPresence) props.onPresence(event);
-
-    setOccupancy((occupancy) => {
-      const occupancyClone = cloneDeep(occupancy);
-      if (event.action === "join" && !occupancyClone[event.channel].includes(event.uuid)) {
-        occupancyClone[event.channel].push(event.uuid);
-      }
-      if (
-        ["leave", "timeout"].includes(event.action) &&
-        occupancyClone[event.channel].includes(event.uuid)
-      ) {
-        occupancyClone[event.channel] = occupancyClone[event.channel].filter(
-          (id) => id !== event.uuid
-        );
-      }
-      return occupancyClone;
-    });
   };
 
   const handleObjectsEvent = (event: BaseObjectsEvent) => {
-    const message = event.message;
-    const eventChannel = message.data.channel.id;
-
-    if (message.type == "membership" && message.data.uuid.id == pubnub.getUUID()) {
-      setJoinedChannels((joinedChannels) => {
-        let joinedChannelsClone = cloneDeep(joinedChannels);
-        if (message.event === "set" && !joinedChannelsClone.includes(eventChannel)) {
-          joinedChannelsClone.push(eventChannel);
-        }
-        if (message.event === "delete" && joinedChannelsClone.includes(eventChannel)) {
-          joinedChannelsClone = joinedChannelsClone.filter((id) => id !== eventChannel);
-        }
-        return joinedChannelsClone;
-      });
-    }
+    if (props.onObject) props.onObject(event);
   };
 
   const handleAction = (action: MessageActionEvent) => {
+    if (props.onAction) props.onAction(action);
+
     if (action.data.type == "reaction") {
       const actionData = action.data;
       setMessages((messages) => {

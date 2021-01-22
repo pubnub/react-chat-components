@@ -1,23 +1,23 @@
 import React from "react";
 import {
-  Chat,
-  MessageList,
-  MessageInput,
-  MemberList,
-  ChannelList,
   Channel,
-  OccupancyIndicator,
+  ChannelList,
+  Chat,
+  MemberList,
+  MessageInput,
+  MessageList,
   TypingIndicator,
-  usePubNubUser,
-  usePubNubUsers,
-  usePubNubChannels,
   usePubNubChannelMembers,
-  usePubNubUserMemberships,
-  usePubNubMessages,
+  usePubNubChannels,
+  usePubNubPresence,
+  // usePubNubUser,
+  // usePubNubUserMemberships,
+  usePubNubUsers,
 } from "pubnub-chat-components";
 import "./group-chat.css";
 
 // const channelRenderer = (channel: Channel) => <span>{channel.name}</span>
+// const memberRenderer = (member: UserData) => <span>{member.name}</span>
 
 // const users = [
 //   {
@@ -48,8 +48,8 @@ function GroupChat() {
 
   const [userList] = usePubNubUsers({ include: { customFields: true } });
   const [channelList] = usePubNubChannels({ include: { customFields: true } });
-
-  // const [members, fetchMoreMembers, totalMembers] = usePubNubChannelMembers({ channel });
+  const [memberList] = usePubNubChannelMembers({ channel, include: { customUUIDFields: true } });
+  const [totalPresence] = usePubNubPresence({ channels: [channel] });
   // const [channelList, fetchMoreChannels, totalChannels] = usePubNubUserMemberships({
   //   uuid: "user_00505cca5b04460fafd716af48665ca1",
   // });
@@ -74,7 +74,7 @@ function GroupChat() {
       >
         <div className="channels">
           <ChannelList
-            channels={channelList}
+            channelList={channelList}
             onChannelSwitched={handleSwitchChannel}
             // sort={(a, b) => 1}
             // filter={(ch) => ch.name === "What?"}
@@ -87,7 +87,9 @@ function GroupChat() {
             className={`people ${showMembers ? "active" : ""}`}
             onClick={() => setShowMembers(!showMembers)}
           >
-            <OccupancyIndicator />
+            <span>
+              {totalPresence || 0} / {memberList.length || 0}
+            </span>
             <svg viewBox="0 0 20 15" width="20" height="15">
               <title>People Group</title>
               <g fill="currentColor" fillRule="evenodd">
@@ -108,7 +110,7 @@ function GroupChat() {
           />
 
           <MessageInput
-          // typingIndicator
+          typingIndicator
           // placeholder="Custom placeholder"
           // initialValue="Initial value"
           // hideSendButton
@@ -122,9 +124,10 @@ function GroupChat() {
 
         <div className={`members ${showMembers && "shown"}`}>
           <MemberList
-          // show="subscribers"
-          // memberRenderer={memberRenderer}
-          // onPresence={(m) => console.log(`Presence event: ${m}`)}
+            memberList={memberList}
+            // sort={(a, b) => 1}
+            // filter={(member) => member.name === "Leonardo Lukasik"}
+            // memberRenderer={memberRenderer}
           />
         </div>
       </Chat>

@@ -7,7 +7,7 @@ import "./channel-list.scss";
 export interface ChannelListProps {
   children?: ReactNode;
   /** Pass a list of channels, including metadata, to render on the list */
-  channels: Channel[] | string[];
+  channelList: Channel[] | string[];
   /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
   sort?: (a: Channel, b: Channel) => -1 | 0 | 1;
   /** Provide an additional channel filter to hide some of the channels */
@@ -65,10 +65,9 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   */
 
   const renderChannel = (channel: Channel) => {
+    if (props.channelRenderer) return props.channelRenderer(channel);
     const channelActive = isChannelActive(channel);
     const activeClass = channelActive ? "pn-channel--active" : "";
-
-    if (props.channelRenderer) return props.channelRenderer(channel);
 
     return (
       <div
@@ -86,7 +85,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
 
   return (
     <div className={`pn-channel-list pn-channel-list--${theme}`}>
-      {(props.channels as string[])
+      {(props.channelList as string[])
         .map(channelFromString)
         .filter(channelFilter)
         .sort(channelSorter)
