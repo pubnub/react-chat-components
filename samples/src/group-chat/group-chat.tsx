@@ -121,7 +121,6 @@ function GroupChat() {
             // onChange={(m) => console.log(`Change event: ${m}`)}
             // onSend={(m) => console.log(`Send event: ${m}`)}
           />
-          <TypingIndicator />
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>

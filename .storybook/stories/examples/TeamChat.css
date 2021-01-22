@@ -33,10 +33,15 @@
   color: gray;
   cursor: pointer;
   display: flex;
+  font-size: 13px;
   position: absolute;
   right: 40px;
   top: 10px;
   z-index: 1;
+}
+
+.people span {
+  margin: 2px 8px 0 0;
 }
 
 .people.active {

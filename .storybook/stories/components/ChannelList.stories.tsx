@@ -1,6 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { ChannelList, ChannelListProps } from "../../../src";
+import { mockChannels } from "../../pubnub-mock";
 
 export default {
   title: "Components/Channel List",
@@ -10,7 +11,7 @@ export default {
 const Template: Story<ChannelListProps> = (args) => <ChannelList {...args} />;
 
 export const Default = Template.bind({});
-// Default.args = {
-//   primary: true,
-//   label: "Button",
-// };
+
+Default.args = {
+  channelList: mockChannels(),
+};

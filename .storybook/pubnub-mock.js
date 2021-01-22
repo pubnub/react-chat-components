@@ -1,4 +1,4 @@
-const mockUsers = () => [
+export const mockUsers = () => [
   {
     uuid: {
       id: "user_fbc9a54790b24ee19441260970b171c0",
@@ -111,7 +111,7 @@ const mockUsers = () => [
   },
 ];
 
-const mockMessages = () => [
+export const mockMessages = () => [
   {
     message: {
       text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
@@ -164,7 +164,7 @@ const mockMessages = () => [
   },
 ];
 
-const mockChannels = () => [
+export const mockChannels = () => [
   {
     id: "space_ce466f2e445c38976168ba78e46",
     name: "Company Culture",
@@ -251,6 +251,7 @@ export function PubNubMock() {
     }),
     getUUID: () => uuid,
     getSubscribedChannels: () => ["space_ce466f2e445c38976168ba78e46"],
+    getSubscribedChannelGroups: () => [],
     hereNow: (args) => ({
       channels: {
         [args.channels[0]]: {

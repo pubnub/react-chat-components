@@ -1,6 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { MemberList, MemberListProps } from "../../../src";
+import { mockUsers } from "../../pubnub-mock";
 
 export default {
   title: "Components/Member List",
@@ -10,3 +11,7 @@ export default {
 const Template: Story<MemberListProps> = (args) => <MemberList {...args} />;
 
 export const Default = Template.bind({});
+
+Default.args = {
+  memberList: mockUsers().map((u) => u.uuid),
+};
