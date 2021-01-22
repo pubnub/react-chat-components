@@ -12,6 +12,7 @@ import {
   EmojiMartOptionsAtom,
   MessagesAtom,
   SubscribeChannelsAtom,
+  SubscribeChannelGroupsAtom,
   ThemeAtom,
   TypingIndicatorAtom,
   TypingIndicatorTimeoutAtom,
@@ -31,6 +32,8 @@ export interface ChatProps {
   channel: string;
   /** Array of channels to subscribe to get events. Allows up to 50 channels. */
   subscribeChannels?: string[];
+  /** Array of channels to subscribe to get events. Allows up to 50 channels. */
+  subscribeChannelGroups?: string[];
   /** By default the components will fetch metadata for users, channels and memberships from PubNub Objects. */
   objects?: boolean;
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
@@ -65,6 +68,7 @@ Chat.defaultProps = {
   emojiMartOptions: { emoji: "", title: "", native: true },
   objects: true,
   subscribeChannels: [],
+  subscribeChannelGroups: [],
   theme: "light" as const,
   presence: true,
   typingIndicatorTimeout: 10,
@@ -86,6 +90,9 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
   const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
   const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
+  const [subscribeChannelGroups, setSubscribeChannelGroups] = useRecoilState(
+    SubscribeChannelGroupsAtom
+  );
   const [typingIndicatorTimeout, setTypingIndicatorTimeout] = useRecoilState(
     TypingIndicatorTimeoutAtom
   );
@@ -114,6 +121,10 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     setSubscribeChannels(props.subscribeChannels);
   }, [props.subscribeChannels]);
 
+  useEffect(() => {
+    setSubscribeChannelGroups(props.subscribeChannelGroups);
+  }, [props.subscribeChannelGroups]);
+
   /**
    * Lifecycle: react to state changes
    */
@@ -140,9 +151,9 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [currentChannel]);
 
   useEffect(() => {
-    if (!subscribeChannels.length) return;
+    if (!subscribeChannels.length && !subscribeChannelGroups.length) return;
     setupSubscriptions();
-  }, [subscribeChannels]);
+  }, [subscribeChannels, subscribeChannelGroups]);
 
   /**
    * Commands
@@ -158,16 +169,24 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   };
 
   const setupSubscriptions = () => {
-    const currentSubscriptions = pubnub.getSubscribedChannels();
     const userChannel = pubnub.getUUID();
+
+    const currentSubscriptions = pubnub.getSubscribedChannels();
     const newChannels = subscribeChannels.filter((c) => !currentSubscriptions.includes(c));
+
+    const currentGroups = pubnub.getSubscribedChannelGroups();
+    const newGroups = subscribeChannelGroups.filter((c) => !currentGroups.includes(c));
 
     if (!currentSubscriptions.includes(userChannel)) {
       pubnub.subscribe({ channels: [userChannel] });
     }
 
-    if (newChannels.length) {
-      pubnub.subscribe({ channels: newChannels, withPresence: props.presence });
+    if (newChannels.length || newGroups.length) {
+      pubnub.subscribe({
+        channels: newChannels,
+        channelGroups: newGroups,
+        withPresence: props.presence,
+      });
     }
   };
 

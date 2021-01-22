@@ -1,4 +1,4 @@
-import React, { FC, UIEvent, useRef, useState, useEffect } from "react";
+import React, { FC, UIEvent, useRef, useState, useEffect, ReactNode } from "react";
 import { FetchMessagesResponse, UserData } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
@@ -24,6 +24,7 @@ export interface MessageRendererProps {
 }
 
 export interface MessageListProps {
+  children?: ReactNode;
   /** Set a number from 0 to 100 to fetch past messages from storage on a channel. Defaults to 0 to fetch no messages from storage. */
   fetchMessages?: number;
   /** Enable to add emoji reactions on messages. */
@@ -378,6 +379,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           />
         )}
       </div>
+
+      {props.children}
 
       <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 

@@ -55,3 +55,7 @@
   --channel__name__fontWeight: 400;
   --channel__padding: 20px 24px;
 }
+
+.pn-msg-input {
+  --msg-input__padding: 0 24px 24px;
+}
