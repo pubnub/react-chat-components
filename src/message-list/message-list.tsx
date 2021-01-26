@@ -39,6 +39,12 @@ export interface MessageListProps {
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
 }
 
+/**
+ * Fetches historical messages using scrolling pagination pattern and subscribes to the current
+ * channel to stay up to date with new messages. Displays data in an interactive list, including
+ * user names, avatars, times of sending and attachments (links, images). Allows to react to
+ * messages with emojis and show those reactions immediately.
+ */
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const pubnub = usePubNub();
 

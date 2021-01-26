@@ -19,7 +19,12 @@ export interface ChannelListProps {
 }
 
 /**
- * Renders an interactive list of channels.
+ * Renders an interactive list of channels. It can represent all channels of the application, only
+ * channels joined by the current user, all channels available to be joined or whatever else is
+ * passed into it. A common patttern in Chat Applications is to render two instances of the
+ * component - one visible all the time to show joined channels, and another one hidden inside of a
+ * modal with channels available to join. Make sure to handle onChannelSwitched event to switch
+ * current channel passed to the Chat provider, or whatever else is expected.
  */
 export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   const channel = useRecoilValue(CurrentChannelAtom);

@@ -42,7 +42,6 @@ be used for other types of applications as well
 - Message Input
 - Channel List
 - Channel Members
-- Occupancy Indicator
 - Typing Indicator
 
 <br />

@@ -55,21 +55,6 @@ export const CurrentChannelPaginationAtom = selector<boolean>({
     ),
 });
 
-export const MembershipsAtom = atom({
-  key: "memberships",
-  default: [],
-});
-
-export const CurrentChannelMembershipsAtom = selector<string[]>({
-  key: "channelMemberships",
-  get: ({ get }) => get(MembershipsAtom)[get(CurrentChannelAtom)] || [],
-  set: ({ get, set }, value) =>
-    set(
-      MembershipsAtom,
-      Object.assign({}, get(MembershipsAtom), { [get(CurrentChannelAtom)]: value })
-    ),
-});
-
 export const TypingIndicatorAtom = atom({
   key: "typingIndicator",
   default: {},

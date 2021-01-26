@@ -87,6 +87,7 @@ function GroupChat() {
             className={`people ${showMembers ? "active" : ""}`}
             onClick={() => setShowMembers(!showMembers)}
           >
+            <TypingIndicator />
             <span>
               {totalPresence || 0} / {memberList.length || 0}
             </span>

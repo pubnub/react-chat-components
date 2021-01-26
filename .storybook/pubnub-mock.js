@@ -243,12 +243,28 @@ export function PubNubMock() {
       actions.push(action);
       listeners.messageAction(action);
     },
-    addListener: (obj) => Object.assign(listeners, obj),
-    fetchMessages: (args) => ({
-      channels: {
-        [args.channels[0]]: messages,
-      },
-    }),
+    addListener: (obj) => {
+      Object.assign(listeners, obj);
+    },
+    fetchMessages: async (args) => {
+      let messagesCopy = [...messages];
+      if (args.start) {
+        messagesCopy = messagesCopy.filter(
+          (m) => parseInt(m.timetoken) < parseInt(args.start)
+        );
+      }
+      messagesCopy = messagesCopy.slice(Math.max(messagesCopy.length - args.count, 0));
+
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({
+            channels: {
+              [args.channels[0]]: messagesCopy,
+            },
+          });
+        }, 800);
+      });
+    },
     getUUID: () => uuid,
     getSubscribedChannels: () => ["space_ce466f2e445c38976168ba78e46"],
     getSubscribedChannelGroups: () => [],

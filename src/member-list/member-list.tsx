@@ -18,8 +18,10 @@ export interface MemberListProps {
 }
 
 /**
- * Fetches all memberships for the current channel from PubNub Objects storage and displays them as a list of users.
- * The component also marks currently subscribed users as active.
+ * Renders a list of members. It can represent all users of the application, only members of
+ * the current channel, users currently subscribed/present on the channel or whatever else is passed
+ * into it. Custom memberRenderer can be used to modify how the users are rendered, so for example
+ * presence indicators can be added.
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const pubnub = usePubNub();

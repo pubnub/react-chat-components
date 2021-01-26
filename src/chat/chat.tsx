@@ -4,11 +4,9 @@ import { BaseObjectsEvent, MessageActionEvent, PresenceEvent, SignalEvent, UserD
 import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message } from "../types";
-import { getPubnubChannelMembers } from "../commands";
 import { setDeep, cloneDeep } from "../helpers";
 import {
   CurrentChannelAtom,
-  CurrentChannelMembershipsAtom,
   EmojiMartOptionsAtom,
   MessagesAtom,
   SubscribeChannelsAtom,
@@ -34,8 +32,6 @@ export interface ChatProps {
   subscribeChannels?: string[];
   /** Array of channels to subscribe to get events. Allows up to 50 channels. */
   subscribeChannelGroups?: string[];
-  /** By default the components will fetch metadata for users, channels and memberships from PubNub Objects. */
-  objects?: boolean;
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
   presence?: boolean;
   /** Provide external list of user metadata. */
@@ -66,7 +62,6 @@ export const Chat: FC<ChatProps> = (props: ChatProps) => {
 
 Chat.defaultProps = {
   emojiMartOptions: { emoji: "", title: "", native: true },
-  objects: true,
   subscribeChannels: [],
   subscribeChannelGroups: [],
   theme: "light" as const,
@@ -88,7 +83,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const setTypingIndicator = useSetRecoilState(TypingIndicatorAtom);
   const setUsersMeta = useSetRecoilState(UsersMetaAtom);
   const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
-  const [members, setMembers] = useRecoilState(CurrentChannelMembershipsAtom);
   const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
   const [subscribeChannelGroups, setSubscribeChannelGroups] = useRecoilState(
     SubscribeChannelGroupsAtom
@@ -147,7 +141,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (!subscribeChannels.includes(currentChannel)) {
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
-    if (!members.length && props.objects) fetchMembers();
   }, [currentChannel]);
 
   useEffect(() => {
@@ -188,11 +181,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         withPresence: props.presence,
       });
     }
-  };
-
-  const fetchMembers = async () => {
-    const members = await getPubnubChannelMembers(pubnub, currentChannel);
-    setMembers(members);
   };
 
   /**
