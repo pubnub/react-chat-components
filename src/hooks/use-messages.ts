@@ -10,16 +10,15 @@ interface MessagesByChannel {
   [channel: string]: Message[];
 }
 
-type HookReturnValue = [MessagesByChannel, () => Promise<void>];
+type HookReturnValue = [MessagesByChannel, () => Promise<void>, Error];
 
-export const usePubNubMessages = (
-  options: FetchMessagesParameters = {},
-  onError = (e) => console.error(e)
-): HookReturnValue => {
+export const useMessages = (options: FetchMessagesParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
+
   const [messages, setMessages] = useState<MessagesByChannel>({});
   const [page, setPage] = useState<number>(undefined);
   const [fetchedAll, setFetchedAll] = useState(false);
+  const [error, setError] = useState<Error>();
 
   const mandatoryOptions = {
     start: page,
@@ -39,13 +38,14 @@ export const usePubNubMessages = (
       setPage(lastTimetoken - 1);
       setFetchedAll(!Object.keys(response.channels).length);
     } catch (e) {
-      onError(e);
+      setError(e);
     }
   };
 
   const handleMessage = (message) => {
     setMessages((messages) => {
       const messagesClone = cloneDeep(messages);
+      if (!messagesClone[message.channel]) messagesClone[message.channel] = [];
       messagesClone[message.channel].push(message);
       return messagesClone;
     });
@@ -54,14 +54,9 @@ export const usePubNubMessages = (
   useEffect(() => {
     command();
     pubnub.addListener({ message: handleMessage });
-    pubnub.subscribe({ channels: options.channels });
-
-    return () => {
-      pubnub.unsubscribe({ channels: options.channels });
-    };
   }, []);
 
-  return [messages, command];
+  return [messages, command, error];
 };
 
 const mergeMessageArray = (oldMessages, newMessages) => {

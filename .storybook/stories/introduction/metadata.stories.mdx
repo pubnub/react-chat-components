@@ -54,8 +54,9 @@ interface UserData {
   eTag: string;                // not used in Chat Components
   created: string;             // not used in Chat Components
   updated: string;             // not used in Chat Components
-  custom?: {                   // not used in Chat Components by default, but can store additional data
-    [key: string]: unknown;
+  custom?: {
+    title?: string             // displays user title / description / status on the member list
+    [key: string]: unknown;    // can store additional data
   };
 }
 

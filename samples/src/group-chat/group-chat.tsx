@@ -7,12 +7,12 @@ import {
   MessageInput,
   MessageList,
   TypingIndicator,
-  usePubNubChannelMembers,
-  usePubNubChannels,
-  usePubNubPresence,
-  // usePubNubUser,
-  // usePubNubUserMemberships,
-  usePubNubUsers,
+  useChannelMembers,
+  useChannels,
+  usePresence,
+  // useUser,
+  // useUserMemberships,
+  useUsers,
 } from "pubnub-chat-components";
 import "./group-chat.css";
 
@@ -46,14 +46,14 @@ function GroupChat() {
   const [channel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
   const [showMembers, setShowMembers] = React.useState(false);
 
-  const [userList] = usePubNubUsers({ include: { customFields: true } });
-  const [channelList] = usePubNubChannels({ include: { customFields: true } });
-  const [memberList] = usePubNubChannelMembers({ channel, include: { customUUIDFields: true } });
-  const [totalPresence] = usePubNubPresence({ channels: [channel] });
-  // const [channelList, fetchMoreChannels, totalChannels] = usePubNubUserMemberships({
+  const [userList] = useUsers({ include: { customFields: true } });
+  const [channelList] = useChannels({ include: { customFields: true } });
+  const [memberList] = useChannelMembers({ channel, include: { customUUIDFields: true } });
+  const [totalPresence] = usePresence({ channels: [channel] });
+  // const [channelList, fetchMoreChannels, totalChannels] = useUserMemberships({
   //   uuid: "user_00505cca5b04460fafd716af48665ca1",
   // });
-  // const usr = usePubNubUser({ uuid: "user_00505cca5b04460fafd716af48665ca1" });
+  // const usr = useUser({ uuid: "user_00505cca5b04460fafd716af48665ca1" });
 
   const handleSwitchChannel = (channel: Channel) => {
     setChannel(channel.id);
@@ -89,7 +89,7 @@ function GroupChat() {
           >
             <TypingIndicator />
             <span>
-              {totalPresence || 0} / {memberList.length || 0}
+              {/* {totalPresence || 0} / {memberList.length || 0} */}
             </span>
             <svg viewBox="0 0 20 15" width="20" height="15">
               <title>People Group</title>

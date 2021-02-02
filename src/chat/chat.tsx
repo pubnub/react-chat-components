@@ -1,6 +1,14 @@
 import React, { FC, useEffect, ReactNode } from "react";
 import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
-import { BaseObjectsEvent, MessageActionEvent, PresenceEvent, SignalEvent, UserData } from "pubnub";
+import {
+  BaseObjectsEvent,
+  MessageActionEvent,
+  PresenceEvent,
+  SignalEvent,
+  UserData,
+  FileEvent,
+  StatusEvent,
+} from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message } from "../types";
@@ -50,6 +58,10 @@ export interface ChatProps {
   onPresence?: (event: PresenceEvent) => unknown;
   /** A callback run on object events. */
   onObject?: (event: BaseObjectsEvent) => unknown;
+  /** A callback run on file events. */
+  onFile?: (event: FileEvent) => unknown;
+  /** A callback run on status events. */
+  onStatus?: (event: StatusEvent) => unknown;
 }
 
 export const Chat: FC<ChatProps> = (props: ChatProps) => {
@@ -158,6 +170,8 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
       presence: (e) => handlePresenceEvent(e),
       objects: (e) => handleObjectsEvent(e),
       signal: (e) => handleSignalEvent(e),
+      file: (e) => handleFileEvent(e),
+      status: (e) => handleStatusEvent(e),
     });
   };
 
@@ -254,6 +268,14 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         return messagesClone;
       });
     }
+  };
+
+  const handleFileEvent = (event: FileEvent) => {
+    if (props.onFile) props.onFile(event);
+  };
+
+  const handleStatusEvent = (event: StatusEvent) => {
+    if (props.onStatus) props.onStatus(event);
   };
 
   return <>{props.children}</>;

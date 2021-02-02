@@ -2,18 +2,17 @@ import { useState, useEffect } from "react";
 import { UserData, GetChannelMembersParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
+import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [UserData[], () => Promise<void>, number];
+type HookReturnValue = [UserData[], () => Promise<void>, number, Error];
 
-export const usePubNubChannelMembers = (
-  options: GetChannelMembersParameters = {},
-  onError = (e) => console.error(e)
-): HookReturnValue => {
+export const useChannelMembers = (options: GetChannelMembersParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
   const [members, setMembers] = useState<UserData[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
+  const [error, setError] = useState<Error>();
 
   const paginatedOptions = merge({}, options, {
     page: { next: page },
@@ -28,9 +27,32 @@ export const usePubNubChannelMembers = (
       setTotalCount(response.totalCount);
       setPage(response.next);
     } catch (e) {
-      onError(e);
+      setError(e);
     }
   };
+
+  const handleObject = (event) => {
+    const message = event.message;
+    if (message.type !== "membership") return;
+
+    setMembers((members) => {
+      const membersCopy = cloneDeep(members);
+      const member = membersCopy.find((u) => u.id === message.data.uuid.id);
+
+      // Set events are not handled since there are no events fired for data updates
+      // New memberships are not handled in order to conform to filters and pagination
+
+      if (member && message.event === "delete") {
+        membersCopy.splice(membersCopy.indexOf(member), 1);
+      }
+
+      return membersCopy;
+    });
+  };
+
+  useEffect(() => {
+    pubnub.addListener({ objects: handleObject });
+  }, []);
 
   useEffect(() => {
     setMembers([]);
@@ -42,5 +64,5 @@ export const usePubNubChannelMembers = (
     if (!page) command();
   }, [page]);
 
-  return [members, command, totalCount];
+  return [members, command, totalCount, error];
 };
