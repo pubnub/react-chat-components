@@ -1,0 +1,49 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Custom Hooks/usePresence" />
+
+## usePresence
+
+Returns the list of unique user-ids currently subscribed to the channel.
+This hook also sets up a listener that will react to new presence events (joins and leaves/timeouts).
+However, this behavior requires a living subscription to the channels passed to the hook - this should be handled by the components.
+
+Information returned by this hook can be used to show a presence indicator, or a number of people currently subscribed to the channel.
+
+```js
+  const [channels, totalPresence, error] = usePresence({ channels: ['channel'] });
+
+return (
+  <p>Users on the channel: {totalPresence}</p>
+)
+ ```
+
+### Input
+
+| Parameter |	Type |	Required | Defaults |	Description |
+| --- | --- | --- | --- | --- |
+| channels | Array | Optional | | Specifies the channel name to return occupancy results. If channel is not provided, hereNow() will return data for all channels. |
+| channelGroups | Array | Optional | | The channel group for which here now information should be received. |
+| includeUUIDs | Boolean | Optional | true | Setting uuid to false disables the return of uuids. |
+| includeState | Boolean | Optional | false | Setting state to true enables the return of subscriber state information. |
+
+<br/>
+
+### Output
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| array[0] | ChannelPresence[] | List of returned channel presence data. |
+| array[1] | Number | Total number of present users across all passed channels. |
+| array[2] | Error | If there's an error fetching presence it will be available here. |
+
+<br />
+
+#### ChannelPresence interface
+
+```
+  [channel: string]: {
+  uuid: string;
+  state?: unknown;
+};
+```

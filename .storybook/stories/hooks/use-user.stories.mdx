@@ -1,0 +1,41 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Custom Hooks/useUser" />
+
+## useUser
+
+Returns metadata for the specified UUID, optionally including its custom data object.
+This hook also sets up a listener that will react to updates of the fetched user.
+However, this behavior requires a living subscription to the user getting updated - this should be handled by the components.
+
+This hook can be used in order not to fetch data about all users of the application.
+Instead, only the current user metadata is passed into the Chat provider and a `senderInfo` option is enabled on the MessageInput.
+This way info about users senders will be attached directly in the messages.
+
+```js
+const [user, error] = useUser({ uuid: 'user' });
+
+return (
+  <Chat userList={[user]}>
+    <MessageInput senderInfo={true} />
+  </Chat>
+)
+ ```
+
+
+### Input
+
+| Parameter |	Type |	Required | Defaults |	Description |
+| --- | --- | --- | --- | --- |
+| uuid | String | Optional | current uuid | Unique user identifier. If not supplied then current user's uuid is used.
+| include |	Object |	Optional | | Include respective additional fields in the response. |
+| customFields | Boolean | Optional | false | Whether to fetch custom fields or not. |
+
+<br/>
+
+### Output
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| array[0] | User | Metadata of the User. |
+| array[1] | Error | If there's an error fetching User it will be available here. |

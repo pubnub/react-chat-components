@@ -21,16 +21,15 @@ export default function HooksTest() {
 
   const user = "user_00505cca5b04460fafd716af48665ca1";
 
-  // const [members, fetchMore, total] = useChannelMembers({
-  //   channel: introductions,
-  //   include: { customFields: true },
-  // });
+  const [members, fetchMore, total, error] = useChannelMembers({ channel: introductions, include: { UUIDFields: true, customUUIDFields: true } });
+
+  console.log('channels members: ', members)
 
   // const [userChannels, fetchMore, total] = useUserMemberships({ uuid: user, include: { customFields: true } });
 
-  useSubscribe({ channels: [user], withPresence: true });
+  // useSubscribe({ channels: [user], withPresence: true });
 
-  const [userinfo] = useUser({ uuid: user })
+  // const [userinfo] = useUser({ uuid: user })
 
   // const [channels, totalPresence] = usePresence({ channels: [introductions, indiaoffice] });
 
@@ -53,7 +52,6 @@ export default function HooksTest() {
 
   return (
     <div className="hooks">
-      <div>{JSON.stringify(userinfo)}</div>
       {/* { users.find(u => u.id === user)?.custom.title } */}
       {/* <button onClick={() => { setShowInfo(!showInfo) }} className="gethistory">
         Show channel info
