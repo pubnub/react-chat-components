@@ -12,7 +12,8 @@ import {
 import { usePubNub } from "pubnub-react";
 import { PickerProps } from "emoji-mart";
 import { Themes, Message } from "../types";
-import { setDeep, cloneDeep } from "../helpers";
+import cloneDeep from "lodash.clonedeep";
+import setDeep from "lodash.set";
 import {
   CurrentChannelAtom,
   EmojiMartOptionsAtom,
@@ -205,6 +206,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
     setMessages((messages) => {
       const messagesClone = cloneDeep(messages);
+      messagesClone[message.channel] = messagesClone[message.channel] || [];
       messagesClone[message.channel].push(message);
       return messagesClone;
     });

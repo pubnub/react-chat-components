@@ -36,8 +36,8 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
   const handlePresence = (event) => {
     setChannels((channels) => {
       const channelsClone = cloneDeep(channels);
+      if (!channelsClone[event.channel]) channelsClone[event.channel] = [];
       const channel = channelsClone[event.channel];
-      if (!channel) channelsClone[event.channel] = [];
 
       if (event.action === "join" && !channel.find((u) => u.uuid == event.uuid)) {
         const { state, uuid } = event;
@@ -60,6 +60,8 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
   }, []);
 
   useEffect(() => {
+    setChannels({});
+    setError(null);
     command();
   }, [JSON.stringify(options.channels)]);
 

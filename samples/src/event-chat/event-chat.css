@@ -1,20 +1,21 @@
 .event-app {
+  align-items: center;
   background: linear-gradient(rgb(62 65 72) 0%, rgb(47 49 54) 100%);
   color: white;
   display: flex;
   height: 100vh;
   overflow: hidden;
-  align-items: center;
-  justify-content: center;
 }
 
 .event-main {
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
+  height: 100%;
 }
 
 .event-channels {
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .event-link {
@@ -25,19 +26,68 @@
 
 .event {
   display: flex;
-  height: 600px;
-  border: 3px solid rgb(77 81 90);
-  margin-bottom: 40px;
+  height: 0;
+  padding-bottom: 56.25%;
+  position: relative;
 }
 
 .event iframe {
-  height: 600px;
-  width: 1067px;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
 
 .event-chat {
   display: flex;
   flex-direction: column;
-  position: relative;
+  flex-shrink: 0;
+  height: 100%;
   width: 400px;
+}
+
+.event-people {
+  background: #2f3136;
+  color: rgb(164 87 230);
+  font-size: 13px;
+  padding: 22px;
+}
+
+.event-people svg {
+  margin-left: 7px;
+  vertical-align: -1px;
+}
+
+.event-people span:last-child {
+  float: right;
+}
+
+.event-info {
+  display: flex;
+  margin: 20px;
+}
+
+.event-info h3 {
+  color: rgb(164 87 230);
+  margin: 0 0 10px;
+}
+
+.event-avatar {
+  background: #4b4e54;
+  border-radius: 50%;
+  height: 75px;
+  margin-right: 20px;
+  width: 75px;
+}
+
+.event-text {
+  color: #7d7d7d;
+  font-size: 12px;
+  line-height: 1.5rem;
+  margin: 0 20px;
+}
+
+.pn-msg-input {
+  --msg-input__padding: 0 10px 15px;
 }

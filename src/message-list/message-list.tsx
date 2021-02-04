@@ -29,6 +29,8 @@ export interface MessageListProps {
   fetchMessages?: number;
   /** Enable to add emoji reactions on messages. */
   enableReactions?: boolean;
+  /** Provide a custom welcome message renderer to replace the default one or disable it completely */
+  welcomeRenderer?: false | JSX.Element;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
@@ -234,6 +236,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   */
 
   const renderWelcomeMessage = () => {
+    if (props.welcomeRenderer !== undefined) return props.welcomeRenderer;
+
     return (
       <div className="pn-msg">
         <div className="pn-msg__avatar">
@@ -287,7 +291,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         </div>
         <div className="pn-msg__main">
           <div className="pn-msg__title">
-            <span className="pn-msg__author">{user?.name || "Unknown User"}</span>
+            <span className="pn-msg__author">{user?.name || uuid}</span>
             <span className="pn-msg__time">{time}</span>
           </div>
           {props.bubbleRenderer && props.filter(message) ? (

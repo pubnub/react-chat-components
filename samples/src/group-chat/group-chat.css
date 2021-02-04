@@ -6,7 +6,7 @@
 
 .channels {
   flex-shrink: 0;
-  width: 250px;
+  width: 300px;
 }
 
 .chat {
@@ -49,7 +49,6 @@
 }
 
 .pn-channel-list {
-  /* --channel__description__display: none; */
   --channel__membership__top: 25px;
   --channel__name__fontSize: 13px;
   --channel__name__fontWeight: 400;
