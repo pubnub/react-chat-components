@@ -23,6 +23,7 @@ function GroupChat() {
   const [userList] = useUsers({ include: { customFields: true } });
   const [channelList] = useChannels({ include: { customFields: true } });
   const [memberList] = useChannelMembers({ channel, include: { customUUIDFields: true } });
+  // eslint-disable-next-line
   const [presentMembers, totalPresence] = usePresence({ channels: [channel] });
 
   const handleSwitchChannel = (channel: Channel) => {

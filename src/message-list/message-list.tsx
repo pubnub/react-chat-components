@@ -390,9 +390,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         )}
       </div>
 
-      {props.children}
-
       <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+
+      {props.children}
 
       {unreadMessages > 0 && (
         <div className="pn-msg-list__unread" onClick={() => scrollToBottom()}>

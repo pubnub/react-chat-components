@@ -35,7 +35,7 @@ export const MessagesAtom = atom<{ [channel: string]: Message[] }>({
 
 export const CurrentChannelMessagesAtom = selector<Message[]>({
   key: "channelMessages",
-  get: ({ get }) => get(MessagesAtom)[get(CurrentChannelAtom)] || [],
+  get: ({ get }) => (get(MessagesAtom) ? get(MessagesAtom)[get(CurrentChannelAtom)] || [] : []),
   set: ({ get, set }, value) =>
     set(MessagesAtom, Object.assign({}, get(MessagesAtom), { [get(CurrentChannelAtom)]: value })),
 });

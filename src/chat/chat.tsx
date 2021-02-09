@@ -205,7 +205,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (props.onMessage) props.onMessage(message);
 
     setMessages((messages) => {
-      const messagesClone = cloneDeep(messages);
+      const messagesClone = cloneDeep(messages) || {};
       messagesClone[message.channel] = messagesClone[message.channel] || [];
       messagesClone[message.channel].push(message);
       return messagesClone;
@@ -244,32 +244,29 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const handleAction = (action: MessageActionEvent) => {
     if (props.onAction) props.onAction(action);
 
-    if (action.data.type == "reaction") {
-      const actionData = action.data;
-      setMessages((messages) => {
-        const messagesClone = cloneDeep(messages);
-        const message = messagesClone[action.channel].find(
-          (m) => m.timetoken === actionData.messageTimetoken
-        );
-        if (message && action.event === "added") {
-          if (!message.actions?.reaction?.[actionData.value])
-            setDeep(message, ["actions", "reaction", actionData.value], []);
-          message.actions.reaction[actionData.value].push({
-            uuid: actionData.uuid,
-            actionTimetoken: actionData.actionTimetoken,
-          });
-        }
-        if (message && action.event === "removed") {
-          const messageReactions = message.actions.reaction[actionData.value];
-          const messageReaction = messageReactions.findIndex(
-            (i) => i.actionTimetoken === actionData.actionTimetoken
-          );
-          messageReactions.splice(messageReaction, 1);
-          if (!messageReactions.length) delete message.actions.reaction[actionData.value];
-        }
-        return messagesClone;
-      });
-    }
+    setMessages((messages) => {
+      if (!messages || !messages[action.channel]) return;
+
+      const { channel, event } = action;
+      const { type, value, actionTimetoken, messageTimetoken, uuid } = action.data;
+      const messagesClone = cloneDeep(messages);
+      const message = messagesClone[channel].find((m) => m.timetoken === messageTimetoken);
+      const actions = message?.actions?.[type]?.[value] || [];
+
+      if (message && event === "added") {
+        const newActions = [...actions, { uuid, actionTimetoken }];
+        setDeep(message, ["actions", type, value], newActions);
+      }
+
+      if (message && event === "removed") {
+        const newActions = actions.filter((a) => a.actionTimetoken !== actionTimetoken);
+        newActions.length
+          ? setDeep(message, ["actions", type, value], newActions)
+          : delete message.actions[type][value];
+      }
+
+      return messagesClone;
+    });
   };
 
   const handleFileEvent = (event: FileEvent) => {
