@@ -58,6 +58,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const paginationEnd = useRecoilValue(CurrentChannelPaginationAtom);
 
   const [scrolledBottom, setScrolledBottom] = useState(true);
+  const [prevMessages, setPrevMessages] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
@@ -188,6 +189,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
+      setEmojiPickerShown(false);
+      setPrevMessages(allMessages);
       set(CurrentChannelMessagesAtom, allMessages);
       set(
         CurrentChannelPaginationAtom,
@@ -198,7 +201,14 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   );
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
-    (event.target as HTMLElement).appendChild(pickerRef.current);
+    let newPickerTopPosition =
+      listRef.current.scrollTop + (event.target as HTMLElement).getBoundingClientRect().y;
+    if (newPickerTopPosition > pickerRef.current.offsetHeight) {
+      newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
+      newPickerTopPosition -= pickerRef.current.offsetHeight;
+    }
+    pickerRef.current.style.top = `${newPickerTopPosition}px`;
+
     setEmojiPickerShown(true);
     setReactingToMessage(timetoken);
     document.addEventListener("mousedown", handleCloseReactions);
@@ -206,6 +216,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const handleCloseReactions = (event: MouseEvent) => {
     if (pickerRef.current?.contains(event.target as Node)) return;
+
     setEmojiPickerShown(false);
     setReactingToMessage(null);
     document.removeEventListener("mousedown", handleCloseReactions);
@@ -222,13 +233,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   useEffect(() => {
     if (!messages?.length) return;
-    setupBottomObserver();
 
-    if (scrolledBottom) {
-      scrollToBottom();
-    } else {
-      setUnreadMessages(unreadMessages + 1);
-    }
+    const messagesFromListener = messages.length - prevMessages.length;
+
+    if (scrolledBottom) scrollToBottom();
+    if (!scrolledBottom && messagesFromListener)
+      setUnreadMessages(unreadMessages + messagesFromListener);
+
+    setupBottomObserver();
+    setPrevMessages(messages);
   }, [messages]);
 
   /*
@@ -366,39 +379,46 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   };
 
   return (
-    <div className={`pn-msg-list pn-msg-list--${theme}`} onScroll={props.onScroll} ref={listRef}>
-      {!!props.fetchMessages && !paginationEnd && (
-        <span ref={spinnerRef} className="pn-msg-list__spinner">
-          <SpinnerIcon />
-        </span>
-      )}
-
-      <div className="pn-msg-list__spacer" />
-
-      {messages && messages.map((m) => renderItem(m))}
-      {messages && !messages.length && !fetchingMessages && renderWelcomeMessage()}
-
-      <div className="pn-msg-list__emoji-picker" ref={pickerRef}>
-        {emojiPickerShown && (
-          <Picker
-            {...emojiMartOptions}
-            onSelect={(e: EmojiData) => {
-              addReaction(e.native, reactingToMessage);
-              setEmojiPickerShown(false);
-            }}
-          />
-        )}
-      </div>
-
-      <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
-
-      {props.children}
-
+    <div className={`pn-msg-list pn-msg-list--${theme}`}>
       {unreadMessages > 0 && (
         <div className="pn-msg-list__unread" onClick={() => scrollToBottom()}>
           {unreadMessages} new messages ↓
         </div>
       )}
+
+      <div className="pn-msg-list-scroller" onScroll={props.onScroll} ref={listRef}>
+        {!!props.fetchMessages && !paginationEnd && (
+          <span ref={spinnerRef} className="pn-msg-list__spinner">
+            <SpinnerIcon />
+          </span>
+        )}
+
+        <div className="pn-msg-list__spacer" />
+
+        {messages && messages.map((m) => renderItem(m))}
+        {messages && !messages.length && !fetchingMessages && renderWelcomeMessage()}
+
+        <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+
+        {props.enableReactions && (
+          <div
+            className={`pn-msg-list__emoji-picker ${
+              !emojiPickerShown && "pn-msg-list__emoji-picker-hidden"
+            }`}
+            ref={pickerRef}
+          >
+            <Picker
+              {...emojiMartOptions}
+              onSelect={(e: EmojiData) => {
+                addReaction(e.native, reactingToMessage);
+                setEmojiPickerShown(false);
+              }}
+            />
+          </div>
+        )}
+
+        {props.children}
+      </div>
     </div>
   );
 };
