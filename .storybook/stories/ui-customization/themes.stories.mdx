@@ -1,0 +1,77 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import Group from "../assets/group.png";
+import Support from "../assets/support.png";
+import Event from "../assets/event.png";
+
+<Meta title="UI Customization/Themes" />
+
+# Themes
+
+UI Customization is an important part of every component library. PubNub Chat Components offer many
+ways of customization depending on what kind of changes need to be applied in order to
+achieve required results.
+
+The most basic method of customizing PubNub Chat Component is changing between built in themes.
+We offer light and dark modes for the three most common chat use cases. They differ in the basic
+color palette and elements that are displayed or hidden on each type of chat. Supported themes are:
+
+- light (default)
+- dark
+- support
+- support-dark
+- event
+- event-dark
+
+In order to change the default components theme an appropiate option needs to be changed on the Chat
+provider:
+
+```js
+const MyCommponent = () => {
+  return (
+    <Chat theme="dark">
+      // Add components here
+    </Chat>
+  );
+};
+```
+
+Here are screenshots showing the MessageList in the 3 use case themes and what decisions were made
+regarding what elements are shown in each and why:
+
+<br />
+<br />
+
+### Group Chat
+
+This type of chat assumes a conversation between multiple entities with a medium amount of messages.
+Author of each message is clearly shown, including the name and avatar, if provided. Time of sending
+the message is detoned as well. This type of chat will most often include message reactions
+(`enableReactions`), rendering attachments and other complex features.
+
+<img src={Group} alt="Group Chat" />
+
+<br />
+<br />
+
+### Support Chat
+
+Most often a suport chat is a 1 on 1 conversation between the user and some kind of support
+assistant. Messages are clearly distinguished to ours/theirs by aligning them to different edges.
+Name of the interlocutor does not have to be shown next to each message to save some space. Only the
+avatar of support agent is shown since in most cases the end user is not required to provide it.
+Complex features and can be disabled or enabled depending on your needs.
+
+<img src={Support} alt="Support Chat" />
+
+<br />
+<br />
+
+### Event Chat
+
+Event Chats are likely to show hundreds of interactions at once from multiple users. Space needs
+to be preserved in order to show as many messages as possible on a single screen. In this case
+avatars and timestamps are not displayed at all, and names are renderer next to the message so that
+they can fit in one line. We recommend disabling complex features like reactions here - they can make
+it harder to navigate the chat.
+
+<img src={Event} alt="Event Chat" />

@@ -3,6 +3,7 @@
 ** ********************* */
 :root {
   --msg-input__background: #f8f6fd;
+  --msg-input__padding: 0 24px;
   --msg-input__emoji-picker__bottom: 0;
   --msg-input__emoji-picker__right: 0;
   --msg-input__icon__color: #585858;
@@ -15,7 +16,6 @@
   --msg-input__indicator__margin: 10px 0 0;
   --msg-input__indicator__minHeight: 16px;
   --msg-input__indicator__padding: 0;
-  --msg-input__padding: 0 24px;
   --msg-input__send__background: #8e2de2;
   --msg-input__send__border: none;
   --msg-input__send__borderRadius: 5px;

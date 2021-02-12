@@ -293,7 +293,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const isOwn = isOwnMessage(uuid);
     const attachments = message.message?.attachments || [];
 
-    if (props.messageRenderer && props.filter(message))
+    if (props.messageRenderer && (props.filter ? props.filter(message) : true))
       return props.messageRenderer({ message, user, time, isOwn });
 
     return (
@@ -307,7 +307,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             <span className="pn-msg__author">{user?.name || uuid}</span>
             <span className="pn-msg__time">{time}</span>
           </div>
-          {props.bubbleRenderer && props.filter(message) ? (
+          {props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
             props.bubbleRenderer({ message, user, time, isOwn })
           ) : (
             <>

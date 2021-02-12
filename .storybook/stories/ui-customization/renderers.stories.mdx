@@ -1,0 +1,54 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="UI Customization/Custom Renderers" />
+
+# Custom Renderers
+
+In some applications using one of the themes and customizating it with CSS variables might not
+be enough - you may need to completely change the HTML markup of the components, either to modify
+the layout, or add new, custom features.
+
+If that's the case you can use to most advanced, and the most flexible option of customization -
+custom renderers. Most of the components come with one, or multiple properties with names ending in
+`renderer` (like `messageRenderer` in MessageList component).
+
+This kind of properties accept a function that should return an HTML/JSX structure. Input to the
+function will differ depending on the particular renderer, but it is always data internally used to
+create the default markup.
+
+<br /><br />
+
+### Example
+
+Code snippet below shows an example usage of MessageList's `messageRenderer` mentioned earlier. We
+are using it to replace the default markup of each message. The function is fed with a message
+object (message itself, attachments, reactions) along with user data, assuming that user metadata
+was provided, timestamp of the message and a flag determining if the current user sent this message.
+
+> Please note that if needed, the default features like message reactions and attachments rendering
+> might need to be implemented as well or will not be shown at all.
+
+```js
+function ExampleChat() {
+  const channel = "example";
+
+  const renderMessage = (props: MessageRendererProps) => {
+    return (
+      <div>
+        <p>
+          <strong>{props.message.sender?.name}</strong> {props.time}
+        </p>
+        <p>{props.message.message.text}</p>
+      </div>
+    );
+  };
+
+  return (
+    <Chat channel={channel}>
+      <MessageList fetchMessages={10} messageRenderer={renderMessage} />
+    </Chat>
+  );
+}
+
+export default ExampleChat;
+```

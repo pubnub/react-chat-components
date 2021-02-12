@@ -39,6 +39,8 @@ export const parameters = {
         ["About", "useUsers", "useUser", "useChannels", "useChannelMembers", "useUserMemberships", "usePresence"],
         "Components",
         ["Chat (Provider)"],
+        "UI Customization",
+        ["Themes", "CSS Variables", "Custom Renderers"]
       ],
     },
   },
