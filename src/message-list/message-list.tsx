@@ -141,6 +141,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
       const firstMessage = listRef.current?.querySelector(".pn-msg");
 
+      if (!messages.length) return;
+
       try {
         const history = await pubnub.fetchMessages({
           channels: [channel],
@@ -229,6 +231,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   useEffect(() => {
     if (!pubnub || !channel) return;
     if (!messages?.length) fetchHistory();
+    setupSpinnerObserver();
   }, [channel]);
 
   useEffect(() => {

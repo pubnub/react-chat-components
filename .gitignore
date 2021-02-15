@@ -2,3 +2,4 @@ node_modules
 build
 .DS_Store
 TODO.md
+storybook-static

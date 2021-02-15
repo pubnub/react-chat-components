@@ -37,9 +37,9 @@ export interface ChatProps {
   theme?: Themes;
   /** A "current" channel to display the messages and members from. */
   channel: string;
-  /** Array of channels to subscribe to get events. Allows up to 50 channels. */
+  /** Array of channels to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
   subscribeChannels?: string[];
-  /** Array of channels to subscribe to get events. Allows up to 50 channels. */
+  /** Array of channels groups to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
   subscribeChannelGroups?: string[];
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
   presence?: boolean;
@@ -151,7 +151,11 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   useEffect(() => {
     if (!currentChannel) return;
-    if (!subscribeChannels.includes(currentChannel)) {
+    if (
+      !subscribeChannels.includes(currentChannel) &&
+      !props.subscribeChannels.length &&
+      !props.subscribeChannelGroups.length
+    ) {
       setSubscribeChannels([...subscribeChannels, currentChannel]);
     }
   }, [currentChannel]);
