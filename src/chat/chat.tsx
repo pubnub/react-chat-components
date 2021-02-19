@@ -54,11 +54,15 @@ export interface ChatProps {
   /** A callback run on signals. */
   onSignal?: (message: SignalEvent) => unknown;
   /** A callback run on message actions. */
-  onAction?: (event: MessageActionEvent) => unknown;
+  onMessageAction?: (event: MessageActionEvent) => unknown;
   /** A callback run on presence events. */
   onPresence?: (event: PresenceEvent) => unknown;
   /** A callback run on object events. */
-  onObject?: (event: BaseObjectsEvent) => unknown;
+  onUser?: (event: BaseObjectsEvent) => unknown;
+  /** A callback run on object events. */
+  onChannel?: (event: BaseObjectsEvent) => unknown;
+  /** A callback run on object events. */
+  onMembership?: (event: BaseObjectsEvent) => unknown;
   /** A callback run on file events. */
   onFile?: (event: FileEvent) => unknown;
   /** A callback run on status events. */
@@ -242,11 +246,13 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   };
 
   const handleObjectsEvent = (event: BaseObjectsEvent) => {
-    if (props.onObject) props.onObject(event);
+    if (event.message.type === "membership" && props.onMembership) props.onMembership(event);
+    if (event.message.type === "channel" && props.onChannel) props.onChannel(event);
+    if (event.message.type === "uuid" && props.onUser) props.onUser(event);
   };
 
   const handleAction = (action: MessageActionEvent) => {
-    if (props.onAction) props.onAction(action);
+    if (props.onMessageAction) props.onMessageAction(action);
 
     setMessages((messages) => {
       if (!messages || !messages[action.channel]) return;

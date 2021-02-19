@@ -11,10 +11,10 @@ However, this behavior requires a living subscription to the channels passed to 
 Information returned by this hook can be used to show a presence indicator, or a number of people currently subscribed to the channel.
 
 ```js
-  const [channels, totalPresence, error] = usePresence({ channels: ['channel'] });
+  const [channels, totalPresence, error] = usePresence({ channels: ['test-channel'] });
 
 return (
-  <p>Users on the channel: {totalPresence}</p>
+  <p>Occupancy of the channel: {channels['test-channel'].occupancy}</p>
 )
  ```
 
@@ -43,7 +43,12 @@ return (
 
 ```
   [channel: string]: {
-  uuid: string;
-  state?: unknown;
-};
+    name: string;
+    occupancy: number;
+    occupants?: {
+      uuid: string;
+      state?: unknown;
+    }[];
+  };
 ```
+
