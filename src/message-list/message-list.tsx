@@ -11,6 +11,8 @@ import {
   UsersMetaAtom,
   ThemeAtom,
   EmojiMartOptionsAtom,
+  RetryFunctionAtom,
+  ErrorFunctionAtom,
 } from "../state-atoms";
 import SpinnerIcon from "./spinner.svg";
 import LogoIcon from "./logo.svg";
@@ -53,6 +55,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const channel = useRecoilValue(CurrentChannelAtom);
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
+  const retry = useRecoilValue(RetryFunctionAtom).function;
+  const onError = useRecoilValue(ErrorFunctionAtom).function;
   const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
   const messages = useRecoilValue(CurrentChannelMessagesAtom);
   const paginationEnd = useRecoilValue(CurrentChannelPaginationAtom);
@@ -118,17 +122,19 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     if (!props.fetchMessages) return;
     try {
       setFetchingMessages(true);
-      const history = await pubnub.fetchMessages({
-        channels: [channel],
-        count: props.fetchMessages,
-        includeMessageActions: true,
-      });
+      const history = await retry(() =>
+        pubnub.fetchMessages({
+          channels: [channel],
+          count: props.fetchMessages,
+          includeMessageActions: true,
+        })
+      );
       handleHistoryFetch(history);
       scrollToBottom();
       setupSpinnerObserver();
       setupBottomObserver();
     } catch (e) {
-      console.error(e);
+      onError(e);
     } finally {
       setFetchingMessages(false);
     }
@@ -144,34 +150,44 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       if (!messages.length) return;
 
       try {
-        const history = await pubnub.fetchMessages({
-          channels: [channel],
-          count: props.fetchMessages,
-          start: (messages?.[0].timetoken as number) || undefined,
-          includeMessageActions: true,
-        });
+        const history = await retry(() =>
+          pubnub.fetchMessages({
+            channels: [channel],
+            count: props.fetchMessages,
+            start: (messages?.[0].timetoken as number) || undefined,
+            includeMessageActions: true,
+          })
+        );
         handleHistoryFetch(history);
         if (firstMessage) firstMessage.scrollIntoView();
       } catch (e) {
-        console.error(e);
+        onError(e);
       }
     },
     []
   );
 
   const addReaction = (reaction: string, messageTimetoken) => {
-    pubnub.addMessageAction({
-      channel,
-      messageTimetoken,
-      action: {
-        type: "reaction",
-        value: reaction,
-      },
-    });
+    try {
+      pubnub.addMessageAction({
+        channel,
+        messageTimetoken,
+        action: {
+          type: "reaction",
+          value: reaction,
+        },
+      });
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const removeReaction = (reaction: string, messageTimetoken, actionTimetoken) => {
-    pubnub.removeMessageAction({ channel, messageTimetoken, actionTimetoken });
+    try {
+      pubnub.removeMessageAction({ channel, messageTimetoken, actionTimetoken });
+    } catch (e) {
+      onError(e);
+    }
   };
 
   /*
@@ -179,8 +195,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   */
 
   const handleBottomScroll = (scrolledBottom: boolean) => {
-    if (scrolledBottom) setUnreadMessages(0);
-    setScrolledBottom(scrolledBottom);
+    try {
+      if (scrolledBottom) setUnreadMessages(0);
+      setScrolledBottom(scrolledBottom);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const handleHistoryFetch = useRecoilCallback(
@@ -203,25 +223,33 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   );
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
-    let newPickerTopPosition =
-      listRef.current.scrollTop + (event.target as HTMLElement).getBoundingClientRect().y;
-    if (newPickerTopPosition > pickerRef.current.offsetHeight) {
-      newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
-      newPickerTopPosition -= pickerRef.current.offsetHeight;
-    }
-    pickerRef.current.style.top = `${newPickerTopPosition}px`;
+    try {
+      let newPickerTopPosition =
+        listRef.current.scrollTop + (event.target as HTMLElement).getBoundingClientRect().y;
+      if (newPickerTopPosition > pickerRef.current.offsetHeight) {
+        newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
+        newPickerTopPosition -= pickerRef.current.offsetHeight;
+      }
+      pickerRef.current.style.top = `${newPickerTopPosition}px`;
 
-    setEmojiPickerShown(true);
-    setReactingToMessage(timetoken);
-    document.addEventListener("mousedown", handleCloseReactions);
+      setEmojiPickerShown(true);
+      setReactingToMessage(timetoken);
+      document.addEventListener("mousedown", handleCloseReactions);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const handleCloseReactions = (event: MouseEvent) => {
-    if (pickerRef.current?.contains(event.target as Node)) return;
+    try {
+      if (pickerRef.current?.contains(event.target as Node)) return;
 
-    setEmojiPickerShown(false);
-    setReactingToMessage(null);
-    document.removeEventListener("mousedown", handleCloseReactions);
+      setEmojiPickerShown(false);
+      setReactingToMessage(null);
+      document.removeEventListener("mousedown", handleCloseReactions);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   /*

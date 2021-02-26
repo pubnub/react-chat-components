@@ -58,3 +58,9 @@ export interface LinkAttachment {
     url: string;
   };
 }
+
+export interface RetryOptions {
+  maxRetries: number;
+  timeout: number;
+  exponentialFactor: number;
+}

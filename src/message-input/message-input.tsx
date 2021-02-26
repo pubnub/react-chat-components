@@ -8,6 +8,7 @@ import {
   ThemeAtom,
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
+  ErrorFunctionAtom,
 } from "../state-atoms";
 import "./message-input.scss";
 import "emoji-mart/css/emoji-mart.css";
@@ -47,6 +48,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
   const channel = useRecoilValue(CurrentChannelAtom);
+  const onError = useRecoilValue(ErrorFunctionAtom).function;
   const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
   const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);
 
@@ -85,28 +87,36 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       stopTypingIndicator();
       setText("");
     } catch (e) {
-      console.error(e);
+      onError(e);
     }
   };
 
   const startTypingIndicator = async () => {
-    if (props.typingIndicator && !typingIndicatorSent) {
-      setTypingIndicatorSent(true);
-      const message = { message: { type: "typing_on" }, channel };
+    try {
+      if (props.typingIndicator && !typingIndicatorSent) {
+        setTypingIndicatorSent(true);
+        const message = { message: { type: "typing_on" }, channel };
 
-      pubnub.signal(message);
+        pubnub.signal(message);
 
-      setTimeout(() => {
-        setTypingIndicatorSent(false);
-      }, (typingIndicatorTimeout - 1) * 1000);
+        setTimeout(() => {
+          setTypingIndicatorSent(false);
+        }, (typingIndicatorTimeout - 1) * 1000);
+      }
+    } catch (e) {
+      onError(e);
     }
   };
 
   const stopTypingIndicator = async () => {
-    if (props.typingIndicator && typingIndicatorSent) {
-      setTypingIndicatorSent(false);
-      const message = { message: { type: "typing_off" }, channel };
-      pubnub.signal(message);
+    try {
+      if (props.typingIndicator && typingIndicatorSent) {
+        setTypingIndicatorSent(false);
+        const message = { message: { type: "typing_off" }, channel };
+        pubnub.signal(message);
+      }
+    } catch (e) {
+      onError(e);
     }
   };
 
@@ -115,42 +125,62 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   */
 
   const handleEmojiInsertion = (emoji: EmojiData) => {
-    if (!("native" in emoji)) return;
-    setText(text + emoji.native);
-    setEmojiPickerShown(false);
+    try {
+      if (!("native" in emoji)) return;
+      setText(text + emoji.native);
+      setEmojiPickerShown(false);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const handleOpenPicker = () => {
-    setEmojiPickerShown(true);
-    document.addEventListener("mousedown", handleClosePicker);
+    try {
+      setEmojiPickerShown(true);
+      document.addEventListener("mousedown", handleClosePicker);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const handleClosePicker = (event: MouseEvent) => {
-    if (pickerRef?.current?.contains(event.target as Node)) return;
-    setEmojiPickerShown(false);
-    document.removeEventListener("mousedown", handleClosePicker);
+    try {
+      if (pickerRef?.current?.contains(event.target as Node)) return;
+      setEmojiPickerShown(false);
+      document.removeEventListener("mousedown", handleClosePicker);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      sendMessage();
+    try {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        sendMessage();
+      }
+    } catch (e) {
+      onError(e);
     }
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    const textArea = event.target as HTMLTextAreaElement;
-    const newText = textArea.value;
+    try {
+      const textArea = event.target as HTMLTextAreaElement;
+      const newText = textArea.value;
 
-    if (newText.length) {
-      startTypingIndicator();
-    } else {
-      stopTypingIndicator();
+      if (newText.length) {
+        startTypingIndicator();
+      } else {
+        stopTypingIndicator();
+      }
+
+      props.onChange && props.onChange(newText);
+      autoSize();
+      setText(newText);
+    } catch (e) {
+      onError(e);
     }
-
-    props.onChange && props.onChange(newText);
-    autoSize();
-    setText(newText);
   };
 
   const renderEmojiPicker = () => {

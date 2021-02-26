@@ -8,6 +8,16 @@ export const ThemeAtom = atom<Themes | "">({
   default: "",
 });
 
+export const RetryFunctionAtom = atom<{ function: (fn: unknown) => unknown }>({
+  key: "retry",
+  default: { function: () => null },
+});
+
+export const ErrorFunctionAtom = atom<{ function: (error: Error) => unknown }>({
+  key: "error",
+  default: { function: () => null },
+});
+
 export const CurrentChannelAtom = atom<string>({
   key: "currentChannel",
   default: "",
