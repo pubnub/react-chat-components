@@ -1,0 +1,74 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction/Error Handling" />
+
+# Error Handling
+
+Passing wrong types of data into the components, unavailability or a limited network connection and
+unexpected behaviors are all examples of what might cause exceptions to be thrown from inside of the
+components code. The results of those problems might vary, starting with some interactions being
+blocked and ending with your whole application crashing. That is why it is important to be able to
+add some form of error handling to your usage of components.
+
+<br />
+
+## Error Callback
+
+The fundamental way of capturing and handling errors coming from the components is by using the
+`onError` property of `Chat` provider component and passing it a custom callback function. This
+function will be called each time a JavaScript exception is raised within components code with the
+actual Error passed in as an argument.
+
+You can use the custom error callback for debugging, logging, as well as showing notifications to the
+end user or recovery by re-rendering. An example of simple logging behavior can be as follows:
+
+```js
+
+function ErrorChat() {
+  const [channel, setChannel] = React.useState("test-channel");
+
+  const onError = (error: Error) => {
+    yourLogger.log(error.message)
+  }
+
+  return (
+    <Chat {...{ channel, onError }}>
+      <MessageList/>
+      <MessageInput />
+    </Chat>
+  );
+}
+```
+
+## Automatic Retries
+
+In addition to the error callback, there is an automatic retry behavior built in for some of the
+component functionalities (currently fetching messages history). It is disabled by default, but can
+be easily configured for environments in which network connection is not too stable, and you don't
+want the connections to fail immediately.
+
+In order to enable this retry behavior you should configure the `retryOptions` property on `Chat`
+provider. Pass in the maximum number of retries, timeout between requests and set a factor number
+for exponential timeout lengths (1 will result in linear timeouts). In the example below, if the
+network connection is down, the components will try to fetch message history up to 5 times, with
+timeout between each request starting from 1 second, to 2s, 4s, and ending on 8 seconds before the
+last call.
+
+```js
+function RetryChat() {
+  const [channel, setChannel] = React.useState("test-channel");
+
+  const retryOptions = {
+    maxRetries: 5,
+    timeout: 1000,
+    exponentialFactor: 2
+  }
+
+  return (
+    <Chat {...{ channel, retryOptions }}>
+      <MessageList/>
+      <MessageInput />
+    </Chat>
+  );
+}
+```

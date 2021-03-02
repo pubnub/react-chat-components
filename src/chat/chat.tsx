@@ -89,9 +89,9 @@ export class Chat extends Component<ChatProps> {
     typingIndicatorTimeout: 10,
     userList: [],
     retryOptions: {
-      maxRetries: 5,
-      timeout: 1000,
-      exponentialFactor: 2,
+      maxRetries: 1,
+      timeout: 0,
+      exponentialFactor: 1,
     },
     onError: (): void => null,
   };
