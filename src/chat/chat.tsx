@@ -5,7 +5,8 @@ import {
   MessageActionEvent,
   PresenceEvent,
   SignalEvent,
-  UserData,
+  UUIDMetadataObject,
+  ObjectCustom,
   FileEvent,
   StatusEvent,
 } from "pubnub";
@@ -46,7 +47,7 @@ export interface ChatProps {
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
   presence?: boolean;
   /** Provide external list of user metadata. */
-  userList?: UserData[];
+  userList?: UUIDMetadataObject<ObjectCustom>[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
   /** Pass options to emoji-mart picker. */
@@ -136,7 +137,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Helpers
    */
   const retryOnError = useCallback(
-    async (fn) => {
+    async <T,>(fn: () => Promise<T>): Promise<T> => {
       const { maxRetries, timeout, exponentialFactor } = props.retryOptions;
       for (let i = 0; i < maxRetries; i++) {
         try {

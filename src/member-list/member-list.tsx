@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { UserData } from "pubnub";
+import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue } from "recoil";
 import { ThemeAtom } from "../state-atoms";
@@ -8,13 +8,13 @@ import "./member-list.scss";
 export interface MemberListProps {
   children?: ReactNode;
   /** Pass a list of members, including metadata, to render on the list */
-  memberList: UserData[] | string[];
+  memberList: UUIDMetadataObject<ObjectCustom>[] | string[];
   /** Members are sorted alphabetically by default, you can override that by providing a sorter function */
-  sort?: (a: UserData, b: UserData) => -1 | 0 | 1;
+  sort?: (a: UUIDMetadataObject<ObjectCustom>, b: UUIDMetadataObject<ObjectCustom>) => -1 | 0 | 1;
   /** Provide an additional member filter to hide some of the members */
-  filter?: (member: UserData) => boolean;
+  filter?: (member: UUIDMetadataObject<ObjectCustom>) => boolean;
   /** Provide custom user renderer to override themes and CSS variables. */
-  memberRenderer?: (member: UserData) => JSX.Element;
+  memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
 }
 
 /**
@@ -44,12 +44,12 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
-  const memberFilter = (member: UserData) => {
+  const memberFilter = (member: UUIDMetadataObject<ObjectCustom>) => {
     if (props.filter) return props.filter(member);
     return true;
   };
 
-  const memberFromString = (member: UserData | string) => {
+  const memberFromString = (member: UUIDMetadataObject<ObjectCustom> | string) => {
     if (typeof member === "string") {
       return {
         id: member,

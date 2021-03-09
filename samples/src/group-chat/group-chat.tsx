@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Channel,
   ChannelList,
   Chat,
   MemberList,
@@ -12,6 +11,7 @@ import {
   usePresence,
   useUsers,
 } from "pubnub-chat-components";
+import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import "./group-chat.css";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
@@ -26,7 +26,7 @@ function GroupChat() {
   // eslint-disable-next-line
   const [presentMembers, totalPresence] = usePresence({ channels: [channel] });
 
-  const handleSwitchChannel = (channel: Channel) => {
+  const handleSwitchChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
     setChannel(channel.id);
   };
 

@@ -1,5 +1,5 @@
 import { atom, selector } from "recoil";
-import { UserData } from "pubnub";
+import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { PickerProps } from "emoji-mart";
 import { Message, Themes } from "./types";
 
@@ -8,7 +8,7 @@ export const ThemeAtom = atom<Themes | "">({
   default: "",
 });
 
-export const RetryFunctionAtom = atom<{ function: (fn: unknown) => unknown }>({
+export const RetryFunctionAtom = atom<{ function: <T>(fn: () => Promise<T>) => Promise<T> }>({
   key: "retry",
   default: { function: () => null },
 });
@@ -33,7 +33,7 @@ export const SubscribeChannelGroupsAtom = atom<string[]>({
   default: [],
 });
 
-export const UsersMetaAtom = atom<UserData[]>({
+export const UsersMetaAtom = atom<UUIDMetadataObject<ObjectCustom>[]>({
   key: "usersMeta",
   default: [],
 });

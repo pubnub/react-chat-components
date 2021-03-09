@@ -1,4 +1,4 @@
-import { UserData } from "pubnub";
+import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
@@ -16,7 +16,7 @@ export interface Message {
   message: {
     type: string;
     text: string;
-    sender?: UserData;
+    sender?: UUIDMetadataObject<ObjectCustom>;
     attachments?: Array<ImageAttachment | LinkAttachment>;
     [key: string]: unknown;
   };

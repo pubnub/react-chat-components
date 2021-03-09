@@ -1,19 +1,9 @@
 import { useState, useEffect } from "react";
-import { HereNowParameters } from "pubnub";
+import { HereNowParameters, HereNowResponse } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import cloneDeep from "lodash.clonedeep";
 
-type ChannelsOccupancy = {
-  [channel: string]: {
-    occupancy: number;
-    occupants?: {
-      name: string;
-      uuid: string;
-      state?: unknown;
-    }[];
-  };
-};
-
+type ChannelsOccupancy = HereNowResponse["channels"];
 type HookReturnValue = [ChannelsOccupancy, number, Error];
 
 export const usePresence = (options: HereNowParameters = {}): HookReturnValue => {

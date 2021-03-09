@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { UserData, GetAllMetadataParameters } from "pubnub";
+import { ObjectCustom, UUIDMetadataObject, GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [UserData[], () => Promise<void>, number, Error];
+type HookReturnValue = [UUIDMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
 
 export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<UUIDMetadataObject<ObjectCustom>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
@@ -17,7 +17,7 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
   const paginatedOptions = merge({}, options, {
     page: { next: page },
     include: { totalCount: true },
-  });
+  }) as GetAllMetadataParameters;
 
   const command = async () => {
     try {

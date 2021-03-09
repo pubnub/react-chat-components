@@ -9,9 +9,9 @@ Some components require providing lists of Channels and Users that should be dis
 | Component | Description | Property | Data type (see below) |
 | --------- | ----------- | -------- | --------- |
 | ChannelList | Displaying channel names along with descriptions | `channelList` | `string[]` or `Channel[]` |
-| MemberList | Displaying full user names, avatars and additional line of text that can serve as user description/title/status | `memberList` | `string[]` or `UserData[]` |
-| MessageList| Displaying full user names and avatars | `userList` of the `Chat` provider | `UserData[]` |
-| TypingIndicator | Displaying full user names or avatars, depending on the type of the indicator | `userList` of the `Chat` provider | `UserData[]` |
+| MemberList | Displaying full user names, avatars and additional line of text that can serve as user description/title/status | `memberList` | `string[]` or `UUIDMetadataObject<ObjectCustom>[]` |
+| MessageList| Displaying full user names and avatars | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]` |
+| TypingIndicator | Displaying full user names or avatars, depending on the type of the indicator | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]` |
 
 
 # Storing Users, Channels and Memberships
@@ -45,7 +45,7 @@ interface Channel {
 ### Users
 
 ```
-interface UserData {
+interface UUIDMetadataObject<ObjectCustom> {
   id: string;                  // used as an unique user identificator accross the components
   name: string;                // displayed on Messages, Typing Indicator and Member List
   profileUrl?: string | null;  // expects an image URL to display the user avatar

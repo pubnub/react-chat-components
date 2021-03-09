@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { ChannelData, GetAllMetadataParameters } from "pubnub";
+import { ChannelMetadataObject, ObjectCustom, GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [ChannelData[], () => Promise<void>, number, Error];
+type HookReturnValue = [ChannelMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
 
 export const useUserMemberships = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
-  const [channels, setChannels] = useState([]);
+  const [channels, setChannels] = useState<ChannelMetadataObject<ObjectCustom>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
@@ -17,13 +17,16 @@ export const useUserMemberships = (options: GetAllMetadataParameters = {}): Hook
   const paginatedOptions = merge(options, {
     page: { next: page },
     include: { totalCount: true },
-  });
+  }) as GetAllMetadataParameters;
 
   const command = async () => {
     try {
       if (totalCount && channels.length >= totalCount) return;
       const response = await pubnub.objects.getMemberships(paginatedOptions);
-      setChannels((channels) => [...channels, ...response.data.map((m) => m.channel)]);
+      setChannels((channels) => [
+        ...channels,
+        ...(response.data.map((m) => m.channel) as ChannelMetadataObject<ObjectCustom>[]),
+      ]);
       setTotalCount(response.totalCount);
       setPage(response.next);
     } catch (e) {

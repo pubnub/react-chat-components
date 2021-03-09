@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { UserData, GetChannelMembersParameters } from "pubnub";
+import { ObjectCustom, UUIDMetadataObject, GetChannelMembersParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [UserData[], () => Promise<void>, number, Error];
+type HookReturnValue = [UUIDMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
 
-export const useChannelMembers = (options: GetChannelMembersParameters = {}): HookReturnValue => {
+export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
   const pubnub = usePubNub();
 
-  const [members, setMembers] = useState<UserData[]>([]);
+  const [members, setMembers] = useState<UUIDMetadataObject<ObjectCustom>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
@@ -17,13 +17,16 @@ export const useChannelMembers = (options: GetChannelMembersParameters = {}): Ho
   const paginatedOptions = merge({}, options, {
     page: { next: page },
     include: { totalCount: true },
-  });
+  }) as GetChannelMembersParameters;
 
   const command = async () => {
     try {
       if (totalCount && members.length >= totalCount) return;
       const response = await pubnub.objects.getChannelMembers(paginatedOptions);
-      setMembers((members) => [...members, ...response.data.map((m) => m.uuid)]);
+      setMembers((members) => [
+        ...members,
+        ...(response.data.map((m) => m.uuid) as UUIDMetadataObject<ObjectCustom>[]),
+      ]);
       setTotalCount(response.totalCount);
       setPage(response.next);
     } catch (e) {

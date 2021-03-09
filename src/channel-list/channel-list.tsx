@@ -1,21 +1,24 @@
 import React, { FC, ReactNode } from "react";
 import { useRecoilValue } from "recoil";
-import { Channel } from "../types";
+import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import { ThemeAtom, CurrentChannelAtom } from "../state-atoms";
 import "./channel-list.scss";
 
 export interface ChannelListProps {
   children?: ReactNode;
   /** Pass a list of channels, including metadata, to render on the list */
-  channelList: Channel[] | string[];
+  channelList: ChannelMetadataObject<ObjectCustom>[] | string[];
   /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
-  sort?: (a: Channel, b: Channel) => -1 | 0 | 1;
+  sort?: (
+    a: ChannelMetadataObject<ObjectCustom>,
+    b: ChannelMetadataObject<ObjectCustom>
+  ) => -1 | 0 | 1;
   /** Provide an additional channel filter to hide some of the channels */
-  filter?: (channel: Channel) => boolean;
+  filter?: (channel: ChannelMetadataObject<ObjectCustom>) => boolean;
   /** Provide custom channel renderer to override default themes and CSS variables. */
-  channelRenderer?: (channel: Channel) => JSX.Element;
+  channelRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** A callback run when user clicked one of the channels. Can be used to switch current channel. */
-  onChannelSwitched?: (channel: Channel) => unknown;
+  onChannelSwitched?: (channel: ChannelMetadataObject<ObjectCustom>) => unknown;
 }
 
 /**
@@ -33,21 +36,24 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /*
   /* Helper functions
   */
-  const isChannelActive = (ch: Channel) => {
+  const isChannelActive = (ch: ChannelMetadataObject<ObjectCustom>) => {
     return channel === ch.id;
   };
 
-  const channelSorter = (a: Channel, b: Channel) => {
+  const channelSorter = (
+    a: ChannelMetadataObject<ObjectCustom>,
+    b: ChannelMetadataObject<ObjectCustom>
+  ) => {
     if (props.sort) return props.sort(a, b);
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
-  const channelFilter = (channel: Channel) => {
+  const channelFilter = (channel: ChannelMetadataObject<ObjectCustom>) => {
     if (props.filter) return props.filter(channel);
     return true;
   };
 
-  const channelFromString = (channel: Channel | string) => {
+  const channelFromString = (channel: ChannelMetadataObject<ObjectCustom> | string) => {
     if (typeof channel === "string") {
       return {
         id: channel,
@@ -61,7 +67,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /* Commands
   */
 
-  const switchChannel = (channel: Channel) => {
+  const switchChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
     if (props.onChannelSwitched) props.onChannelSwitched(channel);
   };
 
@@ -69,7 +75,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /* Renderers
   */
 
-  const renderChannel = (channel: Channel) => {
+  const renderChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
     if (props.channelRenderer) return props.channelRenderer(channel);
     const channelActive = isChannelActive(channel);
     const activeClass = channelActive ? "pn-channel--active" : "";

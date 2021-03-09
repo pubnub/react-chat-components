@@ -13,7 +13,7 @@ interface MessagesByChannel {
 
 type HookReturnValue = [MessagesByChannel, () => Promise<void>, Error];
 
-export const useMessages = (options: FetchMessagesParameters = {}): HookReturnValue => {
+export const useMessages = (options: FetchMessagesParameters): HookReturnValue => {
   const pubnub = usePubNub();
 
   const [messages, setMessages] = useState<MessagesByChannel>(() => {
@@ -37,7 +37,7 @@ export const useMessages = (options: FetchMessagesParameters = {}): HookReturnVa
       const newMessages = mergeWith({}, messages, response.channels, mergeMessageArray);
       const earliestMessageTimetokens = Object.values(response.channels)
         .flatMap((ary) => ary[0])
-        .map((a) => a.timetoken);
+        .map((a) => a.timetoken) as number[];
       const lastTimetoken = Math.min(...earliestMessageTimetokens);
       setMessages(newMessages);
       setPage(lastTimetoken - 1);

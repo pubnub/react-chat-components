@@ -1,5 +1,5 @@
 import React, { FC, UIEvent, useRef, useState, useEffect, ReactNode } from "react";
-import { FetchMessagesResponse, UserData } from "pubnub";
+import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
@@ -22,7 +22,7 @@ export interface MessageRendererProps {
   isOwn: boolean;
   message: Message;
   time: string;
-  user?: UserData;
+  user?: UUIDMetadataObject<ObjectCustom>;
 }
 
 export interface MessageListProps {
