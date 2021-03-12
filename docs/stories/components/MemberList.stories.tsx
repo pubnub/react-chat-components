@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MemberList, MemberListProps } from "../../../src";
+import { MemberList, MemberListProps } from "pubnub-chat-components";
 import { mockUsers } from "../../pubnub-mock";
 
 export default {

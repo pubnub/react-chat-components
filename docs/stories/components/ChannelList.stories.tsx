@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { ChannelList, ChannelListProps } from "../../../src";
+import { ChannelList, ChannelListProps } from "pubnub-chat-components";
 import { mockChannels } from "../../pubnub-mock";
 
 export default {

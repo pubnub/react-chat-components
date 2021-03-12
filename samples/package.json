@@ -1,5 +1,5 @@
 {
-  "name": "samples",
+  "name": "pubnub-chat-component-samples",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

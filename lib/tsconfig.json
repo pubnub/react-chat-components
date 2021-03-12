@@ -16,7 +16,7 @@
   "exclude": ["node_modules", "build", "src/**/*.test.tsx"],
   "baseUrl": "./src",
   "paths": {
-      "@src/*": ["src/*"],
-      "@test/*": ["test/*"],
+    "@src/*": ["src/*"],
+    "@test/*": ["test/*"],
   }
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Chat } from "../src";
+import { Chat } from "pubnub-chat-components";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { PubNubMock, mockUsers } from "./pubnub-mock";
@@ -19,7 +19,7 @@ export const decorators = [
         {...{
           channel: "space_ac4e67b98b34b44c4a39466e93e",
           theme: context.parameters.theme || "dark",
-          userList: mockUsers().map((u) => u.uuid)
+          userList: mockUsers().map((u) => u.uuid),
         }}
       >
         <Story />
@@ -30,18 +30,26 @@ export const decorators = [
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
-  viewMode: 'docs',
+  viewMode: "docs",
   options: {
     storySort: {
       order: [
         "Introduction",
         ["About", "Usage", "Metadata"],
         "Custom Hooks",
-        ["About", "useUsers", "useUser", "useChannels", "useChannelMembers", "useUserMemberships", "usePresence"],
+        [
+          "About",
+          "useUsers",
+          "useUser",
+          "useChannels",
+          "useChannelMembers",
+          "useUserMemberships",
+          "usePresence",
+        ],
         "Components",
         ["Chat (Provider)"],
         "UI Customization",
-        ["Themes", "CSS Variables", "Custom Renderers"]
+        ["Themes", "CSS Variables", "Custom Renderers"],
       ],
     },
   },

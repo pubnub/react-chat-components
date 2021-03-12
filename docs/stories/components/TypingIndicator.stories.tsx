@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { TypingIndicator, TypingIndicatorProps } from "../../../src";
+import { TypingIndicator, TypingIndicatorProps } from "pubnub-chat-components";
 
 export default {
   title: "Components/Typing Indicator",

@@ -2,7 +2,7 @@ import React from "react";
 import { render } from "@test/custom-renderer";
 import "@testing-library/jest-dom/extend-expect";
 
-import channels from "../../sample-data/channels.json";
+import channels from "../../data/channels.json";
 import { ChannelList } from "./channel-list";
 
 test("renders a message", () => {
