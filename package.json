@@ -8,7 +8,7 @@
     "samples"
   ],
   "scripts": {
-    "start": "concurrently \"cd lib && npm run build:watch\" \"npm run start --prefix samples\"",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
     "build": "cd lib && npm run build",
     "test": "jest --config lib/jest.config.js",
     "test:watch": "jest --config lib/jest.config.js --watch",
