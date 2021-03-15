@@ -70,14 +70,14 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     return (
       <div key={member.id} className="pn-member">
         <div className="pn-member__avatar">
-          {member?.profileUrl && <img src={member.profileUrl} alt="User avatar " />}
-          {!member?.profileUrl && <div className="pn-member__avatar-placeholder" />}
+          {member.profileUrl && <img src={member.profileUrl} alt="User avatar " />}
+          {!member.profileUrl && <div className="pn-member__avatar-placeholder" />}
         </div>
         <div className="pn-member__main">
           <p className="pn-member__name">
             {member.name} {youString}
           </p>
-          <p className="pn-member__title">{member?.custom?.title}</p>
+          <p className="pn-member__title">{member.custom?.title}</p>
         </div>
       </div>
     );

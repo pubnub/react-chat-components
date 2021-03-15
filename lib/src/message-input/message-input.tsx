@@ -41,7 +41,7 @@ export interface MessageInputProps {
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
   const pubnub = usePubNub();
 
-  const [text, setText] = useState("");
+  const [text, setText] = useState(props.draftMessage || "");
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
 
