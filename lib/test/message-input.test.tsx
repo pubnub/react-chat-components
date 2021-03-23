@@ -1,58 +1,151 @@
 import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
-import { render, fireEvent, act } from "./helpers/custom-renderer";
+import { render, fireEvent, screen } from "./helpers/custom-renderer";
+import users from "../../data/users.json";
 
-test("renders with default options", () => {
-  const { getByText, queryByText, getByPlaceholderText } = render(<MessageInput />);
+describe("Message Input", () => {
+  /** Basic renderers and properties */
 
-  expect(getByText("Send")).toBeInTheDocument();
-  expect(getByPlaceholderText("Type Message")).toBeInTheDocument();
-  expect(queryByText("☺")).not.toBeInTheDocument();
-});
+  test("renders with default options", () => {
+    render(<MessageInput />);
 
-test("accepts and renders input", () => {
-  const { getByPlaceholderText, getByDisplayValue } = render(<MessageInput />);
-
-  fireEvent.change(getByPlaceholderText("Type Message"), { target: { value: "Changed Value" } });
-  expect(getByDisplayValue("Changed Value")).toBeInTheDocument();
-});
-
-test("renders custom placeholders", () => {
-  const { getByPlaceholderText } = render(<MessageInput placeholder="Placeholder" />);
-
-  expect(getByPlaceholderText("Placeholder")).toBeInTheDocument();
-});
-
-test("accepts an initial value", () => {
-  const { getByDisplayValue } = render(<MessageInput draftMessage="Initial Value" />);
-
-  expect(getByDisplayValue("Initial Value")).toBeInTheDocument();
-});
-
-test("renders without a send button", () => {
-  const { queryByText } = render(<MessageInput hideSendButton />);
-
-  expect(queryByText("Send")).not.toBeInTheDocument();
-});
-
-test("renders with custom send button", () => {
-  const { getByText } = render(<MessageInput sendButton="OK" />);
-
-  expect(getByText("OK")).toBeInTheDocument();
-});
-
-test("sends the message on send button click", async () => {
-  const { getByText, findByDisplayValue } = render(<MessageInput draftMessage="Initial Value" />);
-
-  act(() => {
-    fireEvent.click(getByText("Send"));
+    expect(screen.getByText("Send")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("Type Message")).toBeInTheDocument();
+    expect(screen.queryByText("☺")).not.toBeInTheDocument();
   });
-  expect(await findByDisplayValue("Initial Value")).not.toBeInTheDocument();
-});
 
-// senderInfo?: boolean;
-// typingIndicator?: boolean;
-// emojiPicker?: boolean;
-// onChange?: (value: string) => unknown;
-// onSend?: (value: unknown) => unknown;
+  test("accepts and renders input", () => {
+    render(<MessageInput />);
+
+    fireEvent.change(screen.getByPlaceholderText("Type Message"), {
+      target: { value: "Changed Value" },
+    });
+    expect(screen.getByDisplayValue("Changed Value")).toBeInTheDocument();
+  });
+
+  test("calls a callback on value change", () => {
+    const handleChange = jest.fn();
+    render(<MessageInput onChange={handleChange} />);
+
+    fireEvent.change(screen.getByPlaceholderText("Type Message"), {
+      target: { value: "Changed Value" },
+    });
+    expect(handleChange).toHaveBeenCalledWith("Changed Value");
+  });
+
+  test("renders custom placeholders", () => {
+    render(<MessageInput placeholder="Placeholder" />);
+
+    expect(screen.getByPlaceholderText("Placeholder")).toBeInTheDocument();
+  });
+
+  test("accepts an initial value", () => {
+    render(<MessageInput draftMessage="Initial Value" />);
+
+    expect(screen.getByDisplayValue("Initial Value")).toBeInTheDocument();
+  });
+
+  test("renders without a send button", () => {
+    render(<MessageInput hideSendButton />);
+
+    expect(screen.queryByText("Send")).not.toBeInTheDocument();
+  });
+
+  test("renders with custom send button", () => {
+    render(<MessageInput sendButton="OK" />);
+
+    expect(screen.getByText("OK")).toBeInTheDocument();
+  });
+
+  /** Sending messages */
+
+  test("sends the message on send button click", async () => {
+    render(<MessageInput draftMessage="Initial Value" />);
+
+    fireEvent.click(screen.getByText("Send"));
+    expect(await screen.findByDisplayValue("")).toBeInTheDocument();
+  });
+
+  test("sends the message on enter", async () => {
+    render(<MessageInput draftMessage="Initial Value" />);
+
+    fireEvent.keyPress(screen.getByDisplayValue("Initial Value"), { key: "Enter", charCode: 13 });
+    expect(await screen.findByDisplayValue("")).toBeInTheDocument();
+  });
+
+  test("nothing happens on trying to send empty message", () => {
+    render(<MessageInput />);
+
+    fireEvent.click(screen.getByText("Send"));
+    expect(screen.getByDisplayValue("")).toBeInTheDocument();
+  });
+
+  test("calls a callback on sending message", async () => {
+    const handleSend = jest.fn();
+    render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
+
+    fireEvent.click(screen.getByText("Send"));
+    expect(await screen.findByDisplayValue("")).toBeInTheDocument();
+    expect(handleSend).toHaveBeenCalledTimes(1);
+  });
+
+  test("sends messages in a correct format", async () => {
+    const handleSend = jest.fn();
+    render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
+
+    fireEvent.click(screen.getByText("Send"));
+    expect(await screen.findByDisplayValue("")).toBeInTheDocument();
+    expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
+  });
+
+  test("attaches sender info in messages", async () => {
+    const handleSend = jest.fn();
+    render(<MessageInput draftMessage="Initial Value" onSend={handleSend} senderInfo />, {
+      providerProps: {
+        channel: "test",
+        userList: users,
+      },
+    });
+
+    fireEvent.click(screen.getByText("Send"));
+    expect(await screen.findByDisplayValue("")).toBeInTheDocument();
+    expect(handleSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        sender: users.find((u) => u.id == "user_53bbe00387004010a8b9ad5f36bdd4a7"),
+      })
+    );
+  });
+
+  /** Emoji picker */
+
+  test("renders emoji picker button", () => {
+    render(<MessageInput emojiPicker />);
+
+    expect(screen.getByText("☺")).toBeInTheDocument();
+  });
+
+  test("opens emoji picker on button click", () => {
+    render(<MessageInput emojiPicker />);
+
+    fireEvent.click(screen.getByText("☺"));
+    expect(screen.getByText("Frequently Used")).toBeInTheDocument();
+  });
+
+  test("closes emoji picker when clicking outside", () => {
+    render(<MessageInput emojiPicker />);
+
+    fireEvent.click(screen.getByText("☺"));
+    fireEvent.click(screen.getByPlaceholderText("Type Message"));
+    expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
+  });
+
+  test("emoji picker inserts emojis into the input", async () => {
+    render(<MessageInput emojiPicker />);
+
+    fireEvent.click(screen.getByText("☺"));
+    fireEvent.click(screen.getByText("🙂"));
+    expect(screen.getByDisplayValue("🙂")).toBeInTheDocument();
+    expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
+  });
+});

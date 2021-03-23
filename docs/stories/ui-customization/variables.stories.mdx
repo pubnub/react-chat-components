@@ -14,7 +14,7 @@ in your CSS file:
 
 ```css
 :root {
-  --msg-input__padding: 0
+  --msg-input__padding: 0;
 }
 ```
 
@@ -27,7 +27,6 @@ dark mode, you need to use component class name instead of the `:root` element:
   --msg-list__background: rgb(40 41 49);
 }
 ```
-
 
 ### Message List
 
@@ -202,12 +201,16 @@ dark mode, you need to use component class name instead of the `:root` element:
 --channel--active__background: rgba(0, 0, 0, 0.1);
 
 --channel__name__color: white;
+--channel--hover__name__color: white;
+--channel--active__name__color: white;
 --channel__name__fontSize: 15px;
 --channel__name__fontWeight: 500;
 --channel__name__padding: 0;
 --channel__name__margin: 0;
 
 --channel__description__color: #c7c7c7;
+--channel--hover__description__color: #c7c7c7;
+--channel--active__description__color: #c7c7c7;
 --channel__description__display: inline-block;
 --channel__description__fontSize: 13px;
 --channel__description__fontWeight: 400;
@@ -227,7 +230,6 @@ dark mode, you need to use component class name instead of the `:root` element:
 --channel__membership__size: 6px;
 --channel__membership__top: 19px;
 ```
-
 
 ### Typing Indicator
 

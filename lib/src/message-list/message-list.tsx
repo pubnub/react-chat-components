@@ -207,7 +207,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     ({ snapshot, set }) => async (response: FetchMessagesResponse) => {
       const channel = await snapshot.getPromise(CurrentChannelAtom);
       const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
-      const newMessages = (response.channels[channel] as Message[]) || [];
+      const newMessages = (response?.channels[channel] as Message[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );

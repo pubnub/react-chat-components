@@ -2,19 +2,19 @@ import React from "react";
 
 import { MemberList } from "../src/member-list/member-list";
 import members from "../../data/users.json";
-import { render } from "./helpers/custom-renderer";
+import { render, screen } from "./helpers/custom-renderer";
 
 test("renders members from objects", () => {
-  const { getByText } = render(<MemberList memberList={members} />);
+  render(<MemberList memberList={members} />);
 
-  expect(getByText("Adaline Appleberry")).toBeInTheDocument();
-  expect(getByText("Office Assistant I")).toBeInTheDocument();
+  expect(screen.getByText("Adaline Appleberry")).toBeInTheDocument();
+  expect(screen.getByText("Office Assistant I")).toBeInTheDocument();
 });
 
 test("renders members from strings", () => {
-  const { getByText } = render(<MemberList memberList={["Moby Dick", "Peter Pan"]} />);
+  render(<MemberList memberList={["Moby Dick", "Peter Pan"]} />);
 
-  expect(getByText("Moby Dick")).toBeInTheDocument();
+  expect(screen.getByText("Moby Dick")).toBeInTheDocument();
 });
 
 test("renders current user as first and with a suffix", () => {
@@ -41,22 +41,18 @@ test("renders passed in children", () => {
 
 test("renders with custom renderer", () => {
   const customRenderer = (user) => <p key={user.name}>Custom {user.name}</p>;
-  const { getByText, queryByText } = render(
-    <MemberList memberList={members} memberRenderer={customRenderer} />
-  );
+  render(<MemberList memberList={members} memberRenderer={customRenderer} />);
 
-  expect(getByText("Custom Adaline Appleberry")).toBeInTheDocument();
-  expect(queryByText("Adaline Appleberry")).not.toBeInTheDocument();
+  expect(screen.getByText("Custom Adaline Appleberry")).toBeInTheDocument();
+  expect(screen.queryByText("Adaline Appleberry")).not.toBeInTheDocument();
 });
 
 test("filters members with custom function", () => {
   const customFilter = (user) => user.name !== "Adaline Appleberry";
-  const { getByText, queryByText } = render(
-    <MemberList memberList={members} filter={customFilter} />
-  );
+  render(<MemberList memberList={members} filter={customFilter} />);
 
-  expect(getByText("Adelia Auten")).toBeInTheDocument();
-  expect(queryByText("Adaline Appleberry")).not.toBeInTheDocument();
+  expect(screen.getByText("Adelia Auten")).toBeInTheDocument();
+  expect(screen.queryByText("Adaline Appleberry")).not.toBeInTheDocument();
 });
 
 test("sorts members with custom function", () => {

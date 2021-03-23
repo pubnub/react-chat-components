@@ -70,9 +70,9 @@ export const TypingIndicatorAtom = atom({
   default: {},
 });
 
-export const CurrentChannelTypingIndicatorAtom = selector<string[]>({
+export const CurrentChannelTypingIndicatorAtom = selector<{ [key: string]: string }>({
   key: "channelTypingIndicator",
-  get: ({ get }) => get(TypingIndicatorAtom)[get(CurrentChannelAtom)] || [],
+  get: ({ get }) => get(TypingIndicatorAtom)[get(CurrentChannelAtom)] || {},
   set: ({ get, set }, value) =>
     set(
       TypingIndicatorAtom,

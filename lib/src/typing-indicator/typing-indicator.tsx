@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, useEffect, useCallback, useRef } from "react";
 import { useRecoilValue } from "recoil";
 import {
   CurrentChannelTypingIndicatorAtom,
@@ -6,6 +6,7 @@ import {
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
 } from "../state-atoms";
+import isEqual from "lodash.isequal";
 import "./typing-indicator.scss";
 
 export interface TypingIndicatorProps {
@@ -22,10 +23,19 @@ export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicator
   const users = useRecoilValue(UsersMetaAtom);
   const typingIndicators = useRecoilValue(CurrentChannelTypingIndicatorAtom);
   const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);
+  const [activeUUIDs, setActiveUUIDs] = useState([]);
+  const typingIndicatorsRef = useRef(typingIndicators);
 
-  const activeUUIDs = Object.keys(typingIndicators).filter((id) => {
-    return Date.now() - parseInt(typingIndicators[id]) / 10000 < typingIndicatorTimeout * 1000;
-  });
+  if (!isEqual(typingIndicatorsRef.current, typingIndicators)) {
+    typingIndicatorsRef.current = typingIndicators;
+  }
+
+  const calculateActiveUUIDs = useCallback(() => {
+    const currentActiveUUIDs = Object.keys(typingIndicators).filter(
+      (id) => Date.now() - parseInt(typingIndicators[id]) / 10000 < typingIndicatorTimeout * 1000
+    );
+    setActiveUUIDs(currentActiveUUIDs);
+  }, [typingIndicatorsRef.current]);
 
   const getIndicationString = () => {
     let indicateStr = "";
@@ -36,6 +46,12 @@ export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicator
     }
     return indicateStr;
   };
+
+  useEffect(() => {
+    calculateActiveUUIDs();
+    const interval = setInterval(calculateActiveUUIDs, 1000);
+    return () => clearInterval(interval);
+  }, [calculateActiveUUIDs]);
 
   const renderUserBubble = (uuid) => {
     const user = users.find((u) => u.id === uuid);
@@ -68,7 +84,6 @@ export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicator
           {getIndicationString()}&nbsp;
         </div>
       )}
-
       {props.showAsMessage && activeUUIDs.map((uuid) => renderUserBubble(uuid))}
     </>
   );

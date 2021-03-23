@@ -31,6 +31,7 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
       const channel = channelsClone[event.channel];
 
       if (event.action === "join") {
+        if (!channel.hasOwnProperty("occupants")) channel.occupants = [];
         channel.occupancy = event.occupancy;
 
         if (

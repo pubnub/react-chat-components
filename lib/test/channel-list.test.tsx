@@ -1,30 +1,32 @@
 import React from "react";
 
 import { ChannelList } from "../src/channel-list/channel-list";
-import channels from "../../data/channels.json";
+import channels from "../../data/channels-work.json";
 import { render, screen, fireEvent } from "./helpers/custom-renderer";
 
 test("renders channels from objects", () => {
-  const { getByText } = render(<ChannelList channelList={channels} />);
+  render(<ChannelList channelList={channels} />);
 
-  expect(getByText("Introductions")).toBeInTheDocument();
-  expect(getByText("This channel is for company wide chatter")).toBeInTheDocument();
+  expect(screen.getByText("Introductions")).toBeInTheDocument();
+  expect(screen.getByText("This channel is for company wide chatter")).toBeInTheDocument();
 });
 
 test("renders channels from strings", () => {
-  const { getByText } = render(<ChannelList channelList={["Introductions", "Examples"]} />);
+  render(<ChannelList channelList={["Introductions", "Examples"]} />);
 
-  expect(getByText("Introductions")).toBeInTheDocument();
+  expect(screen.getByText("Introductions")).toBeInTheDocument();
 });
 
 test("renders current channel as active", () => {
-  const { getByText } = render(<ChannelList channelList={channels} />, {
+  render(<ChannelList channelList={channels} />, {
     providerProps: {
       channel: "space_ac4e67b98b34b44c4a39466e93e",
     },
   });
 
-  expect(getByText("Introductions").parentElement.parentElement).toHaveClass("pn-channel--active");
+  expect(screen.getByText("Introductions").parentElement.parentElement).toHaveClass(
+    "pn-channel--active"
+  );
 });
 
 test("renders passed in children", () => {
@@ -43,22 +45,18 @@ test("renders passed in children", () => {
 
 test("renders with custom renderer", () => {
   const customRenderer = (channel) => <p key={channel.name}>Custom {channel.name}</p>;
-  const { getByText, queryByText } = render(
-    <ChannelList channelList={channels} channelRenderer={customRenderer} />
-  );
+  render(<ChannelList channelList={channels} channelRenderer={customRenderer} />);
 
-  expect(getByText("Custom Introductions")).toBeInTheDocument();
-  expect(queryByText("Introductions")).not.toBeInTheDocument();
+  expect(screen.getByText("Custom Introductions")).toBeInTheDocument();
+  expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
 });
 
 test("filters channels with custom function", () => {
   const customFilter = (channel) => channel.name !== "Introductions";
-  const { getByText, queryByText } = render(
-    <ChannelList channelList={channels} filter={customFilter} />
-  );
+  render(<ChannelList channelList={channels} filter={customFilter} />);
 
-  expect(getByText("Running")).toBeInTheDocument();
-  expect(queryByText("Introductions")).not.toBeInTheDocument();
+  expect(screen.getByText("Running")).toBeInTheDocument();
+  expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
 });
 
 test("sorts channels with custom function", () => {

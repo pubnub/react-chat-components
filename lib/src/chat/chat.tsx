@@ -295,13 +295,13 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
           return indicatorsClone;
         });
 
-        setTimeout(() => {
-          setTypingIndicator((indicators) => {
-            const indicatorsClone = cloneDeep(indicators);
-            setDeep(indicatorsClone, [signal.channel, signal.publisher], null);
-            return indicatorsClone;
-          });
-        }, typingIndicatorTimeout * 1000);
+        // setTimeout(() => {
+        //   setTypingIndicator((indicators) => {
+        //     const indicatorsClone = cloneDeep(indicators);
+        //     setDeep(indicatorsClone, [signal.channel, signal.publisher], null);
+        //     return indicatorsClone;
+        //   });
+        // }, typingIndicatorTimeout * 1000);
       }
     } catch (e) {
       props.onError(e);

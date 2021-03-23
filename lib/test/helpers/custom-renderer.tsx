@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { render, RenderResult } from "@testing-library/react";
-import { Chat } from "../../src/chat";
+import { Chat, ChatProps } from "../../src/chat";
 
 // TODO: Implement mock with approach from https://kentcdodds.com/blog/stop-mocking-fetch
 const pubnub = new PubNub({
@@ -17,7 +17,10 @@ const defaultOptions = {
   },
 };
 
-const customRender = (ui: ReactNode, options = defaultOptions): RenderResult => {
+const customRender = (
+  ui: ReactNode,
+  options: { providerProps: ChatProps } = defaultOptions
+): RenderResult => {
   const { providerProps, ...renderOptions } = options;
 
   return render(

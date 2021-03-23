@@ -1,0 +1,130 @@
+.app {
+  color: #585858;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.channels {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 250px;
+
+  h4 {
+    margin: 34px 24px 12px;
+  }
+}
+
+.user {
+  display: flex;
+  padding: 54px 24px 20px;
+
+  h4 {
+    margin: 0 0 2px;
+  }
+
+  small {
+    color: #9b9b9b;
+  }
+
+  img {
+    background: #f8f6fd;
+    display: block;
+    margin: 0 24px 0 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
+  }
+}
+
+.info {
+  padding: 24px 24px 0;
+
+  h4 {
+    margin: 0 0 2px;
+  }
+
+  small {
+    color: #9b9b9b;
+  }
+
+  hr {
+    background-color: #d7e0e9;
+    border: 0;
+    height: 1px;
+    margin: 18px 0 0;
+  }
+}
+
+.chat {
+  background: #f0f3f7;
+  border-radius: 25px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 30px 30px 30px 0;
+  padding-bottom: 30px;
+  position: relative;
+}
+
+.members {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  transform: translateX(310px);
+  transition: 0.3s ease-in-out;
+  width: 0;
+
+  &.shown {
+    transform: none;
+    width: 310px;
+  }
+
+  h4 {
+    margin-top: 54px;
+  }
+}
+
+.people {
+  align-items: center;
+  color: gray;
+  cursor: pointer;
+  display: flex;
+  font-size: 13px;
+  position: absolute;
+  right: 34px;
+  top: 34px;
+  z-index: 1;
+
+  &.active {
+    color: #5babfc;
+  }
+
+  span {
+    margin: 2px 8px 0 0;
+  }
+}
+
+:root {
+  --msg-list__background: transparent;
+
+  --msg-input__send__background: #de2440;
+  --msg-input__send__borderRadius: 25px;
+  --msg-input__send__padding: 10px 20px;
+  --msg-input__textarea__borderRadius: 25px;
+  --msg-input__textarea__padding: 12px 24px;
+
+  --channel-list__background: #ffffff;
+  --channel--active__background: #f0f3f7;
+  --channel--hover__background: #5babfc;
+  --channel__description__display: none;
+  --channel__name__color: #585858;
+  --channel--active__name__color: #585858;
+  --channel__name__fontSize: 13px;
+  --channel__name__fontWeight: 400;
+  --channel__padding: 20px 24px;
+
+  --member__padding: 9px 0;
+  --member--hover__background: transparent;
+}

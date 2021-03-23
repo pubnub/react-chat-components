@@ -1,0 +1,23 @@
+[
+  {
+    "name": "Besties",
+    "description": "Everything about movies",
+    "eTag": "AbOx6N+6vu3zoAE",
+    "id": "space_bc03548bcb11eb8dcd0242c1303",
+    "updated": "2020-09-23T09:23:37.175764Z"
+  },
+  {
+    "name": "Family",
+    "description": "Everything about the family",
+    "eTag": "AbOx6N+6vu3zoAE",
+    "id": "space_5f3547a18f448e567e84ba097db",
+    "updated": "2020-09-23T09:23:37.175764Z"
+  },
+  {
+    "name": "Soccer Practice",
+    "description": "Discuss soccer related matters",
+    "eTag": "AbOx6N+6vu3zoAE",
+    "id": "space_937989646abaa2bf3ed12dbd0a3",
+    "updated": "2020-09-23T09:23:37.175764Z"
+  }
+]

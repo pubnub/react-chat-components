@@ -12,11 +12,15 @@
   --channel--hover__background: rgba(255, 255, 255, 0.1);
   --channel--active__background: rgba(0, 0, 0, 0.1);
   --channel__name__color: white;
+  --channel--hover__name__color: white;
+  --channel--active__name__color: white;
   --channel__name__fontSize: 15px;
   --channel__name__fontWeight: 500;
   --channel__name__padding: 0;
   --channel__name__margin: 0;
   --channel__description__color: #c7c7c7;
+  --channel--hover__description__color: #c7c7c7;
+  --channel--active__description__color: #c7c7c7;
   --channel__description__display: inline-block;
   --channel__description__fontSize: 13px;
   --channel__description__fontWeight: 400;
@@ -61,10 +65,26 @@
     .pn-channel__leave {
       display: inline;
     }
+
+    .pn-channel__name {
+      color: var(--channel--hover__name__color);
+    }
+
+    .pn-channel__description {
+      color: var(--channel--hover__description__color);
+    }
   }
 
   &--active {
     background: var(--channel--active__background);
+
+    .pn-channel__name {
+      color: var(--channel--active__name__color);
+    }
+
+    .pn-channel__description {
+      color: var(--channel--active__description__color);
+    }
   }
 
   &__name {

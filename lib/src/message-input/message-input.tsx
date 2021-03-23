@@ -1,4 +1,12 @@
-import React, { FC, KeyboardEvent, ChangeEvent, useState, useRef } from "react";
+import React, {
+  FC,
+  KeyboardEvent,
+  ChangeEvent,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import { useRecoilValue } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
@@ -84,7 +92,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
       await pubnub.publish({ channel, message });
       props.onSend && props.onSend(message);
-      stopTypingIndicator();
+      if (props.typingIndicator) stopTypingIndicator();
       setText("");
     } catch (e) {
       onError(e);
@@ -92,29 +100,22 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   const startTypingIndicator = async () => {
+    if (typingIndicatorSent) return;
     try {
-      if (props.typingIndicator && !typingIndicatorSent) {
-        setTypingIndicatorSent(true);
-        const message = { message: { type: "typing_on" }, channel };
-
-        pubnub.signal(message);
-
-        setTimeout(() => {
-          setTypingIndicatorSent(false);
-        }, (typingIndicatorTimeout - 1) * 1000);
-      }
+      setTypingIndicatorSent(true);
+      const message = { message: { type: "typing_on" }, channel };
+      pubnub.signal(message);
     } catch (e) {
       onError(e);
     }
   };
 
   const stopTypingIndicator = async () => {
+    if (!typingIndicatorSent) return;
     try {
-      if (props.typingIndicator && typingIndicatorSent) {
-        setTypingIndicatorSent(false);
-        const message = { message: { type: "typing_off" }, channel };
-        pubnub.signal(message);
-      }
+      setTypingIndicatorSent(false);
+      const message = { message: { type: "typing_off" }, channel };
+      pubnub.signal(message);
     } catch (e) {
       onError(e);
     }
@@ -137,21 +138,24 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const handleOpenPicker = () => {
     try {
       setEmojiPickerShown(true);
-      document.addEventListener("mousedown", handleClosePicker);
+      document.addEventListener("click", handleClosePicker);
     } catch (e) {
       onError(e);
     }
   };
 
-  const handleClosePicker = (event: MouseEvent) => {
-    try {
-      if (pickerRef?.current?.contains(event.target as Node)) return;
-      setEmojiPickerShown(false);
-      document.removeEventListener("mousedown", handleClosePicker);
-    } catch (e) {
-      onError(e);
-    }
-  };
+  const handleClosePicker = useCallback(
+    (event: MouseEvent) => {
+      try {
+        if (pickerRef?.current?.contains(event.target as Node)) return;
+        setEmojiPickerShown(false);
+        document.removeEventListener("click", handleClosePicker);
+      } catch (e) {
+        onError(e);
+      }
+    },
+    [pickerRef?.current, emojiPickerShown]
+  );
 
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     try {
@@ -169,11 +173,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       const textArea = event.target as HTMLTextAreaElement;
       const newText = textArea.value;
 
-      if (newText.length) {
-        startTypingIndicator();
-      } else {
-        stopTypingIndicator();
-      }
+      if (props.typingIndicator && newText.length) startTypingIndicator();
+      if (props.typingIndicator && !newText.length) stopTypingIndicator();
 
       props.onChange && props.onChange(newText);
       autoSize();
@@ -182,6 +183,32 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       onError(e);
     }
   };
+
+  /*
+  /* Lifecycle
+  */
+
+  useEffect(() => {
+    return () => {
+      document.removeEventListener("click", handleClosePicker);
+    };
+  }, []);
+
+  useEffect(() => {
+    let timer = null;
+
+    if (typingIndicatorSent) {
+      timer = setTimeout(() => {
+        setTypingIndicatorSent(false);
+      }, (typingIndicatorTimeout - 1) * 1000);
+    }
+
+    return () => clearTimeout(timer);
+  }, [typingIndicatorSent]);
+
+  /*
+  /* Renderers
+  */
 
   const renderEmojiPicker = () => {
     return (

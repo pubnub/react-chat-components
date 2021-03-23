@@ -12,9 +12,12 @@
     "build": "cd lib && npm run build",
     "test": "jest --config lib/jest.config.js",
     "test:watch": "jest --config lib/jest.config.js --watch",
+    "samples": "cd samples && npm run start",
+    "samples:build": "cd samples && npm run build",
+    "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
     "storybook": "start-storybook -p 6006 -c docs",
     "storybook:build": "build-storybook -c docs",
-    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static"
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
   },
   "devDependencies": {
     "concurrently": "^6.0.0"
