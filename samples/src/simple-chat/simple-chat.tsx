@@ -73,7 +73,7 @@ function SimpleChat() {
             <small>{currentChannel.description}</small>
             <hr />
           </div>
-          <MessageList fetchMessages={25} />
+          <MessageList fetchMessages={25} welcomeRenderer={false} />
           <MessageInput placeholder={`Message #${currentChannel.name}`} />
         </div>
 
