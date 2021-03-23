@@ -3,6 +3,35 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
+
+  .pn-msg-list--light {
+    --msg-list__background: transparent;
+  }
+
+  .pn-msg-input--light {
+    --msg-input__send__background: #de2440;
+    --msg-input__send__borderRadius: 25px;
+    --msg-input__send__padding: 10px 20px;
+    --msg-input__textarea__borderRadius: 25px;
+    --msg-input__textarea__padding: 12px 24px;
+  }
+
+  .pn-channel-list--light {
+    --channel-list__background: #ffffff;
+    --channel--active__background: #f0f3f7;
+    --channel--hover__background: #5babfc;
+    --channel__description__display: none;
+    --channel__name__color: #585858;
+    --channel--active__name__color: #585858;
+    --channel__name__fontSize: 13px;
+    --channel__name__fontWeight: 400;
+    --channel__padding: 20px 24px;
+  }
+
+  .pn-msg-list--light {
+    --member__padding: 9px 0;
+    --member--hover__background: transparent;
+  }
 }
 
 .channels {
@@ -104,27 +133,4 @@
   span {
     margin: 2px 8px 0 0;
   }
-}
-
-:root {
-  --msg-list__background: transparent;
-
-  --msg-input__send__background: #de2440;
-  --msg-input__send__borderRadius: 25px;
-  --msg-input__send__padding: 10px 20px;
-  --msg-input__textarea__borderRadius: 25px;
-  --msg-input__textarea__padding: 12px 24px;
-
-  --channel-list__background: #ffffff;
-  --channel--active__background: #f0f3f7;
-  --channel--hover__background: #5babfc;
-  --channel__description__display: none;
-  --channel__name__color: #585858;
-  --channel--active__name__color: #585858;
-  --channel__name__fontSize: 13px;
-  --channel__name__fontWeight: 400;
-  --channel__padding: 20px 24px;
-
-  --member__padding: 9px 0;
-  --member--hover__background: transparent;
 }

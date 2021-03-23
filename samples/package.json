@@ -20,6 +20,7 @@
   "dependencies": {
     "emoji-mart": "^3.0.0",
     "lodash.samplesize": "^4.2.0",
+    "node-sass": "^5.0.0",
     "pubnub": "^4.29.10",
     "pubnub-react": "^2.1.0",
     "react": "^16.14.0",

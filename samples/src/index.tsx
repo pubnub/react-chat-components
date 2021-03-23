@@ -17,26 +17,37 @@ const pubnub = new PubNub({
 
 ReactDOM.render(
   <React.StrictMode>
-    <PubNubProvider client={pubnub}>
-      <HashRouter>
-        <Switch>
-          <Route path="/simple-chat">
-            <SimpleChat />
-          </Route>
-          <Route path="/">
-            <div className="welcome">
-              <h1>Pubnub Chat Components</h1>
-              <h3>Here are some example applications built using PubNub and Chat Components:</h3>
-              <ul>
-                <li>
-                  <Link to="/simple-chat">Simple Chat</Link>
-                </li>
-              </ul>
-            </div>
-          </Route>
-        </Switch>
-      </HashRouter>
-    </PubNubProvider>
+    {pubnubKeys.publishKey.length && pubnubKeys.subscribeKey.length ? (
+      <PubNubProvider client={pubnub}>
+        <HashRouter>
+          <Switch>
+            <Route path="/simple-chat">
+              <SimpleChat />
+            </Route>
+            <Route path="/">
+              <div className="welcome">
+                <h1>Pubnub Chat Components</h1>
+                <h3>Here are some example applications built using PubNub and Chat Components:</h3>
+                <ul>
+                  <li>
+                    <Link to="/simple-chat">Simple Chat</Link>
+                  </li>
+                </ul>
+              </div>
+            </Route>
+          </Switch>
+        </HashRouter>
+      </PubNubProvider>
+    ) : (
+      <div className="pubnub-error">
+        <h1>Warning! Missing PubNub keys</h1>
+        Sign in or create an account to create an app on the
+        <a href="https://dashboard.pubnub.com/">PubNub Admin Portal</a> and copy over the
+        Publish/Subscribe keys into:
+        <pre>samples/pubnub-keys.json</pre>
+        in order to use the app properly.
+      </div>
+    )}
   </React.StrictMode>,
   document.getElementById("root")
 );

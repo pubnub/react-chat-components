@@ -10,8 +10,8 @@ import {
   usePresence,
 } from "pubnub-chat-components";
 
-import { ReactComponent as PeopleGroup } from "../people-group.svg";
 import "./simple-chat.scss";
+import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 import users from "../../../data/users.json";
 import socialChannels from "../../../data/channels-social.json";
