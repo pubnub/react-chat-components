@@ -1,6 +1,7 @@
 {
-  "name": "pubnub-chat-components-monorepo",
+  "name": "@pubnub/react-chat-components-monorepo",
   "version": "1.0.0",
+  "private": true,
   "description": "This monorepository uses npm v7 workspaces feature to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "workspaces": [
@@ -26,6 +27,8 @@
     "@storybook/addons": "6.1.21",
     "@storybook/react": "6.1.21",
     "@storybook/theming": "6.1.21",
-    "concurrently": "^6.0.0"
+    "concurrently": "^6.0.0",
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.0"
   }
 }

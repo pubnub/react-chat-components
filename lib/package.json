@@ -1,5 +1,5 @@
 {
-  "name": "pubnub-chat-components",
+  "name": "@pubnub/react-chat-components",
   "version": "0.1.0",
   "description": "PubNub Chat Components is a development kit of React components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
   "main": "build/index.js",
@@ -47,7 +47,6 @@
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^3.1.8",
     "rollup-plugin-typescript2": "^0.30.0",
-    "sass-loader": "^10.1.0",
     "ts-jest": "^26.5.2",
     "tslib": "^2.1.0",
     "typescript": "^4.1.5"

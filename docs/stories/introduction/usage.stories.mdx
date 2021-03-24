@@ -9,8 +9,8 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 ## PubNub Account
 
-Sign in or create an account to create an app on the [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your
-application.
+Sign in or create an account to create an app on the [Admin Portal](https://dashboard.pubnub.com/)
+and get the keys to use in your application.
 
 When you create a new app, the first set of keys is generated automatically, but a single app can
 have as many keysets as you like. We recommend that you create separate keysets for production and
@@ -26,7 +26,7 @@ Install the components and all required dependencies using npm:
 > Please note that the components are not deployed to npm yet!
 
 ```bash
-npm install --save pubnub pubnub-react pubnub-chat-components
+npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ import {
   MessageInput,
   ChannelList,
   MemberList,
-} from "pubnub-chat-components";
+} from "@pubnub/react-chat-components";
 ```
 
 2. Create your PubNub client and rest of the configuration for the Chat provider.
@@ -61,10 +61,7 @@ const theme = "light";
 
 ```jsx
 const MyCommponent = () => {
-  return (
-    <PubNubProvider client={pubnub}>
-    </PubNub>
-  );
+  return <PubNubProvider client={pubnub}></PubNub>;
 };
 ```
 
@@ -83,3 +80,7 @@ const MyCommponent = () => {
   );
 };
 ```
+
+5. Check out the [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples)
+   to see what is possible using the components. Source code of the sample applications can be found in
+   the `samples` folder in the repository root.
