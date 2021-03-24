@@ -20,6 +20,12 @@
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
   },
   "devDependencies": {
+    "@storybook/addon-actions": "6.1.21",
+    "@storybook/addon-essentials": "6.1.21",
+    "@storybook/addon-links": "6.1.21",
+    "@storybook/addons": "6.1.21",
+    "@storybook/react": "6.1.21",
+    "@storybook/theming": "6.1.21",
     "concurrently": "^6.0.0"
   }
 }
