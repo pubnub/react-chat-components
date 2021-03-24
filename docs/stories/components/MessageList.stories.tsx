@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MessageList, MessageListProps } from "pubnub-chat-components";
+import { MessageList, MessageListProps } from "@pubnub/react-chat-components";
 
 export default {
   title: "Components/Message List",
@@ -13,5 +13,5 @@ export const Default = Template.bind({});
 
 Default.args = {
   fetchMessages: 3,
-  enableReactions: true
+  enableReactions: true,
 };

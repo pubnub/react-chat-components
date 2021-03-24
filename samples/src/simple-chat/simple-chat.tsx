@@ -10,7 +10,7 @@ import {
   MessageList,
   usePresence,
   Themes,
-} from "pubnub-chat-components";
+} from "@pubnub/react-chat-components";
 
 import "./simple-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";

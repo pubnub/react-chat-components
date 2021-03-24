@@ -1,5 +1,11 @@
 import React from "react";
-import { Chat, MessageList, MessageInput, useUser, usePresence } from "pubnub-chat-components";
+import {
+  Chat,
+  MessageList,
+  MessageInput,
+  useUser,
+  usePresence,
+} from "@pubnub/react-chat-components";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 import "./event-chat.scss";
 

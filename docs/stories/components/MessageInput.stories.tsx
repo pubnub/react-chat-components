@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MessageInput, MessageInputProps } from "pubnub-chat-components";
+import { MessageInput, MessageInputProps } from "@pubnub/react-chat-components";
 import "./preview.css";
 
 export default {

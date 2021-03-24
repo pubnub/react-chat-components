@@ -10,7 +10,7 @@ import {
   useChannels,
   usePresence,
   useUsers,
-} from "pubnub-chat-components";
+} from "@pubnub/react-chat-components";
 import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import "./group-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";

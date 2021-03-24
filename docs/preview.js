@@ -1,5 +1,5 @@
 import React from "react";
-import { Chat } from "pubnub-chat-components";
+import { Chat } from "@pubnub/react-chat-components";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { PubNubMock, mockUsers } from "./pubnub-mock";
