@@ -24,6 +24,7 @@
     "pubnub": "^4.29.10",
     "pubnub-react": "^2.1.0",
     "react": "^16.14.0",
+    "react-dark-mode-toggle": "^0.2.0",
     "react-dom": "^16.14.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",

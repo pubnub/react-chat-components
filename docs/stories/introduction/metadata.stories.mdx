@@ -6,13 +6,12 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 Some components require providing lists of Channels and Users that should be displayed. Some of those work fine with simple lists of `strings`, although look much better when provided with metadata about the entities. Please see the reference below to understand what's expected where and why:
 
-| Component | Description | Property | Data type (see below) |
-| --------- | ----------- | -------- | --------- |
-| ChannelList | Displaying channel names along with descriptions | `channelList` | `string[]` or `Channel[]` |
-| MemberList | Displaying full user names, avatars and additional line of text that can serve as user description/title/status | `memberList` | `string[]` or `UUIDMetadataObject<ObjectCustom>[]` |
-| MessageList| Displaying full user names and avatars | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]` |
-| TypingIndicator | Displaying full user names or avatars, depending on the type of the indicator | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]` |
-
+| Component       | Description                                                                                                     | Property                          | Data type (see below)                              |
+| --------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- | -------------------------------------------------- |
+| ChannelList     | Displaying channel names along with descriptions                                                                | `channelList`                     | `string[]` or `Channel[]`                          |
+| MemberList      | Displaying full user names, avatars and additional line of text that can serve as user description/title/status | `memberList`                      | `string[]` or `UUIDMetadataObject<ObjectCustom>[]` |
+| MessageList     | Displaying full user names and avatars                                                                          | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]`               |
+| TypingIndicator | Displaying full user names or avatars, depending on the type of the indicator                                   | `userList` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]`               |
 
 # Storing Users, Channels and Memberships
 
@@ -23,20 +22,21 @@ Since all of the metadata has to be explicitly provided, Chat Components are ind
 
 Once metadata is created and stored on PubNub servers, it's possible to easily fetch it and pass it to the components using our custom **React hooks**. Please see the next page of the Introduction to see how to achieve that.
 
-<br/>
+<br />
 
 # Data Types
 
-<br/>
+<br />
 
 ### Channels
 
 ```
 interface Channel {
-  id: string;             // used as an unique channel identificator accross the components
-  name: string;           // displayed on the ChannelList (first line)
-  description?: string;   // displayed on the ChannelList (second line)
-  custom?: {              // not used in Chat Components by default, but can store additional data
+  id: string;               // used as an unique channel identificator accross the components
+  name: string;             // displayed on the ChannelList (first line)
+  description?: string;     // displayed on the ChannelList (second line)
+  custom?: {                // not used in Chat Components by default, but can store additional data
+    thumb?: string | null;  // expects an image URL to display the channel thumbnail
     [key: string]: unknown;
   };
 }

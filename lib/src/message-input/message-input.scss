@@ -90,6 +90,7 @@
     border: var(--msg-input__send__border);
     color: var(--msg-input__send__color);
     cursor: pointer;
+    flex-shrink: 0;
     font-family: var(--msg-input__send__fontFamily);
     font-size: var(--msg-input__send__fontSize);
     font-weight: var(--msg-input__send__fontWeight);

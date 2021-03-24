@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
+import DarkModeToggle from "react-dark-mode-toggle";
 import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import {
   Chat,
@@ -8,12 +9,15 @@ import {
   MessageInput,
   MessageList,
   usePresence,
+  Themes,
+  TypingIndicator,
 } from "pubnub-chat-components";
 
 import "./simple-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 import users from "../../../data/users.json";
+import messages from "../../../data/messages.json";
 import socialChannels from "../../../data/channels-social.json";
 import directChannels from "../../../data/channels-direct.json";
 const userList: UUIDMetadataObject<ObjectCustom>[] = users;
@@ -23,8 +27,10 @@ const allChannelIds = [...socialChannelList, ...directChannelList].map((c) => c.
 
 function SimpleChat() {
   const pubnub = usePubNub();
-  const [currentChannel, setCurrentChannel] = React.useState(socialChannelList[0]);
-  const [showMembers, setShowMembers] = React.useState(false);
+  const [theme, setTheme] = useState<Themes>("light");
+  const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
+  const [showMembers, setShowMembers] = useState(false);
+  const [showChannels, setShowChannels] = useState(true);
   const [presenceData] = usePresence({ channels: allChannelIds });
 
   const currentUser = userList.find((u) => u.id === pubnub.getUUID());
@@ -32,15 +38,22 @@ function SimpleChat() {
   const presentUsers = userList.filter((u) => presentUUIDs?.includes(u.id));
 
   return (
-    <div className="app">
-      <Chat channel={currentChannel.id} subscribeChannels={allChannelIds} userList={userList}>
-        <div className="channels">
+    <div className={`app ${theme}`}>
+      <Chat
+        theme={theme}
+        channel={currentChannel.id}
+        subscribeChannels={allChannelIds}
+        userList={userList}
+      >
+        <div className={`channels ${showChannels && "shown"}`}>
           <div className="user">
             {currentUser?.profileUrl && <img src={currentUser?.profileUrl} alt="User avatar " />}
-            <div className="details">
-              <h4>{currentUser?.name}</h4>
-              <small>{currentUser?.custom?.title}</small>
-            </div>
+            <h4>
+              {currentUser?.name}{" "}
+              <span className="close" onClick={() => setShowChannels(false)}>
+                ✕
+              </span>
+            </h4>
           </div>
 
           <h4>Channels</h4>
@@ -57,6 +70,13 @@ function SimpleChat() {
               onChannelSwitched={(channel) => setCurrentChannel(channel)}
             />
           </div>
+
+          <DarkModeToggle
+            className="toggle"
+            onChange={(isDark) => (isDark ? setTheme("dark") : setTheme("light"))}
+            checked={theme === "dark"}
+            size={50}
+          />
         </div>
 
         <div className="chat">
@@ -69,16 +89,25 @@ function SimpleChat() {
           </div>
 
           <div className="info">
+            <span className="hamburger" onClick={() => setShowChannels(true)}>
+              ☰
+            </span>
             <h4>{currentChannel.name}</h4>
             <small>{currentChannel.description}</small>
             <hr />
           </div>
-          <MessageList fetchMessages={25} welcomeRenderer={false} />
-          <MessageInput placeholder={`Message #${currentChannel.name}`} />
+          <MessageList fetchMessages={0} welcomeMessages={messages}></MessageList>
+          <MessageInput />
+          {/* <TypingIndicator /> */}
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>
-          <h4>Online Users</h4>
+          <h4>
+            Online Users{" "}
+            <span className="close" onClick={() => setShowMembers(false)}>
+              ✕
+            </span>
+          </h4>
           <MemberList memberList={presentUsers} />
         </div>
       </Chat>

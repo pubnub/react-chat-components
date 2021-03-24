@@ -175,6 +175,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --member__name__margin: 0;
 
 --member__title__color: #9b9b9b;
+--member__title__display: inline-block;
 --member__title__fontSize: 13px;
 --member__title__fontWeight: 400;
 --member__title__padding: 5px 0 0;
@@ -195,10 +196,15 @@ dark mode, you need to use component class name instead of the `:root` element:
 
 --channel__alignItems: center;
 --channel__padding: 12px 40px 12px 24px;
---channel__justifyContent: space-between;
+--channel__justifyContent: flex-start;
 --channel__background: transparent;
 --channel--hover__background: rgba(255, 255, 255, 0.1);
 --channel--active__background: rgba(0, 0, 0, 0.1);
+
+--channel__thumb__display: block;
+--channel__thumb__margin: 0 24px 0 0;
+--channel__thumb__size: 36px;
+--channel__thumb__borderRadius: 36px;
 
 --channel__name__color: white;
 --channel--hover__name__color: white;

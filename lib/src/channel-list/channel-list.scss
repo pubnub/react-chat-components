@@ -7,13 +7,17 @@
 
   --channel__alignItems: center;
   --channel__padding: 12px 40px 12px 24px;
-  --channel__justifyContent: space-between;
+  --channel__justifyContent: flex-start;
   --channel__background: transparent;
   --channel--hover__background: rgba(255, 255, 255, 0.1);
   --channel--active__background: rgba(0, 0, 0, 0.1);
   --channel__name__color: white;
   --channel--hover__name__color: white;
   --channel--active__name__color: white;
+  --channel__thumb__display: block;
+  --channel__thumb__margin: 0 24px 0 0;
+  --channel__thumb__size: 36px;
+  --channel__thumb__borderRadius: 36px;
   --channel__name__fontSize: 15px;
   --channel__name__fontWeight: 500;
   --channel__name__padding: 0;
@@ -85,6 +89,13 @@
     .pn-channel__description {
       color: var(--channel--active__description__color);
     }
+  }
+
+  &__thumb {
+    border-radius: var(--channel__thumb__borderRadius);
+    display: var(--channel__thumb__display);
+    margin: var(--channel__thumb__margin);
+    width: var(--channel__thumb__size);
   }
 
   &__name {

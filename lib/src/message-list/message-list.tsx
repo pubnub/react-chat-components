@@ -31,6 +31,8 @@ export interface MessageListProps {
   fetchMessages?: number;
   /** Enable to add emoji reactions on messages. */
   enableReactions?: boolean;
+  /** Provide custom welcome messages to replace the default one */
+  welcomeMessages?: Message[];
   /** Provide a custom welcome message renderer to replace the default one or disable it completely */
   welcomeRenderer?: false | JSX.Element;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
@@ -280,6 +282,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   */
 
   const renderWelcomeMessage = () => {
+    if (props.welcomeMessages?.length) return props.welcomeMessages.map((m) => renderItem(m));
     if (props.welcomeRenderer !== undefined) return props.welcomeRenderer;
 
     return (

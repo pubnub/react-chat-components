@@ -155,7 +155,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
-    setTheme(props.theme);
     setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
   }, []);
@@ -167,6 +166,10 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   /**
    * Lifecycle: load updateable props
    */
+  useEffect(() => {
+    setTheme(props.theme);
+  }, [props.theme]);
+
   useEffect(() => {
     setCurrentChannel(props.channel);
   }, [props.channel]);

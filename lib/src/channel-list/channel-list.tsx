@@ -86,6 +86,13 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
         className={`pn-channel ${activeClass}`}
         onClick={() => switchChannel(channel)}
       >
+        {channel.custom?.thumb && (
+          <img
+            className="pn-channel__thumb"
+            src={channel.custom?.thumb as string}
+            alt="Channel thumb"
+          />
+        )}
         <div className="pn-channel__title">
           <p className="pn-channel__name">{channel.name}</p>
           {channel.description && <p className="pn-channel__description">{channel.description}</p>}

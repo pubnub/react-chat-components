@@ -6,6 +6,7 @@ module.exports = function override(config) {
     if (plugin instanceof ModuleScopePlugin) {
       plugin.allowedFiles.add(path.resolve("./pubnub-keys.json"));
       plugin.allowedFiles.add(path.resolve("../data/users.json"));
+      plugin.allowedFiles.add(path.resolve("../data/messages.json"));
       plugin.allowedFiles.add(path.resolve("../data/channels-work.json"));
       plugin.allowedFiles.add(path.resolve("../data/channels-social.json"));
       plugin.allowedFiles.add(path.resolve("../data/channels-direct.json"));

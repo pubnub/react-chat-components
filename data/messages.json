@@ -1,0 +1,18 @@
+[
+  {
+    "timetoken": "16165851271766362",
+    "uuid": "user_def709b1adfc4e67b98bb7a820f581b1",
+    "message": {
+      "type": "text",
+      "text": "Hello!"
+    }
+  },
+  {
+    "timetoken": "16165852271766362",
+    "uuid": "user_def709b1adfc4e67b98bb7a820f581b1",
+    "message": {
+      "type": "text",
+      "text": "How are you? I just found an excellent chat solution that should fit our needs"
+    }
+  }
+]
