@@ -12,9 +12,8 @@ import {
   useUsers,
 } from "pubnub-chat-components";
 import { ChannelMetadataObject, ObjectCustom } from "pubnub";
-import "./group-chat.css";
+import "./group-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
-
 
 function GroupChat() {
   const [channel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
@@ -31,7 +30,7 @@ function GroupChat() {
   };
 
   return (
-    <div className="app">
+    <div className="app-group">
       <Chat {...{ theme: "dark", channel, userList }}>
         <div className="channels">
           <ChannelList channelList={channelList} onChannelSwitched={handleSwitchChannel} />

@@ -1,0 +1,93 @@
+.app-event {
+  align-items: center;
+  background: linear-gradient(rgb(62, 65, 72) 0%, rgb(47, 49, 54) 100%);
+  color: white;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+
+  .main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+  }
+
+  .channels {
+    margin: 20px;
+  }
+
+  .link {
+    margin-left: 10px;
+    cursor: pointer;
+    color: rgb(164, 87, 230);
+  }
+
+  .event {
+    display: flex;
+    height: 0;
+    padding-bottom: 56.25%;
+    position: relative;
+  }
+
+  .event iframe {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+
+  .chat {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    height: 100%;
+    width: 400px;
+  }
+
+  .people {
+    background: #2f3136;
+    color: rgb(164, 87, 230);
+    font-size: 13px;
+    padding: 22px;
+  }
+
+  .people svg {
+    margin-left: 7px;
+    vertical-align: -1px;
+  }
+
+  .people span:last-child {
+    float: right;
+  }
+
+  .info {
+    display: flex;
+    margin: 20px;
+  }
+
+  .info h3 {
+    color: rgb(164, 87, 230);
+    margin: 0 0 10px;
+  }
+
+  .avatar {
+    background: #4b4e54;
+    border-radius: 50%;
+    height: 75px;
+    margin-right: 20px;
+    width: 75px;
+  }
+
+  .text {
+    color: #7d7d7d;
+    font-size: 12px;
+    line-height: 1.5rem;
+    margin: 0 20px;
+  }
+
+  .pn-msg-input {
+    --msg-input__padding: 0 10px 15px;
+  }
+}

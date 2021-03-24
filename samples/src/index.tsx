@@ -5,6 +5,8 @@ import { PubNubProvider } from "pubnub-react";
 import { HashRouter, Switch, Route, Link } from "react-router-dom";
 
 import SimpleChat from "./simple-chat/simple-chat";
+import EventChat from "./event-chat/event-chat";
+import GroupChat from "./group-chat/group-chat";
 import "./index.css";
 
 import pubnubKeys from "../pubnub-keys.json";
@@ -21,6 +23,12 @@ ReactDOM.render(
       <PubNubProvider client={pubnub}>
         <HashRouter>
           <Switch>
+            <Route path="/group-chat">
+              <GroupChat />
+            </Route>
+            <Route path="/event-chat">
+              <EventChat />
+            </Route>
             <Route path="/simple-chat">
               <SimpleChat />
             </Route>

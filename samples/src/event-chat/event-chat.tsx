@@ -1,7 +1,7 @@
 import React from "react";
 import { Chat, MessageList, MessageInput, useUser, usePresence } from "pubnub-chat-components";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
-import "./event-chat.css";
+import "./event-chat.scss";
 
 const channels = ["polsatgames2", "izakooo", "dota2ruhub"];
 
@@ -12,13 +12,13 @@ function EventChat() {
   const [presence, total] = usePresence({ channels: [channel] });
 
   return (
-    <div className="event-app">
+    <div className="app-event">
       <Chat {...{ channel, theme: "event-dark", userList: [user] }}>
-        <div className="event-main">
-          <div className="event-channels">
+        <div className="main">
+          <div className="channels">
             Join a channel:
             {channels.map((channel) => (
-              <span key={channel} className="event-link" onClick={() => setChannel(channel)}>
+              <span key={channel} className="link" onClick={() => setChannel(channel)}>
                 {channel}
               </span>
             ))}
@@ -34,15 +34,15 @@ function EventChat() {
             />
           </div>
 
-          <div className="event-info">
-            <div className="event-avatar"></div>
+          <div className="info">
+            <div className="avatar"></div>
             <div>
               <h3>{channel}</h3>
               <small>Additional channel info</small>
             </div>
           </div>
 
-          <div className="event-text">
+          <div className="text">
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
               incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
@@ -70,8 +70,8 @@ function EventChat() {
           </div>
         </div>
 
-        <div className="event-chat">
-          <div className="event-people">
+        <div className="chat">
+          <div className="people">
             <span>Logged in as: {user?.name}</span>
             <span>
               {total} <PeopleGroup />

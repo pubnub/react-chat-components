@@ -10,7 +10,6 @@ import {
   MessageList,
   usePresence,
   Themes,
-  TypingIndicator,
 } from "pubnub-chat-components";
 
 import "./simple-chat.scss";
@@ -38,7 +37,7 @@ function SimpleChat() {
   const presentUsers = userList.filter((u) => presentUUIDs?.includes(u.id));
 
   return (
-    <div className={`app ${theme}`}>
+    <div className={`app-simple ${theme}`}>
       <Chat
         theme={theme}
         channel={currentChannel.id}
@@ -98,12 +97,11 @@ function SimpleChat() {
           </div>
           <MessageList fetchMessages={0} welcomeMessages={messages}></MessageList>
           <MessageInput />
-          {/* <TypingIndicator /> */}
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>
           <h4>
-            Online Users{" "}
+            Online Users
             <span className="close" onClick={() => setShowMembers(false)}>
               ✕
             </span>

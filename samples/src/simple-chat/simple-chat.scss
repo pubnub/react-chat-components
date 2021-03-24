@@ -1,4 +1,4 @@
-.app.light {
+.app-simple.light {
   --app-background: #ffffff;
   --app-color: #585858;
   --app-avatar-background: #f8f6fd;
@@ -25,7 +25,7 @@
   }
 }
 
-.app.dark {
+.app-simple.dark {
   --app-background: #292b2f;
   --app-color: #ffffff;
   --app-avatar-background: #414348;
@@ -52,7 +52,7 @@
   }
 }
 
-.app {
+.app-simple {
   background: var(--app-background);
   color: var(--app-color);
   display: flex;
