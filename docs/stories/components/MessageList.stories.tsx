@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { MessageList, MessageListProps } from "@pubnub/react-chat-components";
+import { MessageList, MessageListProps } from "../../../lib/src";
 
 export default {
   title: "Components/Message List",

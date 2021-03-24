@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { TypingIndicator, TypingIndicatorProps } from "@pubnub/react-chat-components";
+import { TypingIndicator, TypingIndicatorProps } from "../../../lib/src";
 
 export default {
   title: "Components/Typing Indicator",
