@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { Chat, ChatProps } from "../../../lib/src";
+import { Chat, ChatProps } from "../../../src";
 
 export default {
   title: "Components/Chat (Provider)",

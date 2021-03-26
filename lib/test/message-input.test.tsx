@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
-import { render, fireEvent, screen } from "./helpers/custom-renderer";
+import { render, fireEvent, screen } from "../mock/custom-renderer";
 import users from "../../data/users.json";
 
 describe("Message Input", () => {
@@ -103,7 +103,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} senderInfo />, {
       providerProps: {
-        channel: "test",
+        channel: "test-general",
         userList: users,
       },
     });
@@ -112,7 +112,7 @@ describe("Message Input", () => {
     expect(await screen.findByDisplayValue("")).toBeInTheDocument();
     expect(handleSend).toHaveBeenCalledWith(
       expect.objectContaining({
-        sender: users.find((u) => u.id == "user_53bbe00387004010a8b9ad5f36bdd4a7"),
+        sender: users.find((u) => u.id == "user_63ea15931d8541a3bd35e5b1f09087dc"),
       })
     );
   });

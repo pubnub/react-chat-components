@@ -15,7 +15,6 @@ import {
   ErrorFunctionAtom,
 } from "../state-atoms";
 import SpinnerIcon from "./spinner.svg";
-import LogoIcon from "./logo.svg";
 import "./message-list.scss";
 
 export interface MessageRendererProps {
@@ -31,10 +30,8 @@ export interface MessageListProps {
   fetchMessages?: number;
   /** Enable to add emoji reactions on messages. */
   enableReactions?: boolean;
-  /** Provide custom welcome messages to replace the default one */
-  welcomeMessages?: Message[];
-  /** Provide a custom welcome message renderer to replace the default one or disable it completely */
-  welcomeRenderer?: false | JSX.Element;
+  /** Provide custom welcome messages to replace the default one or set to false to disable */
+  welcomeMessages?: false | Message | Message[];
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
@@ -146,6 +143,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const fetchMoreHistory = useRecoilCallback(
     ({ snapshot }) => async () => {
       const channel = await snapshot.getPromise(CurrentChannelAtom);
+      const retryPromise = await snapshot.getPromise(RetryFunctionAtom);
+      const retry = retryPromise.function;
       const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
       const firstMessage = listRef.current?.querySelector(".pn-msg");
 
@@ -281,27 +280,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /* Renderers
   */
 
-  const renderWelcomeMessage = () => {
-    if (props.welcomeMessages?.length) return props.welcomeMessages.map((m) => renderItem(m));
-    if (props.welcomeRenderer !== undefined) return props.welcomeRenderer;
-
-    return (
-      <div className="pn-msg">
-        <div className="pn-msg__avatar">
-          <LogoIcon />
-        </div>
-        <div className="pn-msg__main">
-          <div className="pn-msg__title">
-            <span className="pn-msg__author">PubNub Bot</span>
-            <span className="pn-msg__time">00:00</span>
-          </div>
-          <div className="pn-msg__bubble">
-            Welcome to PubNub Chat Components demo application 👋 <br />
-            Send a message now to start interacting with other users in the app ⬇️
-          </div>
-        </div>
-      </div>
-    );
+  const renderWelcomeMessages = () => {
+    if (!props.welcomeMessages) return;
+    return Array.isArray(props.welcomeMessages)
+      ? props.welcomeMessages.map((m) => renderItem(m))
+      : renderItem(props.welcomeMessages);
   };
 
   const renderItem = (message: Message) => {
@@ -311,7 +294,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
-        {props.enableReactions && (
+        {props.enableReactions && message.message.type !== "welcome" && (
           <div className="pn-msg__actions">
             <div onClick={(e) => handleOpenReactions(e, message.timetoken)}>☺</div>
           </div>
@@ -429,8 +412,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
         <div className="pn-msg-list__spacer" />
 
+        {(!props.fetchMessages || (!fetchingMessages && !messages.length)) &&
+          renderWelcomeMessages()}
         {messages && messages.map((m) => renderItem(m))}
-        {messages && !messages.length && !fetchingMessages && renderWelcomeMessage()}
 
         <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 
@@ -460,4 +444,34 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 MessageList.defaultProps = {
   enableReactions: false,
   fetchMessages: 0,
+  welcomeMessages: [
+    {
+      message: {
+        type: "welcome",
+        text: "Welcome to a chat application built with PubNub Chat Components 👋",
+        sender: {
+          profileUrl: "https://randomuser.me/api/portraits/women/21.jpg",
+          id: "Evelina Smith",
+          eTag: "",
+          updated: "",
+        },
+      },
+      uuid: "Evelina Smith",
+      timetoken: "16165836271766362",
+    },
+    {
+      message: {
+        type: "welcome",
+        text: "Send a message now to start interacting with other users in the app ⬇️",
+        sender: {
+          profileUrl: "https://randomuser.me/api/portraits/women/21.jpg",
+          id: "Evelina Smith",
+          eTag: "",
+          updated: "",
+        },
+      },
+      uuid: "Evelina Smith",
+      timetoken: "16165836271766363",
+    },
+  ],
 };

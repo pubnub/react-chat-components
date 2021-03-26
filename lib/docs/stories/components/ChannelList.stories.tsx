@@ -1,7 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { ChannelList, ChannelListProps } from "../../../lib/src";
-import { mockChannels } from "../../pubnub-mock";
+import { ChannelList, ChannelListProps } from "../../../src";
+import channels from "../../../../data/channels-work.json";
 
 export default {
   title: "Components/Channel List",
@@ -13,5 +13,5 @@ const Template: Story<ChannelListProps> = (args) => <ChannelList {...args} />;
 export const Default = Template.bind({});
 
 Default.args = {
-  channelList: mockChannels(),
+  channelList: channels,
 };

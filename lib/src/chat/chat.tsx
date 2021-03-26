@@ -79,6 +79,7 @@ export interface ChatProps {
 export class Chat extends Component<ChatProps> {
   constructor(props: ChatProps) {
     super(props);
+    this.state = { error: null };
   }
 
   static defaultProps = {
@@ -96,6 +97,10 @@ export class Chat extends Component<ChatProps> {
     },
     onError: (): void => null,
   };
+
+  static getDerivedStateFromError(error: Error): { error: Error } {
+    return { error };
+  }
 
   componentDidCatch(error: Error): void {
     if (this.props.onError) this.props.onError(error);

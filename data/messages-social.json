@@ -1,0 +1,32 @@
+[
+  {
+    "timetoken": "16165851271766362",
+    "channel": "any",
+    "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hello"
+    }
+  },
+  {
+    "timetoken": "16165851871766362",
+    "channel": "any",
+    "uuid": "user_142da3c419804a82a3057cedc86acaa6",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hey, how are you?"
+    }
+  },
+  {
+    "timetoken": "16165852571766362",
+    "channel": "any",
+    "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Good! I just found an excellent chat solution that should fit our needs..."
+    }
+  }
+]

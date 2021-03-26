@@ -10,13 +10,14 @@ import {
   MessageList,
   usePresence,
   Themes,
+  TypingIndicator,
 } from "@pubnub/react-chat-components";
 
 import "./simple-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 import users from "../../../data/users.json";
-import messages from "../../../data/messages.json";
+import messages from "../../../data/messages-social.json";
 import socialChannels from "../../../data/channels-social.json";
 import directChannels from "../../../data/channels-direct.json";
 const userList: UUIDMetadataObject<ObjectCustom>[] = users;
@@ -95,8 +96,10 @@ function SimpleChat() {
             <small>{currentChannel.description}</small>
             <hr />
           </div>
-          <MessageList fetchMessages={0} welcomeMessages={messages}></MessageList>
-          <MessageInput />
+          <MessageList fetchMessages={0} enableReactions welcomeMessages={messages}>
+            <TypingIndicator showAsMessage />
+          </MessageList>
+          <MessageInput emojiPicker typingIndicator />
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>

@@ -2,15 +2,20 @@ import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
 import { TypingIndicator } from "../src/typing-indicator/typing-indicator";
-import { render, fireEvent, waitFor, screen } from "./helpers/custom-renderer";
+import { render, fireEvent, waitFor, screen } from "../mock/custom-renderer";
 
 describe("Typing Indicator", () => {
-  test("typing indicator shows up when typing and disappears when clearing the input", async () => {
+  test("shows up when typing and then disappears when clearing the input", async () => {
     render(
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>
+      </div>,
+      {
+        providerProps: {
+          channel: "test-ti-1",
+        },
+      }
     );
 
     fireEvent.change(screen.getByPlaceholderText("Type Message"), {
@@ -23,12 +28,17 @@ describe("Typing Indicator", () => {
     await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
   });
 
-  test("typing indicator shows up when typing and disappears when sending the message", async () => {
+  test("shows up when typing and then disappears when sending the message", async () => {
     render(
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>
+      </div>,
+      {
+        providerProps: {
+          channel: "test-ti-2",
+        },
+      }
     );
 
     fireEvent.change(screen.getByPlaceholderText("Type Message"), {

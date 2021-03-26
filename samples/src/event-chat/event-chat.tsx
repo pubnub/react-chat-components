@@ -83,7 +83,7 @@ function EventChat() {
               {total} <PeopleGroup />
             </span>
           </div>
-          <MessageList welcomeRenderer={false} />
+          <MessageList welcomeMessages={false} />
           <MessageInput emojiPicker hideSendButton senderInfo />
         </div>
       </Chat>

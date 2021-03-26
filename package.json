@@ -16,9 +16,9 @@
     "samples": "cd samples && npm run start",
     "samples:build": "cd samples && npm run build",
     "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
-    "storybook": "start-storybook -p 6006 -c docs",
-    "storybook:build": "build-storybook -c docs",
-    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
+    "storybook": "start-storybook -p 6006 -c lib/docs",
+    "storybook:build": "build-storybook -c lib/docs",
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e lib/docs"
   },
   "devDependencies": {
     "@storybook/addon-actions": "6.1.21",

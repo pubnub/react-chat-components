@@ -1,6 +1,9 @@
 [
   {
     "name": "Movies",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/149e60f311749f2a7c6515f7b34?s=256&d=identicon"
+    },
     "description": "Everything about movies",
     "eTag": "AbOx6N+6vu3zoAE",
     "id": "space_149e60f311749f2a7c6515f7b34",
@@ -8,6 +11,9 @@
   },
   {
     "name": "Daily Standup",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/2ada61db17878cd388f95da34f9?s=256&d=identicon"
+    },
     "description": "Async virtual standup",
     "eTag": "Ab+2+deSmdf/Fw",
     "id": "space_2ada61db17878cd388f95da34f9",
@@ -15,6 +21,9 @@
   },
   {
     "name": "Running",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/363d9255193e45f190539e0c7d5?s=256&d=identicon"
+    },
     "description": "soc-running space",
     "eTag": "AcrWgrqgmcyHswE",
     "id": "space_363d9255193e45f190539e0c7d5",
@@ -22,6 +31,9 @@
   },
   {
     "name": "India Office",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/515fc9a2a1a895f4059c84b2971?s=256&d=identicon"
+    },
     "description": "भारत के कार्यालय में आपका स्वागत है🇮🇳!",
     "eTag": "AZSu2tPUuLeO2QE",
     "id": "space_515fc9a2a1a895f4059c84b2971",
@@ -29,6 +41,9 @@
   },
   {
     "name": "Off Topic",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/a204f87d215a40985d35cf84bf5?s=256&d=identicon"
+    },
     "description": "Non-work banter and water cooler conversation",
     "eTag": "AZ2/xY3Qv9GGUQ",
     "id": "space_a204f87d215a40985d35cf84bf5",
@@ -36,6 +51,9 @@
   },
   {
     "name": "London Office",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/a652eb6cc340334ff0b244c4a39?s=256&d=identicon"
+    },
     "description": "London Office 🇬🇧",
     "eTag": "AfD93cn945yNTA",
     "id": "space_a652eb6cc340334ff0b244c4a39",
@@ -43,6 +61,9 @@
   },
   {
     "name": "Introductions",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/ac4e67b98b34b44c4a39466e93e?s=256&d=identicon"
+    },
     "description": "This channel is for company wide chatter",
     "eTag": "AfeD+Zn+idGFTQ",
     "id": "space_ac4e67b98b34b44c4a39466e93e",
@@ -50,6 +71,9 @@
   },
   {
     "name": "Poland Office",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/c1ee1eda28554d0a34f9b9df5cfe?s=256&d=identicon"
+    },
     "description": "Zapytaj Nas O Cokolwiek 🇵🇱",
     "eTag": "Adzu4uSC45jGsgE",
     "id": "space_c1ee1eda28554d0a34f9b9df5cfe",
@@ -57,6 +81,9 @@
   },
   {
     "name": "Company Culture",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/ce466f2e445c38976168ba78e46?s=256&d=identicon"
+    },
     "description": "Company culture space",
     "eTag": "AYTS0uL/zs/nXA",
     "id": "space_ce466f2e445c38976168ba78e46",
@@ -64,6 +91,9 @@
   },
   {
     "name": "Exec AMA",
+    "custom": {
+      "thumb": "https://www.gravatar.com/avatar/e1eda2fd92e551358e4af1b6174?s=256&d=identicon"
+    },
     "description": "Ask the CEO anything",
     "eTag": "Ade5g4XZzN652AE",
     "id": "space_e1eda2fd92e551358e4af1b6174",

@@ -1,20 +1,20 @@
 [
   {
-    "name": "Evelina",
+    "name": "Victoria",
     "custom": {
-      "thumb": "https://randomuser.me/api/portraits/women/21.jpg"
+      "thumb": "https://randomuser.me/api/portraits/women/4.jpg"
     },
-    "description": "Direct chat with Hannah",
+    "description": "Direct chat with Victoria",
     "eTag": "AbOx6N+6vu3zoAE",
     "id": "space_515fc9a2a1b043c3847a29f29f3b3c2a",
     "updated": "2020-09-23T09:23:37.175764Z"
   },
   {
-    "name": "Alexander",
+    "name": "Mark",
     "custom": {
       "thumb": "https://randomuser.me/api/portraits/men/1.jpg"
     },
-    "description": "Direct chat with Stewart",
+    "description": "Direct chat with Mark",
     "eTag": "AbOx6N+6vu3zoAE",
     "id": "space_30b5b567829e485ab6267c3c78d48ca3",
     "updated": "2020-09-23T09:23:37.175764Z"
