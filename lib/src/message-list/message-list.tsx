@@ -235,7 +235,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
       setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
-      document.addEventListener("mousedown", handleCloseReactions);
+      document.addEventListener("click", handleCloseReactions);
     } catch (e) {
       onError(e);
     }
@@ -247,7 +247,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
       setEmojiPickerShown(false);
       setReactingToMessage(null);
-      document.removeEventListener("mousedown", handleCloseReactions);
+      document.removeEventListener("click", handleCloseReactions);
     } catch (e) {
       onError(e);
     }

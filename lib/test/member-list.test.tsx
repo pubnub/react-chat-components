@@ -8,14 +8,14 @@ describe("Member List", () => {
   test("renders members from objects", () => {
     render(<MemberList memberList={members} />);
 
-    expect(screen.getByText("Anna Gordon")).toBeInTheDocument();
-    expect(screen.getByText("VP Marketing")).toBeInTheDocument();
+    expect(screen.getByText("Anna Gordon")).toBeVisible();
+    expect(screen.getByText("VP Marketing")).toBeVisible();
   });
 
   test("renders members from strings", () => {
     render(<MemberList memberList={["Moby Dick", "Peter Pan"]} />);
 
-    expect(screen.getByText("Moby Dick")).toBeInTheDocument();
+    expect(screen.getByText("Moby Dick")).toBeVisible();
   });
 
   test("renders current user as first and with a suffix", () => {
@@ -44,7 +44,7 @@ describe("Member List", () => {
     const customRenderer = (user) => <p key={user.name}>Custom {user.name}</p>;
     render(<MemberList memberList={members} memberRenderer={customRenderer} />);
 
-    expect(screen.getByText("Custom Anna Gordon")).toBeInTheDocument();
+    expect(screen.getByText("Custom Anna Gordon")).toBeVisible();
     expect(screen.queryByText("Anna Gordon")).not.toBeInTheDocument();
   });
 
@@ -52,7 +52,7 @@ describe("Member List", () => {
     const customFilter = (user) => user.name !== "Anna Gordon";
     render(<MemberList memberList={members} filter={customFilter} />);
 
-    expect(screen.getByText("Luis Griffin")).toBeInTheDocument();
+    expect(screen.getByText("Luis Griffin")).toBeVisible();
     expect(screen.queryByText("Anna Gordon")).not.toBeInTheDocument();
   });
 

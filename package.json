@@ -29,6 +29,8 @@
     "@storybook/theming": "6.1.21",
     "concurrently": "^6.0.0",
     "node-sass": "^5.0.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "sass-loader": "^10.1.0"
   }
 }

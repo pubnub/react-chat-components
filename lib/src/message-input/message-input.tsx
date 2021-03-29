@@ -30,7 +30,7 @@ export interface MessageInputProps {
   senderInfo?: boolean;
   /** Enable/disable firing the typing events when user is typing a message. */
   typingIndicator?: boolean;
-  /** Show the Send button */
+  /** Hides the Send button */
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the send button. */
   sendButton?: JSX.Element | string;
@@ -254,9 +254,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 };
 
 MessageInput.defaultProps = {
+  emojiPicker: false,
+  hideSendButton: false,
   placeholder: "Type Message",
   sendButton: "Send",
   senderInfo: false,
-  emojiPicker: false,
   typingIndicator: false,
 };

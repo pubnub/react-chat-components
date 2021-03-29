@@ -10,19 +10,14 @@ describe("Typing Indicator", () => {
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>,
-      {
-        providerProps: {
-          channel: "test-ti-1",
-        },
-      }
+      </div>
     );
 
     fireEvent.change(screen.getByPlaceholderText("Type Message"), {
       target: { value: "Changed Value" },
     });
     const indicator = await screen.findByText("Unknown User is typing...");
-    expect(indicator).toBeInTheDocument();
+    expect(indicator).toBeVisible();
 
     fireEvent.change(screen.getByPlaceholderText("Type Message"), { target: { value: "" } });
     await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
@@ -33,19 +28,14 @@ describe("Typing Indicator", () => {
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>,
-      {
-        providerProps: {
-          channel: "test-ti-2",
-        },
-      }
+      </div>
     );
 
     fireEvent.change(screen.getByPlaceholderText("Type Message"), {
       target: { value: "Changed Value" },
     });
     const indicator = await screen.findByText("Unknown User is typing...");
-    expect(indicator).toBeInTheDocument();
+    expect(indicator).toBeVisible();
 
     fireEvent.click(screen.getByText("Send"));
     await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));

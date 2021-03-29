@@ -8,14 +8,14 @@ describe("Channel List", () => {
   test("renders channels from objects", () => {
     render(<ChannelList channelList={channels} />);
 
-    expect(screen.getByText("Introductions")).toBeInTheDocument();
-    expect(screen.getByText("This channel is for company wide chatter")).toBeInTheDocument();
+    expect(screen.getByText("Introductions")).toBeVisible();
+    expect(screen.getByText("This channel is for company wide chatter")).toBeVisible();
   });
 
   test("renders channels from strings", () => {
     render(<ChannelList channelList={["Introductions", "Examples"]} />);
 
-    expect(screen.getByText("Introductions")).toBeInTheDocument();
+    expect(screen.getByText("Introductions")).toBeVisible();
   });
 
   test("renders current channel as active", () => {
@@ -48,7 +48,7 @@ describe("Channel List", () => {
     const customRenderer = (channel) => <p key={channel.name}>Custom {channel.name}</p>;
     render(<ChannelList channelList={channels} channelRenderer={customRenderer} />);
 
-    expect(screen.getByText("Custom Introductions")).toBeInTheDocument();
+    expect(screen.getByText("Custom Introductions")).toBeVisible();
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
   });
 
@@ -56,7 +56,7 @@ describe("Channel List", () => {
     const customFilter = (channel) => channel.name !== "Introductions";
     render(<ChannelList channelList={channels} filter={customFilter} />);
 
-    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.getByText("Running")).toBeVisible();
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
   });
 
