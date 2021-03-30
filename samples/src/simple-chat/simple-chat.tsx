@@ -3,47 +3,52 @@ import { usePubNub } from "pubnub-react";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import {
-  Chat,
   ChannelList,
+  Chat,
   MemberList,
   MessageInput,
   MessageList,
-  usePresence,
   Themes,
   TypingIndicator,
+  usePresence,
 } from "@pubnub/react-chat-components";
 
 import "./simple-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 import users from "../../../data/users.json";
-import messages from "../../../data/messages-social.json";
+import rawMessages from "../../../data/messages-social.json";
 import socialChannels from "../../../data/channels-social.json";
 import directChannels from "../../../data/channels-direct.json";
 const userList: UUIDMetadataObject<ObjectCustom>[] = users;
 const socialChannelList: ChannelMetadataObject<ObjectCustom>[] = socialChannels;
 const directChannelList: ChannelMetadataObject<ObjectCustom>[] = directChannels;
 const allChannelIds = [...socialChannelList, ...directChannelList].map((c) => c.id);
+const messages: any = {};
+rawMessages.forEach((message) => {
+  if (!messages.hasOwnProperty(message.channel)) messages[message.channel] = [];
+  messages[message.channel].push(message);
+});
 
 function SimpleChat() {
   const pubnub = usePubNub();
   const [theme, setTheme] = useState<Themes>("light");
-  const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
   const [presenceData] = usePresence({ channels: allChannelIds });
+  const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
 
-  const currentUser = userList.find((u) => u.id === pubnub.getUUID());
   const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
   const presentUsers = userList.filter((u) => presentUUIDs?.includes(u.id));
+  const currentUser = userList.find((u) => u.id === pubnub.getUUID());
 
   return (
     <div className={`app-simple ${theme}`}>
       <Chat
         theme={theme}
+        userList={userList}
         channel={currentChannel.id}
         subscribeChannels={allChannelIds}
-        userList={userList}
       >
         <div className={`channels ${showChannels && "shown"}`}>
           <div className="user">
@@ -55,7 +60,6 @@ function SimpleChat() {
               </span>
             </h4>
           </div>
-
           <h4>Channels</h4>
           <div>
             <ChannelList
@@ -70,13 +74,14 @@ function SimpleChat() {
               onChannelSwitched={(channel) => setCurrentChannel(channel)}
             />
           </div>
-
-          <DarkModeToggle
-            className="toggle"
-            onChange={(isDark) => (isDark ? setTheme("dark") : setTheme("light"))}
-            checked={theme === "dark"}
-            size={50}
-          />
+          <div className="toggle">
+            <span>Dark Mode</span>
+            <DarkModeToggle
+              size={50}
+              checked={theme === "dark"}
+              onChange={(isDark) => (isDark ? setTheme("dark") : setTheme("light"))}
+            />
+          </div>
         </div>
 
         <div className="chat">
@@ -96,7 +101,11 @@ function SimpleChat() {
             <small>{currentChannel.description}</small>
             <hr />
           </div>
-          <MessageList fetchMessages={0} enableReactions welcomeMessages={messages}>
+          <MessageList
+            enableReactions
+            fetchMessages={0}
+            welcomeMessages={messages[currentChannel.id]}
+          >
             <TypingIndicator showAsMessage />
           </MessageList>
           <MessageInput emojiPicker typingIndicator />

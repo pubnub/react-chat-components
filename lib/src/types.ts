@@ -45,15 +45,15 @@ export interface ImageAttachment {
 
 export interface LinkAttachment {
   type: "link";
-  description: string;
-  title: string;
-  icon: {
+  description?: string;
+  title?: string;
+  icon?: {
     source: string;
   };
   image: {
     source: string;
   };
-  provider: {
+  provider?: {
     name: string;
     url: string;
   };

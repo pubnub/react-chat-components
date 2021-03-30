@@ -76,6 +76,17 @@ describe("Message List", () => {
     expect(await screen.findByText("🙂 1")).toBeVisible();
   });
 
+  // TODO toBeVisible doesnt work with visibility: hidden on the dom tree
+  // test("closes the reactions panel on outside click", async () => {
+  //   render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+
+  //   const triggers = await screen.findAllByText("☺");
+  //   fireEvent.click(triggers[0]);
+  //   fireEvent.click(screen.getByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit."));
+
+  //   await waitFor(() => expect(screen.getByText("Frequently Used")).not.toBeVisible());
+  // });
+
   test("adds new reactions", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 

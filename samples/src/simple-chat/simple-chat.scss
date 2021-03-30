@@ -87,8 +87,20 @@
   }
 
   .toggle {
-    align-self: center;
-    margin-top: 30px;
+    margin-top: 50px;
+    position: relative;
+
+    span {
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 24px;
+    }
+
+    button {
+      left: 50%;
+      position: absolute;
+      transform: translateX(-50%);
+    }
   }
 
   .channels {
