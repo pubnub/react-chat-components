@@ -2,12 +2,22 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { render, fireEvent, screen, waitFor } from "../mock/custom-renderer";
-import "../mock/intersection-observer";
+import { render, fireEvent, screen } from "../mock/custom-renderer";
 
 describe("Message List", () => {
+  let scrollIntoViewMock;
+  let intersectionObserverMock;
+
   beforeEach(() => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+    scrollIntoViewMock = jest.fn();
+    intersectionObserverMock = jest.fn().mockReturnValue({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    });
+
+    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
+    window.IntersectionObserver = intersectionObserverMock;
   });
 
   test("renders default welcome messages", async () => {
@@ -62,12 +72,66 @@ describe("Message List", () => {
     ).toBeVisible();
   });
 
+  test("renders newly sent messages", async () => {
+    render(
+      <div>
+        <MessageList welcomeMessages={false} />
+        <MessageInput draftMessage="New Message" />
+      </div>
+    );
+    fireEvent.keyPress(screen.getByDisplayValue("New Message"), {
+      key: "Enter",
+      charCode: 13,
+    });
+
+    expect(await screen.findByDisplayValue("")).toBeVisible();
+    expect(await screen.findByText("New Message")).toBeVisible();
+  });
+
   test("fetches and renders message history", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} />);
 
     expect(
       await screen.findByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
     ).toBeVisible();
+  });
+
+  test("fetches more history when scrolling to top of the list", async () => {
+    render(<MessageList welcomeMessages={false} fetchMessages={3} />);
+
+    expect(
+      await screen.findByText("Curabitur id quam ac mauris aliquet imperdiet quis eget nisl.")
+    ).toBeVisible();
+    expect(
+      screen.queryByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    ).not.toBeInTheDocument();
+
+    const observerCallback = intersectionObserverMock.mock.calls[0][0]; // spinnerObserver
+    observerCallback([{ isIntersecting: true }]);
+
+    expect(
+      await screen.findByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+    ).toBeVisible();
+  });
+
+  test("shows a notice on a new message when scrolled out of bottom of the list", async () => {
+    render(
+      <div>
+        <MessageList welcomeMessages={false} />
+        <MessageInput draftMessage="Test Message" />
+      </div>
+    );
+
+    const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
+    observerCallback([{ isIntersecting: false }]);
+
+    fireEvent.keyPress(screen.getByDisplayValue("Test Message"), {
+      key: "Enter",
+      charCode: 13,
+    });
+
+    expect(await screen.findByText("Test Message")).toBeVisible();
+    expect(await screen.findByText("1 new messages ↓")).toBeVisible();
   });
 
   test("renders reactions", async () => {
@@ -77,6 +141,7 @@ describe("Message List", () => {
   });
 
   // TODO toBeVisible doesnt work with visibility: hidden on the dom tree
+  // https://github.com/testing-library/jest-dom/issues/209
   // test("closes the reactions panel on outside click", async () => {
   //   render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 
@@ -87,7 +152,7 @@ describe("Message List", () => {
   //   await waitFor(() => expect(screen.getByText("Frequently Used")).not.toBeVisible());
   // });
 
-  test("adds new reactions", async () => {
+  https: test("adds new reactions", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 
     const triggers = await screen.findAllByText("☺");
@@ -112,21 +177,5 @@ describe("Message List", () => {
 
     expect(await screen.findByText("🙂 1")).toBeVisible();
     expect(screen.queryByText("🙂 2")).not.toBeInTheDocument();
-  });
-
-  test("renders newly sent messages", async () => {
-    render(
-      <div>
-        <MessageList welcomeMessages={false} />
-        <MessageInput draftMessage="New Message" />
-      </div>
-    );
-    fireEvent.keyPress(screen.getByDisplayValue("New Message"), {
-      key: "Enter",
-      charCode: 13,
-    });
-
-    expect(await screen.findByDisplayValue("")).toBeVisible();
-    expect(await screen.findByText("New Message")).toBeVisible();
   });
 });

@@ -6,6 +6,7 @@ import {
   ChannelList,
   Chat,
   MemberList,
+  Message,
   MessageInput,
   MessageList,
   Themes,
@@ -36,7 +37,7 @@ function SimpleChat() {
   const [theme, setTheme] = useState<Themes>("light");
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
-  const [welcomeMessages, setWelcomeMessages] = useState({});
+  const [welcomeMessages, setWelcomeMessages] = useState<{ [channel: string]: Message[] }>({});
   const [presenceData] = usePresence({ channels: allChannelIds }); // usePresnce is one of the custom hooks provided by Chat Components
   const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
 
@@ -49,7 +50,7 @@ function SimpleChat() {
     const messages: any = {};
     [...rawMessages].forEach((message) => {
       if (!messages.hasOwnProperty(message.channel)) messages[message.channel] = [];
-      if (message.uuid === "current_user") message.uuid = currentUser?.id;
+      if (message.uuid === "current_user" && currentUser?.id) message.uuid = currentUser?.id;
       messages[message.channel].push(message);
     });
     setWelcomeMessages(messages);
