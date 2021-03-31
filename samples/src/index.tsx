@@ -12,6 +12,10 @@ import "./index.css";
 import pubnubKeys from "../pubnub-keys.json";
 import users from "../../data/users.json";
 
+/**
+ * Prepare a PubNub instance and inject it into PubNubProvider
+ * You should generate your own keyset on pubnub.com and paste it into pubnub-keys.json
+ */
 const pubnub = new PubNub({
   ...pubnubKeys,
   uuid: users[Math.floor(Math.random() * users.length)].id,
