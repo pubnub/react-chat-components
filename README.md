@@ -108,7 +108,7 @@ const pubnub = new PubNub({
   subscribeKey: "mySubscribeKey",
   uuid: "myUniqueUUID",
 });
-const channel = "myCurrentChannel";
+const currentChannel = "myCurrentChannel";
 const theme = "light";
 ```
 
@@ -127,7 +127,7 @@ const MyCommponent = () => {
 const MyCommponent = () => {
   return (
     <PubNubProvider client={pubnub}>
-      <Chat {...{ channel, theme }}>
+      <Chat {...{ currentChannel, theme }}>
         <MessageList>
         <MessageInput>
       </Chat>

@@ -16,7 +16,8 @@ This kind of properties accept a function that should return an HTML/JSX structu
 function will differ depending on the particular renderer, but it is always data internally used to
 create the default markup.
 
-<br /><br />
+<br />
+<br />
 
 ### Example
 
@@ -30,7 +31,7 @@ was provided, timestamp of the message and a flag determining if the current use
 
 ```js
 function ExampleChat() {
-  const channel = "example";
+  const currentChannel = "example";
 
   const renderMessage = (props: MessageRendererProps) => {
     return (
@@ -44,7 +45,7 @@ function ExampleChat() {
   };
 
   return (
-    <Chat channel={channel}>
+    <Chat currentChannel={currentChannel}>
       <MessageList fetchMessages={10} messageRenderer={renderMessage} />
     </Chat>
   );

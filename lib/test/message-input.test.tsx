@@ -103,8 +103,8 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} senderInfo />, {
       providerProps: {
-        channel: "test-general",
-        userList: users,
+        currentChannel: "test-general",
+        users,
       },
     });
 

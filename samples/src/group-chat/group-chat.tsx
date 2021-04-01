@@ -16,24 +16,27 @@ import "./group-chat.scss";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 function GroupChat() {
-  const [channel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
+  const [currentChannel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");
   const [showMembers, setShowMembers] = React.useState(false);
 
-  const [userList] = useUsers({ include: { customFields: true } });
-  const [channelList] = useChannels({ include: { customFields: true } });
-  const [memberList] = useChannelMembers({ channel, include: { customUUIDFields: true } });
+  const [users] = useUsers({ include: { customFields: true } });
+  const [channels] = useChannels({ include: { customFields: true } });
+  const [members] = useChannelMembers({
+    channel: currentChannel,
+    include: { customUUIDFields: true },
+  });
   // eslint-disable-next-line
-  const [presentMembers, totalPresence] = usePresence({ channels: [channel] });
+  const [presentMembers, totalPresence] = usePresence({ channels: [currentChannel] });
 
-  const handleSwitchChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
-    setChannel(channel.id);
+  const handleSwitchChannel = (ch: ChannelMetadataObject<ObjectCustom>) => {
+    setChannel(ch.id);
   };
 
   return (
     <div className="app-group">
-      <Chat {...{ theme: "dark", channel, userList }}>
+      <Chat {...{ theme: "dark", currentChannel, users }}>
         <div className="channels">
-          <ChannelList channelList={channelList} onChannelSwitched={handleSwitchChannel} />
+          <ChannelList channels={channels} onChannelSwitched={handleSwitchChannel} />
         </div>
 
         <div className="chat">
@@ -42,7 +45,7 @@ function GroupChat() {
             onClick={() => setShowMembers(!showMembers)}
           >
             <span>
-              {totalPresence || 0} / {memberList.length || 0}
+              {totalPresence || 0} / {members.length || 0}
             </span>
             <PeopleGroup />
           </div>
@@ -55,7 +58,7 @@ function GroupChat() {
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>
-          <MemberList memberList={memberList} />
+          <MemberList members={members} />
         </div>
       </Chat>
     </div>

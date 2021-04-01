@@ -12,27 +12,27 @@ import "./event-chat.scss";
 const channels = ["polsatgames2", "izakooo", "dota2ruhub"];
 
 function EventChat() {
-  const [channel, setChannel] = React.useState(channels[0]);
+  const [currentChannel, setCurrentChannel] = React.useState(channels[0]);
   const [user] = useUser();
   // eslint-disable-next-line
-  const [presence, total] = usePresence({ channels: [channel] });
+  const [presence, total] = usePresence({ channels: [currentChannel] });
 
   return (
     <div className="app-event">
-      <Chat {...{ channel, theme: "event-dark", userList: [user] }}>
+      <Chat {...{ currentChannel, theme: "event-dark", users: [user] }}>
         <div className="main">
           <div className="channels">
             Join a channel:
-            {channels.map((channel) => (
-              <span key={channel} className="link" onClick={() => setChannel(channel)}>
-                {channel}
+            {channels.map((ch) => (
+              <span key={ch} className="link" onClick={() => setCurrentChannel(ch)}>
+                {ch}
               </span>
             ))}
           </div>
 
           <div className="event">
             <iframe
-              src={`https://player.twitch.tv/?channel=${channel}&parent=localhost`}
+              src={`https://player.twitch.tv/?channel=${currentChannel}&parent=localhost`}
               frameBorder="0"
               allowFullScreen={true}
               scrolling="no"
@@ -43,7 +43,7 @@ function EventChat() {
           <div className="info">
             <div className="avatar"></div>
             <div>
-              <h3>{channel}</h3>
+              <h3>{currentChannel}</h3>
               <small>Additional channel info</small>
             </div>
           </div>

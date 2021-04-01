@@ -7,7 +7,7 @@ import "./channel-list.scss";
 export interface ChannelListProps {
   children?: ReactNode;
   /** Pass a list of channels, including metadata, to render on the list */
-  channelList: ChannelMetadataObject<ObjectCustom>[] | string[];
+  channels: ChannelMetadataObject<ObjectCustom>[] | string[];
   /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
   sort?: (
     a: ChannelMetadataObject<ObjectCustom>,
@@ -30,14 +30,14 @@ export interface ChannelListProps {
  * current channel passed to the Chat provider, or whatever else is expected.
  */
 export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
-  const channel = useRecoilValue(CurrentChannelAtom);
+  const currentChannel = useRecoilValue(CurrentChannelAtom);
   const theme = useRecoilValue(ThemeAtom);
 
   /*
   /* Helper functions
   */
   const isChannelActive = (ch: ChannelMetadataObject<ObjectCustom>) => {
-    return channel === ch.id;
+    return currentChannel === ch.id;
   };
 
   const channelSorter = (
@@ -103,7 +103,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
 
   return (
     <div className={`pn-channel-list pn-channel-list--${theme}`}>
-      {(props.channelList as string[])
+      {(props.channels as string[])
         .map(channelFromString)
         .filter(channelFilter)
         .sort(channelSorter)

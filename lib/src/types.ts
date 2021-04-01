@@ -2,15 +2,6 @@ import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
-export interface Channel {
-  id: string;
-  name: string;
-  description?: string;
-  custom?: {
-    [id: string]: unknown;
-  };
-}
-
 export interface Message {
   channel?: string;
   message: {

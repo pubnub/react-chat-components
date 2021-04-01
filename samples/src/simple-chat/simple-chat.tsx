@@ -23,11 +23,11 @@ import { ReactComponent as PeopleGroup } from "../people-group.svg";
  * external source or loaded from PubNub Objects storage with custom hooks included in the package.
  * Sample messages are fully optional.
  * */
-import users from "../../../data/users.json";
+import rawUsers from "../../../data/users.json";
 import rawMessages from "../../../data/messages-social.json";
 import socialChannels from "../../../data/channels-social.json";
 import directChannels from "../../../data/channels-direct.json";
-const userList: UUIDMetadataObject<ObjectCustom>[] = users;
+const users: UUIDMetadataObject<ObjectCustom>[] = rawUsers;
 const socialChannelList: ChannelMetadataObject<ObjectCustom>[] = socialChannels;
 const directChannelList: ChannelMetadataObject<ObjectCustom>[] = directChannels;
 const allChannelIds = [...socialChannelList, ...directChannelList].map((c) => c.id);
@@ -42,8 +42,8 @@ function SimpleChat() {
   const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
 
   const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
-  const presentUsers = userList.filter((u) => presentUUIDs?.includes(u.id));
-  const currentUser = userList.find((u) => u.id === pubnub.getUUID());
+  const presentUsers = users.filter((u) => presentUUIDs?.includes(u.id));
+  const currentUser = users.find((u) => u.id === pubnub.getUUID());
 
   /** Prepare welcome messages for each channel injecting current user info into some of them */
   useEffect(() => {
@@ -63,12 +63,7 @@ function SimpleChat() {
     <div className={`app-simple ${theme}`}>
       {/* Be sure to wrap Chat component in PubNubProvider from pubnub-react package.
       In this case it's done in the index.tsx file */}
-      <Chat
-        theme={theme}
-        userList={userList}
-        channel={currentChannel.id}
-        subscribeChannels={allChannelIds}
-      >
+      <Chat theme={theme} users={users} currentChannel={currentChannel.id} channels={allChannelIds}>
         <div className={`channels ${showChannels && "shown"}`}>
           <div className="user">
             {currentUser?.profileUrl && <img src={currentUser?.profileUrl} alt="User avatar " />}
@@ -82,14 +77,14 @@ function SimpleChat() {
           <h4>Channels</h4>
           <div>
             <ChannelList
-              channelList={socialChannelList}
+              channels={socialChannelList}
               onChannelSwitched={(channel) => setCurrentChannel(channel)}
             />
           </div>
           <h4>Direct Chats</h4>
           <div>
             <ChannelList
-              channelList={directChannelList}
+              channels={directChannelList}
               onChannelSwitched={(channel) => setCurrentChannel(channel)}
             />
           </div>
@@ -137,7 +132,7 @@ function SimpleChat() {
               ✕
             </span>
           </h4>
-          <MemberList memberList={presentUsers} />
+          <MemberList members={presentUsers} />
         </div>
       </Chat>
     </div>

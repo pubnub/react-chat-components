@@ -23,17 +23,16 @@ You can use the custom error callback for debugging, logging, as well as showing
 end user or recovery by re-rendering. An example of simple logging behavior can be as follows:
 
 ```js
-
 function ErrorChat() {
-  const [channel, setChannel] = React.useState("test-channel");
+  const [currentChannel, setCurrentChannel] = React.useState("test-channel");
 
   const onError = (error: Error) => {
-    yourLogger.log(error.message)
-  }
+    yourLogger.log(error.message);
+  };
 
   return (
-    <Chat {...{ channel, onError }}>
-      <MessageList/>
+    <Chat {...{ currentChannel, onError }}>
+      <MessageList />
       <MessageInput />
     </Chat>
   );
@@ -56,17 +55,17 @@ last call.
 
 ```js
 function RetryChat() {
-  const [channel, setChannel] = React.useState("test-channel");
+  const [currentChannel, setCurrentChannel] = React.useState("test-channel");
 
   const retryOptions = {
     maxRetries: 5,
     timeout: 1000,
-    exponentialFactor: 2
-  }
+    exponentialFactor: 2,
+  };
 
   return (
-    <Chat {...{ channel, retryOptions }}>
-      <MessageList/>
+    <Chat {...{ currentChannel, retryOptions }}>
+      <MessageList />
       <MessageInput />
     </Chat>
   );

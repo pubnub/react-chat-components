@@ -39,15 +39,15 @@ export interface ChatProps {
    * Exact looks can be tweaked later on with the use of CSS variables. */
   theme?: Themes;
   /** A "current" channel to display the messages and members from. */
-  channel: string;
+  currentChannel: string;
   /** Array of channels to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
-  subscribeChannels?: string[];
+  channels?: string[];
   /** Array of channels groups to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
-  subscribeChannelGroups?: string[];
+  channelGroups?: string[];
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
-  presence?: boolean;
+  enablePresence?: boolean;
   /** Provide external list of user metadata. */
-  userList?: UUIDMetadataObject<ObjectCustom>[];
+  users?: UUIDMetadataObject<ObjectCustom>[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
   /** Pass options to emoji-mart picker. */
@@ -84,12 +84,12 @@ export class Chat extends Component<ChatProps> {
 
   static defaultProps = {
     emojiMartOptions: { emoji: "", title: "", native: true },
-    subscribeChannels: [],
-    subscribeChannelGroups: [],
+    channels: [],
+    channelGroups: [],
     theme: "light" as const,
-    presence: true,
+    enablePresence: true,
     typingIndicatorTimeout: 10,
-    userList: [],
+    users: [],
     retryOptions: {
       maxRetries: 1,
       timeout: 0,
@@ -128,15 +128,11 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const setErrorFunction = useSetRecoilState(ErrorFunctionAtom);
   const setRetryFunction = useSetRecoilState(RetryFunctionAtom);
   const setTypingIndicator = useSetRecoilState(TypingIndicatorAtom);
+  const setTypingIndicatorTimeout = useSetRecoilState(TypingIndicatorTimeoutAtom);
   const setUsersMeta = useSetRecoilState(UsersMetaAtom);
   const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
-  const [subscribeChannels, setSubscribeChannels] = useRecoilState(SubscribeChannelsAtom);
-  const [subscribeChannelGroups, setSubscribeChannelGroups] = useRecoilState(
-    SubscribeChannelGroupsAtom
-  );
-  const [typingIndicatorTimeout, setTypingIndicatorTimeout] = useRecoilState(
-    TypingIndicatorTimeoutAtom
-  );
+  const [channels, setChannels] = useRecoilState(SubscribeChannelsAtom);
+  const [channelGroups, setChannelGroups] = useRecoilState(SubscribeChannelGroupsAtom);
 
   /**
    * Helpers
@@ -165,8 +161,8 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, []);
 
   useEffect(() => {
-    setUsersMeta(props.userList);
-  }, [props.userList]);
+    setUsersMeta(props.users);
+  }, [props.users]);
 
   /**
    * Lifecycle: load updateable props
@@ -176,16 +172,16 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [props.theme]);
 
   useEffect(() => {
-    setCurrentChannel(props.channel);
-  }, [props.channel]);
+    setCurrentChannel(props.currentChannel);
+  }, [props.currentChannel]);
 
   useEffect(() => {
-    setSubscribeChannels(props.subscribeChannels);
-  }, [props.subscribeChannels]);
+    setChannels(props.channels);
+  }, [props.channels]);
 
   useEffect(() => {
-    setSubscribeChannelGroups(props.subscribeChannelGroups);
-  }, [props.subscribeChannelGroups]);
+    setChannelGroups(props.channelGroups);
+  }, [props.channelGroups]);
 
   useEffect(() => {
     setErrorFunction({ function: (error) => props.onError(error) });
@@ -215,18 +211,18 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   useEffect(() => {
     if (!currentChannel) return;
     if (
-      !subscribeChannels.includes(currentChannel) &&
-      !props.subscribeChannels.length &&
-      !props.subscribeChannelGroups.length
+      !channels.includes(currentChannel) &&
+      !props.channels.length &&
+      !props.channelGroups.length
     ) {
-      setSubscribeChannels([...subscribeChannels, currentChannel]);
+      setChannels([...channels, currentChannel]);
     }
   }, [currentChannel]);
 
   useEffect(() => {
-    if (!subscribeChannels.length && !subscribeChannelGroups.length) return;
+    if (!channels.length && !channelGroups.length) return;
     setupSubscriptions();
-  }, [subscribeChannels, subscribeChannelGroups]);
+  }, [channels, channelGroups]);
 
   /**
    * Commands
@@ -252,10 +248,10 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
       const userChannel = pubnub.getUUID();
 
       const currentSubscriptions = pubnub.getSubscribedChannels();
-      const newChannels = subscribeChannels.filter((c) => !currentSubscriptions.includes(c));
+      const newChannels = channels.filter((c) => !currentSubscriptions.includes(c));
 
       const currentGroups = pubnub.getSubscribedChannelGroups();
-      const newGroups = subscribeChannelGroups.filter((c) => !currentGroups.includes(c));
+      const newGroups = channelGroups.filter((c) => !currentGroups.includes(c));
 
       if (!currentSubscriptions.includes(userChannel)) {
         pubnub.subscribe({ channels: [userChannel] });
@@ -265,7 +261,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         pubnub.subscribe({
           channels: newChannels,
           channelGroups: newGroups,
-          withPresence: props.presence,
+          withPresence: props.enablePresence,
         });
       }
     } catch (e) {
@@ -302,14 +298,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
           setDeep(indicatorsClone, [signal.channel, signal.publisher], value);
           return indicatorsClone;
         });
-
-        // setTimeout(() => {
-        //   setTypingIndicator((indicators) => {
-        //     const indicatorsClone = cloneDeep(indicators);
-        //     setDeep(indicatorsClone, [signal.channel, signal.publisher], null);
-        //     return indicatorsClone;
-        //   });
-        // }, typingIndicatorTimeout * 1000);
       }
     } catch (e) {
       props.onError(e);

@@ -13,5 +13,5 @@ const Template: Story<ChannelListProps> = (args) => <ChannelList {...args} />;
 export const Default = Template.bind({});
 
 Default.args = {
-  channelList: channels,
+  channels: channels,
 };

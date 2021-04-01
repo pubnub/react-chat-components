@@ -8,7 +8,7 @@ const pubnub = PubNubMock();
 
 const defaultOptions = {
   providerProps: {
-    channel: "test-general",
+    currentChannel: "test-general",
   },
 };
 

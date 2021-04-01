@@ -6,22 +6,22 @@ import { render, screen, fireEvent } from "../mock/custom-renderer";
 
 describe("Channel List", () => {
   test("renders channels from objects", () => {
-    render(<ChannelList channelList={channels} />);
+    render(<ChannelList channels={channels} />);
 
     expect(screen.getByText("Introductions")).toBeVisible();
     expect(screen.getByText("This channel is for company wide chatter")).toBeVisible();
   });
 
   test("renders channels from strings", () => {
-    render(<ChannelList channelList={["Introductions", "Examples"]} />);
+    render(<ChannelList channels={["Introductions", "Examples"]} />);
 
     expect(screen.getByText("Introductions")).toBeVisible();
   });
 
   test("renders current channel as active", () => {
-    render(<ChannelList channelList={channels} />, {
+    render(<ChannelList channels={channels} />, {
       providerProps: {
-        channel: "space_ac4e67b98b34b44c4a39466e93e",
+        currentChannel: "space_ac4e67b98b34b44c4a39466e93e",
       },
     });
 
@@ -32,7 +32,7 @@ describe("Channel List", () => {
 
   test("renders passed in children", () => {
     const { container } = render(
-      <ChannelList channelList={channels}>
+      <ChannelList channels={channels}>
         <p>Test String</p>
       </ChannelList>
     );
@@ -46,7 +46,7 @@ describe("Channel List", () => {
 
   test("renders with custom renderer", () => {
     const customRenderer = (channel) => <p key={channel.name}>Custom {channel.name}</p>;
-    render(<ChannelList channelList={channels} channelRenderer={customRenderer} />);
+    render(<ChannelList channels={channels} channelRenderer={customRenderer} />);
 
     expect(screen.getByText("Custom Introductions")).toBeVisible();
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("Channel List", () => {
 
   test("filters channels with custom function", () => {
     const customFilter = (channel) => channel.name !== "Introductions";
-    render(<ChannelList channelList={channels} filter={customFilter} />);
+    render(<ChannelList channels={channels} filter={customFilter} />);
 
     expect(screen.getByText("Running")).toBeVisible();
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
@@ -62,7 +62,7 @@ describe("Channel List", () => {
 
   test("sorts channels with custom function", () => {
     const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
-    const { container } = render(<ChannelList channelList={channels} sort={customSorter} />);
+    const { container } = render(<ChannelList channels={channels} sort={customSorter} />);
 
     expect(container.firstChild.firstChild).toHaveTextContent("Running");
     expect(container.firstChild.lastChild).toHaveTextContent("Company Culture");
@@ -70,7 +70,7 @@ describe("Channel List", () => {
 
   test("emits events on channel clicks", () => {
     const handleClick = jest.fn();
-    render(<ChannelList channelList={channels} onChannelSwitched={handleClick} />);
+    render(<ChannelList channels={channels} onChannelSwitched={handleClick} />);
     fireEvent.click(screen.getByText("Introductions"));
 
     expect(handleClick).toHaveBeenCalledTimes(1);
@@ -78,7 +78,7 @@ describe("Channel List", () => {
 
   test("emits nothing on channel clicks when no callback", () => {
     const handleClick = jest.fn();
-    render(<ChannelList channelList={channels} />);
+    render(<ChannelList channels={channels} />);
     fireEvent.click(screen.getByText("Introductions"));
 
     expect(handleClick).not.toHaveBeenCalled();

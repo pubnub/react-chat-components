@@ -8,7 +8,7 @@ import "./member-list.scss";
 export interface MemberListProps {
   children?: ReactNode;
   /** Pass a list of members, including metadata, to render on the list */
-  memberList: UUIDMetadataObject<ObjectCustom>[] | string[];
+  members: UUIDMetadataObject<ObjectCustom>[] | string[];
   /** Members are sorted alphabetically by default, you can override that by providing a sorter function */
   sort?: (a: UUIDMetadataObject<ObjectCustom>, b: UUIDMetadataObject<ObjectCustom>) => -1 | 0 | 1;
   /** Provide an additional member filter to hide some of the members */
@@ -85,7 +85,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
 
   return (
     <div className={`pn-member-list pn-member-list--${theme}`}>
-      {(props.memberList as string[])
+      {(props.members as string[])
         .map(memberFromString)
         .filter(memberFilter)
         .sort(memberSorter)

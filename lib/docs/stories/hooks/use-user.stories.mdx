@@ -13,29 +13,28 @@ Instead, only the current user metadata is passed into the Chat provider and a `
 This way info about users senders will be attached directly in the messages.
 
 ```js
-const [user, error] = useUser({ uuid: 'user' });
+const [user, error] = useUser({ uuid: "user" });
 
 return (
-  <Chat userList={[user]}>
+  <Chat users={[user]}>
     <MessageInput senderInfo={true} />
   </Chat>
-)
- ```
-
+);
+```
 
 ### Input
 
-| Parameter |	Type |	Required | Defaults |	Description |
-| --- | --- | --- | --- | --- |
-| uuid | String | Optional | current uuid | Unique user identifier. If not supplied then current user's uuid is used.
-| include |	Object |	Optional | | Include respective additional fields in the response. |
-| →&nbsp;customFields | Boolean | Optional | false | Whether to fetch custom fields or not. |
+| Parameter           | Type    | Required | Defaults     | Description                                                               |
+| ------------------- | ------- | -------- | ------------ | ------------------------------------------------------------------------- |
+| uuid                | String  | Optional | current uuid | Unique user identifier. If not supplied then current user's uuid is used. |
+| include             | Object  | Optional |              | Include respective additional fields in the response.                     |
+| →&nbsp;customFields | Boolean | Optional | false        | Whether to fetch custom fields or not.                                    |
 
-<br/>
+<br />
 
 ### Output
 
-| Parameter | Type | Description |
-| --- | --- | --- |
-| array[0] | User | Metadata of the User. |
-| array[1] | Error | If there's an error fetching User it will be available here. |
+| Parameter | Type  | Description                                                  |
+| --------- | ----- | ------------------------------------------------------------ |
+| array[0]  | User  | Metadata of the User.                                        |
+| array[1]  | Error | If there's an error fetching User it will be available here. |

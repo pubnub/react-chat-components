@@ -13,5 +13,5 @@ const Template: Story<MemberListProps> = (args) => <MemberList {...args} />;
 export const Default = Template.bind({});
 
 Default.args = {
-  memberList: users,
+  members: users,
 };
