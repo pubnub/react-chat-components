@@ -22,6 +22,15 @@ PubNub Chat Components is a development kit of React components that aims to hel
 - [PubNub React Documentation](https://www.pubnub.com/docs/chat/react/setup) - React wrapper can
   be used for other types of applications as well
 
+## Features
+
+- Subscriptions: automatic subscriptions to current channel, optional subscriptions to other channels and channel groups
+- Messages: publishing and listening to text messages, fetching history for each channel
+- Presence: fetching currently present users and listening to new presence, publishing presence events
+- Actions: publishing and displaying message reactions (emojis) for each message
+- Signals: typing indicators displayed as text notifications or messages
+- Objects: fetching metadata about users, channels and memberships from PB Objects storage using custom hooks
+
 ## Benefits
 
 - Ease of installation and setup
@@ -40,7 +49,7 @@ PubNub Chat Components is a development kit of React components that aims to hel
 
 ## Components
 
-- Chat Components (obligatory state provider)
+- Chat (obligatory state provider)
 - Message List
 - Message Input
 - Channel List
