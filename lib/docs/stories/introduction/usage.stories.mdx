@@ -26,7 +26,7 @@ Install the components and all required dependencies using npm:
 > Please note that the components are not deployed to npm yet!
 
 ```bash
-npm install --save pubnub pubnub-react @pubnub/react-chat-components
+npm install --save pubnub pubnub-react emoji-mart @pubnub/react-chat-components
 ```
 
 ## Usage
@@ -34,7 +34,7 @@ npm install --save pubnub pubnub-react @pubnub/react-chat-components
 1. Import PubNub, PubNub React Provider and the components
 
 ```js
-import { PubNub } from "pubnub";
+import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import {
   Chat,
@@ -61,7 +61,7 @@ const theme = "light";
 
 ```jsx
 const MyCommponent = () => {
-  return <PubNubProvider client={pubnub}></PubNub>;
+  return <PubNubProvider client={pubnub}></PubNubProvider>;
 };
 ```
 
@@ -73,10 +73,10 @@ const MyCommponent = () => {
   return (
     <PubNubProvider client={pubnub}>
       <Chat {...{ currentChannel, theme }}>
-        <MessageList>
-        <MessageInput>
+        <MessageList />
+        <MessageInput />
       </Chat>
-    </PubNub>
+    </PubNubProvider>
   );
 };
 ```

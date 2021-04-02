@@ -2,10 +2,13 @@
   "name": "@pubnub/react-chat-components",
   "version": "0.1.0",
   "description": "PubNub Chat Components is a development kit of React components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
-  "main": "build/index.js",
-  "module": "build/index.es.js",
+  "author": "PubNub <support@pubnub.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
   "files": [
-    "build"
+    "dist"
   ],
   "scripts": {
     "build": "rollup -c",
@@ -13,8 +16,6 @@
     "test": "jest",
     "test:watch": "jest --watch"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@rollup/plugin-commonjs": "^15.1.0",
@@ -41,8 +42,8 @@
     "prettier": "^2.1.2",
     "pubnub": "^4.29.10",
     "pubnub-react": "^2.1.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": ">16.8.0",
+    "react-dom": ">16.8.0",
     "rollup": "^2.32.1",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-postcss": "^3.1.8",
@@ -55,8 +56,8 @@
     "emoji-mart": "^3.0.0",
     "pubnub": "^4.29.9",
     "pubnub-react": "^2.1.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0"
+    "react": ">16.8.0",
+    "react-dom": ">16.8.0"
   },
   "dependencies": {
     "lodash.clonedeep": "^4.5.0",
