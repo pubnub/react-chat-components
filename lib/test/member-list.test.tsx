@@ -38,29 +38,11 @@ describe("Member List", () => {
     `);
   });
 
-  /** Properties */
-
   test("renders with custom renderer", () => {
     const customRenderer = (user) => <p key={user.name}>Custom {user.name}</p>;
     render(<MemberList members={members} memberRenderer={customRenderer} />);
 
     expect(screen.getByText("Custom Anna Gordon")).toBeVisible();
     expect(screen.queryByText("Anna Gordon")).not.toBeInTheDocument();
-  });
-
-  test("filters members with custom function", () => {
-    const customFilter = (user) => user.name !== "Anna Gordon";
-    render(<MemberList members={members} filter={customFilter} />);
-
-    expect(screen.getByText("Luis Griffin")).toBeVisible();
-    expect(screen.queryByText("Anna Gordon")).not.toBeInTheDocument();
-  });
-
-  test("sorts members with custom function", () => {
-    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
-    const { container } = render(<MemberList members={members} sort={customSorter} />);
-
-    expect(container.firstChild.firstChild).toHaveTextContent("Victoria Torres");
-    expect(container.firstChild.lastChild).toHaveTextContent("Anna Gordon");
   });
 });

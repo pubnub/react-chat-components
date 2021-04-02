@@ -8,13 +8,6 @@ export interface ChannelListProps {
   children?: ReactNode;
   /** Pass a list of channels, including metadata, to render on the list */
   channels: ChannelMetadataObject<ObjectCustom>[] | string[];
-  /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
-  sort?: (
-    a: ChannelMetadataObject<ObjectCustom>,
-    b: ChannelMetadataObject<ObjectCustom>
-  ) => -1 | 0 | 1;
-  /** Provide an additional channel filter to hide some of the channels */
-  filter?: (channel: ChannelMetadataObject<ObjectCustom>) => boolean;
   /** Provide custom channel renderer to override default themes and CSS variables. */
   channelRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** A callback run when user clicked one of the channels. Can be used to switch current channel. */
@@ -44,13 +37,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
     a: ChannelMetadataObject<ObjectCustom>,
     b: ChannelMetadataObject<ObjectCustom>
   ) => {
-    if (props.sort) return props.sort(a, b);
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
-  };
-
-  const channelFilter = (channel: ChannelMetadataObject<ObjectCustom>) => {
-    if (props.filter) return props.filter(channel);
-    return true;
   };
 
   const channelFromString = (channel: ChannelMetadataObject<ObjectCustom> | string) => {
@@ -103,12 +90,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
 
   return (
     <div className={`pn-channel-list pn-channel-list--${theme}`}>
-      {(props.channels as string[])
-        .map(channelFromString)
-        .filter(channelFilter)
-        .sort(channelSorter)
-        .map(renderChannel)}
-
+      {(props.channels as string[]).map(channelFromString).sort(channelSorter).map(renderChannel)}
       <>{props.children}</>
     </div>
   );

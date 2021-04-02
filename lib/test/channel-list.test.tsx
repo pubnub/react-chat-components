@@ -52,22 +52,6 @@ describe("Channel List", () => {
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
   });
 
-  test("filters channels with custom function", () => {
-    const customFilter = (channel) => channel.name !== "Introductions";
-    render(<ChannelList channels={channels} filter={customFilter} />);
-
-    expect(screen.getByText("Running")).toBeVisible();
-    expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
-  });
-
-  test("sorts channels with custom function", () => {
-    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
-    const { container } = render(<ChannelList channels={channels} sort={customSorter} />);
-
-    expect(container.firstChild.firstChild).toHaveTextContent("Running");
-    expect(container.firstChild.lastChild).toHaveTextContent("Company Culture");
-  });
-
   test("emits events on channel clicks", () => {
     const handleClick = jest.fn();
     render(<ChannelList channels={channels} onChannelSwitched={handleClick} />);

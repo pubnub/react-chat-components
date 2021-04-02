@@ -9,10 +9,6 @@ export interface MemberListProps {
   children?: ReactNode;
   /** Pass a list of members, including metadata, to render on the list */
   members: UUIDMetadataObject<ObjectCustom>[] | string[];
-  /** Members are sorted alphabetically by default, you can override that by providing a sorter function */
-  sort?: (a: UUIDMetadataObject<ObjectCustom>, b: UUIDMetadataObject<ObjectCustom>) => -1 | 0 | 1;
-  /** Provide an additional member filter to hide some of the members */
-  filter?: (member: UUIDMetadataObject<ObjectCustom>) => boolean;
   /** Provide custom user renderer to override themes and CSS variables. */
   memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
 }
@@ -36,17 +32,10 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   const memberSorter = (a, b) => {
-    if (props.sort) return props.sort(a, b);
-
     if (isOwnMember(a.id)) return -1;
     if (isOwnMember(b.id)) return 1;
 
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
-  };
-
-  const memberFilter = (member: UUIDMetadataObject<ObjectCustom>) => {
-    if (props.filter) return props.filter(member);
-    return true;
   };
 
   const memberFromString = (member: UUIDMetadataObject<ObjectCustom> | string) => {
@@ -85,12 +74,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
 
   return (
     <div className={`pn-member-list pn-member-list--${theme}`}>
-      {(props.members as string[])
-        .map(memberFromString)
-        .filter(memberFilter)
-        .sort(memberSorter)
-        .map(renderMember)}
-
+      {(props.members as string[]).map(memberFromString).sort(memberSorter).map(renderMember)}
       <>{props.children}</>
     </div>
   );
