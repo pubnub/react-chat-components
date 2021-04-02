@@ -1,10 +1,11 @@
 import React, { ReactNode } from "react";
+import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { render, RenderResult } from "@testing-library/react";
 import { Chat, ChatProps } from "../src/chat";
 import { PubNubMock } from "./pubnub-mock";
 
-const pubnub = PubNubMock();
+const pubnub = PubNubMock() as PubNub;
 
 const defaultOptions = {
   providerProps: {

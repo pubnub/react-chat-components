@@ -2,7 +2,8 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { render, fireEvent, screen } from "../mock/custom-renderer";
+import { render, screen } from "../mock/custom-renderer";
+import userEvent from "@testing-library/user-event";
 
 describe("Message List", () => {
   let scrollIntoViewMock;
@@ -79,10 +80,7 @@ describe("Message List", () => {
         <MessageInput draftMessage="New Message" />
       </div>
     );
-    fireEvent.keyPress(screen.getByDisplayValue("New Message"), {
-      key: "Enter",
-      charCode: 13,
-    });
+    userEvent.type(screen.getByDisplayValue("New Message"), "{enter}");
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(await screen.findByText("New Message")).toBeVisible();
@@ -125,10 +123,7 @@ describe("Message List", () => {
     const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
     observerCallback([{ isIntersecting: false }]);
 
-    fireEvent.keyPress(screen.getByDisplayValue("Test Message"), {
-      key: "Enter",
-      charCode: 13,
-    });
+    userEvent.type(screen.getByDisplayValue("Test Message"), "{enter}");
 
     expect(await screen.findByText("Test Message")).toBeVisible();
     expect(await screen.findByText("1 new messages ↓")).toBeVisible();
@@ -146,8 +141,8 @@ describe("Message List", () => {
   //   render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 
   //   const triggers = await screen.findAllByText("☺");
-  //   fireEvent.click(triggers[0]);
-  //   fireEvent.click(screen.getByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit."));
+  //   userEvent.click(triggers[0]);
+  //   userEvent.click(screen.getByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit."));
 
   //   await waitFor(() => expect(screen.getByText("Frequently Used")).not.toBeVisible());
   // });
@@ -156,15 +151,15 @@ describe("Message List", () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 
     const triggers = await screen.findAllByText("☺");
-    fireEvent.click(triggers[0]);
-    fireEvent.click(screen.getByText("😄"));
+    userEvent.click(triggers[0]);
+    userEvent.click(screen.getByText("😄"));
 
     expect(await screen.findByText("😄 1")).toBeVisible();
   });
 
   test("adds to existing reactions", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
-    fireEvent.click(await screen.findByText("🙂 1"));
+    userEvent.click(await screen.findByText("🙂 1"));
 
     expect(await screen.findByText("🙂 2")).toBeVisible();
     expect(screen.queryByText("🙂 1")).not.toBeInTheDocument();
@@ -172,8 +167,8 @@ describe("Message List", () => {
 
   test("removes from existing reactions", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
-    fireEvent.click(await screen.findByText("🙂 1"));
-    fireEvent.click(await screen.findByText("🙂 2"));
+    userEvent.click(await screen.findByText("🙂 1"));
+    userEvent.click(await screen.findByText("🙂 2"));
 
     expect(await screen.findByText("🙂 1")).toBeVisible();
     expect(screen.queryByText("🙂 2")).not.toBeInTheDocument();

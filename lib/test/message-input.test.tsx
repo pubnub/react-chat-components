@@ -1,7 +1,8 @@
 import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
-import { render, fireEvent, screen } from "../mock/custom-renderer";
+import { render, screen } from "../mock/custom-renderer";
+import userEvent from "@testing-library/user-event";
 import users from "../../data/users.json";
 
 describe("Message Input", () => {
@@ -18,9 +19,7 @@ describe("Message Input", () => {
   test("accepts and renders input", () => {
     render(<MessageInput />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type Message"), {
-      target: { value: "Changed Value" },
-    });
+    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
     expect(screen.getByDisplayValue("Changed Value")).toBeVisible();
   });
 
@@ -28,9 +27,7 @@ describe("Message Input", () => {
     const handleChange = jest.fn();
     render(<MessageInput onChange={handleChange} />);
 
-    fireEvent.change(screen.getByPlaceholderText("Type Message"), {
-      target: { value: "Changed Value" },
-    });
+    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
     expect(handleChange).toHaveBeenCalledWith("Changed Value");
   });
 
@@ -63,21 +60,21 @@ describe("Message Input", () => {
   test("sends the message on send button click", async () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
-    fireEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByText("Send"));
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
 
   test("sends the message on enter", async () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
-    fireEvent.keyPress(screen.getByDisplayValue("Initial Value"), { key: "Enter", charCode: 13 });
+    userEvent.type(screen.getByDisplayValue("Initial Value"), "{enter}");
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
 
   test("nothing happens on trying to send empty message", () => {
     render(<MessageInput />);
 
-    fireEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByText("Send"));
     expect(screen.getByDisplayValue("")).toBeVisible();
   });
 
@@ -85,7 +82,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    fireEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByText("Send"));
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledTimes(1);
   });
@@ -94,7 +91,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    fireEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByText("Send"));
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
   });
@@ -108,7 +105,7 @@ describe("Message Input", () => {
       },
     });
 
-    fireEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByText("Send"));
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -128,23 +125,23 @@ describe("Message Input", () => {
   test("opens emoji picker on button click", () => {
     render(<MessageInput emojiPicker />);
 
-    fireEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByText("☺"));
     expect(screen.getByText("Frequently Used")).toBeVisible();
   });
 
   test("closes emoji picker when clicking outside", () => {
     render(<MessageInput emojiPicker />);
 
-    fireEvent.click(screen.getByText("☺"));
-    fireEvent.click(screen.getByPlaceholderText("Type Message"));
+    userEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByPlaceholderText("Type Message"));
     expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
   });
 
   test("emoji picker inserts emojis into the input", async () => {
     render(<MessageInput emojiPicker />);
 
-    fireEvent.click(screen.getByText("☺"));
-    fireEvent.click(screen.getByText("🙂"));
+    userEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByText("🙂"));
     expect(screen.getByDisplayValue("🙂")).toBeVisible();
     expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
   });

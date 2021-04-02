@@ -2,7 +2,7 @@ import React, { FC, UIEvent, useRef, useState, useEffect, ReactNode } from "reac
 import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
-import { Picker, EmojiData } from "emoji-mart";
+import { Picker, BaseEmoji } from "emoji-mart";
 import { Message, ImageAttachment, LinkAttachment } from "../types";
 import {
   CurrentChannelAtom,
@@ -235,7 +235,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
       setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
-      document.addEventListener("click", handleCloseReactions);
+      document.addEventListener("mousedown", handleCloseReactions);
     } catch (e) {
       onError(e);
     }
@@ -247,7 +247,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
       setEmojiPickerShown(false);
       setReactingToMessage(null);
-      document.removeEventListener("click", handleCloseReactions);
+      document.removeEventListener("mousedown", handleCloseReactions);
     } catch (e) {
       onError(e);
     }
@@ -427,7 +427,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           >
             <Picker
               {...emojiMartOptions}
-              onSelect={(e: EmojiData) => {
+              onSelect={(e: BaseEmoji) => {
                 addReaction(e.native, reactingToMessage);
                 setEmojiPickerShown(false);
               }}

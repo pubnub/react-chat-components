@@ -138,7 +138,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const handleOpenPicker = () => {
     try {
       setEmojiPickerShown(true);
-      document.addEventListener("click", handleClosePicker);
+      document.addEventListener("mousedown", handleClosePicker);
     } catch (e) {
       onError(e);
     }
@@ -149,7 +149,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       try {
         if (pickerRef?.current?.contains(event.target as Node)) return;
         setEmojiPickerShown(false);
-        document.removeEventListener("click", handleClosePicker);
+        document.removeEventListener("mousedown", handleClosePicker);
       } catch (e) {
         onError(e);
       }
@@ -190,7 +190,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   useEffect(() => {
     return () => {
-      document.removeEventListener("click", handleClosePicker);
+      document.removeEventListener("mousedown", handleClosePicker);
     };
   }, []);
 
