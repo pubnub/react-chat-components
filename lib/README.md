@@ -55,14 +55,14 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 
 ## PubNub Account
 
-Sign in or create an account to create an app on the Admin Portal and get the keys to use in your
+1. Sign in or create an account to create an app on the [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your
 application.
 
-When you create a new app, the first set of keys is generated automatically, but a single app can
+2. When you create a new app, the first set of keys is generated automatically, but a single app can
 have as many keysets as you like. We recommend that you create separate keysets for production and
 test environments.
 
-Some of the functionalities you might want to enable on your keyset depending on the use-case
+3. Some of the functionalities you might want to enable on your keyset depending on the use-case
 include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
 select a geographical region corresponding to most users of your application).
 
