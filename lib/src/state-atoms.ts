@@ -1,6 +1,5 @@
 import { atom, selector } from "recoil";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
-import { PickerProps } from "emoji-mart";
 import { Message, Themes } from "./types";
 
 export const ThemeAtom = atom<Themes | "">({

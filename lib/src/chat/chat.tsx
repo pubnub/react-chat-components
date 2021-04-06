@@ -44,11 +44,11 @@ export interface ChatProps {
   channelGroups?: string[];
   /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
   enablePresence?: boolean;
-  /** Provide external list of user metadata. */
+  /** Provide external list of user metadata. It's used to display information about senders on MessageList and TypingIndicator. */
   users?: UUIDMetadataObject<ObjectCustom>[];
-  /** Define a timeout in seconds for typing indicators to hide after last types character */
+  /** Define a timeout in seconds for typing indicators to hide after last types character. */
   typingIndicatorTimeout?: number;
-  /** Options for automatic retry on error behavior */
+  /** Options for automatic retry on error behavior. */
   retryOptions?: RetryOptions;
   /** A callback run on new messages. */
   onMessage?: (message: Message) => unknown;
