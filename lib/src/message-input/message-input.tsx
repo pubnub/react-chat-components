@@ -12,7 +12,6 @@ import { Picker, EmojiData } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
 import {
   CurrentChannelAtom,
-  EmojiMartOptionsAtom,
   ThemeAtom,
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
@@ -57,7 +56,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const theme = useRecoilValue(ThemeAtom);
   const channel = useRecoilValue(CurrentChannelAtom);
   const onError = useRecoilValue(ErrorFunctionAtom).function;
-  const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
   const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -219,7 +217,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
         {emojiPickerShown && (
           <div className="pn-msg-input__emoji-picker" ref={pickerRef}>
-            <Picker {...emojiMartOptions} onSelect={(e: EmojiData) => handleEmojiInsertion(e)} />
+            <Picker
+              emoji=""
+              title=""
+              native={true}
+              onSelect={(e: EmojiData) => handleEmojiInsertion(e)}
+            />
           </div>
         )}
       </>

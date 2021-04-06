@@ -80,11 +80,6 @@ export const CurrentChannelTypingIndicatorAtom = selector<{ [key: string]: strin
     ),
 });
 
-export const EmojiMartOptionsAtom = atom<PickerProps>({
-  key: "emojiMartOptions",
-  default: {},
-});
-
 export const TypingIndicatorTimeoutAtom = atom<number>({
   key: "typingIndicatorTimeout",
   default: 10,

@@ -11,13 +11,11 @@ import {
   StatusEvent,
 } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { PickerProps } from "emoji-mart";
 import { Themes, Message, RetryOptions } from "../types";
 import cloneDeep from "lodash.clonedeep";
 import setDeep from "lodash.set";
 import {
   CurrentChannelAtom,
-  EmojiMartOptionsAtom,
   MessagesAtom,
   SubscribeChannelsAtom,
   SubscribeChannelGroupsAtom,
@@ -50,8 +48,6 @@ export interface ChatProps {
   users?: UUIDMetadataObject<ObjectCustom>[];
   /** Define a timeout in seconds for typing indicators to hide after last types character */
   typingIndicatorTimeout?: number;
-  /** Pass options to emoji-mart picker. */
-  emojiMartOptions?: PickerProps;
   /** Options for automatic retry on error behavior */
   retryOptions?: RetryOptions;
   /** A callback run on new messages. */
@@ -83,7 +79,6 @@ export class Chat extends Component<ChatProps> {
   }
 
   static defaultProps = {
-    emojiMartOptions: { emoji: "", title: "", native: true },
     channels: [],
     channelGroups: [],
     theme: "light" as const,
@@ -122,7 +117,6 @@ export class Chat extends Component<ChatProps> {
  */
 export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const pubnub = usePubNub();
-  const setEmojiMartOptions = useSetRecoilState(EmojiMartOptionsAtom);
   const setMessages = useSetRecoilState(MessagesAtom);
   const setTheme = useSetRecoilState(ThemeAtom);
   const setErrorFunction = useSetRecoilState(ErrorFunctionAtom);
@@ -156,7 +150,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
-    setEmojiMartOptions(props.emojiMartOptions);
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
   }, []);
 

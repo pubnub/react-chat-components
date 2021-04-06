@@ -10,7 +10,6 @@ import {
   CurrentChannelPaginationAtom,
   UsersMetaAtom,
   ThemeAtom,
-  EmojiMartOptionsAtom,
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
@@ -56,7 +55,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const theme = useRecoilValue(ThemeAtom);
   const retry = useRecoilValue(RetryFunctionAtom).function;
   const onError = useRecoilValue(ErrorFunctionAtom).function;
-  const emojiMartOptions = useRecoilValue(EmojiMartOptionsAtom);
   const messages = useRecoilValue(CurrentChannelMessagesAtom);
   const paginationEnd = useRecoilValue(CurrentChannelPaginationAtom);
 
@@ -426,7 +424,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             ref={pickerRef}
           >
             <Picker
-              {...emojiMartOptions}
+              emoji=""
+              title=""
+              native={true}
               onSelect={(e: BaseEmoji) => {
                 addReaction(e.native, reactingToMessage);
                 setEmojiPickerShown(false);
