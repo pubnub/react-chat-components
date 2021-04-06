@@ -147,7 +147,7 @@ describe("Message List", () => {
   //   await waitFor(() => expect(screen.getByText("Frequently Used")).not.toBeVisible());
   // });
 
-  https: test("adds new reactions", async () => {
+  test("adds new reactions", async () => {
     render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
 
     const triggers = await screen.findAllByText("☺");
