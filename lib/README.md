@@ -1,6 +1,6 @@
 # React Chat Components (Beta)
 
-PubNub's Chat Components library provides easy-to-use components to build chat applications using PubNub Chat on the React Framework. Our component library is the fastest way to add chat features like direct and group messaging, typing indicators, reactions and more without going through the complexity of low-level architecture of realtime networks. At the same time it allows you to create apps for various use cases, with different functionalities and customizable looks. 
+PubNub's Chat Components library provides easy-to-use components to build chat applications using PubNub Chat on the React Framework. Our component library is the fastest way to add chat features like direct and group messaging, typing indicators, reactions and more without going through the complexity of low-level architecture of realtime networks. At the same time it allows you to create apps for various use cases, with different functionalities and customizable looks.
 
 ![PubNub Chat Components](https://i.imgur.com/CydXVNT.png)
 
@@ -56,22 +56,22 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 ## PubNub Account
 
 1. Sign in or create an account to create an app on the [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your
-application.
+   application.
 
 2. When you create a new app, the first set of keys is generated automatically, but a single app can
-have as many keysets as you like. We recommend that you create separate keysets for production and
-test environments.
+   have as many keysets as you like. We recommend that you create separate keysets for production and
+   test environments.
 
 3. Some of the functionalities you might want to enable on your keyset depending on the use-case
-include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
-select a geographical region corresponding to most users of your application).
+   include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
+   select a geographical region corresponding to most users of your application).
 
 ## Installation
 
 Install the components and all required dependencies using npm:
 
 ```bash
-npm install --save pubnub pubnub-react emoji-mart @pubnub/react-chat-components
+npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
 ## Usage
