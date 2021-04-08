@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  KeyboardEvent,
-  ChangeEvent,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { FC, KeyboardEvent, ChangeEvent, useState, useRef, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { Picker, EmojiData } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
@@ -134,27 +126,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
-  const handleOpenPicker = () => {
+  const handleClosePicker = (event: MouseEvent) => {
     try {
-      setEmojiPickerShown(true);
-      document.addEventListener("mousedown", handleClosePicker);
+      setEmojiPickerShown((pickerShown) => {
+        if (!pickerShown || pickerRef.current?.contains(event.target as Node)) return pickerShown;
+        return false;
+      });
     } catch (e) {
       onError(e);
     }
   };
-
-  const handleClosePicker = useCallback(
-    (event: MouseEvent) => {
-      try {
-        if (pickerRef?.current?.contains(event.target as Node)) return;
-        setEmojiPickerShown(false);
-        document.removeEventListener("mousedown", handleClosePicker);
-      } catch (e) {
-        onError(e);
-      }
-    },
-    [pickerRef?.current, emojiPickerShown]
-  );
 
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     try {
@@ -188,6 +169,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   */
 
   useEffect(() => {
+    document.addEventListener("mousedown", handleClosePicker);
+
     return () => {
       document.removeEventListener("mousedown", handleClosePicker);
     };
@@ -212,7 +195,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderEmojiPicker = () => {
     return (
       <>
-        <div className="pn-msg-input__icon" onClick={() => handleOpenPicker()}>
+        <div className="pn-msg-input__icon" onClick={() => setEmojiPickerShown(true)}>
           ☺
         </div>
 

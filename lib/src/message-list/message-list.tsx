@@ -233,7 +233,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
       setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
-      document.addEventListener("mousedown", handleCloseReactions);
     } catch (e) {
       onError(e);
     }
@@ -241,11 +240,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const handleCloseReactions = (event: MouseEvent) => {
     try {
-      if (pickerRef.current?.contains(event.target as Node)) return;
-
-      setEmojiPickerShown(false);
-      setReactingToMessage(null);
-      document.removeEventListener("mousedown", handleCloseReactions);
+      setEmojiPickerShown((pickerShown) => {
+        if (
+          !pickerShown ||
+          pickerRef.current?.contains(event.target as Node) ||
+          (event.target as Element).classList.contains("pn-msg__reactions-toggle")
+        )
+          return pickerShown;
+        return false;
+      });
     } catch (e) {
       onError(e);
     }
@@ -274,6 +277,14 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     setPrevMessages(messages);
   }, [messages]);
 
+  useEffect(() => {
+    document.addEventListener("mousedown", handleCloseReactions);
+
+    return () => {
+      document.removeEventListener("mousedown", handleCloseReactions);
+    };
+  }, []);
+
   /*
   /* Renderers
   */
@@ -294,7 +305,16 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         {renderMessage(message)}
         {props.enableReactions && message.message.type !== "welcome" && (
           <div className="pn-msg__actions">
-            <div onClick={(e) => handleOpenReactions(e, message.timetoken)}>☺</div>
+            <div
+              className="pn-msg__reactions-toggle"
+              onClick={(e) => {
+                emojiPickerShown && reactingToMessage === message.timetoken
+                  ? setEmojiPickerShown(false)
+                  : handleOpenReactions(e, message.timetoken);
+              }}
+            >
+              ☺
+            </div>
           </div>
         )}
       </div>
