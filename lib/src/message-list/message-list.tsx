@@ -224,7 +224,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
     try {
       let newPickerTopPosition =
-        listRef.current.scrollTop + (event.target as HTMLElement).getBoundingClientRect().y;
+        listRef.current.scrollTop -
+        listRef.current.getBoundingClientRect().top +
+        (event.target as HTMLElement).getBoundingClientRect().y;
       if (newPickerTopPosition > pickerRef.current.offsetHeight) {
         newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
         newPickerTopPosition -= pickerRef.current.offsetHeight;
