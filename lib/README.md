@@ -37,8 +37,8 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 ## Requirements
 
 - `React 16.8+` and `ReactDOM 16.8+`
-- `PubNub JavaScript SDK 4.29+`
-- `PubNub React SDK 2.1.0+`
+- [`PubNub JavaScript SDK 4.29+`](https://www.pubnub.com/docs/sdks/javascript)
+- [`PubNub React SDK 2.1.0+`](https://www.pubnub.com/docs/sdks/javascript/react/)
 
 ## List of Components
 
