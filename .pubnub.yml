@@ -1,0 +1,14 @@
+---
+name: pubnub-react
+version: v0.1.0
+scm: github.com/pubnub/react-chat-components
+schema: 1
+files:
+  - dist/index.js
+  - dist/index.es.js
+changelog:
+  - changes:
+      - text: Initial public release
+        type: feature
+    date: 2021-04-09
+    version: v0.1.0
