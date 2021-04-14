@@ -66,7 +66,36 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
    include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
    select a geographical region corresponding to most users of your application).
 
-## Installation
+## Run Sample Apps
+
+Start with exploring our [Sample Apps](https://pubnub.github.io/react-chat-components/samples) that are built using chat components. Follow the steps below to run the apps locally in your own environment.
+
+1. Clone the repository:
+
+```bash
+git clone git@github.com:pubnub/react-chat-components.git
+```
+
+2. Go to the `samples` folder and install the dependencies:
+
+```bash
+cd react-chat-components/samples
+npm install
+```
+
+3. Follow steps from the PubNub Account section above to create your own keyset and paste it into `pubnub-keys.json`:
+
+```bash
+vi pubnub-keys.json
+```
+
+4. Run the application:
+
+```bash
+npm start
+```
+
+## Components Installation
 
 Install the components and all required dependencies using npm:
 
@@ -74,7 +103,7 @@ Install the components and all required dependencies using npm:
 npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
-## Usage
+## Components Usage
 
 1. Import PubNub, PubNub React Provider and the components:
 
@@ -129,32 +158,3 @@ const MyCommponent = () => {
 
 5. Check out the [PubNub Chat Components Documentation](https://pubnub.github.io/react-chat-components/docs)
    to learn more about how to use the components and the [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples) to see what is possible using the components. Source code of the sample applications can be found in the `samples` folder in the repository root.
-
-<br />
-
-# Run sample apps locally
-
-1. Clone the repository:
-
-```bash
-git clone git@github.com:pubnub/react-chat-components.git
-```
-
-2. Go to the `samples` folder and install the dependencies:
-
-```bash
-cd react-chat-components/samples
-npm install
-```
-
-3. Follow steps from the PubNub Account section above to create your own keyset and paste it into `pubnub-keys.json`:
-
-```bash
-vi pubnub-keys.json
-```
-
-4. Run the application:
-
-```bash
-npm start
-```
