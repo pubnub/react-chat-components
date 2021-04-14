@@ -76,7 +76,7 @@ npm install --save pubnub pubnub-react @pubnub/react-chat-components
 
 ## Usage
 
-1. Import PubNub, PubNub React Provider and the components
+1. Import PubNub, PubNub React Provider and the components:
 
 ```js
 import PubNub from "pubnub";
@@ -103,7 +103,7 @@ const currentChannel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
+3. Feed the PubNub Provider with your newly created client as with other PubNub React applications:
 
 ```jsx
 const MyCommponent = () => {
@@ -112,7 +112,7 @@ const MyCommponent = () => {
 ```
 
 4. Place the components within the Chat state provider in any order that your app requires. Components
-   can be tweaked later on using option properties and CSS variables.
+   can be tweaked later on using option properties and CSS variables:
 
 ```jsx
 const MyCommponent = () => {
@@ -129,3 +129,32 @@ const MyCommponent = () => {
 
 5. Check out the [PubNub Chat Components Documentation](https://pubnub.github.io/react-chat-components/docs)
    to learn more about how to use the components and the [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples) to see what is possible using the components. Source code of the sample applications can be found in the `samples` folder in the repository root.
+
+<br />
+
+# Run sample apps locally
+
+1. Clone the repository:
+
+```bash
+git clone git@github.com:pubnub/react-chat-components.git
+```
+
+2. Go to the `samples` folder and install the dependencies:
+
+```bash
+cd react-chat-components/samples
+npm install
+```
+
+3. Follow steps from the PubNub Account section above to create your own keyset and paste it into `pubnub-keys.json`:
+
+```bash
+vi pubnub-keys.json
+```
+
+4. Run the application:
+
+```bash
+npm start
+```
