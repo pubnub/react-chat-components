@@ -83,7 +83,7 @@ cd react-chat-components/samples
 npm install
 ```
 
-3. Follow steps from the PubNub Account section above to create your own keyset and paste it into `pubnub-keys.json`:
+3. Follow steps from the [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account) to create your own keys and paste them into `pubnub-keys.json`:
 
 ```bash
 vi pubnub-keys.json
