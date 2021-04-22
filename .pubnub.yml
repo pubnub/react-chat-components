@@ -8,6 +8,11 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: Remove internal emoji picker component
+        type: feature
+    date: 2021-04-22
+    version: v0.2.0
+  - changes:
       - text: Initial public release
         type: feature
     date: 2021-04-09

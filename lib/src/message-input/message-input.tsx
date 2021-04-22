@@ -1,7 +1,15 @@
-import React, { FC, KeyboardEvent, ChangeEvent, useState, useRef, useEffect } from "react";
+import React, {
+  FC,
+  KeyboardEvent,
+  ChangeEvent,
+  useState,
+  useRef,
+  useEffect,
+  ReactElement,
+} from "react";
 import { useRecoilValue } from "recoil";
-import { Picker, EmojiData } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
+import { EmojiPickerElementProps } from "../types";
 import {
   CurrentChannelAtom,
   ThemeAtom,
@@ -10,7 +18,6 @@ import {
   ErrorFunctionAtom,
 } from "../state-atoms";
 import "./message-input.scss";
-import "emoji-mart/css/emoji-mart.css";
 
 export interface MessageInputProps {
   /** Set a placeholder message display in the text window. */
@@ -26,8 +33,8 @@ export interface MessageInputProps {
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the send button. */
   sendButton?: JSX.Element | string;
-  /** Show the built-in emoji picker in the message input.*/
-  emojiPicker?: boolean;
+  /** Pass in an emoji picker if you want it to be rendered in the input. See Emoji Pickers section of the docs to get more details */
+  emojiPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback to handle event when the text value changes. */
   onChange?: (value: string) => unknown;
   /** Callback for extra actions while sending a message */
@@ -44,6 +51,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [text, setText] = useState(props.draftMessage || "");
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
+  const [picker, setPicker] = useState<ReactElement>();
 
   const users = useRecoilValue(UsersMetaAtom);
   const theme = useRecoilValue(ThemeAtom);
@@ -116,7 +124,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   /* Event handlers
   */
 
-  const handleEmojiInsertion = (emoji: EmojiData) => {
+  const handleEmojiInsertion = (emoji: { native: string }) => {
     try {
       if (!("native" in emoji)) return;
       setText(text + emoji.native);
@@ -177,6 +185,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   }, []);
 
   useEffect(() => {
+    if (React.isValidElement(props.emojiPicker)) {
+      setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion }));
+    }
+  }, [props.emojiPicker]);
+
+  useEffect(() => {
     let timer = null;
 
     if (typingIndicatorSent) {
@@ -201,12 +215,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
         {emojiPickerShown && (
           <div className="pn-msg-input__emoji-picker" ref={pickerRef}>
-            <Picker
-              emoji=""
-              title=""
-              native={true}
-              onSelect={(e: EmojiData) => handleEmojiInsertion(e)}
-            />
+            {picker}
           </div>
         )}
       </>
@@ -241,7 +250,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 };
 
 MessageInput.defaultProps = {
-  emojiPicker: false,
   hideSendButton: false,
   placeholder: "Type Message",
   sendButton: "Send",

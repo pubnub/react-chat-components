@@ -50,11 +50,11 @@ function GroupChat() {
             <PeopleGroup />
           </div>
 
-          <MessageList fetchMessages={10} enableReactions>
+          <MessageList fetchMessages={10}>
             <TypingIndicator showAsMessage />
           </MessageList>
 
-          <MessageInput typingIndicator emojiPicker />
+          <MessageInput typingIndicator />
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>

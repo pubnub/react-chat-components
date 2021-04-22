@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Picker } from "emoji-mart";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
@@ -15,6 +16,7 @@ import {
 } from "@pubnub/react-chat-components";
 
 import "./simple-chat.scss";
+import "emoji-mart/css/emoji-mart.css";
 import { ReactComponent as PeopleGroup } from "../people-group.svg";
 
 /**
@@ -116,13 +118,14 @@ function SimpleChat() {
             <hr />
           </div>
           <MessageList
-            enableReactions
             fetchMessages={0}
             welcomeMessages={welcomeMessages[currentChannel.id]}
+            enableReactions
+            reactionsPicker={<Picker />}
           >
             <TypingIndicator showAsMessage />
           </MessageList>
-          <MessageInput emojiPicker typingIndicator />
+          <MessageInput typingIndicator emojiPicker={<Picker />} />
         </div>
 
         <div className={`members ${showMembers && "shown"}`}>

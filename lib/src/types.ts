@@ -2,6 +2,10 @@ import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
+export interface EmojiPickerElementProps {
+  onSelect?: ({ native: string }) => void;
+}
+
 export interface Message {
   channel?: string;
   message: {

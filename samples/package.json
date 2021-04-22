@@ -19,6 +19,8 @@
   },
   "dependencies": {
     "@pubnub/react-chat-components": "^0.1.0",
+    "@types/emoji-mart": "^3.0.4",
+    "emoji-mart": "^3.0.0",
     "lodash.samplesize": "^4.2.0",
     "node-sass": "^5.0.0",
     "pubnub": "^4.29.10",

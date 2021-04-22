@@ -1,9 +1,17 @@
-import React, { FC, UIEvent, useRef, useState, useEffect, ReactNode } from "react";
+import React, {
+  FC,
+  UIEvent,
+  useRef,
+  useState,
+  useEffect,
+  useCallback,
+  ReactNode,
+  ReactElement,
+} from "react";
 import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useRecoilValue, useRecoilCallback } from "recoil";
-import { Picker, BaseEmoji } from "emoji-mart";
-import { Message, ImageAttachment, LinkAttachment } from "../types";
+import { Message, ImageAttachment, LinkAttachment, EmojiPickerElementProps } from "../types";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
@@ -27,10 +35,12 @@ export interface MessageListProps {
   children?: ReactNode;
   /** Set a number from 0 to 100 to fetch past messages from storage on a channel. Defaults to 0 to fetch no messages from storage. */
   fetchMessages?: number;
-  /** Enable to add emoji reactions on messages. */
+  /** Enable to render reactions that were added to messages. Be sure to also set up reactionsPicker when this is enabled */
   enableReactions?: boolean;
   /** Provide custom welcome messages to replace the default one or set to false to disable */
   welcomeMessages?: false | Message | Message[];
+  /** Pass in an emoji picker component if you want to enable message reactions. See Emoji Pickers section of the docs to get more details */
+  reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
@@ -62,6 +72,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const [prevMessages, setPrevMessages] = useState([]);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [fetchingMessages, setFetchingMessages] = useState(false);
+  const [picker, setPicker] = useState<ReactElement>();
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [reactingToMessage, setReactingToMessage] = useState(null);
 
@@ -193,6 +204,19 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /* Event handlers
   */
 
+  const handleEmojiInsertion = useCallback(
+    (emoji: { native: string }) => {
+      try {
+        if (!("native" in emoji)) return;
+        addReaction(emoji.native, reactingToMessage);
+        setEmojiPickerShown(false);
+      } catch (e) {
+        onError(e);
+      }
+    },
+    [reactingToMessage]
+  );
+
   const handleBottomScroll = (scrolledBottom: boolean) => {
     try {
       if (scrolledBottom) setUnreadMessages(0);
@@ -267,6 +291,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   }, [channel]);
 
   useEffect(() => {
+    if (React.isValidElement(props.reactionsPicker)) {
+      setPicker(React.cloneElement(props.reactionsPicker, { onSelect: handleEmojiInsertion }));
+    }
+  }, [props.reactionsPicker, handleEmojiInsertion]);
+
+  useEffect(() => {
     if (!messages?.length) return;
 
     const messagesFromListener = messages.length - prevMessages.length;
@@ -305,7 +335,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
-        {props.enableReactions && message.message.type !== "welcome" && (
+        {props.reactionsPicker && message.message.type !== "welcome" && (
           <div className="pn-msg__actions">
             <div
               className="pn-msg__reactions-toggle"
@@ -438,22 +468,14 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
         <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 
-        {props.enableReactions && (
+        {props.reactionsPicker && (
           <div
             className={`pn-msg-list__emoji-picker ${
               !emojiPickerShown && "pn-msg-list__emoji-picker-hidden"
             }`}
             ref={pickerRef}
           >
-            <Picker
-              emoji=""
-              title=""
-              native={true}
-              onSelect={(e: BaseEmoji) => {
-                addReaction(e.native, reactingToMessage);
-                setEmojiPickerShown(false);
-              }}
-            />
+            {picker}
           </div>
         )}
 

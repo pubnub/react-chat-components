@@ -2,6 +2,7 @@ import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
 import { render, screen } from "../mock/custom-renderer";
+import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 import users from "../../data/users.json";
 
@@ -115,34 +116,33 @@ describe("Message Input", () => {
   });
 
   /** Emoji picker */
-
   test("renders emoji picker button", () => {
-    render(<MessageInput emojiPicker />);
+    render(<MessageInput emojiPicker={<Picker />} />);
 
     expect(screen.getByText("☺")).toBeVisible();
   });
 
   test("opens emoji picker on button click", () => {
-    render(<MessageInput emojiPicker />);
+    render(<MessageInput emojiPicker={<Picker />} />);
 
     userEvent.click(screen.getByText("☺"));
-    expect(screen.getByText("Frequently Used")).toBeVisible();
+    expect(screen.getByText("Emoji Picker")).toBeVisible();
   });
 
   test("closes emoji picker when clicking outside", () => {
-    render(<MessageInput emojiPicker />);
+    render(<MessageInput emojiPicker={<Picker />} />);
 
     userEvent.click(screen.getByText("☺"));
     userEvent.click(screen.getByPlaceholderText("Type Message"));
-    expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
+    expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
 
   test("emoji picker inserts emojis into the input", async () => {
-    render(<MessageInput emojiPicker />);
+    render(<MessageInput emojiPicker={<Picker />} />);
 
     userEvent.click(screen.getByText("☺"));
     userEvent.click(screen.getByText("🙂"));
     expect(screen.getByDisplayValue("🙂")).toBeVisible();
-    expect(screen.queryByText("Frequently Used")).not.toBeInTheDocument();
+    expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
 });

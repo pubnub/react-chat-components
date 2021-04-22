@@ -84,7 +84,7 @@ function EventChat() {
             </span>
           </div>
           <MessageList welcomeMessages={false} />
-          <MessageInput emojiPicker hideSendButton senderInfo />
+          <MessageInput hideSendButton senderInfo />
         </div>
       </Chat>
     </div>

@@ -3,6 +3,7 @@ import React from "react";
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
 import { render, screen } from "../mock/custom-renderer";
+import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 
 describe("Message List", () => {
@@ -148,7 +149,14 @@ describe("Message List", () => {
   // });
 
   test("adds new reactions", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+    render(
+      <MessageList
+        welcomeMessages={false}
+        fetchMessages={10}
+        enableReactions
+        reactionsPicker={<Picker />}
+      />
+    );
 
     const triggers = await screen.findAllByText("☺");
     userEvent.click(triggers[0]);
