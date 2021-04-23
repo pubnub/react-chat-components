@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from "react";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { useRecoilValue } from "recoil";
+import { useAtom } from "jotai";
 import { ThemeAtom } from "../state-atoms";
 import "./member-list.scss";
 
@@ -21,7 +21,7 @@ export interface MemberListProps {
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const pubnub = usePubNub();
-  const theme = useRecoilValue(ThemeAtom);
+  const [theme] = useAtom(ThemeAtom);
 
   /*
   /* Helper functions

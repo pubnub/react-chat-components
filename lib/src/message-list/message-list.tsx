@@ -10,7 +10,8 @@ import React, {
 } from "react";
 import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { useRecoilValue, useRecoilCallback } from "recoil";
+import { useAtom } from "jotai";
+import { useAtomCallback } from "jotai/utils";
 import { Message, ImageAttachment, LinkAttachment, EmojiPickerElementProps } from "../types";
 import {
   CurrentChannelAtom,
@@ -60,13 +61,15 @@ export interface MessageListProps {
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const pubnub = usePubNub();
 
-  const channel = useRecoilValue(CurrentChannelAtom);
-  const users = useRecoilValue(UsersMetaAtom);
-  const theme = useRecoilValue(ThemeAtom);
-  const retry = useRecoilValue(RetryFunctionAtom).function;
-  const onError = useRecoilValue(ErrorFunctionAtom).function;
-  const messages = useRecoilValue(CurrentChannelMessagesAtom);
-  const paginationEnd = useRecoilValue(CurrentChannelPaginationAtom);
+  const [channel] = useAtom(CurrentChannelAtom);
+  const [users] = useAtom(UsersMetaAtom);
+  const [theme] = useAtom(ThemeAtom);
+  const [retryObj] = useAtom(RetryFunctionAtom);
+  const [onErrorObj] = useAtom(ErrorFunctionAtom);
+  const [messages] = useAtom(CurrentChannelMessagesAtom);
+  const [paginationEnd] = useAtom(CurrentChannelPaginationAtom);
+  const retry = retryObj.function;
+  const onError = onErrorObj.function;
 
   const [scrolledBottom, setScrolledBottom] = useState(true);
   const [prevMessages, setPrevMessages] = useState([]);
@@ -148,13 +151,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  /** useRecoilCallback to accesses recoil atoms inside of a Intersection Observer callback */
-  const fetchMoreHistory = useRecoilCallback(
-    ({ snapshot }) => async () => {
-      const channel = await snapshot.getPromise(CurrentChannelAtom);
-      const retryPromise = await snapshot.getPromise(RetryFunctionAtom);
-      const retry = retryPromise.function;
-      const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
+  /** useAtomCallback to accesses jotai atoms inside of a Intersection Observer callback */
+  const fetchMoreHistory = useAtomCallback(
+    useCallback(async (get) => {
+      const channel = get(CurrentChannelAtom);
+      const retryObj = get(RetryFunctionAtom);
+      const errorObj = get(ErrorFunctionAtom);
+      const messages = get(CurrentChannelMessagesAtom);
+      const retry = retryObj.function;
+      const onError = errorObj.function;
       const firstMessage = listRef.current?.querySelector(".pn-msg");
 
       if (!messages.length) return;
@@ -173,8 +178,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       } catch (e) {
         onError(e);
       }
-    },
-    []
+    }, [])
   );
 
   const addReaction = (reaction: string, messageTimetoken) => {
@@ -226,10 +230,10 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const handleHistoryFetch = useRecoilCallback(
-    ({ snapshot, set }) => async (response: FetchMessagesResponse) => {
-      const channel = await snapshot.getPromise(CurrentChannelAtom);
-      const messages = await snapshot.getPromise(CurrentChannelMessagesAtom);
+  const handleHistoryFetch = useAtomCallback(
+    useCallback((get, set, response: FetchMessagesResponse) => {
+      const channel = get(CurrentChannelAtom);
+      const messages = get(CurrentChannelMessagesAtom);
       const newMessages = (response?.channels[channel] as Message[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
@@ -241,8 +245,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         CurrentChannelPaginationAtom,
         !allMessages.length || newMessages.length !== props.fetchMessages
       );
-    },
-    []
+    }, [])
   );
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {

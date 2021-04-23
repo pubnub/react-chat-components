@@ -1,6 +1,6 @@
 ---
 name: pubnub-react-chat-components
-version: v0.1.0
+version: v0.2.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
@@ -10,7 +10,9 @@ changelog:
   - changes:
       - text: Remove internal emoji picker component
         type: feature
-    date: 2021-04-22
+      - text: Replace Recoil with Jotai
+        type: feature
+    date: 2021-04-23
     version: v0.2.0
   - changes:
       - text: Initial public release

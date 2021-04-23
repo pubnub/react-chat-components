@@ -1,85 +1,45 @@
-import { atom, selector } from "recoil";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
+import { atom } from "jotai";
 import { Message, Themes } from "./types";
 
-export const ThemeAtom = atom<Themes | "">({
-  key: "theme",
-  default: "",
-});
+export const ThemeAtom = atom<Themes | "">("light");
+export const CurrentChannelAtom = atom<string>("");
+export const SubscribeChannelsAtom = atom<string[]>([]);
+export const SubscribeChannelGroupsAtom = atom<string[]>([]);
+export const UsersMetaAtom = atom<UUIDMetadataObject<ObjectCustom>[]>([]);
+export const MessagesAtom = atom<{ [channel: string]: Message[] }>({});
+export const PaginationAtom = atom<{ [channel: string]: boolean }>({});
+export const TypingIndicatorAtom = atom({});
+export const TypingIndicatorTimeoutAtom = atom<number>(10);
 
 export const RetryFunctionAtom = atom<{ function: <T>(fn: () => Promise<T>) => Promise<T> }>({
-  key: "retry",
-  default: { function: () => null },
+  function: () => null,
 });
 
 export const ErrorFunctionAtom = atom<{ function: (error: Error) => unknown }>({
-  key: "error",
-  default: { function: () => null },
+  function: () => null,
 });
 
-export const CurrentChannelAtom = atom<string>({
-  key: "currentChannel",
-  default: "",
-});
+export const CurrentChannelMessagesAtom = atom(
+  (get) => (get(MessagesAtom) ? get(MessagesAtom)[get(CurrentChannelAtom)] || [] : []),
+  (get, set, value) =>
+    set(MessagesAtom, Object.assign({}, get(MessagesAtom), { [get(CurrentChannelAtom)]: value }))
+);
 
-export const SubscribeChannelsAtom = atom<string[]>({
-  key: "subscribeChannels",
-  default: [],
-});
-
-export const SubscribeChannelGroupsAtom = atom<string[]>({
-  key: "subscribeChannelGroups",
-  default: [],
-});
-
-export const UsersMetaAtom = atom<UUIDMetadataObject<ObjectCustom>[]>({
-  key: "usersMeta",
-  default: [],
-});
-
-export const MessagesAtom = atom<{ [channel: string]: Message[] }>({
-  key: "messages",
-  default: {},
-});
-
-export const CurrentChannelMessagesAtom = selector<Message[]>({
-  key: "channelMessages",
-  get: ({ get }) => (get(MessagesAtom) ? get(MessagesAtom)[get(CurrentChannelAtom)] || [] : []),
-  set: ({ get, set }, value) =>
-    set(MessagesAtom, Object.assign({}, get(MessagesAtom), { [get(CurrentChannelAtom)]: value })),
-});
-
-export const PaginationAtom = atom<{ [channel: string]: boolean }>({
-  key: "pagination",
-  default: {},
-});
-
-export const CurrentChannelPaginationAtom = selector<boolean>({
-  key: "channelPagination",
-  get: ({ get }) => get(PaginationAtom)[get(CurrentChannelAtom)] || false,
-  set: ({ get, set }, value) =>
+export const CurrentChannelPaginationAtom = atom(
+  (get) => get(PaginationAtom)[get(CurrentChannelAtom)] || false,
+  (get, set, value) =>
     set(
       PaginationAtom,
       Object.assign({}, get(PaginationAtom), { [get(CurrentChannelAtom)]: value })
-    ),
-});
+    )
+);
 
-export const TypingIndicatorAtom = atom({
-  key: "typingIndicator",
-  default: {},
-});
-
-export const CurrentChannelTypingIndicatorAtom = selector<{ [key: string]: string }>({
-  key: "channelTypingIndicator",
-  get: ({ get }) => get(TypingIndicatorAtom)[get(CurrentChannelAtom)] || {},
-  set: ({ get, set }, value) =>
+export const CurrentChannelTypingIndicatorAtom = atom(
+  (get) => get(TypingIndicatorAtom)[get(CurrentChannelAtom)] || {},
+  (get, set, value) =>
     set(
       TypingIndicatorAtom,
       Object.assign({}, get(TypingIndicatorAtom), { [get(CurrentChannelAtom)]: value })
-    ),
-});
-
-export const TypingIndicatorTimeoutAtom = atom<number>({
-  key: "typingIndicatorTimeout",
-  default: 10,
-});
+    )
+);
