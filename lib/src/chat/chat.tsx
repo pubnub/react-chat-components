@@ -1,5 +1,5 @@
 import React, { FC, Component, useEffect, useCallback, ReactNode } from "react";
-import { RecoilRoot, useRecoilState, useSetRecoilState } from "recoil";
+import { useAtom, Provider } from "jotai";
 import {
   BaseObjectsEvent,
   MessageActionEvent,
@@ -103,9 +103,9 @@ export class Chat extends Component<ChatProps> {
 
   render(): JSX.Element {
     return (
-      <RecoilRoot>
+      <Provider>
         <ChatInternal {...this.props}></ChatInternal>
-      </RecoilRoot>
+      </Provider>
     );
   }
 }
@@ -117,16 +117,16 @@ export class Chat extends Component<ChatProps> {
  */
 export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const pubnub = usePubNub();
-  const setMessages = useSetRecoilState(MessagesAtom);
-  const setTheme = useSetRecoilState(ThemeAtom);
-  const setErrorFunction = useSetRecoilState(ErrorFunctionAtom);
-  const setRetryFunction = useSetRecoilState(RetryFunctionAtom);
-  const setTypingIndicator = useSetRecoilState(TypingIndicatorAtom);
-  const setTypingIndicatorTimeout = useSetRecoilState(TypingIndicatorTimeoutAtom);
-  const setUsersMeta = useSetRecoilState(UsersMetaAtom);
-  const [currentChannel, setCurrentChannel] = useRecoilState(CurrentChannelAtom);
-  const [channels, setChannels] = useRecoilState(SubscribeChannelsAtom);
-  const [channelGroups, setChannelGroups] = useRecoilState(SubscribeChannelGroupsAtom);
+  const [, setMessages] = useAtom(MessagesAtom);
+  const [, setTheme] = useAtom(ThemeAtom);
+  const [, setErrorFunction] = useAtom(ErrorFunctionAtom);
+  const [, setRetryFunction] = useAtom(RetryFunctionAtom);
+  const [, setTypingIndicator] = useAtom(TypingIndicatorAtom);
+  const [, setTypingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
+  const [, setUsersMeta] = useAtom(UsersMetaAtom);
+  const [currentChannel, setCurrentChannel] = useAtom(CurrentChannelAtom);
+  const [channels, setChannels] = useAtom(SubscribeChannelsAtom);
+  const [channelGroups, setChannelGroups] = useAtom(SubscribeChannelGroupsAtom);
 
   /**
    * Helpers

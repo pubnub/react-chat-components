@@ -62,11 +62,11 @@
   },
   "dependencies": {
     "emoji-mart": "^3.0.0",
+    "jotai": "^0.16.2",
     "lodash.clonedeep": "^4.5.0",
     "lodash.isequal": "^4.5.0",
     "lodash.merge": "^4.6.2",
     "lodash.mergewith": "^4.6.2",
-    "lodash.set": "^4.3.2",
-    "recoil": "^0.1.2"
+    "lodash.set": "^4.3.2"
   }
 }

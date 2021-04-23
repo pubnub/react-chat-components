@@ -1,5 +1,5 @@
 import React, { FC, KeyboardEvent, ChangeEvent, useState, useRef, useEffect } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtom } from "jotai";
 import { Picker, EmojiData } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
 import {
@@ -45,11 +45,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
 
-  const users = useRecoilValue(UsersMetaAtom);
-  const theme = useRecoilValue(ThemeAtom);
-  const channel = useRecoilValue(CurrentChannelAtom);
-  const onError = useRecoilValue(ErrorFunctionAtom).function;
-  const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);
+  const [users] = useAtom(UsersMetaAtom);
+  const [theme] = useAtom(ThemeAtom);
+  const [channel] = useAtom(CurrentChannelAtom);
+  const [onErrorObj] = useAtom(ErrorFunctionAtom);
+  const onError = onErrorObj.function;
+  const [typingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);

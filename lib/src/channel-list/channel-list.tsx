@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtom } from "jotai";
 import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import { ThemeAtom, CurrentChannelAtom } from "../state-atoms";
 import "./channel-list.scss";
@@ -23,8 +23,8 @@ export interface ChannelListProps {
  * current channel passed to the Chat provider, or whatever else is expected.
  */
 export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
-  const currentChannel = useRecoilValue(CurrentChannelAtom);
-  const theme = useRecoilValue(ThemeAtom);
+  const [currentChannel] = useAtom(CurrentChannelAtom);
+  const [theme] = useAtom(ThemeAtom);
 
   /*
   /* Helper functions

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useCallback, useRef } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtom } from "jotai";
 import {
   CurrentChannelTypingIndicatorAtom,
   ThemeAtom,
@@ -19,10 +19,10 @@ export interface TypingIndicatorProps {
  * a Message that can be renderer inside of the MessageList.
  */
 export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicatorProps) => {
-  const theme = useRecoilValue(ThemeAtom);
-  const users = useRecoilValue(UsersMetaAtom);
-  const typingIndicators = useRecoilValue(CurrentChannelTypingIndicatorAtom);
-  const typingIndicatorTimeout = useRecoilValue(TypingIndicatorTimeoutAtom);
+  const [theme] = useAtom(ThemeAtom);
+  const [users] = useAtom(UsersMetaAtom);
+  const [typingIndicators] = useAtom(CurrentChannelTypingIndicatorAtom);
+  const [typingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
   const [activeUUIDs, setActiveUUIDs] = useState([]);
   const typingIndicatorsRef = useRef(typingIndicators);
 
