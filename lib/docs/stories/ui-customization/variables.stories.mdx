@@ -5,8 +5,8 @@ import { Meta } from "@storybook/addon-docs/blocks";
 # CSS Variables
 
 Built in themes can be customized by changing the values of
-[CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
-that are internally used to style different parts of each component. You can see the full list of
+[CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that
+are internally used to style different parts of each component. You can see the full list of
 avilable variables along with its default values below.
 
 For example, to remove the default padding around Message Input you can simply redefine the varaible
@@ -44,8 +44,9 @@ dark mode, you need to use component class name instead of the `:root` element:
 
 --msg-list__spinner__color: #9b9b9b;
 
---msg--hover__background: transparent;
+--msg--hover__background: #f1eff7;
 --msg__flexDirection: row;
+--msg__height: auto;
 --msg__padding: 10px 24px;
 
 --msg__actions--hover__background: #e1dfe6;
@@ -54,6 +55,8 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg__actions__fontSize: 22px;
 --msg__actions__borderRadius: 10px;
 --msg__actions__padding: 2px 8px;
+--msg__actions__right: 10px;
+--msg__actions__top: 10px;
 
 --msg__author__color: #585858;
 --msg__author__fontSize: 15px;

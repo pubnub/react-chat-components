@@ -1,26 +1,33 @@
 # React Chat Components (Beta)
 
-PubNub's Chat Components library provides easy-to-use components to build chat applications using PubNub Chat on the React Framework. Our component library is the fastest way to add chat features like direct and group messaging, typing indicators, reactions and more without going through the complexity of low-level architecture of realtime networks. At the same time it allows you to create apps for various use cases, with different functionalities and customizable looks.
+PubNub's Chat Components library provides easy-to-use components to build chat applications using
+PubNub Chat on the React Framework. Our component library is the fastest way to add chat features
+like direct and group messaging, typing indicators, reactions and more without going through the
+complexity of low-level architecture of realtime networks. At the same time it allows you to create
+apps for various use cases, with different functionalities and customizable looks.
 
 ![PubNub Chat Components](https://i.imgur.com/CydXVNT.png)
 
 ## Quick Links
 
-- [Sample Apps](https://pubnub.github.io/react-chat-components/samples) - sample
-  applications built using Chat Components for React
-- [React Component Docs](https://pubnub.github.io/react-chat-components/docs) - describes
-  the components' features, options, customizations etc.
-- [PubNub Chat Docs](https://www.pubnub.com/docs/chat/overview) - look into this first to
-  have a general understanding of how PubNub works
-- [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - React wrapper can
-  be used for other types of applications as well
+- [Sample Apps](https://pubnub.github.io/react-chat-components/samples) - sample applications built
+  using Chat Components for React
+- [React Component Docs](https://pubnub.github.io/react-chat-components/docs) - describes the
+  components' features, options, customizations etc.
+- [PubNub Chat Docs](https://www.pubnub.com/docs/chat/overview) - look into this first to have a
+  general understanding of how PubNub works
+- [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - React wrapper can be used for
+  other types of applications as well
 
 ## Features
 
-- User and Channel Metadata: fetching metadata about users, channels and memberships from PB Objects storage using custom hooks
-- Subscriptions: automatic subscriptions to current channel, optional subscriptions to other channels and channel groups
+- User and Channel Metadata: fetching metadata about users, channels and memberships from PB Objects
+  storage using custom hooks
+- Subscriptions: automatic subscriptions to current channel, optional subscriptions to other
+  channels and channel groups
 - Messages: publishing and listening to text messages, fetching history for each channel
-- Presence: fetching currently present users and listening to new presence, publishing presence events
+- Presence: fetching currently present users and listening to new presence, publishing presence
+  events
 - Typing Indicators: typing indicators displayed as text notifications or messages
 - Message Reactions: publishing and displaying message reactions (emojis) for each message
 
@@ -36,7 +43,8 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 
 ## Requirements
 
-- [`React 16.8+`](https://reactjs.org/docs/getting-started.html) and [`ReactDOM 16.8+`](https://reactjs.org/docs/react-dom.html)
+- [`React 16.8+`](https://reactjs.org/docs/getting-started.html) and
+  [`ReactDOM 16.8+`](https://reactjs.org/docs/react-dom.html)
 - [`PubNub JavaScript SDK 4.29+`](https://github.com/pubnub/javascript)
 - [`PubNub React SDK 2.1.0+`](https://github.com/pubnub/react)
 
@@ -55,12 +63,12 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 
 ## PubNub Account
 
-1. Sign in or create an account to create an app on the [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your
-   application.
+1. Sign in or create an account to create an app on the
+   [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your application.
 
 2. When you create a new app, the first set of keys is generated automatically, but a single app can
-   have as many keysets as you like. We recommend that you create separate keysets for production and
-   test environments.
+   have as many keysets as you like. We recommend that you create separate keysets for production
+   and test environments.
 
 3. Some of the functionalities you might want to enable on your keyset depending on the use-case
    include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
@@ -68,7 +76,9 @@ PubNub's Chat Components library provides easy-to-use components to build chat a
 
 ## Run Sample Apps
 
-Start with exploring our [Sample Apps](https://pubnub.github.io/react-chat-components/samples) that are built using chat components. Follow the steps below to run the apps locally in your own environment.
+Start with exploring our [Sample Apps](https://pubnub.github.io/react-chat-components/samples) that
+are built using chat components. Follow the steps below to run the apps locally in your own
+environment.
 
 1. Clone the repository:
 
@@ -83,7 +93,9 @@ cd react-chat-components/samples
 npm install
 ```
 
-3. Follow steps from the [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account) to create your own keys and paste them into `pubnub-keys.json`:
+3. Follow steps from the
+   [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account)
+   to create your own keys and paste them into `pubnub-keys.json`:
 
 ```bash
 vi pubnub-keys.json
@@ -119,8 +131,8 @@ import {
 } from "@pubnub/react-chat-components";
 ```
 
-2. Create your PubNub client and rest of the configuration for the Chat, which serves as a
-   common context for all of the components:
+2. Create your PubNub client and rest of the configuration for the Chat, which serves as a common
+   context for all of the components:
 
 ```jsx
 const pubnub = new PubNub({
@@ -135,16 +147,16 @@ const theme = "light";
 3. Feed the PubNub Provider with your newly created client as with other PubNub React applications:
 
 ```jsx
-const MyCommponent = () => {
+const MyComponent = () => {
   return <PubNubProvider client={pubnub}></PubNubProvider>;
 };
 ```
 
-4. Place the components within the Chat state provider in any order that your app requires. Components
-   can be tweaked later on using option properties and CSS variables:
+4. Place the components within the Chat state provider in any order that your app requires.
+   Components can be tweaked later on using option properties and CSS variables:
 
 ```jsx
-const MyCommponent = () => {
+const MyComponent = () => {
   return (
     <PubNubProvider client={pubnub}>
       <Chat {...{ currentChannel, theme }}>
@@ -156,5 +168,9 @@ const MyCommponent = () => {
 };
 ```
 
-5. Check out the [PubNub Chat Components Documentation](https://pubnub.github.io/react-chat-components/docs)
-   to learn more about how to use the components and the [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples) to see what is possible using the components. Source code of the sample applications can be found in the `samples` folder in the repository root.
+5. Check out the
+   [PubNub Chat Components Documentation](https://pubnub.github.io/react-chat-components/docs) to
+   learn more about how to use the components and the
+   [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples) to see
+   what is possible using the components. Source code of the sample applications can be found in the
+   `samples` folder in the repository root.

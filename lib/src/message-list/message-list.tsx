@@ -491,34 +491,4 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 MessageList.defaultProps = {
   enableReactions: false,
   fetchMessages: 0,
-  welcomeMessages: [
-    {
-      message: {
-        type: "welcome",
-        text: "Welcome to a chat application built with PubNub Chat Components 👋",
-        sender: {
-          profileUrl: "https://randomuser.me/api/portraits/women/21.jpg",
-          id: "Evelina Smith",
-          eTag: "",
-          updated: "",
-        },
-      },
-      uuid: "Evelina Smith",
-      timetoken: "16165836271766362",
-    },
-    {
-      message: {
-        type: "welcome",
-        text: "Send a message now to start interacting with other users in the app ⬇️",
-        sender: {
-          profileUrl: "https://randomuser.me/api/portraits/women/21.jpg",
-          id: "Evelina Smith",
-          eTag: "",
-          updated: "",
-        },
-      },
-      uuid: "Evelina Smith",
-      timetoken: "16165836271766363",
-    },
-  ],
 };
