@@ -4,7 +4,10 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Providing Users and Channels data
 
-Some components require providing lists of Channels and Users that should be displayed. Some of those work fine with simple lists of `strings`, although look much better when provided with metadata about the entities. Please see the reference below to understand what's expected where and why:
+Some components require providing lists of Channels and Users that should be displayed. Some of
+those work fine with simple lists of `strings`, although look much better when provided with
+metadata about the entities. Please see the reference below to understand what's expected where and
+why:
 
 | Component       | Description                                                                                                     | Property                       | Data type (see below)                                 |
 | --------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------ | ----------------------------------------------------- |
@@ -15,12 +18,18 @@ Some components require providing lists of Channels and Users that should be dis
 
 # Storing Users, Channels and Memberships
 
-Since all of the metadata has to be explicitly provided, Chat Components are indifferent regarding where the data is coming from. However, it's possible to create Chat Applications with completely serverless architecture. PubNub infrastructure allows you to store information about Channels, Users and Memberships between the two, using **Objects** feautre. Please see links below to learn more about it:
+Since all of the metadata has to be explicitly provided, Chat Components are indifferent regarding
+where the data is coming from. However, it's possible to create Chat Applications with completely
+serverless architecture. PubNub infrastructure allows you to store information about Channels, Users
+and Memberships between the two, using **Objects** feautre. Please see links below to learn more
+about it:
 
 - [Blog Post](https://www.pubnub.com/blog/introducing-objects-v2-store-for-user-and-channel-metadata/)
 - [JavaScript SDK](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects)
 
-Once metadata is created and stored on PubNub servers, it's possible to easily fetch it and pass it to the components using our custom **React hooks**. Please see the next page of the Introduction to see how to achieve that.
+Once metadata is created and stored on PubNub servers, it's possible to easily fetch it and pass it
+to the components using our custom **React hooks**. Please see the next page of the Introduction to
+see how to achieve that.
 
 <br />
 
@@ -32,7 +41,7 @@ Once metadata is created and stored on PubNub servers, it's possible to easily f
 
 ```
 interface ChannelMetadataObject<ObjectCustom> {
-  id: string;               // used as an unique channel identificator accross the components
+  id: string;               // used as an unique channel identifier across the components
   name: string;             // displayed on the ChannelList (first line)
   description?: string;     // displayed on the ChannelList (second line)
   custom?: {                // not used in Chat Components by default, but can store additional data
@@ -46,7 +55,7 @@ interface ChannelMetadataObject<ObjectCustom> {
 
 ```
 interface UUIDMetadataObject<ObjectCustom> {
-  id: string;                  // used as an unique user identificator accross the components
+  id: string;                  // used as an unique user identifier across the components
   name: string;                // displayed on Messages, Typing Indicator and Member List
   profileUrl?: string | null;  // expects an image URL to display the user avatar
   externalId?: string | null;  // not used in Chat Components

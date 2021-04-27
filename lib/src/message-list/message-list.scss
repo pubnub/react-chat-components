@@ -15,6 +15,7 @@
   --msg-list__spinner__color: #9b9b9b;
 
   --msg--hover__background: #f1eff7;
+  --msg__alignItems: flex-start;
   --msg__flexDirection: row;
   --msg__height: auto;
   --msg__padding: 10px 24px;
@@ -31,7 +32,7 @@
   --msg__author__fontWeight: 500;
   --msg__author__padding: 0;
   --msg__avatar__display: block;
-  --msg__avatar__margin: 0 21px 0 0;
+  --msg__avatar__margin: 2px 21px 0 0;
   --msg__avatar__size: 36px;
   --msg__avatar__borderRadius: 36px;
   --msg__bubble__background: #ffffff;
@@ -42,6 +43,9 @@
   --msg__bubble__fontWeight: 400;
   --msg__bubble__margin: 0;
   --msg__bubble__padding: 16px;
+  --msg__content__alignItems: flex-start;
+  --msg__content__flexDirection: column;
+  --msg__content__margin: 0;
   --msg__image__borderRadius: 10px;
   --msg__image__margin: 10px 0 0;
   --msg__link__margin: 10px 0 0;
@@ -131,7 +135,7 @@
 }
 
 .pn-msg {
-  align-items: center;
+  align-items: var(--msg__alignItems);
   display: flex;
   flex-direction: var(--msg__flexDirection);
   height: var(--msg__height);
@@ -172,6 +176,13 @@
     flex-direction: var(--msg__main__flexDirection);
     padding: var(--msg__main__margin);
     max-width: var(--msg__main__maxWidth);
+  }
+
+  &__content {
+    align-items: var(--msg__content__alignItems);
+    display: flex;
+    flex-direction: var(--msg__content__flexDirection);
+    padding: var(--msg__content__margin);
   }
 
   &__title {
@@ -345,20 +356,19 @@
 }
 
 .pn-msg-list--event {
-  --msg__height: 16px;
+  --msg__alignItems: flex-start;
   --msg__actions__top: 0;
   --msg__author__fontSize: 13px;
   --msg__avatar__display: none;
   --msg__bubble__background: transparent;
   --msg__bubble__boxShadow: none;
   --msg__bubble__padding: 0;
+  --msg__content__alignItems: center;
+  --msg__content__flexDirection: row;
   --msg__main__alignItems: baseline;
-  --msg__main__flexDirection: row;
-  --msg__main__margin: 0;
+  --msg__main__flexDirection: column;
   --msg__main__maxWidth: 100%;
   --msg__padding: 7px 12px;
-  --msg__reaction__padding: 2px 5px;
-  --msg__reaction__margin: 0 0 0 5px;
   --msg__time__display: none;
   --msg__title__margin: 0 6px 0 0;
 
@@ -371,8 +381,8 @@
 
 .pn-msg-list--event-dark {
   --msg-list__background: #2f3136;
+  --msg__alignItems: flex-start;
   --msg--hover__background: #2b2d31;
-  --msg__height: 16px;
   --msg__actions--hover__background: #232427;
   --msg__actions__background: #36393f;
   --msg__actions__color: #dcddde;
@@ -384,15 +394,14 @@
   --msg__bubble__boxShadow: none;
   --msg__bubble__color: #dcddde;
   --msg__bubble__padding: 0;
+  --msg__content__alignItems: center;
+  --msg__content__flexDirection: row;
   --msg__main__alignItems: baseline;
-  --msg__main__flexDirection: row;
-  --msg__main__margin: 0;
+  --msg__main__flexDirection: column;
   --msg__main__maxWidth: 100%;
   --msg__padding: 7px 12px;
   --msg__reaction--hover__background: #232427;
   --msg__reaction__background: #36393f;
-  --msg__reaction__margin: 0 0 0 5px;
-  --msg__reaction__padding: 2px 5px;
   --msg__time__display: none;
   --msg__title__margin: 0 6px 0 0;
 

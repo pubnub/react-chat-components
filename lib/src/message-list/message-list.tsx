@@ -373,19 +373,21 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           {!user?.profileUrl && <div className="pn-msg__avatar-placeholder" />}
         </div>
         <div className="pn-msg__main">
-          <div className="pn-msg__title">
-            <span className="pn-msg__author">{user?.name || uuid}</span>
-            <span className="pn-msg__time">{time}</span>
-          </div>
-          {props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-            props.bubbleRenderer({ message, user, time, isOwn })
-          ) : (
-            <>
+          <div className="pn-msg__content">
+            <div className="pn-msg__title">
+              <span className="pn-msg__author">{user?.name || uuid}</span>
+              <span className="pn-msg__time">{time}</span>
+            </div>
+            {props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
+              props.bubbleRenderer({ message, user, time, isOwn })
+            ) : (
               <div className="pn-msg__bubble">{message.message.text}</div>
-              {attachments.map(renderAttachment)}
-            </>
-          )}
-          {props.enableReactions && renderReactions(message)}
+            )}
+          </div>
+          <div className="pn-msg__extras">
+            {attachments.map(renderAttachment)}
+            {props.enableReactions && renderReactions(message)}
+          </div>
         </div>
       </>
     );
@@ -421,7 +423,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const renderAttachment = (attachment: ImageAttachment | LinkAttachment, key: number) => {
     return (
-      <div key={key}>
+      <div key={key} className="pn-msg__attachments">
         {attachment.type === "image" && (
           <img className="pn-msg__image" src={attachment.image?.source} />
         )}
