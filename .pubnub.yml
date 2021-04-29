@@ -16,6 +16,8 @@ changelog:
         type: improvement
       - text: Improve the display of actions/reactions on certain themes
         type: improvement
+      - text: Add 'refetch' option to usePresence hook
+        type: feature
     date: 2021-04-23
     version: v0.2.0
   - changes:
