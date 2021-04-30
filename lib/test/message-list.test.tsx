@@ -22,56 +22,47 @@ describe("Message List", () => {
     window.IntersectionObserver = intersectionObserverMock;
   });
 
-  test("renders default welcome messages", async () => {
-    render(<MessageList />);
-
-    expect(
-      screen.getByText("Welcome to a chat application built with PubNub Chat Components 👋")
-    ).toBeVisible();
-    expect(
-      screen.getByText("Send a message now to start interacting with other users in the app ⬇️")
-    ).toBeVisible();
-  });
-
-  test("renders empty with welcome message disabled", async () => {
-    render(<MessageList welcomeMessages={false} />);
-
-    expect(
-      screen.queryByText("Welcome to a chat application built with PubNub Chat Components 👋")
-    ).not.toBeInTheDocument();
-  });
-
   test("renders with custom welcome messages", async () => {
     const message = {
-      message: { type: "welcome", text: "Custom welcome" },
+      message: { type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(<MessageList welcomeMessages={message} />);
 
-    expect(screen.getByText("Custom welcome")).toBeVisible();
-    expect(
-      screen.queryByText("Welcome to a chat application built with PubNub Chat Components 👋")
-    ).not.toBeInTheDocument();
+    expect(screen.getByText("Welcome")).toBeVisible();
+    expect(screen.getByText("12:25")).toBeVisible();
   });
 
   test("renders messages with custom message renderer", async () => {
+    const message = {
+      message: { type: "welcome", text: "Welcome" },
+      timetoken: "16165851271766362",
+    };
     render(
-      <MessageList messageRenderer={(props) => <div>Custom {props.message.message.text}</div>} />
+      <MessageList
+        welcomeMessages={message}
+        messageRenderer={(props) => <div>Custom {props.message.message.text}</div>}
+      />
     );
 
-    expect(
-      screen.getByText("Custom Welcome to a chat application built with PubNub Chat Components 👋")
-    ).toBeVisible();
+    expect(screen.getByText("Custom Welcome")).toBeVisible();
+    expect(screen.queryByText("12:25")).not.toBeInTheDocument();
   });
 
   test("renders messages with custom bubble renderer", async () => {
+    const message = {
+      message: { type: "welcome", text: "Welcome" },
+      timetoken: "16165851271766362",
+    };
     render(
-      <MessageList bubbleRenderer={(props) => <div>Custom {props.message.message.text}</div>} />
+      <MessageList
+        welcomeMessages={message}
+        bubbleRenderer={(props) => <div>Custom {props.message.message.text}</div>}
+      />
     );
 
-    expect(
-      screen.getByText("Custom Welcome to a chat application built with PubNub Chat Components 👋")
-    ).toBeVisible();
+    expect(screen.getByText("Custom Welcome")).toBeVisible();
+    expect(screen.getByText("12:25")).toBeVisible();
   });
 
   test("renders newly sent messages", async () => {

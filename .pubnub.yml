@@ -10,15 +10,13 @@ changelog:
   - changes:
       - text: Remove internal emoji picker component
         type: feature
-      - text: Replace Recoil with Jotai
+      - text: Add 'refetch' option to usePresence hook
         type: feature
       - text: Remove default welcome messages on MessageList
         type: improvement
       - text: Improve the display of actions/reactions on certain themes
         type: improvement
-      - text: Add 'refetch' option to usePresence hook
-        type: feature
-    date: 2021-04-23
+    date: 2021-04-30
     version: v0.2.0
   - changes:
       - text: Initial public release
