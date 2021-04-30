@@ -19,15 +19,15 @@ The fundamental way of capturing and handling errors coming from the components 
 function will be called each time a JavaScript exception is raised within components code with the
 actual Error passed in as an argument.
 
-You can use the custom error callback for debugging, logging, as well as showing notifications to the
-end user or recovery by re-rendering. An example of simple logging behavior can be as follows:
+You can use the custom error callback for debugging, logging, as well as showing notifications to
+the end user or recovery by re-rendering. An example of simple logging behavior can be as follows:
 
 ```js
 function ErrorChat() {
   const [currentChannel, setCurrentChannel] = React.useState("test-channel");
 
   const onError = (error: Error) => {
-    yourLogger.log(error.message);
+    yourLogger.log(error.message, error.status);
   };
 
   return (
@@ -69,5 +69,24 @@ function RetryChat() {
       <MessageInput />
     </Chat>
   );
+}
+```
+
+## Errors in Custom Hooks
+
+Custom hooks have its own way of handling errors. Every custom hook exposes the most recent error it
+ran into as the last element of its output array. You can easily detect changes to the variable
+using the standard Reacts' useEffect hook and put your custom handling logic there, or use the error
+to directly influence the UI.
+
+```js
+function ErrorHook() {
+  const [presenceData, refetch, total, error] = usePresence({ channels: ["test-channel"] });
+
+  React.useEffect(() => {
+    if (error) yourLogger.log(error.message, error.status);
+  }, [error]);
+
+  return <p>{error ? `Presence error: ${error.message}` : `Currently chatting: ${total}`}</p>;
 }
 ```
