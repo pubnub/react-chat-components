@@ -7,6 +7,17 @@
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pubnub/react-chat-components.git"
+  },
+  "keywords": [
+    "pubnub",
+    "react",
+    "chat",
+    "components"
+  ],
+  "homepage": "https://www.pubnub.com/docs/chat/components/overview",
   "files": [
     "dist"
   ],
