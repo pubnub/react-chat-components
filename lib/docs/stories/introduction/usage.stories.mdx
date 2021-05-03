@@ -59,7 +59,7 @@ const theme = "light";
 3. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
 
 ```jsx
-const MyCommponent = () => {
+const MyComponent = () => {
   return <PubNubProvider client={pubnub}></PubNubProvider>;
 };
 ```
@@ -68,7 +68,7 @@ const MyCommponent = () => {
    can be tweaked later on using option properties and CSS variables.
 
 ```jsx
-const MyCommponent = () => {
+const MyComponent = () => {
   return (
     <PubNubProvider client={pubnub}>
       <Chat {...{ currentChannel, theme }}>
