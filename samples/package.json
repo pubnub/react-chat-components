@@ -18,7 +18,7 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "@pubnub/react-chat-components": "^0.1.0",
+    "@pubnub/react-chat-components": "^0.2.0",
     "@types/emoji-mart": "^3.0.4",
     "emoji-mart": "^3.0.0",
     "lodash.samplesize": "^4.2.0",
