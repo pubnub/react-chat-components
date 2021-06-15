@@ -7,6 +7,7 @@ import { HashRouter, Switch, Route, Link } from "react-router-dom";
 import SimpleChat from "./simple-chat/simple-chat";
 import EventChat from "./event-chat/event-chat";
 import GroupChat from "./group-chat/group-chat";
+import ModeratedChat from "./moderated-chat/moderated-chat";
 import "./index.css";
 
 import pubnubKeys from "../pubnub-keys.json";
@@ -36,6 +37,9 @@ ReactDOM.render(
             <Route path="/simple-chat">
               <SimpleChat />
             </Route>
+            <Route path="/moderated-chat">
+              <ModeratedChat />
+            </Route>
             <Route path="/">
               <div className="welcome">
                 <h1>Pubnub Chat Components</h1>
@@ -43,6 +47,9 @@ ReactDOM.render(
                 <ul>
                   <li>
                     <Link to="/simple-chat">Simple Chat</Link>
+                  </li>
+                  <li>
+                    <Link to="/moderated-chat">Moderated Chat</Link>
                   </li>
                 </ul>
               </div>
