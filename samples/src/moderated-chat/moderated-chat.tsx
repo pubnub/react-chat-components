@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Picker } from "emoji-mart";
 import DarkModeToggle from "react-dark-mode-toggle";
 import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom, GetAllMetadataParameters } from "pubnub";
@@ -7,7 +7,6 @@ import {
   ChannelList,
   Chat,
   MemberList,
-  Message,
   MessageInput,
   MessageList,
   Themes,
@@ -24,7 +23,6 @@ import { ReactComponent as PeopleGroup } from "../people-group.svg";
 /**
  * Data about users and channels is stored with PubNub Objects.
  * */
-import rawMessages from "../../../data/messages-social.json";
 import socialChannels from "../../../data/channels-social.json";
 import directChannels from "../../../data/channels-direct.json";
 const socialChannelList: ChannelMetadataObject<ObjectCustom>[] = socialChannels;
@@ -40,7 +38,6 @@ function SimpleChat() {
   const [theme, setTheme] = useState<Themes>("light");
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
-  const [welcomeMessages, setWelcomeMessages] = useState<{ [channel: string]: Message[] }>({});
   const [presenceData] = usePresence({ channels: allChannelIds }); // usePresence is one of the custom hooks provided by Chat Components
   const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
 
@@ -53,17 +50,6 @@ function SimpleChat() {
   // types are broken
   const params = { uuid: pubnub.getUUID() } as unknown as GetAllMetadataParameters;
   const [currentUser] = useUser(params) as [UUIDMetadataObject<UserCustom>, Error];
-
-  /** Prepare welcome messages for each channel injecting current user info into some of them */
-  useEffect(() => {
-    const messages: any = {};
-    [...rawMessages].forEach((message) => {
-      if (!messages.hasOwnProperty(message.channel)) messages[message.channel] = [];
-      if (message.uuid === "current_user" && currentUser?.id) message.uuid = currentUser?.id;
-      messages[message.channel].push(message);
-    });
-    setWelcomeMessages(messages);
-  }, [currentUser]);
 
   /** Rendered markup is a mixture of PubNub Chat Components (Chat, ChannelList, MessageList,
    * MessageInput, MemberList) and some elements to display additional information and to handle
@@ -125,8 +111,7 @@ function SimpleChat() {
             <hr />
           </div>
           <MessageList
-            fetchMessages={0}
-            welcomeMessages={welcomeMessages[currentChannel.id]}
+            fetchMessages={20}
             enableReactions
             reactionsPicker={<Picker />}
           >
