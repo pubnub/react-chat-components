@@ -14,8 +14,11 @@
     "@types/react": "^16.14.2",
     "@types/react-dom": "^16.9.10",
     "@types/react-router-dom": "^5.1.7",
+    "cli-progress": "^3.9.0",
+    "prompts": "^2.4.1",
     "react-app-rewired": "^2.1.8",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.3",
+    "yargs": "^17.0.1"
   },
   "dependencies": {
     "@pubnub/react-chat-components": "^0.2.0",
