@@ -20,6 +20,7 @@ import users from "../../data/users.json";
 const pubnub = new PubNub({
   ...pubnubKeys,
   uuid: users[Math.floor(Math.random() * users.length)].id,
+  ssl: true,
 });
 
 ReactDOM.render(
