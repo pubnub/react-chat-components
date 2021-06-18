@@ -204,7 +204,7 @@ const main = async () => {
     names = uuids.map(uuid => users.find(({ id }) => id === uuid).name);
     return {
       id: channel,
-      name: `${names[0]},${names[1]}`,
+      name: names.join(", "),
       description: `Direct Message between ${names[0]} and ${names[1]}`,
       custom: {
         thumb: `https://www.gravatar.com/avatar/${uuids.join('-')}?s=256&d=identicon`
