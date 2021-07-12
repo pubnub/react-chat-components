@@ -1,0 +1,103 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction/PAM" />
+
+# PubNub Access Manager
+
+PubNub Access Manager (PAM) allows you to enforce secure controls for client access to resources
+within the PubNub network. With PAM, your servers can grant their clients access to individual
+PubNub resources for a limited duration, with the ability to extend access or add permissions for
+additional resources.
+
+With Access Manager enabled, your clients must have permissions to send requests to PubNub. You can
+grant access to your clients from a secure server using the secretKey. These grants allow you to
+granularly manage the resources available to each client. For instance, you can make a one-to-one
+chat room private by only allowing the two users in that chat room to have read and write
+permissions on the chat room channel. Alternatively, you can make a channel public by allowing all
+users to have access to it.
+
+More information about PAM can be found [here](https://www.pubnub.com/docs/security/access-control).
+
+<br />
+
+## PAM handling in components
+
+PubNub Chat Components as a purely client-side React components library does not do anything
+specific to handle PAM internally. Once PAM is enabled on the PubNub keyset, the developer is
+expected to write custom code that would handle granting and revoking access, just as if the app was
+written from scratch.
+
+You can expect the operations listed below to be executed internally by the components. In order for
+those to work properly all of them should be granted access to for the UUID passed to the PubNub
+instance.
+
+<br />
+
+### Property to resource mappings
+
+| Component / Hook   | Property            | Resource      | Description                                     |
+| ------------------ | ------------------- | ------------- | ----------------------------------------------- |
+| Chat               | `channels`          | Channel       | All channels passed to the property             |
+| Chat               | `channelGroups`     | Channel Group | All channel groups passed to the property       |
+| PubNub instance    | UUID                | Channel       | UUID channel is used to get its' Object updates |
+| useUser            | `uuid` (or current) | UUID          |                                                 |
+| useUsers           | (all uuids)         | UUID          |                                                 |
+| useUserMemberships | `uuid`              | UUID          |                                                 |
+| useChannels        | (all channels)      | Channel       |                                                 |
+| useChannelMembers  | `channel`           | Channel       |                                                 |
+
+<br />
+
+### Publish/Subscribe
+
+| PubNub Operation                    | Resource                         | Permission    |
+| ----------------------------------- | -------------------------------- | ------------- |
+| Publish on channel                  | Channel                          | Write         |
+| Signal on channel                   | Channel                          | Write         |
+| Subscribe to channel                | Channel                          | Read          |
+| Subscribe to presence channel       | Presence Channel (-pnpres)       | Read          |
+| Subscribe to channel group          | Channel Group                    | Read          |
+| Subscribe to presence channel group | Presence Channel Group (-pnpres) | Read          |
+| Unsubscribe from channel            | Channel                          | None required |
+| Unsubscribe from channel group      | Channel Group                    | None required |
+
+<br />
+
+### Presence
+
+| PubNub Operation | Resource | Permission |
+| ---------------- | -------- | ---------- |
+| Here Now         | Channel  | Read       |
+
+<br />
+
+### Storage
+
+| PubNub Operation         | Resource | Permission |
+| ------------------------ | -------- | ---------- |
+| History - Fetch Messages | Channel  | Read       |
+
+<br />
+
+### Objects
+
+| PubNub Operation         | Resource | Permission                              |
+| ------------------------ | -------- | --------------------------------------- |
+| Set user metadata        | UUID     | Update                                  |
+| Get user metadata        | UUID     | Get                                     |
+| Get all user metadata    | UUID     | Managed by a flag on the settings page. |
+| Get channel metadata     | Channel  | Get                                     |
+| Get all channel metadata | Channel  | Managed by a flag on the settings page. |
+| Get channel members      | Channel  | Get                                     |
+| Get channel memberships  | UUID     | Get                                     |
+
+<br />
+
+### Message Actions
+
+| PubNub Operation         | Resource | Permission |
+| ------------------------ | -------- | ---------- |
+| Add Message Action       | Channel  | Write      |
+| Remove Message Action    | Channel  | Delete     |
+| Get Message Actions      | Channel  | Read       |
+| Get History with Actions | Channel  | Read       |
