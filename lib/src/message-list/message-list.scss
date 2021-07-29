@@ -25,6 +25,7 @@
   --msg__actions__fontSize: 22px;
   --msg__actions__borderRadius: 10px;
   --msg__actions__padding: 2px 8px;
+  --msg__actions__spacing: 8px;
   --msg__actions__right: 10px;
   --msg__actions__top: 10px;
   --msg__author__color: #585858;
@@ -146,7 +147,7 @@
     background: var(--msg--hover__background);
 
     .pn-msg__actions {
-      display: block;
+      display: flex;
     }
   }
 
@@ -163,6 +164,7 @@
       background: var(--msg__actions__background);
       border-radius: var(--msg__actions__borderRadius);
       padding: var(--msg__actions__padding);
+      margin-left: var(--msg__actions__spacing);
     }
 
     & > div:hover {

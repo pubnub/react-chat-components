@@ -50,6 +50,10 @@
   background: var(--msg-input__background);
   padding: var(--msg-input__padding);
 
+  &.disabled {
+    pointer-events: none;
+  }
+
   &__wrapper {
     background: var(--msg-input__textarea__background);
     border-radius: var(--msg-input__textarea__borderRadius);
@@ -107,7 +111,7 @@
     position: absolute;
   }
 
-  &__icon {
+  &__icon, &__action {
     align-self: center;
     cursor: pointer;
     color: var(--msg-input__icon__color);

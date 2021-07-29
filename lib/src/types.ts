@@ -4,6 +4,7 @@ export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "
 
 export interface EmojiPickerElementProps {
   onSelect?: ({ native: string }) => void;
+  theme?: "dark" | "light";
 }
 
 export interface Message {
