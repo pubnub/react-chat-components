@@ -138,7 +138,7 @@ function FileUpload({ file, setModalState, channel }: {file: File, setModalState
     await pubnub.sendFile({
       file,
       channel,
-      message: text.length > 0 ? text : undefined,
+      message: { text: text.length > 0 ? text : undefined },
     }).catch(console.error);
     setModalState(false);
     setText("");

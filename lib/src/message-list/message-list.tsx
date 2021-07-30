@@ -39,7 +39,7 @@ export interface MessageRendererProps {
 interface HistoryFileEntry {
   channel: string;
   message: {
-    message: string;
+    message: { text: string };
     file: {
       name: string;
       id: string;
@@ -256,7 +256,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       ...payload,
       message: {
         type: "text",
-        text: message.message,
+        text: message.message.text,
         attachments: [
           {
             type: "image",

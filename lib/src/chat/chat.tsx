@@ -349,7 +349,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
           ...message,
           message: {
             type: "text",
-            text: description,
+            text: description?.text,
             attachments: [{
               type: "image",
               image: {
