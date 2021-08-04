@@ -6,6 +6,7 @@ const prompts = require("prompts");
 const fs = require("fs");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
+const path = require("path");
 
 const keyPrompt = `
 \u{1b}[1m*** A PubNub account is required. ***\u{1b}[0m
@@ -28,7 +29,7 @@ let timeouts = 0;
 // read pubnub keys from file
 const getKeys = async () => {
   // TODO: support for multiple keysets
-  const text = await fs.readFileSync("../../pubnub-keys.json", "utf-8");
+  const text = await fs.readFileSync(path.resolve(__dirname, "../../pubnub-keys.json"), "utf-8");
   return JSON.parse(text);
 };
 
