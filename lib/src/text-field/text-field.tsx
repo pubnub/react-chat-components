@@ -72,7 +72,8 @@ export const TextField: FC<TextFieldProps> = (props: TextFieldProps) => {
       if (!("native" in emoji)) return;
       // insert emoji at cursor position
       const cursor = inputRef.current.selectionEnd;
-      const newText = props.text.slice(0, cursor) + emoji.native + props.text.slice(cursor);
+      const text = inputRef.current.value;
+      const newText = text.slice(0, cursor) + emoji.native + text.slice(cursor);
       props.onChange && props.onChange(newText);
       setEmojiPickerShown(false);
     } catch (e) {
