@@ -432,7 +432,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
     // check message actions for updates
     const updates = message?.actions?.updated;
-    console.log(updates);
     const updatedMessage =
       (updates
         ? Object.keys(updates).sort((a, b) => {
