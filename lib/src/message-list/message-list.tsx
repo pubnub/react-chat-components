@@ -43,7 +43,7 @@ interface HistoryFileEntry {
     file: {
       name: string;
       id: string;
-    }
+    };
   };
   timetoken: string;
   messageType: 4;
@@ -69,7 +69,10 @@ export interface MessageListProps {
   /** A callback run on list scroll */
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
   /** Components for additional message actions */
-  additionalActions?: ({ component: JSX.Element, onClick: (message: Message, sender: UUIDMetadataObject<ObjectCustom>) => void })[];
+  additionalActions?: {
+    component: JSX.Element;
+    onClick: (message: Message, sender: UUIDMetadataObject<ObjectCustom>) => void;
+  }[];
 }
 
 /**
@@ -261,19 +264,26 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           {
             type: "image",
             image: {
-              source: pubnub.getFileUrl({ channel: m.channel, id: message.file.id, name: message.file.name }),
+              source: pubnub.getFileUrl({
+                channel: m.channel,
+                id: message.file.id,
+                name: message.file.name,
+              }),
             },
-          }
-        ]
-      }
-    }
-  }
+          },
+        ],
+      },
+    };
+  };
 
   const handleHistoryFetch = useAtomCallback(
     useCallback((get, set, response: FetchMessagesResponse) => {
       const channel = get(CurrentChannelAtom);
       const messages = get(CurrentChannelMessagesAtom);
-      const newMessages = ((response?.channels[channel]||[]).map((m) => m.messageType === 4 ? retrieveFiles(m as HistoryFileEntry) : m) as Message[]) || [];
+      const newMessages =
+        ((response?.channels[channel] || []).map((m) =>
+          m.messageType === 4 ? retrieveFiles(m as HistoryFileEntry) : m
+        ) as Message[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
@@ -377,9 +387,24 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
-          <div className="pn-msg__actions">
-            {props.additionalActions ? props.additionalActions.map(({ component, onClick }, index) => <div className="pn-msg__action" onClick={() => {onClick(message, getUser(message.uuid || message.publisher))} } key={`input-action_${index}`}>{component}</div>) : <></>}
-            { props.reactionsPicker && message.message.type !== "welcome" && <div
+        <div className="pn-msg__actions">
+          {props.additionalActions ? (
+            props.additionalActions.map(({ component, onClick }, index) => (
+              <div
+                className="pn-msg__action"
+                onClick={() => {
+                  onClick(message, getUser(message.uuid || message.publisher));
+                }}
+                key={`input-action_${index}`}
+              >
+                {component}
+              </div>
+            ))
+          ) : (
+            <></>
+          )}
+          {props.reactionsPicker && message.message.type !== "welcome" && (
+            <div
               className="pn-msg__reactions-toggle"
               onClick={(e) => {
                 emojiPickerShown && reactingToMessage === message.timetoken
@@ -388,8 +413,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               }}
             >
               ☺
-            </div>}
-          </div>
+            </div>
+          )}
+        </div>
       </div>
     );
   };
@@ -403,13 +429,18 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
     if (props.messageRenderer && (props.filter ? props.filter(message) : true))
       return props.messageRenderer({ message, user, time, isOwn });
-  
+
     // check message actions for updates
     const updates = message?.actions?.updated;
     console.log(updates);
-    const updatedMessage = (updates ? Object.keys(updates).sort((a, b) => {
-      return Number(last(updates[b]).actionTimetoken) - Number(last(updates[a]).actionTimetoken);
-    }) : [])[0] || message.message.text;
+    const updatedMessage =
+      (updates
+        ? Object.keys(updates).sort((a, b) => {
+            return (
+              Number(last(updates[b]).actionTimetoken) - Number(last(updates[a]).actionTimetoken)
+            );
+          })
+        : [])[0] || message.message.text;
 
     return (
       <>
@@ -423,11 +454,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__author">{user?.name || uuid}</span>
               <span className="pn-msg__time">{time}</span>
             </div>
-            {message?.message?.text?.length > 0 ? props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-              props.bubbleRenderer({ message, user, time, isOwn })
+            {message?.message?.text?.length > 0 ? (
+              props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
+                props.bubbleRenderer({ message, user, time, isOwn })
+              ) : (
+                <div className="pn-msg__bubble">{updatedMessage}</div>
+              )
             ) : (
-              <div className="pn-msg__bubble">{updatedMessage}</div>
-            ) : <> </>}
+              <> </>
+            )}
           </div>
           <div className="pn-msg__extras">
             {attachments.map(renderAttachment)}
@@ -514,7 +549,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
         {(!props.fetchMessages || (!fetchingMessages && !messages.length)) &&
           renderWelcomeMessages()}
-        {messages && messages.filter(m => !m?.actions?.deleted).map((m) => renderItem(m))}
+        {messages && messages.filter((m) => !m?.actions?.deleted).map((m) => renderItem(m))}
 
         <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 

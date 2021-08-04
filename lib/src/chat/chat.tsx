@@ -350,13 +350,15 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
           message: {
             type: "text",
             text: description?.text,
-            attachments: [{
-              type: "image",
-              image: {
-                source: file.url
-              }
-            }]
-          }
+            attachments: [
+              {
+                type: "image",
+                image: {
+                  source: file.url,
+                },
+              },
+            ],
+          },
         });
         return messagesClone;
       });

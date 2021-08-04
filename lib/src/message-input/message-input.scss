@@ -111,7 +111,8 @@
     position: absolute;
   }
 
-  &__icon, &__action {
+  &__icon,
+  &__action {
     align-self: center;
     cursor: pointer;
     color: var(--msg-input__icon__color);

@@ -7,7 +7,7 @@
   --app-chat-background: #f0f3f7;
   --app-people-color: gray;
   --app-people-active-color: #5babfc;
-  --app-modal-background: rgba(0,0,0, 0.3);
+  --app-modal-background: rgba(0, 0, 0, 0.3);
   --app-modal__action__background: #5babfc;
   --app-modal__action__color: #ffffff;
 
@@ -39,7 +39,7 @@
   --app-chat-background: #2f3136;
   --app-people-color: gray;
   --app-people-active-color: #de2440;
-  --app-modal-background: rgba(0,0,0, 0.6);
+  --app-modal-background: rgba(0, 0, 0, 0.6);
   --app-modal__action__background: #de2440;
   --app-modal__action__color: #ffffff;
 
@@ -70,43 +70,43 @@
   z-index: 100;
   display: none;
 
-    &.shown {
-      opacity: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  &.shown {
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
-    &_content-area {
-      background-color: var(--app-background);
+  &_content-area {
+    background-color: var(--app-background);
+    color: var(--app-color);
+    width: 500px;
+    max-width: 100%;
+    border-radius: 25px;
+    padding: 24px;
+  }
+
+  &_actions {
+    text-align: right;
+
+    button {
       color: var(--app-color);
-      width: 500px;
-      max-width: 100%;
+      border: none;
       border-radius: 25px;
-      padding: 24px;
-    }
+      padding: 10px 20px;
+      background-color: transparent;
+      cursor: pointer;
 
-    &_actions {
-      text-align: right;
+      &:hover {
+        text-decoration: underline;
+      }
 
-      button {
-        color: var(--app-color);
-        border: none;
-        border-radius: 25px;
-        padding: 10px 20px;
-        background-color: transparent;
-        cursor: pointer;
-
-        &:hover {
-          text-decoration: underline;
-        }
-
-        &.cta {
-          color: var(--app-modal__action__color);
-          background-color: var(--app-modal__action__background);
-        }
+      &.cta {
+        color: var(--app-modal__action__color);
+        background-color: var(--app-modal__action__background);
       }
     }
+  }
 }
 
 .file-picker {

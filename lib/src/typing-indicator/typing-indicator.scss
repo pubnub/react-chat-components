@@ -47,13 +47,15 @@
 }
 
 @keyframes wave {
-	0%, 60%, 100% {
-		transform: initial;
-	}
+  0%,
+  60%,
+  100% {
+    transform: initial;
+  }
 
-	30% {
-		transform: translateY(var(--typing-indicator__dot__animationTravel));
-	}
+  30% {
+    transform: translateY(var(--typing-indicator__dot__animationTravel));
+  }
 }
 
 .pn-typing-indicator--dark,

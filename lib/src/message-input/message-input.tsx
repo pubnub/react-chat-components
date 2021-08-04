@@ -73,7 +73,7 @@ export interface TextFieldProps {
 /**
  * Allows users to edit text and use emojis.
  */
- export const TextField: FC<TextFieldProps> = (props: TextFieldProps) => {
+export const TextField: FC<TextFieldProps> = (props: TextFieldProps) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
@@ -100,14 +100,14 @@ export interface TextFieldProps {
   const onSubmit = (text: string) => {
     props.onSubmit(text);
     props.onChange("");
-  }
+  };
 
   const handleEmojiInsertion = (emoji: { native: string }) => {
     try {
       if (!("native" in emoji)) return;
       // insert emoji at cursor position
       const cursor = inputRef.current.selectionEnd;
-      const newText = props.text.slice(0,cursor) + emoji.native + props.text.slice(cursor);
+      const newText = props.text.slice(0, cursor) + emoji.native + props.text.slice(cursor);
       props.onChange && props.onChange(newText);
       setEmojiPickerShown(false);
     } catch (e) {
@@ -163,7 +163,12 @@ export interface TextFieldProps {
 
   useEffect(() => {
     if (React.isValidElement(props.emojiPicker)) {
-      setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion, theme: props.theme.includes("dark") ? "dark" : "light" }));
+      setPicker(
+        React.cloneElement(props.emojiPicker, {
+          onSelect: handleEmojiInsertion,
+          theme: props.theme.includes("dark") ? "dark" : "light",
+        })
+      );
     }
   }, [props.emojiPicker]);
 
@@ -187,35 +192,40 @@ export interface TextFieldProps {
     );
   };
 
+  return (
+    <div className={`pn-msg-input pn-msg-input--${props.theme} ${props.disabled && "disabled"}`}>
+      <div className="pn-msg-input__wrapper">
+        <div className="pn-msg-input__spacer">
+          <textarea
+            className="pn-msg-input__textarea"
+            placeholder={props.placeholder}
+            rows={1}
+            value={props.text}
+            onChange={(e) => handleInputChange(e)}
+            onKeyPress={(e) => handleKeyPress(e)}
+            ref={inputRef}
+            readOnly={props.disabled}
+            disabled={props.disabled}
+          />
+        </div>
 
-  return <div className={`pn-msg-input pn-msg-input--${props.theme} ${props.disabled && "disabled"}`}>
-    <div className="pn-msg-input__wrapper">
-      <div className="pn-msg-input__spacer">
-        <textarea
-          className="pn-msg-input__textarea"
-          placeholder={props.placeholder}
-          rows={1}
-          value={props.text}
-          onChange={(e) => handleInputChange(e)}
-          onKeyPress={(e) => handleKeyPress(e)}
-          ref={inputRef}
-          readOnly={props.disabled}
-          disabled={props.disabled}
-        />
+        {props.additionalActions.map((action, index) => (
+          <div className="pn-msg-input__action" key={`input-action_${index}`}>
+            {action}
+          </div>
+        ))}
+
+        {props.emojiPicker && renderEmojiPicker()}
+
+        {!props.hideSendButton && (
+          <button className="pn-msg-input__send" onClick={() => onSubmit(props.text)}>
+            {props.sendButton}
+          </button>
+        )}
       </div>
-
-      {props.additionalActions.map((action, index) => <div className="pn-msg-input__action" key={`input-action_${index}`}>{action}</div>)}
-
-      {props.emojiPicker && renderEmojiPicker()}
-
-      {!props.hideSendButton && (
-        <button className="pn-msg-input__send" onClick={() => onSubmit(props.text)}>
-          {props.sendButton}
-        </button>
-      )}
     </div>
-  </div>
- }
+  );
+};
 
 /**
  * Allows users to compose messages using text and emojis
@@ -284,7 +294,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     setText(newText);
     if (props.typingIndicator && newText.length) startTypingIndicator();
     if (props.typingIndicator && !newText.length) stopTypingIndicator();
-  }
+  };
 
   /*
   /* Lifecycle
@@ -302,7 +312,19 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   }, [typingIndicatorSent]);
 
   return (
-    <TextField theme={theme} text={text} onChange={onChange} onSubmit={sendMessage} onError={onError} disabled={props.disabled} emojiPicker={props.emojiPicker} sendButton={props.sendButton} hideSendButton={props.hideSendButton} placeholder={props.placeholder} additionalActions={props.additionalActions}/>
+    <TextField
+      theme={theme}
+      text={text}
+      onChange={onChange}
+      onSubmit={sendMessage}
+      onError={onError}
+      disabled={props.disabled}
+      emojiPicker={props.emojiPicker}
+      sendButton={props.sendButton}
+      hideSendButton={props.hideSendButton}
+      placeholder={props.placeholder}
+      additionalActions={props.additionalActions}
+    />
   );
 };
 
