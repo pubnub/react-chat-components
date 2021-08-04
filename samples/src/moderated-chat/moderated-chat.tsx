@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Picker } from "emoji-mart";
 import DarkModeToggle from "react-dark-mode-toggle";
 import {
@@ -17,7 +9,6 @@ import {
   ListenerParameters,
   ObjectsEvent,
   BaseObjectsEvent,
-  SetUUIDMetadataParameters,
 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import {
@@ -27,8 +18,6 @@ import {
   Message,
   MessageInput,
   MessageList,
-  TextField,
-  Themes,
   TypingIndicator,
   useChannelMembers,
   usePresence,
@@ -43,49 +32,23 @@ import { ReactComponent as PeopleGroup } from "../people-group.svg";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-interface UserCustom extends ObjectCustom {
-  profileUrl: string;
-  ban: boolean;
-  flag: boolean;
-  flaggedAt: string;
-  flaggedBy: string;
-  mutedChannels: string;
-  blockedChannels: string;
-  reason: string;
-  title: string;
-}
-
-const ThemeContext = createContext<{ value: Themes; set: Dispatch<SetStateAction<Themes>> }>({
-  value: "light",
-  set: () => {},
-});
-
-function ModalParent() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [theme, setTheme] = useState<Themes>("light");
-  const [modalContent, setModalContent] = useState(<div></div>);
-  return (
-    <div className={`app`}>
-      <ThemeContext.Provider value={{ value: theme, set: setTheme }}>
-        <div className={`modal ${isOpen ? "shown" : ""} ${theme}`}>
-          <div className="modal_content-area">{modalContent}</div>
-        </div>
-        <ModeratedChatSetup
-          setModalState={setIsOpen}
-          setModalContent={setModalContent}
-        ></ModeratedChatSetup>
-      </ThemeContext.Provider>
-    </div>
-  );
-}
+import { ModalProvider, ModalConsumerProps } from "./components/modal-provider";
+import { FilePickerButton } from "./components/file-picker";
+import { FlagUserButton, FlagUser } from "./components/flag-user";
+import { ThemeContext } from "./theme";
+import { UserCustom } from "./types";
 
 function ModeratedChat() {
-  return <ModalParent></ModalParent>;
-}
-
-interface ModalConsumerProps {
-  setModalState: (state: boolean) => void;
-  setModalContent: (content: JSX.Element) => void;
+  return (
+    <ModalProvider
+      renderChildren={({ setModalState, setModalContent }) => (
+        <ModeratedChatSetup
+          setModalState={setModalState}
+          setModalContent={setModalContent}
+        ></ModeratedChatSetup>
+      )}
+    ></ModalProvider>
+  );
 }
 
 function ModeratedChatSetup({ setModalState, setModalContent }: ModalConsumerProps) {
@@ -146,178 +109,6 @@ function ModeratedChatSetup({ setModalState, setModalContent }: ModalConsumerPro
       setModalState={setModalState}
     />
   );
-}
-
-function FileUpload({
-  file,
-  setModalState,
-  channel,
-}: {
-  file: File;
-  setModalState: (state: boolean) => void;
-  channel: string;
-}) {
-  const pubnub = usePubNub();
-  const [image, setImage] = useState("");
-  const { value: theme } = useContext(ThemeContext);
-  const [text, setText] = useState("");
-  // read the file to a data URL
-  useEffect(() => {
-    if (file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        // this is safe because we only use readAsDataURL
-        const dataURL = e.target?.result as string;
-        setImage(dataURL);
-      };
-      reader.readAsDataURL(file);
-    }
-  }, [file]);
-
-  const e = Math.floor(Math.log(file.size) / Math.log(1024));
-  const size = (file.size / Math.pow(1024, e)).toFixed(1) + " " + " KMGTP".charAt(e) + "B";
-
-  const send = async () => {
-    // currently not handling files too big
-    await pubnub
-      .sendFile({
-        file,
-        channel,
-        message: { text: text.length > 0 ? text : undefined },
-      })
-      .catch(console.error);
-    setModalState(false);
-    setText("");
-  };
-
-  return (
-    <div className="file-preview">
-      <img src={image} alt="file preview" />
-      <div className="filename">
-        {file.name} ({size})
-      </div>
-      <div className="description">
-        Description <span>(optional)</span>
-      </div>
-      <TextField
-        emojiPicker={<Picker />}
-        theme={theme}
-        text={text}
-        onChange={setText}
-        onSubmit={send}
-        hideSendButton
-        placeholder=""
-      />
-      <div className="modal_actions">
-        <button
-          onClick={() => {
-            setModalState(false);
-            setText("");
-          }}
-        >
-          Cancel
-        </button>
-        <button className="cta" onClick={send}>
-          Upload
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function FilePickerButton({
-  id,
-  channel,
-  setModalState,
-  setModalContent,
-}: { id: string; channel: string } & ModalConsumerProps) {
-  const showModal: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setModalState(true);
-    setModalContent(
-      <FileUpload
-        file={(e.target?.files || [])[0]}
-        channel={channel}
-        setModalState={setModalState}
-      />
-    );
-  };
-  return (
-    <div className="file-picker">
-      <label htmlFor={`${id}_file`}>+</label>
-      <input type="file" id={`${id}_file`} name="file" onChange={showModal}></input>
-    </div>
-  );
-}
-
-function FlagUser({
-  setModalState,
-  sender,
-  currentUser,
-}: {
-  setModalState: (state: boolean) => void;
-  message: Message;
-  sender: UUIDMetadataObject<ObjectCustom>;
-  currentUser: string;
-}) {
-  const pubnub = usePubNub();
-  const { value: theme } = useContext(ThemeContext);
-  const [text, setText] = useState("");
-
-  const flag = async () => {
-    // currently not handling errors
-    // if using PAM, replace this with a call to your authorization server
-    await pubnub.objects
-      .setUUIDMetadata<UserCustom>({
-        uuid: sender.id,
-        data: {
-          custom: {
-            flag: true,
-            flaggedAt: new Date().toISOString(),
-            flaggedBy: currentUser,
-            reason: text,
-          },
-        },
-      } as SetUUIDMetadataParameters<UserCustom>)
-      .catch(console.error);
-    setModalState(false);
-    setText("");
-  };
-
-  return (
-    <div className="file-preview">
-      <div>
-        <img src={sender.profileUrl || ""} alt={`${sender.name}'s avatar`} />
-        <div className="name">{sender.name}</div>
-      </div>
-      <div className="description">Reason for flagging</div>
-      <TextField
-        emojiPicker={<Picker />}
-        theme={theme}
-        text={text}
-        onChange={setText}
-        onSubmit={flag}
-        hideSendButton
-        placeholder=""
-      />
-      <div className="modal_actions">
-        <button
-          onClick={() => {
-            setModalState(false);
-            setText("");
-          }}
-        >
-          Cancel
-        </button>
-        <button className="cta" onClick={flag}>
-          Submit
-        </button>
-      </div>
-    </div>
-  );
-}
-
-function FlagUserButton() {
-  return <span>⚑</span>;
 }
 
 function ModeratedChatContent({

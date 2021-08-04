@@ -1,0 +1,42 @@
+.file-picker {
+  input[type="file"] {
+    display: none;
+  }
+
+  label {
+    padding-bottom: 5px;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+}
+
+.file-preview {
+  .filename {
+    font-size: 12px;
+  }
+
+  .description {
+    font-weight: bold;
+    font-size: 15px;
+    font-style: normal;
+    margin-top: 42px;
+
+    span {
+      font-weight: normal;
+    }
+  }
+
+  img {
+    height: 120px;
+    border-radius: 10px;
+  }
+
+  .pn-msg-input {
+    --text-field__send__borderRadius: 25px;
+    --text-field__send__padding: 10px 20px;
+    --text-field__textarea__borderRadius: 25px;
+    --text-field__textarea__padding: 12px 24px;
+    padding: 12px 0px 24px 0px;
+    background-color: transparent;
+  }
+}

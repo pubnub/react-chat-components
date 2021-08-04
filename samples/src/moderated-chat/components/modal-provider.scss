@@ -1,0 +1,48 @@
+.modal {
+  opacity: 0;
+  transition: 0.3s ease-in-out;
+  width: 100%;
+  height: 100%;
+  background-color: var(--app-modal-background);
+  position: fixed;
+  z-index: 100;
+  display: none;
+
+  &.shown {
+    opacity: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &_content-area {
+    background-color: var(--app-background);
+    color: var(--app-color);
+    width: 500px;
+    max-width: 100%;
+    border-radius: 25px;
+    padding: 24px;
+  }
+
+  &_actions {
+    text-align: right;
+
+    button {
+      color: var(--app-color);
+      border: none;
+      border-radius: 25px;
+      padding: 10px 20px;
+      background-color: transparent;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.cta {
+        color: var(--app-modal__action__color);
+        background-color: var(--app-modal__action__background);
+      }
+    }
+  }
+}
