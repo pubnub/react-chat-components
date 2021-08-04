@@ -1,9 +1,4 @@
-import React, {
-  FC,
-  useState,
-  useEffect,
-  ReactElement,
-} from "react";
+import React, { FC, useState, useEffect, ReactElement } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
 import { EmojiPickerElementProps } from "../types";
@@ -16,6 +11,7 @@ import {
 } from "../state-atoms";
 import "./message-input.scss";
 import { TextField } from "../text-field";
+import { TextFieldProps } from "../text-field/text-field";
 
 export interface MessageInputProps {
   /** Set a placeholder message display in the text window. */
@@ -40,7 +36,7 @@ export interface MessageInputProps {
   /** Callback for extra actions while sending a message */
   onSend?: (value: unknown) => unknown;
   /** Components for additional message input actions */
-  additionalActions?: JSX.Element[];
+  additionalActions?: TextFieldProps["additionalActions"];
 }
 
 /**

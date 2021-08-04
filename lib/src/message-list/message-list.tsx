@@ -395,7 +395,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
                 onClick={() => {
                   onClick(message, getUser(message.uuid || message.publisher));
                 }}
-                key={`input-action_${index}`}
+                key={`message-action_${index}`}
               >
                 {component}
               </div>

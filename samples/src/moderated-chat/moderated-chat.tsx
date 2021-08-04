@@ -286,7 +286,7 @@ function FlagUser({
   return (
     <div className="file-preview">
       <div>
-        <img src={sender.profileUrl || ""} alt={`${sender.name}'s avatar`}/>
+        <img src={sender.profileUrl || ""} alt={`${sender.name}'s avatar`} />
         <div className="name">{sender.name}</div>
       </div>
       <div className="description">Reason for flagging</div>
@@ -504,12 +504,18 @@ function ModeratedChatContent({
             disabled={!canWrite}
             placeholder={placeholder}
             additionalActions={[
-              <FilePickerButton
-                id="0"
-                channel={currentChannel.id}
-                setModalContent={setModalContent}
-                setModalState={setModalState}
-              />,
+              {
+                component: (
+                  <FilePickerButton
+                    id="0"
+                    channel={currentChannel.id}
+                    setModalContent={setModalContent}
+                    setModalState={setModalState}
+                  />
+                ),
+                // use native file picker functionality
+                onClick: () => {},
+              },
             ]}
           />
         </div>

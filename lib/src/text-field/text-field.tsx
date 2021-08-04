@@ -32,7 +32,14 @@ export interface TextFieldProps {
   /** Callback for when errors occur */
   onError?: (value: unknown) => unknown;
   /** Components for additional message input actions */
-  additionalActions?: JSX.Element[];
+  additionalActions?: {
+    component: JSX.Element;
+    onClick: (
+      text: string,
+      onChange: (value: string) => unknown,
+      selection: [number, number]
+    ) => void;
+  }[];
 }
 
 /**
@@ -147,7 +154,7 @@ export const TextField: FC<TextFieldProps> = (props: TextFieldProps) => {
       <>
         <div className="pn-msg-input__icon" onClick={() => setEmojiPickerShown(true)}>
           ☺
-          </div>
+        </div>
 
         {emojiPickerShown && (
           <div className="pn-msg-input__emoji-picker" ref={pickerRef}>
@@ -175,11 +182,24 @@ export const TextField: FC<TextFieldProps> = (props: TextFieldProps) => {
           />
         </div>
 
-        {props.additionalActions.map((action, index) => (
-          <div className="pn-msg-input__action" key={`input-action_${index}`}>
-            {action}
-          </div>
-        ))}
+        {props.additionalActions ? (
+          props.additionalActions.map(({ component, onClick }, index) => (
+            <div
+              className="pn-msg-input__action"
+              onClick={() => {
+                onClick(props.text, props.onChange, [
+                  inputRef.current.selectionStart,
+                  inputRef.current.selectionEnd,
+                ]);
+              }}
+              key={`input-action_${index}`}
+            >
+              {component}
+            </div>
+          ))
+        ) : (
+          <></>
+        )}
 
         {props.emojiPicker && renderEmojiPicker()}
 
@@ -198,5 +218,5 @@ TextField.defaultProps = {
   placeholder: "Type Message",
   sendButton: "Send",
   additionalActions: [],
-  onError: () => { },
+  onError: () => {},
 };
