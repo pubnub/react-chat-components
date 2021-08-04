@@ -5,7 +5,6 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from "react";
 import { Picker } from "emoji-mart";
@@ -17,8 +16,6 @@ import {
   GetAllMetadataParameters,
   ListenerParameters,
   ObjectsEvent,
-  SetUUIDMetadataEvent,
-  RemoveUUIDMetadataEvent,
   BaseObjectsEvent,
   SetUUIDMetadataParameters,
 } from "pubnub";
@@ -26,7 +23,6 @@ import { usePubNub } from "pubnub-react";
 import {
   ChannelList,
   Chat,
-  EmojiPickerElementProps,
   MemberList,
   Message,
   MessageInput,
@@ -57,10 +53,6 @@ interface UserCustom extends ObjectCustom {
   blockedChannels: string;
   reason: string;
   title: string;
-}
-
-interface ChannelCustom extends ObjectCustom {
-  thumb: string;
 }
 
 const ThemeContext = createContext<{ value: Themes; set: Dispatch<SetStateAction<Themes>> }>({
@@ -200,7 +192,7 @@ function FileUpload({
 
   return (
     <div className="file-preview">
-      <img src={image} />
+      <img src={image} alt="file preview" />
       <div className="filename">
         {file.name} ({size})
       </div>
@@ -294,7 +286,7 @@ function FlagUser({
   return (
     <div className="file-preview">
       <div>
-        <img src={sender.profileUrl || ""} />
+        <img src={sender.profileUrl || ""} alt={`${sender.name}'s avatar`}/>
         <div className="name">{sender.name}</div>
       </div>
       <div className="description">Reason for flagging</div>
