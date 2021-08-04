@@ -5,7 +5,6 @@ import {
   ChannelMetadataObject,
   UUIDMetadataObject,
   ObjectCustom,
-  GetAllMetadataParameters,
   ListenerParameters,
   ObjectsEvent,
   BaseObjectsEvent,
@@ -53,10 +52,10 @@ function ModeratedChat() {
 
 function ModeratedChatSetup({ setModalState, setModalContent }: ModalConsumerProps) {
   const pubnub = usePubNub(); //usePubNub is only used here to get current user info (as it's randomly selected)
-  const params = (useMemo(
+  const params = useMemo(
     () => ({ uuid: pubnub.getUUID(), include: { channelFields: true, customChannelFields: true } }),
     [pubnub]
-  ) as unknown) as GetAllMetadataParameters;
+  );
 
   const [rawChannels] = useUserMemberships(params);
   const [updatedChannels, setUpdatedChannels] = useState<{
@@ -95,7 +94,7 @@ function ModeratedChatSetup({ setModalState, setModalContent }: ModalConsumerPro
       ),
     [rawChannels, updatedChannels]
   );
-  const [currentUser] = useUser(params) as [UUIDMetadataObject<UserCustom>, Error];
+  const [currentUser] = useUser({ uuid: params.uuid }) as [UUIDMetadataObject<UserCustom>, Error];
 
   if (channels.length < 1 || !currentUser) {
     return <div></div>;
