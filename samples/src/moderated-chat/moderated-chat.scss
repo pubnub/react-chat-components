@@ -12,8 +12,8 @@
   --app-modal__action__color: #ffffff;
 
   .pn-msg-input {
-    --msg-input__background: transparent;
-    --msg-input__send__background: #5babfc;
+    --text-field__background: transparent;
+    --text-field__send__background: #5babfc;
   }
 
   .pn-msg-list--light {
@@ -44,7 +44,7 @@
   --app-modal__action__color: #ffffff;
 
   .pn-msg-input {
-    --msg-input__send__background: #de2440;
+    --text-field__send__background: #de2440;
   }
 
   .pn-msg-list--dark {
@@ -143,10 +143,10 @@
   }
 
   .pn-msg-input {
-    --msg-input__send__borderRadius: 25px;
-    --msg-input__send__padding: 10px 20px;
-    --msg-input__textarea__borderRadius: 25px;
-    --msg-input__textarea__padding: 12px 24px;
+    --text-field__send__borderRadius: 25px;
+    --text-field__send__padding: 10px 20px;
+    --text-field__textarea__borderRadius: 25px;
+    --text-field__textarea__padding: 12px 24px;
     padding: 12px 0px 24px 0px;
     background-color: transparent;
   }
@@ -160,10 +160,10 @@
   overflow: hidden;
 
   .pn-msg-input {
-    --msg-input__send__borderRadius: 25px;
-    --msg-input__send__padding: 10px 20px;
-    --msg-input__textarea__borderRadius: 25px;
-    --msg-input__textarea__padding: 12px 24px;
+    --text-field__send__borderRadius: 25px;
+    --text-field__send__padding: 10px 20px;
+    --text-field__textarea__borderRadius: 25px;
+    --text-field__textarea__padding: 12px 24px;
   }
 
   .pn-channel-list {

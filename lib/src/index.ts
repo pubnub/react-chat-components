@@ -1,6 +1,7 @@
 export * from "./types";
 export * from "./chat";
 export * from "./message-input";
+export * from "./text-field";
 export * from "./message-list";
 export * from "./member-list";
 export * from "./channel-list";
