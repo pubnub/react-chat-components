@@ -36,7 +36,7 @@ apps for various use cases, with different functionalities and customizable look
 - Ease of installation and setup
 - Allows to build fully-featured chat applications
 - No need to deal with server code
-- Useful compontent options to tweak the functionalities
+- Useful component options to tweak the functionalities
 - Built-in light and dark themes for various use cases: group, support and event chats
 - Extra customization with CSS variables
 - TypeScript support
@@ -71,7 +71,7 @@ apps for various use cases, with different functionalities and customizable look
    and test environments.
 
 3. Some of the functionalities you might want to enable on your keyset depending on the use-case
-   include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
+   include _Presence_, _Files_, _Storage & Playback_ (including correct Retention) and _Objects_ (be sure to
    select a geographical region corresponding to most users of your application).
 
 ## Run Sample Apps
@@ -105,6 +105,14 @@ vi pubnub-keys.json
 
 ```bash
 npm start
+```
+
+5. For the moderated chat sample, enable _Files_, _Storage & Playback_, and _Objects_ with _Channel Metadata Events_ and _User Metadata Events_ on your keyset. 
+
+    Then, initialize the keyset with objects data.
+
+```bash
+node moderated-chat/populate.js
 ```
 
 ## Components Installation
