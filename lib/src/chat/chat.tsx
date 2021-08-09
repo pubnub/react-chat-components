@@ -238,17 +238,11 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   const setupSubscriptions = () => {
     try {
-      const userChannel = pubnub.getUUID();
-
       const currentSubscriptions = pubnub.getSubscribedChannels();
       const newChannels = channels.filter((c) => !currentSubscriptions.includes(c));
 
       const currentGroups = pubnub.getSubscribedChannelGroups();
       const newGroups = channelGroups.filter((c) => !currentGroups.includes(c));
-
-      if (!currentSubscriptions.includes(userChannel)) {
-        pubnub.subscribe({ channels: [userChannel] });
-      }
 
       if (newChannels.length || newGroups.length) {
         pubnub.subscribe({
