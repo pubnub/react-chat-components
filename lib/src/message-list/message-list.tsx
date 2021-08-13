@@ -12,7 +12,13 @@ import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub"
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
-import { Message, ImageAttachment, LinkAttachment, EmojiPickerElementProps } from "../types";
+import {
+  Message,
+  ImageAttachment,
+  LinkAttachment,
+  EmojiPickerElementProps,
+  FileAttachment,
+} from "../types";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
@@ -22,7 +28,9 @@ import {
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
-import SpinnerIcon from "./spinner.svg";
+import SpinnerIcon from "../icons/spinner.svg";
+import EmojiIcon from "../icons/emoji.svg";
+import DownloadIcon from "../icons/download.svg";
 import "./message-list.scss";
 
 export interface MessageRendererProps {
@@ -204,6 +212,17 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
+  const fetchFileUrl = (message: Message) => {
+    const url = pubnub.getFileUrl({
+      channel: message.channel,
+      id: message.message.file.id,
+      name: message.message.file.name,
+    });
+
+    message.message.file.url = url;
+    return message;
+  };
+
   /*
   /* Event handlers
   */
@@ -234,7 +253,10 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     useCallback((get, set, response: FetchMessagesResponse) => {
       const channel = get(CurrentChannelAtom);
       const messages = get(CurrentChannelMessagesAtom);
-      const newMessages = (response?.channels[channel] as Message[]) || [];
+      const newMessages =
+        ((response?.channels[channel] || []).map((m) =>
+          m.messageType === 4 ? fetchFileUrl(m) : m
+        ) as Message[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
@@ -348,7 +370,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
                   : handleOpenReactions(e, message.timetoken);
               }}
             >
-              ☺
+              <EmojiIcon />
             </div>
           </div>
         )}
@@ -361,7 +383,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const user = message.message.sender || getUser(uuid);
     const time = getTime(message.timetoken as number);
     const isOwn = isOwnMessage(uuid);
-    const attachments = message.message?.attachments || [];
+    const attachments = message.message.attachments || [];
+    const file = message.message.file;
 
     if (props.messageRenderer && (props.filter ? props.filter(message) : true))
       return props.messageRenderer({ message, user, time, isOwn });
@@ -378,13 +401,16 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__author">{user?.name || uuid}</span>
               <span className="pn-msg__time">{time}</span>
             </div>
-            {props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-              props.bubbleRenderer({ message, user, time, isOwn })
-            ) : (
-              <div className="pn-msg__bubble">{message.message.text}</div>
-            )}
+            {message.message.text ? (
+              props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
+                props.bubbleRenderer({ message, user, time, isOwn })
+              ) : (
+                <div className="pn-msg__bubble">{message.message.text}</div>
+              )
+            ) : null}
           </div>
           <div className="pn-msg__extras">
+            {file ? renderFile(file) : null}
             {attachments.map(renderAttachment)}
             {props.enableReactions && renderReactions(message)}
           </div>
@@ -417,6 +443,29 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  const renderFile = (file: FileAttachment) => {
+    return (
+      <div className="pn-msg__file">
+        {/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
+          <img className="pn-msg__image" src={file.url} />
+        ) : (
+          <div className="pn-msg__bubble">
+            <a
+              className="pn-msg__nonImage"
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
+              {file.name}
+              <DownloadIcon className="pn-msg__downloadIcon" />
+            </a>
+          </div>
+        )}
       </div>
     );
   };

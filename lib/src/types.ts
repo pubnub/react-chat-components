@@ -9,13 +9,15 @@ export interface EmojiPickerElementProps {
 export interface Message {
   channel?: string;
   message: {
-    type: string;
-    text: string;
+    type?: string;
+    text?: string;
     sender?: UUIDMetadataObject<ObjectCustom>;
     attachments?: Array<ImageAttachment | LinkAttachment>;
+    file?: FileAttachment;
     [key: string]: unknown;
   };
   timetoken: string | number;
+  messageType?: string | number;
   publisher?: string;
   uuid?: string;
   meta?: {
@@ -29,6 +31,12 @@ export interface Message {
       }>;
     };
   };
+}
+
+export interface FileAttachment {
+  id: string;
+  name: string;
+  url?: string;
 }
 
 export interface ImageAttachment {

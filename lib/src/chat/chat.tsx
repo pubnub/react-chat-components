@@ -335,6 +335,19 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   const handleFileEvent = (event: FileEvent) => {
     if (props.onFile) props.onFile(event);
+
+    try {
+      setMessages((messages) => {
+        const { file, ...payload } = event;
+        const message = { ...payload, message: { file }, messageType: 4 };
+        const messagesClone = cloneDeep(messages) || {};
+        messagesClone[message.channel] = messagesClone[message.channel] || [];
+        messagesClone[message.channel].push(message);
+        return messagesClone;
+      });
+    } catch (e) {
+      props.onError(e);
+    }
   };
 
   const handleStatusEvent = (event: StatusEvent) => {

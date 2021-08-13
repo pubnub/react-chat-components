@@ -47,7 +47,7 @@
   --msg__content__flexDirection: column;
   --msg__content__margin: 0;
   --msg__image__borderRadius: 10px;
-  --msg__image__margin: 10px 0 0;
+  --msg__image__margin: 0;
   --msg__link__margin: 10px 0 0;
   --msg__link__padding: 20px;
   --msg__link-description__color: #9b9b9b;
@@ -305,6 +305,16 @@
       color: var(--msg__link-description__color);
       margin: 0;
     }
+  }
+
+  &__nonImage {
+    color: var(--msg__bubble__color);
+  }
+
+  &__downloadIcon {
+    color: var(--msg__bubble__color);
+    margin: 0 0 0 8px;
+    vertical-align: middle;
   }
 }
 

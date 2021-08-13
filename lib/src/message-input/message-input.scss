@@ -7,7 +7,7 @@
   --msg-input__emoji-picker__bottom: 0;
   --msg-input__emoji-picker__right: 0;
   --msg-input__icon__color: #585858;
-  --msg-input__icon__margin: 5px 10px;
+  --msg-input__icon__margin: 5px;
   --msg-input__icon__fontSize: 22px;
   --msg-input__indicator__color: #585858;
   --msg-input__indicator__fontFamily: inherit;
@@ -23,7 +23,7 @@
   --msg-input__send__fontFamily: inherit;
   --msg-input__send__fontSize: 13px;
   --msg-input__send__fontWeight: bold;
-  --msg-input__send__margin: 2px;
+  --msg-input__send__margin: 2px 2px 2px 8px;
   --msg-input__send__minWidth: 40px;
   --msg-input__send__padding: 10px;
   --msg-input__textarea--focus__border: 1px solid #9b9b9b;
@@ -123,6 +123,14 @@
     margin: var(--msg-input__indicator__margin);
     min-height: var(--msg-input__indicator__minHeight);
     padding: var(--msg-input__indicator__padding);
+  }
+
+  &__fileLabel {
+    cursor: pointer;
+  }
+
+  &__fileInput {
+    display: none;
   }
 }
 
