@@ -111,9 +111,14 @@
     top: var(--msg-list__unread__offset);
     transform: translateX(50%);
     z-index: 5;
+
+    svg {
+      vertical-align: bottom;
+    }
   }
 
   &__bottom-ref {
+    flex-shrink: 0;
     width: 100%;
     height: 1px;
   }

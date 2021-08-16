@@ -31,6 +31,7 @@ import {
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
+import ArrowDownIcon from "../icons/arrow-down.svg";
 import "./message-list.scss";
 
 export interface MessageRendererProps {
@@ -451,7 +452,13 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className="pn-msg__file">
         {/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
-          <img className="pn-msg__image" src={file.url} />
+          <img
+            className="pn-msg__image"
+            src={file.url}
+            onLoad={() => {
+              if (scrolledBottom) scrollToBottom();
+            }}
+          />
         ) : (
           <div className="pn-msg__bubble">
             <a
@@ -503,7 +510,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     <div className={`pn-msg-list pn-msg-list--${theme}`}>
       {unreadMessages > 0 && (
         <div className="pn-msg-list__unread" onClick={() => scrollToBottom()}>
-          {unreadMessages} new messages ↓
+          {unreadMessages} new message{unreadMessages > 1 ? "s" : ""} <ArrowDownIcon />
         </div>
       )}
 
