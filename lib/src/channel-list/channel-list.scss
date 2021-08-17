@@ -3,17 +3,17 @@
 ** ********************* */
 
 :root {
-  --channel-list__background: linear-gradient(rgb(142, 45, 226) 0%, rgb(74, 0, 224) 100%);
+  --channel-list__background: #ffffff;
 
   --channel__alignItems: center;
-  --channel__padding: 12px 40px 12px 24px;
+  --channel__padding: 12px 24px;
   --channel__justifyContent: flex-start;
   --channel__background: transparent;
-  --channel--hover__background: rgba(255, 255, 255, 0.1);
-  --channel--active__background: rgba(0, 0, 0, 0.1);
-  --channel__name__color: white;
-  --channel--hover__name__color: white;
-  --channel--active__name__color: white;
+  --channel--hover__background: #5babfc;
+  --channel--active__background: #f0f3f7;
+  --channel__name__color: #585858;
+  --channel--hover__name__color: #ffffff;
+  --channel--active__name__color: #585858;
   --channel__thumb__display: block;
   --channel__thumb__margin: 0 24px 0 0;
   --channel__thumb__size: 36px;
@@ -22,9 +22,9 @@
   --channel__name__fontWeight: 500;
   --channel__name__padding: 0;
   --channel__name__margin: 0;
-  --channel__description__color: #c7c7c7;
-  --channel--hover__description__color: #c7c7c7;
-  --channel--active__description__color: #c7c7c7;
+  --channel__description__color: #9b9b9b;
+  --channel--hover__description__color: #ffffff;
+  --channel--active__description__color: #9b9b9b;
   --channel__description__display: inline-block;
   --channel__description__fontSize: 13px;
   --channel__description__fontWeight: 400;
@@ -146,10 +146,11 @@
 .pn-channel-list--dark,
 .pn-channel-list--event-dark,
 .pn-channel-list--support-dark {
-  --channel-list__background: linear-gradient(rgb(41 43 47) 0%, rgb(47 49 54) 100%);
-  --channel--hover__background: #36393f;
+  --channel-list__background: #292b2f;
+  --channel--hover__background: #de2440;
   --channel--active__background: #2f3136;
   --channel__description__color: #929292;
   --channel__name__color: #dcddde;
   --channel__leave__color: #dcddde;
+  --channel--active__name__color: #dcddde;
 }

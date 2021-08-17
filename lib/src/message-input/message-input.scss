@@ -2,7 +2,7 @@
 ** Variables
 ** ********************* */
 :root {
-  --msg-input__background: #f8f6fd;
+  --msg-input__background: transparent;
   --msg-input__padding: 0 24px;
   --msg-input__emoji-picker__bottom: 0;
   --msg-input__emoji-picker__right: 0;
@@ -16,7 +16,7 @@
   --msg-input__indicator__margin: 10px 0 0;
   --msg-input__indicator__minHeight: 16px;
   --msg-input__indicator__padding: 0;
-  --msg-input__send__background: #8e2de2;
+  --msg-input__send__background: #5babfc;
   --msg-input__send__border: none;
   --msg-input__send__borderRadius: 5px;
   --msg-input__send__color: #ffffff;
@@ -26,12 +26,12 @@
   --msg-input__send__margin: 2px 2px 2px 8px;
   --msg-input__send__minWidth: 40px;
   --msg-input__send__padding: 10px;
-  --msg-input__textarea--focus__border: 1px solid #9b9b9b;
+  --msg-input__textarea--focus__border: 1px solid #ffffff;
   --msg-input__textarea--focus__outline: none;
-  --msg-input__textarea__background: transparent;
-  --msg-input__textarea__border: 1px solid #9b9b9b;
+  --msg-input__textarea__background: #ffffff;
+  --msg-input__textarea__border: 1px solid #ffffff;
   --msg-input__textarea__borderRadius: 5px;
-  --msg-input__textarea__boxShadow: none;
+  --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
   --msg-input__textarea__color: #585858;
   --msg-input__textarea__fontFamily: inherit;
   --msg-input__textarea__fontSize: 13px;
@@ -141,12 +141,12 @@
 .pn-msg-input--dark,
 .pn-msg-input--event-dark,
 .pn-msg-input--support-dark {
-  --msg-input__background: #2f3136;
   --msg-input__icon__color: #dcddde;
   --msg-input__indicator__color: #dcddde;
+  --msg-input__send__background: #de2440;
+  --msg-input__textarea--focus__border: 1px solid #36393f;
   --msg-input__textarea__background: #36393f;
   --msg-input__textarea__border: 1px solid #36393f;
   --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
   --msg-input__textarea__color: #dcddde;
-  --msg-input__textarea--focus__border: 1px solid #36393f;
 }

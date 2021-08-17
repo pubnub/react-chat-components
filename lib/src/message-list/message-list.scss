@@ -3,7 +3,7 @@
 ** ********************* */
 
 :root {
-  --msg-list__background: #f8f6fd;
+  --msg-list__background: #f0f3f7;
   --msg-list__padding: 0 0 10px;
   --msg-list__unread__background: #9b9b9b;
   --msg-list__unread__borderRadius: 20px;
@@ -14,7 +14,7 @@
   --msg-list__unread__offset: 50px;
   --msg-list__spinner__color: #9b9b9b;
 
-  --msg--hover__background: #f1eff7;
+  --msg--hover__background: #e5e8ec;
   --msg__alignItems: flex-start;
   --msg__flexDirection: row;
   --msg__height: auto;
@@ -36,7 +36,7 @@
   --msg__avatar__size: 36px;
   --msg__avatar__borderRadius: 36px;
   --msg__bubble__background: #ffffff;
-  --msg__bubble__boxShadow: 0 6px 10px rgba(103, 19, 176, 0.06);
+  --msg__bubble__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
   --msg__bubble__borderRadius: 0 10px 10px 10px;
   --msg__bubble__color: #585858;
   --msg__bubble__fontSize: 13px;
@@ -263,6 +263,7 @@
 
   &__image {
     border-radius: var(--msg__image__borderRadius);
+    box-shadow: var(--msg__bubble__boxShadow);
     margin: var(--msg__image__margin);
     max-width: 100%;
   }

@@ -31,9 +31,8 @@ dark mode, you need to use component class name instead of the `:root` element:
 ### Message List
 
 ```css
---msg-list__background: #f8f6fd;
+--msg-list__background: #f0f3f7;
 --msg-list__padding: 0 0 10px;
-
 --msg-list__unread__background: #9b9b9b;
 --msg-list__unread__borderRadius: 20px;
 --msg-list__unread__color: #ffffff;
@@ -41,10 +40,9 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg-list__unread__fontWeight: 400;
 --msg-list__unread__padding: 8px 16px;
 --msg-list__unread__offset: 50px;
-
 --msg-list__spinner__color: #9b9b9b;
 
---msg--hover__background: #f1eff7;
+--msg--hover__background: #e5e8ec;
 --msg__alignItems: flex-start;
 --msg__flexDirection: row;
 --msg__height: auto;
@@ -55,6 +53,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg__actions__color: #585858;
 --msg__actions__fontSize: 22px;
 --msg__actions__borderRadius: 10px;
+--msg__actions__margin: 0 0 0 4px;
 --msg__actions__padding: 2px 8px;
 --msg__actions__right: 10px;
 --msg__actions__top: 10px;
@@ -70,7 +69,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg__avatar__borderRadius: 36px;
 
 --msg__bubble__background: #ffffff;
---msg__bubble__boxShadow: 0 6px 10px rgba(103, 19, 176, 0.06);
+--msg__bubble__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
 --msg__bubble__borderRadius: 0 10px 10px 10px;
 --msg__bubble__color: #585858;
 --msg__bubble__fontSize: 13px;
@@ -83,7 +82,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg__content__margin: 0;
 
 --msg__image__borderRadius: 10px;
---msg__image__margin: 10px 0 0;
+--msg__image__margin: 0;
 
 --msg__link__margin: 10px 0 0;
 --msg__link__padding: 20px;
@@ -116,14 +115,14 @@ dark mode, you need to use component class name instead of the `:root` element:
 ### Message Input
 
 ```css
---msg-input__background: #f8f6fd;
+--msg-input__background: transparent;
 --msg-input__padding: 0 24px;
 
 --msg-input__emoji-picker__bottom: 0;
 --msg-input__emoji-picker__right: 0;
 
 --msg-input__icon__color: #585858;
---msg-input__icon__margin: 5px 10px;
+--msg-input__icon__margin: 5px;
 --msg-input__icon__fontSize: 22px;
 
 --msg-input__indicator__color: #585858;
@@ -134,23 +133,27 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg-input__indicator__minHeight: 16px;
 --msg-input__indicator__padding: 0;
 
---msg-input__send__background: #8e2de2;
+--msg-input__send__background: #5babfc;
+--msg-input--disabled__send__background: transparent;
 --msg-input__send__border: none;
 --msg-input__send__borderRadius: 5px;
 --msg-input__send__color: #ffffff;
+--msg-input--disabled__send__color: transparent;
 --msg-input__send__fontFamily: inherit;
 --msg-input__send__fontSize: 13px;
 --msg-input__send__fontWeight: bold;
---msg-input__send__margin: 2px;
+--msg-input__send__margin: 2px 2px 2px 8px;
 --msg-input__send__minWidth: 40px;
 --msg-input__send__padding: 10px;
 
---msg-input__textarea--focus__border: 1px solid #9b9b9b;
+--msg-input__textarea--focus__border: 1px solid #ffffff;
 --msg-input__textarea--focus__outline: none;
---msg-input__textarea__background: transparent;
---msg-input__textarea__border: 1px solid #9b9b9b;
+--msg-input__textarea__background: #ffffff;
+--msg-input--disabled__textarea__background: #f6f9fc;
+--msg-input__textarea__border: 1px solid #ffffff;
+--msg-input--disabled__textarea__border: 1px solid #f6f9fc;
 --msg-input__textarea__borderRadius: 5px;
---msg-input__textarea__boxShadow: none;
+--msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
 --msg-input__textarea__color: #585858;
 --msg-input__textarea__fontFamily: inherit;
 --msg-input__textarea__fontSize: 13px;
@@ -168,9 +171,9 @@ dark mode, you need to use component class name instead of the `:root` element:
 
 --member__padding: 9px 24px;
 --member__background: transparent;
---member--hover__background: #f8f6fd;
+--member--hover__background: #f0f3f7;
 
---member__avatar__background: #f8f6fd;
+--member__avatar__background: #f0f3f7;
 --member__avatar__display: block;
 --member__avatar__margin: 0 24px 0 0;
 --member__avatar__size: 36px;
@@ -200,55 +203,51 @@ dark mode, you need to use component class name instead of the `:root` element:
 ### Channel List
 
 ```css
---channel-list__background: linear-gradient(rgb(142, 45, 226) 0%, rgb(74, 0, 224) 100%);
+--channel-list__background: #ffffff;
 
 --channel__alignItems: center;
---channel__padding: 12px 40px 12px 24px;
+--channel__padding: 12px 24px;
 --channel__justifyContent: flex-start;
 --channel__background: transparent;
---channel--hover__background: rgba(255, 255, 255, 0.1);
---channel--active__background: rgba(0, 0, 0, 0.1);
+--channel--hover__background: #5babfc;
+--channel--active__background: #f0f3f7;
 
 --channel__thumb__display: block;
 --channel__thumb__margin: 0 24px 0 0;
 --channel__thumb__size: 36px;
 --channel__thumb__borderRadius: 36px;
 
---channel__name__color: white;
---channel--hover__name__color: white;
---channel--active__name__color: white;
+--channel__name__color: #585858;
+--channel--hover__name__color: #ffffff;
+--channel--active__name__color: #585858;
 --channel__name__fontSize: 15px;
 --channel__name__fontWeight: 500;
 --channel__name__padding: 0;
 --channel__name__margin: 0;
 
---channel__description__color: #c7c7c7;
---channel--hover__description__color: #c7c7c7;
---channel--active__description__color: #c7c7c7;
+--channel__description__color: #9b9b9b;
+--channel--hover__description__color: #ffffff;
+--channel--active__description__color: #9b9b9b;
 --channel__description__display: inline-block;
 --channel__description__fontSize: 13px;
 --channel__description__fontWeight: 400;
 --channel__description__padding: 3px 0 0;
 --channel__description__margin: 0;
 
---channel__leave__color: white;
---channel__leave__size: 20px;
---channel__leave__right: 20px;
---channel__leave__top: auto;
-
---channel__membership__borderRadius: 5px;
---channel__membership__color: #62e905;
---channel__membership__display: inline-block;
---channel__membership__left: 10px;
---channel__membership__position: absolute;
---channel__membership__size: 6px;
---channel__membership__top: 19px;
+--channel__actions--hover__background: #ffffff;
+--channel__actions__background: #81bfff;
+--channel__actions__borderRadius: 5px;
+--channel__actions__color: #ffffff;
+--channel__actions--hover__color: #5babfc;
+--channel__actions__fontSize: 22px;
+--channel__actions__margin: 0 0 0 4px;
+--channel__actions__padding: 1px 6px;
 ```
 
 ### Typing Indicator
 
 ```css
---typing-indicator__background: #f8f6fd;
+--typing-indicator__background: #f0f3f7;
 --typing-indicator__color: #9b9b9b;
 --typing-indicator__display: inline-block;
 --typing-indicator__fontSize: 11px;
