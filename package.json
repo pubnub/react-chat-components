@@ -8,6 +8,9 @@
     "lib",
     "samples"
   ],
+  "engines": {
+    "npm": ">= 7.0.0"
+  },
   "scripts": {
     "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
     "build": "cd lib && npm run build",
@@ -28,9 +31,9 @@
     "@storybook/react": "6.2.2",
     "@storybook/theming": "6.2.2",
     "concurrently": "^6.0.0",
-    "node-sass": "^5.0.0",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
+    "sass": "^1.38.0",
     "sass-loader": "^10.1.0"
   }
 }
