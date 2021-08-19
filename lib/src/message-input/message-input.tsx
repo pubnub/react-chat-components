@@ -20,6 +20,7 @@ import {
 import "./message-input.scss";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
+import ImageIcon from "../icons/image.svg";
 import XCircleIcon from "../icons/x-circle.svg";
 
 export interface MessageInputProps {
@@ -34,6 +35,8 @@ export interface MessageInputProps {
   typingIndicator?: boolean;
   /** Enable/disable internal file upload capabilty */
   fileUpload?: "image" | "all";
+  /** Disable the input from composing and sending messages */
+  disabled?: boolean;
   /** Hides the Send button */
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the send button. */
@@ -246,8 +249,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           </div>
         ) : null}
         <div className="pn-msg-input__icon">
-          <label htmlFor="file-upload" className="pn-msg-input__fileLabel">
-            <FileIcon />
+          <label htmlFor="file-upload" className="pn-msg-input__fileLabel" title="Add a file">
+            {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
           </label>
           <input
             id="file-upload"
@@ -265,7 +268,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderEmojiPicker = () => {
     return (
       <>
-        <div className="pn-msg-input__icon" onClick={() => setEmojiPickerShown(true)}>
+        <div
+          className="pn-msg-input__icon"
+          onClick={() => setEmojiPickerShown(true)}
+          title="Add an emoji"
+        >
           <EmojiIcon />
         </div>
 
@@ -279,7 +286,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   return (
-    <div className={`pn-msg-input pn-msg-input--${theme}`}>
+    <div
+      className={`pn-msg-input pn-msg-input--${theme} ${
+        props.disabled ? "pn-msg-input--disabled" : ""
+      }`}
+    >
       <div className="pn-msg-input__wrapper">
         <div className="pn-msg-input__spacer">
           <textarea
@@ -290,16 +301,20 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
             onChange={(e) => handleInputChange(e)}
             onKeyPress={(e) => handleKeyPress(e)}
             ref={inputRef}
-            disabled={!!file}
+            disabled={props.disabled || !!file}
           />
         </div>
 
-        {props.fileUpload && renderFileUpload()}
+        {!props.disabled && props.fileUpload && renderFileUpload()}
 
-        {props.emojiPicker && renderEmojiPicker()}
+        {!props.disabled && props.emojiPicker && renderEmojiPicker()}
 
         {!props.hideSendButton && (
-          <button className="pn-msg-input__send" onClick={() => sendMessage()}>
+          <button
+            className="pn-msg-input__send"
+            onClick={() => sendMessage()}
+            disabled={props.disabled}
+          >
             {props.sendButton}
           </button>
         )}
@@ -312,6 +327,7 @@ MessageInput.defaultProps = {
   hideSendButton: false,
   placeholder: "Type Message",
   sendButton: "Send",
+  disabled: false,
   senderInfo: false,
   typingIndicator: false,
   fileUpload: undefined,

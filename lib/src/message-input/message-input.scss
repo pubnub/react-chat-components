@@ -17,9 +17,11 @@
   --msg-input__indicator__minHeight: 16px;
   --msg-input__indicator__padding: 0;
   --msg-input__send__background: #5babfc;
+  --msg-input--disabled__send__background: transparent;
   --msg-input__send__border: none;
   --msg-input__send__borderRadius: 5px;
   --msg-input__send__color: #ffffff;
+  --msg-input--disabled__send__color: transparent;
   --msg-input__send__fontFamily: inherit;
   --msg-input__send__fontSize: 13px;
   --msg-input__send__fontWeight: bold;
@@ -29,7 +31,9 @@
   --msg-input__textarea--focus__border: 1px solid #ffffff;
   --msg-input__textarea--focus__outline: none;
   --msg-input__textarea__background: #ffffff;
+  --msg-input--disabled__textarea__background: #f6f9fc;
   --msg-input__textarea__border: 1px solid #ffffff;
+  --msg-input--disabled__textarea__border: 1px solid #f6f9fc;
   --msg-input__textarea__borderRadius: 5px;
   --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
   --msg-input__textarea__color: #585858;
@@ -134,6 +138,23 @@
   }
 }
 
+.pn-msg-input--disabled {
+  .pn-msg-input__wrapper {
+    background: var(--msg-input--disabled__textarea__background);
+    border: var(--msg-input--disabled__textarea__border);
+  }
+
+  .pn-msg-input__textarea {
+    cursor: not-allowed;
+  }
+
+  .pn-msg-input__send {
+    background: var(--msg-input--disabled__send__background);
+    color: var(--msg-input--disabled__send__color);
+    cursor: not-allowed;
+  }
+}
+
 /* ************************
 ** Themes
 ** ********************* */
@@ -149,4 +170,11 @@
   --msg-input__textarea__border: 1px solid #36393f;
   --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
   --msg-input__textarea__color: #dcddde;
+}
+
+.pn-msg-input--disabled.pn-msg-input--dark,
+.pn-msg-input--disabled.pn-msg-input--event-dark,
+.pn-msg-input--disabled.pn-msg-input--support-dark {
+  --msg-input--disabled__textarea__background: #242529;
+  --msg-input--disabled__textarea__border: 1px solid #242529;
 }
