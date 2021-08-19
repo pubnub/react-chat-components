@@ -1,25 +1,46 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { ChannelMetadataObject, ObjectCustom, GetMembershipsParametersv2 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [ChannelMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
+type HookReturnValue = [
+  ChannelMetadataObject<ObjectCustom>[],
+  () => Promise<void>,
+  () => void,
+  number,
+  Error
+];
 
 export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): HookReturnValue => {
-  const pubnub = usePubNub();
+  const jsonOptions = JSON.stringify(options);
 
+  const pubnub = usePubNub();
   const [channels, setChannels] = useState<ChannelMetadataObject<ObjectCustom>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
+  const [doFetch, setDoFetch] = useState(true);
 
-  const paginatedOptions = merge(options, {
-    page: { next: page },
-    include: { totalCount: true },
-  }) as GetMembershipsParametersv2;
+  const paginatedOptions = useMemo(
+    () =>
+      merge({}, JSON.parse(jsonOptions), {
+        page: { next: page },
+        include: { totalCount: true },
+      }) as GetMembershipsParametersv2,
+    [page, jsonOptions]
+  );
 
-  const command = async () => {
+  const resetHook = () => {
+    setChannels([]);
+    setTotalCount(0);
+    setPage("");
+    setError(undefined);
+    setDoFetch(true);
+  };
+
+  const fetchPage = useCallback(async () => {
+    setDoFetch(false);
     try {
       if (totalCount && channels.length >= totalCount) return;
       const response = await pubnub.objects.getMemberships(paginatedOptions);
@@ -32,7 +53,7 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     } catch (e) {
       setError(e);
     }
-  };
+  }, [pubnub, paginatedOptions, channels.length, totalCount]);
 
   const handleObject = (event) => {
     const message = event.message;
@@ -55,8 +76,15 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
 
   useEffect(() => {
     pubnub.addListener({ objects: handleObject });
-    command();
-  }, []);
+  }, [pubnub]);
 
-  return [channels, command, totalCount, error];
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
+
+  useEffect(() => {
+    if (doFetch) fetchPage();
+  }, [doFetch, fetchPage]);
+
+  return [channels, fetchPage, resetHook, totalCount, error];
 };
