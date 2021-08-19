@@ -13,7 +13,7 @@ import {
 } from "@pubnub/react-chat-components";
 import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import "./group-chat.scss";
-import { ReactComponent as PeopleGroup } from "../people-group.svg";
+import { ReactComponent as PeopleGroup } from "../icons/people-group.svg";
 
 function GroupChat() {
   const [currentChannel, setChannel] = React.useState("space_ac4e67b98b34b44c4a39466e93e");

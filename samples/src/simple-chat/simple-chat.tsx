@@ -17,7 +17,7 @@ import {
 
 import "./simple-chat.scss";
 import "emoji-mart/css/emoji-mart.css";
-import { ReactComponent as PeopleGroup } from "../people-group.svg";
+import { ReactComponent as PeopleGroup } from "../icons/people-group.svg";
 
 /**
  * In this simple application, data about users, channels and sample welcome messages are
@@ -141,7 +141,7 @@ function SimpleChat() {
               >
                 <TypingIndicator showAsMessage />
               </MessageList>
-              <MessageInput typingIndicator emojiPicker={<Picker />} />
+              <MessageInput typingIndicator fileUpload="all" emojiPicker={<Picker />} />
             </div>
 
             <div className={`members ${showMembers && "shown"}`}>

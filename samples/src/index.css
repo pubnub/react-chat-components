@@ -13,6 +13,7 @@ code {
 
 .pubnub-error {
   color: rgb(168, 0, 0);
+  line-height: 1.5;
   margin: 0 auto;
   width: 900px;
 }

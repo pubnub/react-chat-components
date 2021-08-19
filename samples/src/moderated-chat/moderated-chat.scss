@@ -1,0 +1,264 @@
+.app-moderated {
+  background: #ffffff;
+  color: #585858;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  padding-right: 30px;
+
+  .banned,
+  .blocked {
+    align-items: center;
+    color: rgb(168, 0, 0);
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    margin: 0;
+    width: 100%;
+  }
+
+  .blocked {
+    font-size: 14px;
+  }
+
+  .channels {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 350px;
+
+    h4 {
+      margin: 34px 24px 12px;
+    }
+  }
+
+  .user {
+    display: flex;
+    padding: 46px 24px 20px;
+
+    h4 {
+      flex-grow: 1;
+      margin: 8px 0;
+    }
+
+    img {
+      background: #f0f3f7;
+      display: block;
+      margin: 0 24px 0 0;
+      width: 36px;
+      height: 36px;
+      border-radius: 36px;
+    }
+  }
+
+  .info {
+    padding: 24px 24px 0;
+
+    h4 {
+      margin: 0 0 2px;
+    }
+
+    small {
+      color: #9b9b9b;
+    }
+
+    hr {
+      background-color: #d7e0e9;
+      border: 0;
+      height: 1px;
+      margin: 18px 0 0;
+    }
+  }
+
+  .chat {
+    background: #f0f3f7;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin: 30px 0;
+    padding-bottom: 30px;
+    position: relative;
+  }
+
+  .members {
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transform: translateX(310px);
+    transition: 0.3s ease-in-out;
+    width: 0;
+
+    &.shown {
+      transform: none;
+      width: 310px;
+    }
+
+    h4 {
+      margin: 54px 24px 12px;
+    }
+
+    .close {
+      margin-right: 24px;
+    }
+  }
+
+  .close {
+    cursor: pointer;
+    display: none;
+    float: right;
+  }
+
+  .hamburger {
+    display: none;
+    float: left;
+    font-size: 24px;
+    margin-right: 15px;
+  }
+
+  .join {
+    float: right;
+    cursor: pointer;
+  }
+
+  .people {
+    align-items: center;
+    color: gray;
+    cursor: pointer;
+    display: flex;
+    font-size: 13px;
+    position: absolute;
+    right: 34px;
+    top: 34px;
+    z-index: 1;
+
+    &.active {
+      color: #5babfc;
+    }
+
+    span {
+      margin-right: 8px;
+    }
+  }
+
+  .overlay {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 6px 10px rgba(20, 20, 20, 0.15);
+    width: 600px;
+    padding: 40px;
+    overflow: hidden;
+
+    h4 {
+      margin: 0 0 20px;
+    }
+
+    .close {
+      display: block;
+    }
+  }
+
+  .form {
+    margin: 60px 0 40px;
+    display: flex;
+
+    input,
+    button {
+      padding: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+
+    input {
+      border: 1px solid #aeb6c1;
+      color: #585858;
+      flex: 1;
+      margin-right: 10px;
+
+      &:focus {
+        outline: none;
+        border-color: #48576b;
+      }
+    }
+
+    button {
+      background-color: #5babfc;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+    }
+  }
+
+  @media (max-width: 950px) {
+    .channels,
+    .members.shown {
+      width: 200px;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .channels {
+      height: 100%;
+      position: absolute;
+      z-index: 10;
+      transition: 0.3s ease-in-out;
+      width: 100%;
+
+      &:not(.shown) {
+        transform: translateX(-100%);
+      }
+    }
+
+    .user {
+      padding-top: 24px;
+    }
+
+    .close {
+      display: inline-block;
+    }
+
+    .chat {
+      margin: 5px;
+    }
+
+    .hamburger {
+      display: inline;
+    }
+
+    .members.shown {
+      height: 100%;
+      padding: 24px;
+      position: absolute;
+      z-index: 10;
+      width: 100%;
+
+      h4 {
+        margin-top: 0;
+      }
+
+      h4 span {
+        margin-right: 48px;
+      }
+    }
+
+    .modal {
+      height: 100%;
+      width: 100%;
+    }
+  }
+}
