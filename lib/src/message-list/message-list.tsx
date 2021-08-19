@@ -38,6 +38,7 @@ export interface MessageRendererProps {
   isOwn: boolean;
   message: Message;
   time: string;
+  editedText: string;
   user?: UUIDMetadataObject<ObjectCustom>;
 }
 
@@ -51,6 +52,8 @@ export interface MessageListProps {
   welcomeMessages?: false | Message | Message[];
   /** Pass in an emoji picker component if you want to enable message reactions. See Emoji Pickers section of the docs to get more details */
   reactionsPicker?: ReactElement<EmojiPickerElementProps>;
+  /** Provide extra actions renderer to add custom action buttons to each message */
+  extraActionsRenderer?: (message: Message) => JSX.Element;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
@@ -357,14 +360,22 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderItem = (message: Message) => {
     const uuid = message.uuid || message.publisher || "";
     const currentUserClass = isOwnMessage(uuid) ? "pn-msg--own" : "";
+    const actions = message.actions;
+    const deleted = !!Object.keys(actions?.deleted || {}).length;
+
+    if (deleted) return;
 
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
         {props.reactionsPicker && message.message.type !== "welcome" && (
           <div className="pn-msg__actions">
+            {props.extraActionsRenderer && (props.filter ? props.filter(message) : true)
+              ? props.extraActionsRenderer(message)
+              : null}
             <div
               className="pn-msg__reactions-toggle"
+              title="Add a reaction"
               onClick={(e) => {
                 emojiPickerShown && reactingToMessage === message.timetoken
                   ? setEmojiPickerShown(false)
@@ -386,9 +397,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const isOwn = isOwnMessage(uuid);
     const attachments = message.message.attachments || [];
     const file = message.message.file;
+    const actions = message.actions;
+    const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
     if (props.messageRenderer && (props.filter ? props.filter(message) : true))
-      return props.messageRenderer({ message, user, time, isOwn });
+      return props.messageRenderer({ message, user, time, isOwn, editedText });
 
     return (
       <>
@@ -404,9 +417,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             </div>
             {message.message.text ? (
               props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-                props.bubbleRenderer({ message, user, time, isOwn })
+                props.bubbleRenderer({ message, user, time, isOwn, editedText })
               ) : (
-                <div className="pn-msg__bubble">{message.message.text}</div>
+                <div className="pn-msg__bubble">{editedText || message.message.text}</div>
               )
             ) : null}
           </div>

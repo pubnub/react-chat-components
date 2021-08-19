@@ -21,9 +21,10 @@
   --msg__padding: 10px 24px;
   --msg__actions--hover__background: #e1dfe6;
   --msg__actions__background: #ffffff;
+  --msg__actions__borderRadius: 10px;
   --msg__actions__color: #585858;
   --msg__actions__fontSize: 22px;
-  --msg__actions__borderRadius: 10px;
+  --msg__actions__margin: 0 0 0 4px;
   --msg__actions__padding: 2px 8px;
   --msg__actions__right: 10px;
   --msg__actions__top: 10px;
@@ -164,13 +165,15 @@
     right: var(--msg__actions__right);
     top: var(--msg__actions__top);
 
-    & > div {
+    & > * {
       background: var(--msg__actions__background);
       border-radius: var(--msg__actions__borderRadius);
+      display: inline-block;
+      margin: var(--msg__actions__margin);
       padding: var(--msg__actions__padding);
     }
 
-    & > div:hover {
+    & > *:hover {
       background: var(--msg__actions--hover__background);
     }
   }
