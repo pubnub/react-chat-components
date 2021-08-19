@@ -8,6 +8,8 @@ export interface ChannelListProps {
   children?: ReactNode;
   /** Pass a list of channels, including metadata, to render on the list */
   channels: ChannelMetadataObject<ObjectCustom>[] | string[];
+  /** Provide extra actions renderer to add custom action buttons to each channel */
+  extraActionsRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** Provide custom channel renderer to override default themes and CSS variables. */
   channelRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** A callback run when user clicked one of the channels. Can be used to switch current channel. */
@@ -37,7 +39,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
     a: ChannelMetadataObject<ObjectCustom>,
     b: ChannelMetadataObject<ObjectCustom>
   ) => {
-    return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
+    return a?.name?.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
   const channelFromString = (channel: ChannelMetadataObject<ObjectCustom> | string) => {
@@ -81,8 +83,11 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
           />
         )}
         <div className="pn-channel__title">
-          <p className="pn-channel__name">{channel.name}</p>
+          <p className="pn-channel__name">{channel.name || channel.id}</p>
           {channel.description && <p className="pn-channel__description">{channel.description}</p>}
+        </div>
+        <div className="pn-channel__actions">
+          {props.extraActionsRenderer ? props.extraActionsRenderer(channel) : null}
         </div>
       </div>
     );
