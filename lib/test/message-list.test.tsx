@@ -118,7 +118,7 @@ describe("Message List", () => {
     userEvent.type(screen.getByDisplayValue("Test Message"), "{enter}");
 
     expect(await screen.findByText("Test Message")).toBeVisible();
-    expect(await screen.findByText("1 new messages ↓")).toBeVisible();
+    expect(await screen.findByText("1 new message")).toBeVisible();
   });
 
   test("renders reactions", async () => {
@@ -149,7 +149,7 @@ describe("Message List", () => {
       />
     );
 
-    const triggers = await screen.findAllByText("☺");
+    const triggers = await screen.findAllByTitle("Add a reaction");
     userEvent.click(triggers[0]);
     userEvent.click(screen.getByText("😄"));
 

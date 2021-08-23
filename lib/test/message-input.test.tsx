@@ -14,7 +14,7 @@ describe("Message Input", () => {
 
     expect(screen.getByText("Send")).toBeVisible();
     expect(screen.getByPlaceholderText("Type Message")).toBeVisible();
-    expect(screen.queryByText("☺")).not.toBeInTheDocument();
+    expect(screen.queryByTitle("Add an emoji")).not.toBeInTheDocument();
   });
 
   test("accepts and renders input", () => {
@@ -119,20 +119,20 @@ describe("Message Input", () => {
   test("renders emoji picker button", () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    expect(screen.getByText("☺")).toBeVisible();
+    expect(screen.getByTitle("Add an emoji")).toBeVisible();
   });
 
   test("opens emoji picker on button click", () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByTitle("Add an emoji"));
     expect(screen.getByText("Emoji Picker")).toBeVisible();
   });
 
   test("closes emoji picker when clicking outside", () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByTitle("Add an emoji"));
     userEvent.click(screen.getByPlaceholderText("Type Message"));
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
@@ -140,7 +140,7 @@ describe("Message Input", () => {
   test("emoji picker inserts emojis into the input", async () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByText("☺"));
+    userEvent.click(screen.getByTitle("Add an emoji"));
     userEvent.click(screen.getByText("🙂"));
     expect(screen.getByDisplayValue("🙂")).toBeVisible();
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
