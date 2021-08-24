@@ -244,7 +244,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     return (
       <>
         {file ? (
-          <div className="pn-msg-input__icon" onClick={handleFileClear}>
+          <div className="pn-msg-input__icon" title="Remove the file" onClick={handleFileClear}>
             <XCircleIcon />
           </div>
         ) : null}
@@ -253,12 +253,13 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
             {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
           </label>
           <input
-            id="file-upload"
-            type="file"
-            ref={fileRef}
-            className="pn-msg-input__fileInput"
-            onChange={handleFileChange}
             accept={props.fileUpload === "image" ? "image/*" : "*"}
+            className="pn-msg-input__fileInput"
+            data-testid="file-upload"
+            id="file-upload"
+            onChange={handleFileChange}
+            ref={fileRef}
+            type="file"
           />
         </div>
       </>
@@ -295,13 +296,14 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         <div className="pn-msg-input__spacer">
           <textarea
             className="pn-msg-input__textarea"
-            placeholder={props.placeholder}
-            rows={1}
-            value={text}
+            data-testid="message-input"
+            disabled={props.disabled || !!file}
             onChange={(e) => handleInputChange(e)}
             onKeyPress={(e) => handleKeyPress(e)}
+            placeholder={props.placeholder}
             ref={inputRef}
-            disabled={props.disabled || !!file}
+            rows={1}
+            value={text}
           />
         </div>
 
@@ -312,8 +314,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         {!props.hideSendButton && (
           <button
             className="pn-msg-input__send"
-            onClick={() => sendMessage()}
             disabled={props.disabled}
+            onClick={() => sendMessage()}
           >
             {props.sendButton}
           </button>
@@ -324,11 +326,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 };
 
 MessageInput.defaultProps = {
+  disabled: false,
+  fileUpload: undefined,
   hideSendButton: false,
   placeholder: "Type Message",
   sendButton: "Send",
-  disabled: false,
   senderInfo: false,
   typingIndicator: false,
-  fileUpload: undefined,
 };

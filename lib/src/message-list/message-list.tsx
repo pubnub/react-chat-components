@@ -368,11 +368,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
         {renderMessage(message)}
-        {props.reactionsPicker && message.message.type !== "welcome" && (
-          <div className="pn-msg__actions">
-            {props.extraActionsRenderer && (props.filter ? props.filter(message) : true)
-              ? props.extraActionsRenderer(message)
-              : null}
+        <div className="pn-msg__actions">
+          {props.extraActionsRenderer ? props.extraActionsRenderer(message) : null}
+          {props.reactionsPicker && message.message.type !== "welcome" && (
             <div
               className="pn-msg__reactions-toggle"
               title="Add a reaction"
@@ -384,8 +382,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             >
               <EmojiIcon />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   };
@@ -464,8 +462,9 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderFile = (file: FileAttachment) => {
     return (
       <div className="pn-msg__file">
-        {/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
+        {/\.(svg|gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
           <img
+            alt={file.name}
             className="pn-msg__image"
             src={file.url}
             onLoad={() => {

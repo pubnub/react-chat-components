@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
-import { render, screen } from "../mock/custom-renderer";
+import { findByAltText, render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 import users from "../../data/users.json";
@@ -21,6 +21,7 @@ describe("Message Input", () => {
     render(<MessageInput />);
 
     userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+
     expect(screen.getByDisplayValue("Changed Value")).toBeVisible();
   });
 
@@ -29,6 +30,7 @@ describe("Message Input", () => {
     render(<MessageInput onChange={handleChange} />);
 
     userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+
     expect(handleChange).toHaveBeenCalledWith("Changed Value");
   });
 
@@ -62,6 +64,7 @@ describe("Message Input", () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
     userEvent.click(screen.getByText("Send"));
+
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
 
@@ -69,6 +72,7 @@ describe("Message Input", () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
     userEvent.type(screen.getByDisplayValue("Initial Value"), "{enter}");
+
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
 
@@ -76,6 +80,7 @@ describe("Message Input", () => {
     render(<MessageInput />);
 
     userEvent.click(screen.getByText("Send"));
+
     expect(screen.getByDisplayValue("")).toBeVisible();
   });
 
@@ -84,6 +89,7 @@ describe("Message Input", () => {
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
     userEvent.click(screen.getByText("Send"));
+
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledTimes(1);
   });
@@ -93,6 +99,7 @@ describe("Message Input", () => {
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
     userEvent.click(screen.getByText("Send"));
+
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
   });
@@ -107,6 +114,7 @@ describe("Message Input", () => {
     });
 
     userEvent.click(screen.getByText("Send"));
+
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -126,6 +134,7 @@ describe("Message Input", () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
     userEvent.click(screen.getByTitle("Add an emoji"));
+
     expect(screen.getByText("Emoji Picker")).toBeVisible();
   });
 
@@ -134,6 +143,7 @@ describe("Message Input", () => {
 
     userEvent.click(screen.getByTitle("Add an emoji"));
     userEvent.click(screen.getByPlaceholderText("Type Message"));
+
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
 
@@ -142,7 +152,57 @@ describe("Message Input", () => {
 
     userEvent.click(screen.getByTitle("Add an emoji"));
     userEvent.click(screen.getByText("🙂"));
+
     expect(screen.getByDisplayValue("🙂")).toBeVisible();
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
+  });
+
+  /** File upload */
+  test("renders file upload button", () => {
+    render(<MessageInput fileUpload="all" />);
+
+    expect(screen.getByTitle("Add a file")).toBeVisible();
+  });
+
+  test("accepts a file and renders a text preview", async () => {
+    render(<MessageInput fileUpload="all" />);
+    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
+    const input = screen.getByTestId("message-input") as HTMLTextAreaElement;
+
+    userEvent.upload(fileInput, file);
+
+    expect(fileInput.files[0]).toStrictEqual(file);
+    expect(fileInput.files).toHaveLength(1);
+    expect(input).toHaveValue("hello.png");
+  });
+
+  test("clears the file", async () => {
+    render(<MessageInput fileUpload="all" />);
+    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
+    const input = screen.getByTestId("message-input") as HTMLTextAreaElement;
+
+    userEvent.upload(fileInput, file);
+    userEvent.click(screen.getByTitle("Remove the file"));
+
+    expect(input).toHaveValue("");
+  });
+
+  test("sends the file", async () => {
+    const handleSend = jest.fn();
+    render(<MessageInput fileUpload="all" onSend={handleSend} />);
+    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
+
+    userEvent.upload(fileInput, file);
+    userEvent.click(screen.getByText("Send"));
+
+    expect(await screen.findByDisplayValue("")).toBeVisible();
+    expect(handleSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: "hello.png",
+      })
+    );
   });
 });

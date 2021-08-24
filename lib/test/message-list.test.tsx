@@ -65,10 +65,22 @@ describe("Message List", () => {
     expect(screen.getByText("12:25")).toBeVisible();
   });
 
+  test("renders extra actions", async () => {
+    const message = {
+      message: { type: "welcome", text: "Welcome" },
+      timetoken: "16165851271766362",
+    };
+    render(
+      <MessageList welcomeMessages={message} extraActionsRenderer={() => <div>Extra Action</div>} />
+    );
+
+    expect(screen.getByText("Extra Action")).toBeVisible();
+  });
+
   test("renders newly sent messages", async () => {
     render(
       <div>
-        <MessageList welcomeMessages={false} />
+        <MessageList />
         <MessageInput draftMessage="New Message" />
       </div>
     );
@@ -79,7 +91,7 @@ describe("Message List", () => {
   });
 
   test("fetches and renders message history", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={10} />);
+    render(<MessageList fetchMessages={10} />);
 
     expect(
       await screen.findByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
@@ -87,7 +99,7 @@ describe("Message List", () => {
   });
 
   test("fetches more history when scrolling to top of the list", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={3} />);
+    render(<MessageList fetchMessages={4} />);
 
     expect(
       await screen.findByText("Curabitur id quam ac mauris aliquet imperdiet quis eget nisl.")
@@ -107,7 +119,7 @@ describe("Message List", () => {
   test("shows a notice on a new message when scrolled out of bottom of the list", async () => {
     render(
       <div>
-        <MessageList welcomeMessages={false} />
+        <MessageList />
         <MessageInput draftMessage="Test Message" />
       </div>
     );
@@ -121,8 +133,21 @@ describe("Message List", () => {
     expect(await screen.findByText("1 new message")).toBeVisible();
   });
 
+  /** Fetching files */
+
+  test("fetches file urls", async () => {
+    render(<MessageList fetchMessages={10} />);
+
+    expect(await screen.findByAltText("pubnub-logo-docs.svg")).toHaveAttribute(
+      "src",
+      "https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg"
+    );
+  });
+
+  /** Reactions */
+
   test("renders reactions", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+    render(<MessageList fetchMessages={10} enableReactions />);
 
     expect(await screen.findByText("🙂 1")).toBeVisible();
   });
@@ -130,7 +155,7 @@ describe("Message List", () => {
   // TODO toBeVisible doesnt work with visibility: hidden on the dom tree
   // https://github.com/testing-library/jest-dom/issues/209
   // test("closes the reactions panel on outside click", async () => {
-  //   render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+  //   render(<MessageList fetchMessages={10} enableReactions />);
 
   //   const triggers = await screen.findAllByText("☺");
   //   userEvent.click(triggers[0]);
@@ -157,7 +182,7 @@ describe("Message List", () => {
   });
 
   test("adds to existing reactions", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+    render(<MessageList fetchMessages={10} enableReactions />);
     userEvent.click(await screen.findByText("🙂 1"));
 
     expect(await screen.findByText("🙂 2")).toBeVisible();
@@ -165,11 +190,46 @@ describe("Message List", () => {
   });
 
   test("removes from existing reactions", async () => {
-    render(<MessageList welcomeMessages={false} fetchMessages={10} enableReactions />);
+    render(<MessageList fetchMessages={10} enableReactions />);
     userEvent.click(await screen.findByText("🙂 1"));
     userEvent.click(await screen.findByText("🙂 2"));
 
     expect(await screen.findByText("🙂 1")).toBeVisible();
     expect(screen.queryByText("🙂 2")).not.toBeInTheDocument();
+  });
+
+  /** Message modifications/removals */
+
+  test("renders message text edits", async () => {
+    const message = {
+      message: { type: "text", text: "Original text" },
+      timetoken: "16165851271766362",
+      actions: {
+        updated: {
+          "Modified text": [{ actionTimetoken: "16165851271766365", uuid: "any" }],
+        },
+      },
+    };
+
+    render(<MessageList welcomeMessages={message} />);
+
+    expect(await screen.findByText("Modified text")).toBeVisible();
+    expect(screen.queryByText("Original text")).not.toBeInTheDocument();
+  });
+
+  test("renders message text edits", async () => {
+    const message = {
+      message: { type: "text", text: "Original text" },
+      timetoken: "16165851271766362",
+      actions: {
+        deleted: {
+          ".": [{ actionTimetoken: "16165851271766365", uuid: "any" }],
+        },
+      },
+    };
+
+    render(<MessageList welcomeMessages={message} />);
+
+    expect(screen.queryByText("Original text")).not.toBeInTheDocument();
   });
 });
