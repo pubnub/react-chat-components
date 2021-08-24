@@ -36,6 +36,7 @@
     "yargs": "^17.1.1"
   },
   "scripts": {
+    "setup": "cd src/moderated-chat; node populate-pn-objects.js; cd ../..",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
