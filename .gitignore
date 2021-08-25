@@ -6,3 +6,7 @@ TODO.md
 storybook-static
 coverage
 keys.json
+
+# GitHub Actions #
+##################
+.github/.release
