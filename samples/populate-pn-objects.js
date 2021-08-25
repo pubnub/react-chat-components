@@ -6,8 +6,8 @@ const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const sampleSize = require("lodash.sampleSize");
 
-const users = require("../../../data/users.json");
-const channels = require("../../../data/channels-work.json");
+const users = require("../data/users.json");
+const channels = require("../data/channels-work.json");
 
 /**
  * This version of the population script adds:
@@ -40,7 +40,7 @@ const sleep = async (ms) => {
 };
 
 const getKeys = async () => {
-  const text = await fs.readFileSync("../../pubnub-keys.json", "utf-8");
+  const text = await fs.readFileSync("pubnub-keys.json", "utf-8");
   return JSON.parse(text);
 };
 
