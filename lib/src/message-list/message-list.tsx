@@ -103,7 +103,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const scrollToBottom = () => {
     if (!endRef.current) return;
-    endRef.current.scrollIntoView();
+    endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   };
 
   const setupSpinnerObserver = () => {
