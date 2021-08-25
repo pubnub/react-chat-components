@@ -36,6 +36,7 @@
     "yargs": "^17.1.1"
   },
   "scripts": {
+    "setup": "node populate-pn-objects.js",
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
