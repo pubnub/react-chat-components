@@ -22,6 +22,7 @@ import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
 import ImageIcon from "../icons/image.svg";
 import XCircleIcon from "../icons/x-circle.svg";
+import SpinnerIcon from "../icons/spinner.svg";
 
 export interface MessageInputProps {
   /** Set a placeholder message display in the text window. */
@@ -61,6 +62,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
   const [picker, setPicker] = useState<ReactElement>();
+  const [loader, setLoader] = useState(false);
 
   const [users] = useAtom(UsersMetaAtom);
   const [theme] = useAtom(ThemeAtom);
@@ -94,6 +96,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const sendMessage = async () => {
     try {
       if (!file && !text) return;
+      setLoader(true);
 
       if (file) {
         await pubnub.sendFile({ channel, file });
@@ -109,10 +112,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       }
 
       if (props.typingIndicator) stopTypingIndicator();
-      setFile(null);
-      setText("");
+      clearInput();
     } catch (e) {
       onError(e);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -136,6 +140,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     } catch (e) {
       onError(e);
     }
+  };
+
+  const clearInput = () => {
+    setFile(null);
+    setText("");
+    fileRef.current.value = null;
   };
 
   /*
@@ -200,12 +210,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
-  const handleFileClear = () => {
-    setFile(null);
-    setText("");
-    fileRef.current.value = null;
-  };
-
   /*
   /* Lifecycle
   */
@@ -244,7 +248,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     return (
       <>
         {file ? (
-          <div className="pn-msg-input__icon" title="Remove the file" onClick={handleFileClear}>
+          <div className="pn-msg-input__icon" title="Remove the file" onClick={clearInput}>
             <XCircleIcon />
           </div>
         ) : null}
@@ -314,10 +318,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         {!props.hideSendButton && (
           <button
             className="pn-msg-input__send"
-            disabled={props.disabled}
+            disabled={loader || props.disabled}
             onClick={() => sendMessage()}
           >
-            {props.sendButton}
+            {loader ? <SpinnerIcon /> : props.sendButton}
           </button>
         )}
       </div>

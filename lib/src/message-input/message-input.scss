@@ -26,7 +26,7 @@
   --msg-input__send__fontSize: 13px;
   --msg-input__send__fontWeight: bold;
   --msg-input__send__margin: 2px 2px 2px 8px;
-  --msg-input__send__minWidth: 40px;
+  --msg-input__send__minWidth: 53px;
   --msg-input__send__padding: 10px;
   --msg-input__textarea--focus__border: 1px solid #ffffff;
   --msg-input__textarea--focus__outline: none;
@@ -103,6 +103,11 @@
     outline: none;
     padding: var(--msg-input__send__padding);
     white-space: nowrap;
+
+    svg {
+      height: 18px;
+      width: 18px;
+    }
   }
 
   &__emoji-picker {
