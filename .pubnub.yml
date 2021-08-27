@@ -14,11 +14,15 @@ changelog:
         type: feature
       - text: Support for message edits/removals and extra actions renderer in MessageList
         type: feature
+      - text: Spinner loader for MessageInput send button
+        type: feature
       - text: ChannelList extra actions renderer
         type: feature
       - text: Add new disabled state in MessageInput
         type: feature
       - text: Ability to refetch data in useChannelMembers and useUserMemberships
+        type: feature
+      - text: Renamed Message interface to MessageEnvelope, added StandardMessage and FileMessage
         type: feature
       - text: Improved MessageList scrolling behavior and detection
         type: fix

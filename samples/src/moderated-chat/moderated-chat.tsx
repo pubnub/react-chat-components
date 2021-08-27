@@ -6,7 +6,7 @@ import {
   ChannelList,
   Chat,
   MemberList,
-  Message,
+  MessageEnvelope,
   MessageInput,
   MessageList,
   TypingIndicator,
@@ -30,7 +30,7 @@ function ModeratedChat() {
   const [showChannels, setShowChannels] = useState(true);
   const [showChannelsModal, setShowChannelsModal] = useState(false);
   const [showFlaggingModal, setShowFlaggingModal] = useState(false);
-  const [flaggingMessage, setFlaggingMessage] = useState<Message>();
+  const [flaggingMessage, setFlaggingMessage] = useState<MessageEnvelope>();
   const defaultChannel = {
     id: "default",
     name: "Default Channel",
@@ -85,7 +85,7 @@ function ModeratedChat() {
     }
   };
 
-  const openFlaggingModal = (message: Message) => {
+  const openFlaggingModal = (message: MessageEnvelope) => {
     setFlaggingMessage(message);
     setShowFlaggingModal(true);
   };

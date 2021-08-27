@@ -13,7 +13,8 @@ import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import {
-  Message,
+  MessageEnvelope,
+  isFileMessage,
   ImageAttachment,
   LinkAttachment,
   EmojiPickerElementProps,
@@ -36,7 +37,7 @@ import "./message-list.scss";
 
 export interface MessageRendererProps {
   isOwn: boolean;
-  message: Message;
+  message: MessageEnvelope;
   time: string;
   editedText: string;
   user?: UUIDMetadataObject<ObjectCustom>;
@@ -49,17 +50,17 @@ export interface MessageListProps {
   /** Enable to render reactions that were added to messages. Be sure to also set up reactionsPicker when this is enabled */
   enableReactions?: boolean;
   /** Provide custom welcome messages to replace the default one or set to false to disable */
-  welcomeMessages?: false | Message | Message[];
+  welcomeMessages?: false | MessageEnvelope | MessageEnvelope[];
   /** Pass in an emoji picker component if you want to enable message reactions. See Emoji Pickers section of the docs to get more details */
   reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Provide extra actions renderer to add custom action buttons to each message */
-  extraActionsRenderer?: (message: Message) => JSX.Element;
+  extraActionsRenderer?: (message: MessageEnvelope) => JSX.Element;
   /** Provide custom message item renderer if themes and CSS variables aren't enough */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Use this function to render only some of the messages on your own. */
-  filter?: (message: Message) => boolean;
+  filter?: (message: MessageEnvelope) => boolean;
   /** A callback run on list scroll */
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
 }
@@ -115,7 +116,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const scrollToBottom = () => {
     if (!endRef.current) return;
-    endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    endRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
   };
 
   const setupSpinnerObserver = () => {
@@ -216,15 +217,22 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const fetchFileUrl = (message: Message) => {
-    const url = pubnub.getFileUrl({
-      channel: message.channel,
-      id: message.message.file.id,
-      name: message.message.file.name,
-    });
+  const fetchFileUrl = (envelope: MessageEnvelope) => {
+    if (!isFileMessage(envelope.message)) return envelope;
 
-    message.message.file.url = url;
-    return message;
+    try {
+      const url = pubnub.getFileUrl({
+        channel: envelope.channel,
+        id: envelope.message.file.id,
+        name: envelope.message.file.name,
+      });
+
+      envelope.message.file.url = url;
+    } catch (e) {
+      onError(e);
+    } finally {
+      return envelope;
+    }
   };
 
   /*
@@ -260,7 +268,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       const newMessages =
         ((response?.channels[channel] || []).map((m) =>
           m.messageType === 4 ? fetchFileUrl(m) : m
-        ) as Message[]) || [];
+        ) as MessageEnvelope[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
@@ -357,27 +365,28 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       : renderItem(props.welcomeMessages);
   };
 
-  const renderItem = (message: Message) => {
-    const uuid = message.uuid || message.publisher || "";
+  const renderItem = (envelope: MessageEnvelope) => {
+    const uuid = envelope.uuid || envelope.publisher || "";
     const currentUserClass = isOwnMessage(uuid) ? "pn-msg--own" : "";
-    const actions = message.actions;
+    const actions = envelope.actions;
     const deleted = !!Object.keys(actions?.deleted || {}).length;
+    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
 
     if (deleted) return;
 
     return (
-      <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
-        {renderMessage(message)}
+      <div className={`pn-msg ${currentUserClass}`} key={envelope.timetoken}>
+        {renderMessage(envelope)}
         <div className="pn-msg__actions">
-          {props.extraActionsRenderer ? props.extraActionsRenderer(message) : null}
-          {props.reactionsPicker && message.message.type !== "welcome" && (
+          {props.extraActionsRenderer ? props.extraActionsRenderer(envelope) : null}
+          {props.reactionsPicker && message?.type !== "welcome" && (
             <div
               className="pn-msg__reactions-toggle"
               title="Add a reaction"
               onClick={(e) => {
-                emojiPickerShown && reactingToMessage === message.timetoken
+                emojiPickerShown && reactingToMessage === envelope.timetoken
                   ? setEmojiPickerShown(false)
-                  : handleOpenReactions(e, message.timetoken);
+                  : handleOpenReactions(e, envelope.timetoken);
               }}
             >
               <EmojiIcon />
@@ -388,18 +397,19 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     );
   };
 
-  const renderMessage = (message: Message) => {
-    const uuid = message.uuid || message.publisher || "";
-    const user = message.message.sender || getUser(uuid);
-    const time = getTime(message.timetoken as number);
+  const renderMessage = (envelope: MessageEnvelope) => {
+    const uuid = envelope.uuid || envelope.publisher || "";
+    const time = getTime(envelope.timetoken as number);
     const isOwn = isOwnMessage(uuid);
-    const attachments = message.message.attachments || [];
-    const file = message.message.file;
-    const actions = message.actions;
+    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
+    const user = message?.sender || getUser(uuid);
+    const attachments = message?.attachments || [];
+    const file = isFileMessage(envelope.message) && envelope.message.file;
+    const actions = envelope.actions;
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
-    if (props.messageRenderer && (props.filter ? props.filter(message) : true))
-      return props.messageRenderer({ message, user, time, isOwn, editedText });
+    if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
+      return props.messageRenderer({ message: envelope, user, time, isOwn, editedText });
 
     return (
       <>
@@ -413,26 +423,26 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__author">{user?.name || uuid}</span>
               <span className="pn-msg__time">{time}</span>
             </div>
-            {message.message.text ? (
-              props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-                props.bubbleRenderer({ message, user, time, isOwn, editedText })
+            {message?.text ? (
+              props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
+                props.bubbleRenderer({ message: envelope, user, time, isOwn, editedText })
               ) : (
-                <div className="pn-msg__bubble">{editedText || message.message.text}</div>
+                <div className="pn-msg__bubble">{editedText || message?.text}</div>
               )
             ) : null}
           </div>
           <div className="pn-msg__extras">
-            {file ? renderFile(file) : null}
+            {file && file.name ? renderFile(file) : null}
             {attachments.map(renderAttachment)}
-            {props.enableReactions && renderReactions(message)}
+            {props.enableReactions && renderReactions(envelope)}
           </div>
         </div>
       </>
     );
   };
 
-  const renderReactions = (message: Message) => {
-    const reactions = message.actions?.reaction;
+  const renderReactions = (envelope: MessageEnvelope) => {
+    const reactions = envelope.actions?.reaction;
     if (!reactions) return;
 
     return (
@@ -447,8 +457,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               key={reaction}
               onClick={() => {
                 userReaction
-                  ? removeReaction(reaction, message.timetoken, userReaction.actionTimetoken)
-                  : addReaction(reaction, message.timetoken);
+                  ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
+                  : addReaction(reaction, envelope.timetoken);
               }}
             >
               {reaction} &nbsp; {instances.length}

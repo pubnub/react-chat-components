@@ -6,16 +6,9 @@ export interface EmojiPickerElementProps {
   onSelect?: ({ native: string }) => void;
 }
 
-export interface Message {
+export interface MessageEnvelope {
   channel?: string;
-  message: {
-    type?: string;
-    text?: string;
-    sender?: UUIDMetadataObject<ObjectCustom>;
-    attachments?: Array<ImageAttachment | LinkAttachment>;
-    file?: FileAttachment;
-    [key: string]: unknown;
-  };
+  message: StandardMessage | FileMessage;
   timetoken: string | number;
   messageType?: string | number;
   publisher?: string;
@@ -31,6 +24,23 @@ export interface Message {
       }>;
     };
   };
+}
+
+export interface StandardMessage {
+  type?: string;
+  text?: string;
+  sender?: UUIDMetadataObject<ObjectCustom>;
+  attachments?: Array<ImageAttachment | LinkAttachment>;
+  [key: string]: unknown;
+}
+
+export interface FileMessage {
+  message?: StandardMessage;
+  file: FileAttachment;
+}
+
+export function isFileMessage(message: StandardMessage | FileMessage): message is FileMessage {
+  return (message as FileMessage).file !== undefined;
 }
 
 export interface FileAttachment {
