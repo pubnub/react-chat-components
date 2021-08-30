@@ -71,29 +71,37 @@ apps for various use cases, with different functionalities and customizable look
    and test environments.
 
 3. Some of the functionalities you might want to enable on your keyset depending on the use-case
-   include _Presence_, _Storage & Playback_ (including correct Renention) and _Objects_ (be sure to
-   select a geographical region corresponding to most users of your application).
+   include _Presence_, _Files_, _Storage & Playback_ (including correct Retention Period) and
+   _Objects_ (be sure to select a geographical region corresponding to most users of your
+   application). The moderated-chat sample _requires_ these features are set in order to work with
+   the
+   [moderation dashboard](https://github.com/pubnub/moderation-dashboard/blob/master/how-to-design-modertable-app.md).
 
 ## Run Sample Apps
 
-Start with exploring our [Sample Apps](https://pubnub.github.io/react-chat-components/samples) that
+Start by exploring our [Sample Apps](https://pubnub.github.io/react-chat-components/samples) that
 are built using chat components. Follow the steps below to run the apps locally in your own
 environment.
 
 1. Clone the repository:
 
 ```bash
-git clone git@github.com:pubnub/react-chat-components.git
+git clone https://github.com/pubnub/react-chat-components.git
 ```
 
-2. Go to the `samples` folder and install the dependencies:
+2. Go to the `samples` folder:
 
 ```bash
 cd react-chat-components/samples
+```
+
+3. Install the dependencies:
+
+```bash
 npm install
 ```
 
-3. Follow steps from the
+4. Follow steps from the
    [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account)
    to create your own keys and paste them into `pubnub-keys.json`:
 
@@ -101,7 +109,13 @@ npm install
 vi pubnub-keys.json
 ```
 
-4. Run the application:
+5. Pre-populate the User and Channel Object metadata (required only for the moderated-chat sample):
+
+```bash
+npm run setup
+```
+
+6. Run the application:
 
 ```bash
 npm start

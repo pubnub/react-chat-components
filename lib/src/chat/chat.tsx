@@ -11,7 +11,7 @@ import {
   StatusEvent,
 } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { Themes, Message, RetryOptions } from "../types";
+import { Themes, MessageEnvelope, RetryOptions } from "../types";
 import cloneDeep from "lodash.clonedeep";
 import setDeep from "lodash.set";
 import {
@@ -51,7 +51,7 @@ export interface ChatProps {
   /** Options for automatic retry on error behavior. */
   retryOptions?: RetryOptions;
   /** A callback run on new messages. */
-  onMessage?: (message: Message) => unknown;
+  onMessage?: (message: MessageEnvelope) => unknown;
   /** A callback run on signals. */
   onSignal?: (message: SignalEvent) => unknown;
   /** A callback run on message actions. */
@@ -259,7 +259,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   /**
    * Event handlers
    */
-  const handleMessage = (message: Message) => {
+  const handleMessage = (message: MessageEnvelope) => {
     if (props.onMessage) props.onMessage(message);
 
     try {
@@ -335,6 +335,19 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   const handleFileEvent = (event: FileEvent) => {
     if (props.onFile) props.onFile(event);
+
+    try {
+      setMessages((messages) => {
+        const { file, message, ...payload } = event;
+        const newMessage = { ...payload, message: { file, message }, messageType: 4 };
+        const messagesClone = cloneDeep(messages) || {};
+        messagesClone[newMessage.channel] = messagesClone[newMessage.channel] || [];
+        messagesClone[newMessage.channel].push(newMessage);
+        return messagesClone;
+      });
+    } catch (e) {
+      props.onError(e);
+    }
   };
 
   const handleStatusEvent = (event: StatusEvent) => {

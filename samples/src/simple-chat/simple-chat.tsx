@@ -7,7 +7,7 @@ import {
   ChannelList,
   Chat,
   MemberList,
-  Message,
+  MessageEnvelope,
   MessageInput,
   MessageList,
   Themes,
@@ -17,7 +17,7 @@ import {
 
 import "./simple-chat.scss";
 import "emoji-mart/css/emoji-mart.css";
-import { ReactComponent as PeopleGroup } from "../people-group.svg";
+import { ReactComponent as PeopleGroup } from "../icons/people-group.svg";
 
 /**
  * In this simple application, data about users, channels and sample welcome messages are
@@ -40,7 +40,7 @@ function SimpleChat() {
   const [accessError, setAccessError] = useState(false);
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
-  const [welcomeMessages, setWelcomeMessages] = useState<{ [channel: string]: Message[] }>({});
+  const [welcomeMessages, setWelcomeMessages] = useState<{ [channel: string]: MessageEnvelope[] }>({});
   const [presenceData] = usePresence({ channels: allChannelIds }); // usePresnce is one of the custom hooks provided by Chat Components
   const [currentChannel, setCurrentChannel] = useState(socialChannelList[0]);
 
@@ -141,7 +141,7 @@ function SimpleChat() {
               >
                 <TypingIndicator showAsMessage />
               </MessageList>
-              <MessageInput typingIndicator emojiPicker={<Picker />} />
+              <MessageInput typingIndicator fileUpload="all" emojiPicker={<Picker />} />
             </div>
 
             <div className={`members ${showMembers && "shown"}`}>

@@ -1,12 +1,37 @@
 ---
 name: pubnub-react-chat-components
-version: v0.3.0
+version: v0.4.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - dist/index.js
   - dist/index.es.js
 changelog:
+  - changes:
+      - text: Basic file/image upload and display using Files API
+        type: feature
+      - text: Changes to the default theme color palette
+        type: feature
+      - text: Support for message edits/removals and extra actions renderer in MessageList
+        type: feature
+      - text: Spinner loader for MessageInput send button
+        type: feature
+      - text: ChannelList extra actions renderer
+        type: feature
+      - text: Add new disabled state in MessageInput
+        type: feature
+      - text: Ability to refetch data in useChannelMembers and useUserMemberships
+        type: feature
+      - text: Renamed Message interface to MessageEnvelope, added StandardMessage and FileMessage
+        type: feature
+      - text: Improved MessageList scrolling behavior and detection
+        type: fix
+      - text: useUser and useUserMemberships hook typings
+        type: fix
+      - text: usePresence hook options memoization
+        type: fix
+    date: 2021-08-25
+    version: v0.4.0
   - changes:
       - text: Remove default subscription to the 'user channel'
         type: feature

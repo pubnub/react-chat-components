@@ -4,13 +4,18 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 ## useUserMemberships
 
-The hook returns a list of channel memberships for a user. This method doesn't return a user's subscriptions.
-Pagination is handled internally, you can adjust the `limit` of returned channes on a single call (max/default 100) and call a function returned by the hook to get another page of results.
-This hook also sets up a listener that will react to updates and removals of already fetched Channels.
-However, this behavior requires a living subscription to the user getting updated - this should be handled by the components.
+The hook returns a list of channel memberships for a user. This method doesn't return a user's
+subscriptions. Pagination is handled internally, you can adjust the `limit` of returned channes on a
+single call (max/default 100) and call a function returned by the hook to get another page of
+results. This hook also sets up a listener that will react to removals of already fetched Channels
+(updates and new memberships are not handled due to technical limitations). However, this behavior
+requires a living subscription to the user getting updated - this should be handled by the
+components.
 
 ```js
-const [channels, fetchPage, total, error] = useUserMemberships({ uuid: "user" });
+const [channels, fetchPage, refetchMemberships, total, error] = useUserMemberships({
+  uuid: "user",
+});
 
 return (
   <Chat {...{ options }}>
@@ -34,9 +39,10 @@ return (
 
 ### Output
 
-| Parameter | Type          | Description                                                      |
-| --------- | ------------- | ---------------------------------------------------------------- |
-| array[0]  | ChannelData[] | List of returned channels.                                       |
-| array[1]  | Function      | Function that can be called to fetch another page of channels.   |
-| array[2]  | Number        | Total number of stored channels.                                 |
-| array[3]  | Error         | If there's an error fetching channels it will be available here. |
+| Parameter | Type          | Description                                                                                                       |
+| --------- | ------------- | ----------------------------------------------------------------------------------------------------------------- |
+| array[0]  | ChannelData[] | List of returned channels.                                                                                        |
+| array[1]  | Function      | Function that can be called to fetch another page of channels.                                                    |
+| array[2]  | Function      | Function that can be called to completely reset the hook. This can be used in case of expected membership updates |
+| array[3]  | Number        | Total number of stored channels.                                                                                  |
+| array[4]  | Error         | If there's an error fetching channels it will be available here.                                                  |

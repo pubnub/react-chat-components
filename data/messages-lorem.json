@@ -57,5 +57,17 @@
         ]
       }
     }
+  },
+  {
+    "message": {
+      "text": "Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.",
+      "type": "text",
+      "file": { "name": "pubnub-logo-docs.svg", "id": "random-file-uuid" }
+    },
+    "messageType": 4,
+    "timetoken": "16070949464879837",
+    "uuid": "user_ed145d8b0f094b83a2d51d428a59d0cb",
+    "channel": "any",
+    "actions": {}
   }
 ]

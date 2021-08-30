@@ -6,6 +6,7 @@ import type {
   HereNowResponse,
   PublishResponse,
   SignalResponse,
+  SendFileResponse,
 } from "pubnub";
 import users from "../../data/users.json";
 import messages from "../../data/messages-lorem.json";
@@ -55,6 +56,10 @@ export function PubNubMock(): Partial<PubNub> {
         },
       });
     });
+  };
+
+  const getFileUrl = ({ channel, id, name }) => {
+    return `https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg`;
   };
 
   const getUUID = () => uuid;
@@ -133,6 +138,18 @@ export function PubNubMock(): Partial<PubNub> {
     });
   };
 
+  const sendFile = (args) => {
+    // TODO: generate file message
+
+    return new Promise<SendFileResponse>((resolve) => {
+      resolve({
+        timetoken: Date.now() + "0000",
+        id: "random-file-uuid",
+        name: args.file.name,
+      });
+    });
+  };
+
   // const objects = {
   // getAllUUIDMetadata: () => ({
   //   data: users.map((u) => u.uuid),
@@ -161,6 +178,7 @@ export function PubNubMock(): Partial<PubNub> {
     addMessageAction,
     addListener,
     fetchMessages,
+    getFileUrl,
     getUUID,
     getSubscribedChannels,
     getSubscribedChannelGroups,
@@ -168,6 +186,7 @@ export function PubNubMock(): Partial<PubNub> {
     publish,
     removeMessageAction,
     signal,
+    sendFile,
     stop: () => true,
     subscribe: () => true,
     unsubscribe: () => true,

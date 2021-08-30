@@ -4,13 +4,18 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 ## useChannelMembers
 
-The hook returns a list of members in a channel. The list will include user metadata for members that have additional metadata stored in the database.
-Pagination is handled internally, you can adjust the `limit` of returned members on a single call (max/default 100) and call a function returned by the hook to get another page of results.
-This hook also sets up a listener that will react to updates and removals of already fetched Members.
-However, this behavior requires a living subscription to the channel getting updated - this should be handled by the components.
+The hook returns a list of members in a channel. The list will include user metadata for members
+that have additional metadata stored in the database. Pagination is handled internally, you can
+adjust the `limit` of returned members on a single call (max/default 100) and call a function
+returned by the hook to get another page of results. This hook also sets up a listener that will
+react to removals of already fetched Members (updates and new memberships are not handled due to
+technical limitations). However, this behavior requires a living subscription to the channel getting
+updated - this should be handled by the components.
 
 ```js
-const [members, fetchPage, total, error] = useChannelMembers({ channel: "channel" });
+const [members, fetchPage, refetchChannelMembers, total, error] = useChannelMembers({
+  channel: "channel",
+});
 
 return (
   <Chat {...{ options }}>
@@ -34,9 +39,10 @@ return (
 
 ### Output
 
-| Parameter | Type     | Description                                                     |
-| --------- | -------- | --------------------------------------------------------------- |
-| array[0]  | User[]   | List of returned members.                                       |
-| array[1]  | Function | Function that can be called to fetch another page of Members.   |
-| array[2]  | Number   | Total number of stored Members.                                 |
-| array[3]  | Error    | If there's an error fetching Members it will be available here. |
+| Parameter | Type     | Description                                                                                                    |
+| --------- | -------- | -------------------------------------------------------------------------------------------------------------- |
+| array[0]  | User[]   | List of returned members.                                                                                      |
+| array[1]  | Function | Function that can be called to fetch another page of Members.                                                  |
+| array[2]  | Function | Function that can be called to completely reset the hook. This can be used in case of expected members updates |
+| array[3]  | Number   | Total number of stored Members.                                                                                |
+| array[4]  | Error    | If there's an error fetching Members it will be available here.                                                |

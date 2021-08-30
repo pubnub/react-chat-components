@@ -18,6 +18,11 @@ import {
   ErrorFunctionAtom,
 } from "../state-atoms";
 import "./message-input.scss";
+import EmojiIcon from "../icons/emoji.svg";
+import FileIcon from "../icons/file.svg";
+import ImageIcon from "../icons/image.svg";
+import XCircleIcon from "../icons/x-circle.svg";
+import SpinnerIcon from "../icons/spinner.svg";
 
 export interface MessageInputProps {
   /** Set a placeholder message display in the text window. */
@@ -29,6 +34,10 @@ export interface MessageInputProps {
   senderInfo?: boolean;
   /** Enable/disable firing the typing events when user is typing a message. */
   typingIndicator?: boolean;
+  /** Enable/disable internal file upload capabilty */
+  fileUpload?: "image" | "all";
+  /** Disable the input from composing and sending messages */
+  disabled?: boolean;
   /** Hides the Send button */
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the send button. */
@@ -49,9 +58,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const pubnub = usePubNub();
 
   const [text, setText] = useState(props.draftMessage || "");
+  const [file, setFile] = useState<File>(null);
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
   const [picker, setPicker] = useState<ReactElement>();
+  const [loader, setLoader] = useState(false);
 
   const [users] = useAtom(UsersMetaAtom);
   const [theme] = useAtom(ThemeAtom);
@@ -61,6 +72,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [typingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
 
   /*
@@ -83,19 +95,28 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const sendMessage = async () => {
     try {
-      if (!text) return;
-      const message = {
-        type: "text",
-        text,
-        ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
-      };
+      if (!file && !text) return;
+      setLoader(true);
 
-      await pubnub.publish({ channel, message });
-      props.onSend && props.onSend(message);
+      if (file) {
+        await pubnub.sendFile({ channel, file });
+        props.onSend && props.onSend(file);
+      } else if (text) {
+        const message = {
+          type: "text",
+          text,
+          ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+        };
+        await pubnub.publish({ channel, message });
+        props.onSend && props.onSend(message);
+      }
+
       if (props.typingIndicator) stopTypingIndicator();
-      setText("");
+      clearInput();
     } catch (e) {
       onError(e);
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -119,6 +140,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     } catch (e) {
       onError(e);
     }
+  };
+
+  const clearInput = () => {
+    setFile(null);
+    setText("");
+    fileRef.current.value = null;
   };
 
   /*
@@ -173,6 +200,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = event.target.files[0];
+      setFile(file);
+      setText(file.name);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
   /*
   /* Lifecycle
   */
@@ -207,11 +244,41 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   /* Renderers
   */
 
+  const renderFileUpload = () => {
+    return (
+      <>
+        {file ? (
+          <div className="pn-msg-input__icon" title="Remove the file" onClick={clearInput}>
+            <XCircleIcon />
+          </div>
+        ) : null}
+        <div className="pn-msg-input__icon">
+          <label htmlFor="file-upload" className="pn-msg-input__fileLabel" title="Add a file">
+            {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
+          </label>
+          <input
+            accept={props.fileUpload === "image" ? "image/*" : "*"}
+            className="pn-msg-input__fileInput"
+            data-testid="file-upload"
+            id="file-upload"
+            onChange={handleFileChange}
+            ref={fileRef}
+            type="file"
+          />
+        </div>
+      </>
+    );
+  };
+
   const renderEmojiPicker = () => {
     return (
       <>
-        <div className="pn-msg-input__icon" onClick={() => setEmojiPickerShown(true)}>
-          ☺
+        <div
+          className="pn-msg-input__icon"
+          onClick={() => setEmojiPickerShown(true)}
+          title="Add an emoji"
+        >
+          <EmojiIcon />
         </div>
 
         {emojiPickerShown && (
@@ -224,25 +291,37 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   return (
-    <div className={`pn-msg-input pn-msg-input--${theme}`}>
+    <div
+      className={`pn-msg-input pn-msg-input--${theme} ${
+        props.disabled ? "pn-msg-input--disabled" : ""
+      }`}
+    >
       <div className="pn-msg-input__wrapper">
         <div className="pn-msg-input__spacer">
           <textarea
             className="pn-msg-input__textarea"
-            placeholder={props.placeholder}
-            rows={1}
-            value={text}
+            data-testid="message-input"
+            disabled={props.disabled || !!file}
             onChange={(e) => handleInputChange(e)}
             onKeyPress={(e) => handleKeyPress(e)}
+            placeholder={props.placeholder}
             ref={inputRef}
+            rows={1}
+            value={text}
           />
         </div>
 
-        {props.emojiPicker && renderEmojiPicker()}
+        {!props.disabled && props.fileUpload && renderFileUpload()}
+
+        {!props.disabled && props.emojiPicker && renderEmojiPicker()}
 
         {!props.hideSendButton && (
-          <button className="pn-msg-input__send" onClick={() => sendMessage()}>
-            {props.sendButton}
+          <button
+            className="pn-msg-input__send"
+            disabled={loader || props.disabled}
+            onClick={() => sendMessage()}
+          >
+            {loader ? <SpinnerIcon /> : props.sendButton}
           </button>
         )}
       </div>
@@ -251,6 +330,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 };
 
 MessageInput.defaultProps = {
+  disabled: false,
+  fileUpload: undefined,
   hideSendButton: false,
   placeholder: "Type Message",
   sendButton: "Send",

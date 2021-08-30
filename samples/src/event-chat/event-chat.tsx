@@ -6,7 +6,7 @@ import {
   useUser,
   usePresence,
 } from "@pubnub/react-chat-components";
-import { ReactComponent as PeopleGroup } from "../people-group.svg";
+import { ReactComponent as PeopleGroup } from "../icons/people-group.svg";
 import "./event-chat.scss";
 
 const channels = ["polsatgames2", "izakooo", "dota2ruhub"];
