@@ -48,6 +48,8 @@ export interface MessageInputProps {
   onChange?: (value: string) => unknown;
   /** Callback for extra actions while sending a message */
   onSend?: (value: unknown) => unknown;
+  /** Provide extra actions renderer to add custom action buttons to the input */
+  extraActionsRenderer?: () => JSX.Element;
 }
 
 /**
@@ -247,12 +249,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderFileUpload = () => {
     return (
       <>
-        {file ? (
-          <div className="pn-msg-input__icon" title="Remove the file" onClick={clearInput}>
+        {file && (
+          <div title="Remove the file" onClick={clearInput}>
             <XCircleIcon />
           </div>
-        ) : null}
-        <div className="pn-msg-input__icon">
+        )}
+        <div>
           <label htmlFor="file-upload" className="pn-msg-input__fileLabel" title="Add a file">
             {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
           </label>
@@ -273,11 +275,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderEmojiPicker = () => {
     return (
       <>
-        <div
-          className="pn-msg-input__icon"
-          onClick={() => setEmojiPickerShown(true)}
-          title="Add an emoji"
-        >
+        <div onClick={() => setEmojiPickerShown(true)} title="Add an emoji">
           <EmojiIcon />
         </div>
 
@@ -311,9 +309,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           />
         </div>
 
-        {!props.disabled && props.fileUpload && renderFileUpload()}
-
-        {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+        <div className="pn-msg-input__icons">
+          {props.extraActionsRenderer && props.extraActionsRenderer()}
+          {!props.disabled && props.fileUpload && renderFileUpload()}
+          {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+        </div>
 
         {!props.hideSendButton && (
           <button

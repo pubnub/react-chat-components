@@ -116,12 +116,16 @@
     position: absolute;
   }
 
-  &__icon {
-    align-self: center;
-    cursor: pointer;
-    color: var(--msg-input__icon__color);
-    font-size: var(--msg-input__icon__fontSize);
-    margin: var(--msg-input__icon__margin);
+  &__icons {
+    align-items: center;
+    display: flex;
+
+    & > * {
+      cursor: pointer;
+      color: var(--msg-input__icon__color);
+      font-size: var(--msg-input__icon__fontSize);
+      margin: var(--msg-input__icon__margin);
+    }
   }
 
   &__indicator {

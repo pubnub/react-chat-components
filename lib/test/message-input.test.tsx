@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MessageInput } from "../src/message-input/message-input";
-import { findByAltText, render, screen } from "../mock/custom-renderer";
+import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 import users from "../../data/users.json";
@@ -56,6 +56,12 @@ describe("Message Input", () => {
     render(<MessageInput sendButton="OK" />);
 
     expect(screen.getByText("OK")).toBeVisible();
+  });
+
+  test("renders extra actions", () => {
+    render(<MessageInput extraActionsRenderer={() => <p>Custom Action</p>} />);
+
+    expect(screen.queryByText("Custom Action")).toBeVisible();
   });
 
   /** Sending messages */
