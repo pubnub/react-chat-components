@@ -1,12 +1,23 @@
 ---
 name: pubnub-react-chat-components
-version: v0.4.0
+version: v0.5.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - dist/index.js
   - dist/index.es.js
 changelog:
+  - changes:
+      - text: MemberList present member indicators
+        type: feature
+      - text: MemberList extra actions renderer
+        type: feature
+      - text: MessageInput extra actions renderer
+        type: feature
+      - text: useChannelMembers fetching too many results
+        type: fix
+    date: 2021-09-06
+    version: v0.5.0
   - changes:
       - text: Basic file/image upload and display using Files API
         type: feature
