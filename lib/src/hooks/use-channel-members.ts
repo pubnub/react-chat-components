@@ -40,6 +40,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
   };
 
   const fetchPage = useCallback(async () => {
+    setDoFetch(false);
     try {
       if (totalCount && members.length >= totalCount) return;
       const response = await pubnub.objects.getChannelMembers(paginatedOptions);
