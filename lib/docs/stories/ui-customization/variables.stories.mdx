@@ -169,9 +169,10 @@ dark mode, you need to use component class name instead of the `:root` element:
 ```css
 --member-list__background: transparent;
 
+--member__alignItems: center;
 --member__padding: 9px 24px;
 --member__background: transparent;
---member--hover__background: #f0f3f7;
+--member--hover__background: transparent;
 
 --member__avatar__background: #f0f3f7;
 --member__avatar__display: block;
@@ -192,12 +193,22 @@ dark mode, you need to use component class name instead of the `:root` element:
 --member__title__padding: 5px 0 0;
 --member__title__margin: 0;
 
---member__presence__borderRadius: 5px;
---member__presence__color: #62e905;
---member__presence__left: 58px;
+--member__presence__border: 3px solid #ffffff;
+--member__presence__borderRadius: 100%;
+--member__presence__color: #01bd4c;
+--member__presence__left: 50px;
 --member__presence__position: absolute;
---member__presence__size: 6px;
---member__presence__top: 6px;
+--member__presence__size: 8px;
+--member__presence__top: 36px;
+
+--member__actions--hover__background: #5babfc;
+--member__actions__background: #f0f3f7;
+--member__actions__borderRadius: 5px;
+--member__actions__color: #585858;
+--member__actions--hover__color: #ffffff;
+--member__actions__fontSize: 22px;
+--member__actions__margin: 0 0 0 4px;
+--member__actions__padding: 1px 6px;
 ```
 
 ### Channel List

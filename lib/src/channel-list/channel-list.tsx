@@ -87,7 +87,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
           {channel.description && <p className="pn-channel__description">{channel.description}</p>}
         </div>
         <div className="pn-channel__actions">
-          {props.extraActionsRenderer ? props.extraActionsRenderer(channel) : null}
+          {props.extraActionsRenderer && props.extraActionsRenderer(channel)}
         </div>
       </div>
     );

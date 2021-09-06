@@ -378,7 +378,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       <div className={`pn-msg ${currentUserClass}`} key={envelope.timetoken}>
         {renderMessage(envelope)}
         <div className="pn-msg__actions">
-          {props.extraActionsRenderer ? props.extraActionsRenderer(envelope) : null}
+          {props.extraActionsRenderer && props.extraActionsRenderer(envelope)}
           {props.reactionsPicker && message?.type !== "welcome" && (
             <div
               className="pn-msg__reactions-toggle"
@@ -423,16 +423,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__author">{user?.name || uuid}</span>
               <span className="pn-msg__time">{time}</span>
             </div>
-            {message?.text ? (
-              props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
+            {message?.text &&
+              (props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
                 props.bubbleRenderer({ message: envelope, user, time, isOwn, editedText })
               ) : (
                 <div className="pn-msg__bubble">{editedText || message?.text}</div>
-              )
-            ) : null}
+              ))}
           </div>
           <div className="pn-msg__extras">
-            {file && file.name ? renderFile(file) : null}
+            {file && file.name && renderFile(file)}
             {attachments.map(renderAttachment)}
             {props.enableReactions && renderReactions(envelope)}
           </div>

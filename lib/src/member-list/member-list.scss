@@ -5,6 +5,7 @@
 :root {
   --member-list__background: transparent;
 
+  --member__alignItems: center;
   --member__padding: 9px 24px;
   --member__background: transparent;
   --member--hover__background: transparent;
@@ -24,12 +25,21 @@
   --member__title__fontWeight: 400;
   --member__title__padding: 5px 0 0;
   --member__title__margin: 0;
-  --member__presence__borderRadius: 5px;
-  --member__presence__color: #62e905;
-  --member__presence__left: 58px;
+  --member__presence__border: 3px solid #ffffff;
+  --member__presence__borderRadius: 100%;
+  --member__presence__color: #01bd4c;
+  --member__presence__left: 50px;
   --member__presence__position: absolute;
-  --member__presence__size: 6px;
-  --member__presence__top: 6px;
+  --member__presence__size: 8px;
+  --member__presence__top: 36px;
+  --member__actions--hover__background: #5babfc;
+  --member__actions__background: #f0f3f7;
+  --member__actions__borderRadius: 5px;
+  --member__actions__color: #585858;
+  --member__actions--hover__color: #ffffff;
+  --member__actions__fontSize: 22px;
+  --member__actions__margin: 0 0 0 4px;
+  --member__actions__padding: 1px 6px;
 }
 
 /* ************************
@@ -44,6 +54,7 @@
 }
 
 .pn-member {
+  align-items: var(--member__alignItems);
   background: var(--member__background);
   display: flex;
   padding: var(--member__padding);
@@ -51,6 +62,10 @@
 
   &:hover {
     background: var(--member--hover__background);
+
+    .pn-member__actions {
+      visibility: visible;
+    }
   }
 
   &__avatar {
@@ -69,6 +84,10 @@
     border-radius: var(--member__avatar__borderRadius);
     height: var(--member__avatar__size);
     width: var(--member__avatar__size);
+  }
+
+  &__main {
+    flex: 1;
   }
 
   &__name {
@@ -92,12 +111,33 @@
 
   &__presence {
     background: var(--member__presence__color);
+    border: var(--member__presence__border);
     border-radius: var(--member__presence__borderRadius);
     height: var(--member__presence__size);
     left: var(--member__presence__left);
     position: var(--member__presence__position);
     top: var(--member__presence__top);
     width: var(--member__presence__size);
+  }
+
+  &__actions {
+    color: var(--member__actions__color);
+    cursor: pointer;
+    visibility: hidden;
+    font-size: var(--member__actions__fontSize);
+
+    & > * {
+      background: var(--member__actions__background);
+      border-radius: var(--member__actions__borderRadius);
+      display: inline-block;
+      margin: var(--member__actions__margin);
+      padding: var(--member__actions__padding);
+    }
+
+    & > *:hover {
+      background: var(--member__actions--hover__background);
+      color: var(--member__actions--hover__color);
+    }
   }
 }
 
@@ -109,7 +149,12 @@
 .pn-member-list--event-dark,
 .pn-member-list--support-dark {
   --member-list__background: #292b2f;
-  --member--hover__background: #36393f;
+  --member--hover__background: transparent;
   --member__name__color: #dcddde;
   --member__avatar__background: #36393f;
+  --member__actions--hover__background: #de2440;
+  --member__actions__background: #2f3136;
+  --member__actions__color: #ffffff;
+  --member__actions--hover__color: #ffffff;
+  --member__presence__border: 3px solid #292b2f;
 }

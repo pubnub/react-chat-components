@@ -45,4 +45,11 @@ describe("Member List", () => {
     expect(screen.getByText("Custom Anna Gordon")).toBeVisible();
     expect(screen.queryByText("Anna Gordon")).not.toBeInTheDocument();
   });
+
+  test("renders extra actions", () => {
+    const customRenderer = (user) => <p key={user.name}>Custom {user.name}</p>;
+    render(<MemberList members={members} extraActionsRenderer={customRenderer} />);
+
+    expect(screen.queryByText("Anna Gordon")).toBeVisible();
+  });
 });
