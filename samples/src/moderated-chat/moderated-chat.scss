@@ -4,7 +4,6 @@
   display: flex;
   height: 100vh;
   overflow: hidden;
-  padding-right: 30px;
 
   .banned,
   .blocked {
@@ -34,12 +33,17 @@
   }
 
   .user {
+    align-items: center;
     display: flex;
     padding: 46px 24px 20px;
 
     h4 {
       flex-grow: 1;
-      margin: 8px 0;
+      margin: 0 0 3px;
+    }
+
+    & > div {
+      flex: 1;
     }
 
     img {
@@ -87,21 +91,21 @@
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-    transform: translateX(310px);
+    transform: translateX(330px);
     transition: 0.3s ease-in-out;
     width: 0;
 
     &.shown {
       transform: none;
-      width: 310px;
+      width: 330px;
+    }
+
+    &.hidden {
+      margin-left: 20px;
     }
 
     h4 {
       margin: 54px 24px 12px;
-    }
-
-    .close {
-      margin-right: 24px;
     }
   }
 
@@ -204,6 +208,16 @@
     }
   }
 
+  .filter {
+    color: #585858;
+    background-color: #f0f3f7;
+    border-radius: 5px;
+    border: 0;
+    margin: 10px 20px;
+    padding: 10px;
+    outline: none;
+  }
+
   @media (max-width: 950px) {
     .channels,
     .members.shown {
@@ -240,19 +254,21 @@
       display: inline;
     }
 
-    .members.shown {
-      height: 100%;
-      padding: 24px;
-      position: absolute;
-      z-index: 10;
-      width: 100%;
+    .members {
+      &.shown {
+        height: 100%;
+        padding: 24px 0;
+        position: absolute;
+        z-index: 10;
+        width: 100%;
 
-      h4 {
-        margin-top: 0;
+        h4 {
+          margin-top: 0;
+        }
       }
 
-      h4 span {
-        margin-right: 48px;
+      &.hidden {
+        margin-left: 0;
       }
     }
 

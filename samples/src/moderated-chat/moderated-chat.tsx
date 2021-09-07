@@ -30,6 +30,8 @@ function ModeratedChat() {
   const [showChannels, setShowChannels] = useState(true);
   const [showChannelsModal, setShowChannelsModal] = useState(false);
   const [showFlaggingModal, setShowFlaggingModal] = useState(false);
+  const [channelsFilter, setChannelsFilter] = useState("");
+  const [membersFilter, setMembersFilter] = useState("");
   const [flaggingMessage, setFlaggingMessage] = useState<MessageEnvelope>();
   const defaultChannel = {
     id: "default",
@@ -56,10 +58,12 @@ function ModeratedChat() {
   const [currentChannel, setCurrentChannel] = useState<ChannelMetadataObject<ObjectCustom>>(
     defaultChannel
   );
-  const [, , , totalchannelMembers] = useChannelMembers({ channel: currentChannel?.id });
+  const [channelMembers, , , totalchannelMembers] = useChannelMembers({
+    channel: currentChannel?.id,
+    include: { customUUIDFields: true },
+  });
   const [presenceData] = usePresence({ channels: joinedChannels.map((c) => c.id) });
   const presentUUIDs = presenceData[currentChannel?.id]?.occupants?.map((o) => o.uuid);
-  const presentUsers = allUsers.filter((u) => presentUUIDs?.includes(u.id));
 
   const userBanned = currentUser?.custom?.ban;
   const userMuted = (currentUser?.custom?.mutedChannels as string)
@@ -107,11 +111,15 @@ function ModeratedChat() {
     setShowFlaggingModal(false);
   };
 
-  const handleError = (e: Error) => {
-    if (e.message.startsWith("Publish failed"))
+  const handleError = (e: any) => {
+    if (
+      (e.status.operation === "PNPublishOperation" && e.status.statusCode === 403) ||
+      e.message.startsWith("Publish failed")
+    ) {
       alert(
-        "Publishing message failed. Perhaps you tried to send a file that contains nudity or offensive language?"
+        "Your message was blocked. Perhaps you tried to use offensive language or send an image that contains nudity?"
       );
+    }
   };
 
   useEffect(() => {
@@ -134,12 +142,12 @@ function ModeratedChat() {
         channels={[...joinedChannels.map((c) => c.id), uuid]}
         onError={(e) => handleError(e)}
       >
-        {showChannelsModal ? (
+        {showChannelsModal && (
           <JoinChannelModal {...{ unJoinedChannels, setShowChannelsModal, joinChannel }} />
-        ) : null}
-        {showFlaggingModal ? (
+        )}
+        {showFlaggingModal && (
           <FlagMessageModal {...{ flaggingMessage, setShowFlaggingModal, flagMessage, allUsers }} />
-        ) : null}
+        )}
 
         {userBanned ? (
           <BanNotification />
@@ -150,19 +158,31 @@ function ModeratedChat() {
                 {currentUser && currentUser?.profileUrl && (
                   <img src={currentUser?.profileUrl} alt="User avatar " />
                 )}
-                <h4>
-                  {currentUser && currentUser?.name}
-                  <span className="close" onClick={() => setShowChannels(false)}>
-                    ✕
-                  </span>
-                </h4>
+                <div>
+                  <h4>
+                    {currentUser && currentUser?.name}
+                    <span className="close" onClick={() => setShowChannels(false)}>
+                      ✕
+                    </span>
+                  </h4>
+                  <small>{currentUser?.custom?.title}</small>
+                </div>
               </div>
               <h4>
                 Channels <PlusCircle onClick={() => setShowChannelsModal(true)} className="join" />
               </h4>
+              <input
+                className="filter"
+                onChange={(e) => setChannelsFilter(e.target.value)}
+                placeholder="Filter..."
+                type="text"
+                value={channelsFilter}
+              />
               <div>
                 <ChannelList
-                  channels={joinedChannels}
+                  channels={joinedChannels.filter((c) =>
+                    c.name?.toLowerCase().includes(channelsFilter)
+                  )}
                   extraActionsRenderer={(c) => (
                     <div onClick={(e) => leaveChannel(c, e)}>
                       <SignOut title="Leave channel" />
@@ -221,14 +241,26 @@ function ModeratedChat() {
               )}
             </div>
 
-            <div className={`members ${showMembers && "shown"}`}>
+            <div className={`members ${showMembers ? "shown" : "hidden"}`}>
               <h4>
-                Online Users
+                Channel Members
                 <span className="close" onClick={() => setShowMembers(false)}>
                   ✕
                 </span>
               </h4>
-              <MemberList members={presentUsers} />
+              <input
+                className="filter"
+                onChange={(e) => setMembersFilter(e.target.value)}
+                placeholder="Filter..."
+                type="text"
+                value={membersFilter}
+              />
+              <MemberList
+                members={channelMembers.filter((c) =>
+                  c.name?.toLowerCase().includes(membersFilter)
+                )}
+                presentMembers={presentUUIDs}
+              />
             </div>
           </>
         )}
