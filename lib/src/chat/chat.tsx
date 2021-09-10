@@ -150,6 +150,10 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    * Lifecycle: load one-off props
    */
   useEffect(() => {
+    (pubnub as any)._config._addPnsdkSuffix('chat-components', 'RCC/__VERSION__');
+  }, []);
+
+  useEffect(() => {
     setTypingIndicatorTimeout(props.typingIndicatorTimeout);
   }, []);
 
