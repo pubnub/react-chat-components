@@ -36,7 +36,7 @@ apps for various use cases, with different functionalities and customizable look
 - Ease of installation and setup
 - Allows to build fully-featured chat applications
 - No need to deal with server code
-- Useful compontent options to tweak the functionalities
+- Useful component options to tweak the functionalities
 - Built-in light and dark themes for various use cases: group, support and event chats
 - Extra customization with CSS variables
 - TypeScript support
