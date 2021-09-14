@@ -63,9 +63,11 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
       const membersCopy = cloneDeep(members);
       const member = membersCopy.find((u) => u.id === message.data.uuid.id);
 
+      // Make sure the event is for the same channel as the hook
+      if (message.data.channel !== options.channel) return membersCopy;
+
       // Set events are not handled since there are no events fired for data updates
       // New memberships are not handled in order to conform to filters and pagination
-
       if (member && message.event === "delete") {
         membersCopy.splice(membersCopy.indexOf(member), 1);
       }
