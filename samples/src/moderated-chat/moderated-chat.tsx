@@ -94,15 +94,17 @@ function ModeratedChat() {
     setShowFlaggingModal(true);
   };
 
-  const flagMessage = async (reason: string) => {
+  const flagMessage = async (reason: string, currentUser: UUIDMetadataObject<ObjectCustom>) => {
     if (!flaggingMessage) return;
+    const flaggedBy = (currentUser && currentUser.id && currentUser.name) ?
+      `${currentUser.id} - ${currentUser.name}` : uuid;
     await pubnub.objects.setUUIDMetadata({
       uuid: flaggingMessage.uuid,
       data: {
         custom: {
           flag: true,
           flaggedAt: Date.now(),
-          flaggedBy: uuid,
+          flaggedBy,
           reason,
         },
       },
@@ -146,7 +148,7 @@ function ModeratedChat() {
           <JoinChannelModal {...{ unJoinedChannels, setShowChannelsModal, joinChannel }} />
         )}
         {showFlaggingModal && (
-          <FlagMessageModal {...{ flaggingMessage, setShowFlaggingModal, flagMessage, allUsers }} />
+          <FlagMessageModal {...{ flaggingMessage, setShowFlaggingModal, flagMessage, currentUser, allUsers }} />
         )}
 
         {userBanned ? (
@@ -300,6 +302,7 @@ const FlagMessageModal = ({
   flaggingMessage,
   setShowFlaggingModal,
   flagMessage,
+  currentUser,
   allUsers,
 }: any) => {
   const [reason, setReason] = useState("");
@@ -329,7 +332,7 @@ const FlagMessageModal = ({
             value={reason}
             onChange={(e) => setReason(e.target.value)}
           />
-          <button onClick={() => flagMessage(reason)}>Submit</button>
+          <button onClick={() => flagMessage(reason, currentUser)}>Submit</button>
         </div>
       </div>
     </div>
