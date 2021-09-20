@@ -10,6 +10,7 @@ import {
   MessageInput,
   MessageList,
   TypingIndicator,
+  isFileMessage,
   useChannelMembers,
   useChannels,
   usePresence,
@@ -96,13 +97,14 @@ function ModeratedChat() {
 
   const flagMessage = async (reason: string) => {
     if (!flaggingMessage) return;
+    const uuid = flaggingMessage.uuid || flaggingMessage.publisher || "";
     await pubnub.objects.setUUIDMetadata({
-      uuid: flaggingMessage.uuid,
+      uuid,
       data: {
         custom: {
           flag: true,
           flaggedAt: Date.now(),
-          flaggedBy: uuid,
+          flaggedBy: `${currentUser.name} (${currentUser.id})`,
           reason,
         },
       },
