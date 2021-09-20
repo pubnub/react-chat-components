@@ -4,9 +4,9 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # PubNub Access Manager
 
-PubNub Access Manager (PAM) allows you to enforce secure controls for client access to resources
+PubNub Access Manager (PAM) allows you to enforce security controls for client access to resources
 within the PubNub network. With PAM, your servers can grant their clients access to individual
-PubNub resources for a limited duration, with the ability to extend access or add permissions for
+PubNub resources for a limited duration, with the ability to renew access or add permissions for
 additional resources.
 
 With Access Manager enabled, your clients must have permissions to send requests to PubNub. You can
@@ -24,16 +24,16 @@ More information about PAM can be found [here](https://www.pubnub.com/docs/secur
 
 PubNub Chat Components as a purely client-side React components library does not do anything
 specific to handle PAM internally. Once PAM is enabled on the PubNub keyset, the developer is
-expected to write custom code that would handle granting and revoking access, just as if the app was
+expected to write custom code that would handle granting, just as if the app was
 written from scratch.
 
-You can expect the operations listed below to be executed internally by the components. In order for
-those to work properly all of them should be granted access to for the UUID passed to the PubNub
+You can expect the operations listed below to be executed internally by the components. To work properly, all of them should be granted access to the UUID passed to the PubNub
 instance.
 
 <br />
 
 ### Property to resource mappings
+<!--To be reviewed by @pnehrer in https://github.com/pubnub/platform-documentation/pull/569-->
 
 | Component / Hook   | Property            | Resource      | Description                                     |
 | ------------------ | ------------------- | ------------- | ----------------------------------------------- |
