@@ -2,10 +2,10 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Introduction/PAM" />
 
-# PubNub Access Manager
+# Access Manager
 
-PubNub Access Manager (PAM) allows you to enforce security controls for client access to resources
-within the PubNub network. With PAM, your servers can grant their clients access to individual
+Access Manager allows you to enforce security controls for client access to resources
+within the PubNub network. Your servers can grant their clients access to individual
 PubNub resources (channels, channel groups, and UUID metadata) for a limited duration, with the ability to renew access or add permissions for
 additional resources.
 
@@ -16,14 +16,14 @@ chat room private by only allowing the two users in that chat room to have read 
 permissions on the chat room channel. Alternatively, you can make a channel public by allowing all
 users to have access to it.
 
-More information about PAM can be found [here](https://www.pubnub.com/docs/security/access-control).
+More information about Access Manager can be found [here](https://www.pubnub.com/docs/security/access-control).
 
 <br />
 
-## PAM handling in components
+## Access Manager handling in components
 
 PubNub Chat Components as a purely client-side React components library does not do anything
-specific to handle PAM internally. Once PAM is enabled on the PubNub keyset, the developer is
+specific to handle Access Manager internally. Once it is enabled on the PubNub keyset, the developer is
 expected to write custom code that would handle granting, just as if the app was
 written from scratch.
 
