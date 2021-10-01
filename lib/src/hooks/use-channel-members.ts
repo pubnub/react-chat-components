@@ -21,6 +21,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
+  const [fetching, setFetching] = useState(false);
 
   const paginatedOptions = useMemo(
     () =>
@@ -41,6 +42,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
 
   const fetchPage = useCallback(async () => {
     setDoFetch(false);
+    setFetching(true);
     try {
       if (totalCount && members.length >= totalCount) return;
       const response = await pubnub.objects.getChannelMembers(paginatedOptions);
@@ -52,6 +54,8 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
       setPage(response.next);
     } catch (e) {
       setError(e);
+    } finally {
+      setFetching(false);
     }
   }, [pubnub, paginatedOptions, members.length, totalCount]);
 
@@ -91,8 +95,8 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
   }, [options.channel]);
 
   useEffect(() => {
-    if (doFetch) fetchPage();
-  }, [doFetch, fetchPage]);
+    if (doFetch && !fetching) fetchPage();
+  }, [doFetch, fetching, fetchPage]);
 
   return [members, fetchPage, resetHook, totalCount, error];
 };
