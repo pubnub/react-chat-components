@@ -6,6 +6,7 @@
   --member-list__background: transparent;
 
   --member__alignItems: center;
+  --member__cursor: auto;
   --member__padding: 9px 24px;
   --member__background: transparent;
   --member--hover__background: transparent;
@@ -56,6 +57,7 @@
 .pn-member {
   align-items: var(--member__alignItems);
   background: var(--member__background);
+  cursor: var(--member__cursor);
   display: flex;
   padding: var(--member__padding);
   position: relative;

@@ -15,6 +15,8 @@ export interface MemberListProps {
   extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
   /** Provide custom user renderer to override themes and CSS variables. */
   memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
+  /** A callback run when user clicked one of the members. */
+  onMemberClicked?: (member: UUIDMetadataObject<ObjectCustom>) => unknown;
 }
 
 /**
@@ -60,6 +62,14 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   /*
+  /* Commands
+  */
+
+  const clickMember = (member: UUIDMetadataObject<ObjectCustom>) => {
+    if (props.onMemberClicked) props.onMemberClicked(member);
+  };
+
+  /*
   /* Renderers
   */
 
@@ -68,7 +78,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     const youString = isOwnMember(member.id) ? "(You)" : "";
 
     return (
-      <div key={member.id} className="pn-member">
+      <div key={member.id} className="pn-member" onClick={() => clickMember(member)}>
         <div className="pn-member__avatar">
           {member.profileUrl && <img src={member.profileUrl} alt="User avatar" />}
           {!member.profileUrl && <div className="pn-member__avatar-placeholder" />}
@@ -98,4 +108,5 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
 MemberList.defaultProps = {
   members: [],
   presentMembers: [],
+  onMemberClicked: null,
 };
