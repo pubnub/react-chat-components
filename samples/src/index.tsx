@@ -10,16 +10,27 @@ import GroupChat from "./group-chat/group-chat";
 import ModeratedChat from "./moderated-chat/moderated-chat";
 import "./index.css";
 
-import pubnubKeys from "../pubnub-keys.json";
+import defaultKeys from "../pubnub-keys.json";
 import users from "../../data/users.json";
 
 /**
  * Prepare a PubNub instance and inject it into PubNubProvider
  * You should generate your own keyset on pubnub.com and paste it into pubnub-keys.json
  */
+
+const hash = document.location.hash.split("?")[1];
+const params = new URLSearchParams(hash);
+const uuid = params.get("uuid");
+const queryKeys = {
+  publishKey: params.get("pubkey"),
+  subscribeKey: params.get("subkey"),
+};
+const pubnubKeys = (queryKeys.publishKey && queryKeys.subscribeKey
+  ? queryKeys
+  : defaultKeys) as PubnubConfig;
 const pubnub = new PubNub({
   ...pubnubKeys,
-  uuid: users[Math.floor(Math.random() * users.length)].id,
+  uuid: uuid || users[Math.floor(Math.random() * users.length)].id,
   fileUploadPublishRetryLimit: 0,
 } as PubnubConfig);
 
@@ -120,7 +131,7 @@ const KeysError = () => {
 const renderApp = () => {
   ReactDOM.render(
     <React.StrictMode>
-      {pubnubKeys.publishKey.length && pubnubKeys.subscribeKey.length ? (
+      {pubnubKeys.publishKey?.length && pubnubKeys.subscribeKey?.length ? (
         pamEnabled ? (
           <PamError />
         ) : (
