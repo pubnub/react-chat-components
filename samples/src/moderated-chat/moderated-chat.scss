@@ -1,12 +1,15 @@
 .app-moderated {
+  --channel__description__display: none;
+  --member__title__display: none;
+
   background: #ffffff;
   color: #585858;
   display: flex;
   height: 100vh;
   overflow: hidden;
 
-  .banned,
-  .blocked {
+  .banned-error,
+  .blocked-error {
     align-items: center;
     color: rgb(168, 0, 0);
     display: flex;
@@ -16,11 +19,11 @@
     width: 100%;
   }
 
-  .blocked {
+  .blocked-error {
     font-size: 14px;
   }
 
-  .channels {
+  .channels-panel {
     background: #ffffff;
     display: flex;
     flex-direction: column;
@@ -32,14 +35,18 @@
     }
   }
 
-  .user {
+  .channel-lists {
+    overflow: auto;
+  }
+
+  .user-info {
     align-items: center;
     display: flex;
     padding: 46px 24px 20px;
 
     h4 {
       flex-grow: 1;
-      margin: 0 0 3px;
+      margin: 0;
     }
 
     & > div {
@@ -48,45 +55,50 @@
 
     img {
       background: #f0f3f7;
-      display: block;
-      margin: 0 24px 0 0;
-      width: 36px;
-      height: 36px;
       border-radius: 36px;
+      height: 36px;
+      margin: 0 24px 0 0;
+      vertical-align: middle;
+      width: 36px;
     }
   }
 
-  .info {
+  .channel-info {
     padding: 24px 24px 0;
 
     h4 {
+      display: inline-block;
       margin: 0 0 2px;
+    }
+
+    span {
+      cursor: pointer;
     }
 
     small {
       color: #9b9b9b;
     }
-
-    hr {
-      background-color: #d7e0e9;
-      border: 0;
-      height: 1px;
-      margin: 18px 0 0;
-    }
   }
 
-  .chat {
+  .chat-window {
     background: #f0f3f7;
-    border-radius: 5px;
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     margin: 30px 0;
     padding-bottom: 30px;
     position: relative;
+
+    hr {
+      background-color: #d0dae5;
+      border: 0;
+      height: 1px;
+      margin: 18px 0 0;
+    }
   }
 
-  .members {
+  .members-panel {
     background: #ffffff;
     display: flex;
     flex-direction: column;
@@ -107,49 +119,38 @@
     h4 {
       margin: 54px 24px 12px;
     }
+
+    .close-icon {
+      display: inline-block;
+    }
   }
 
-  .close {
+  .close-icon {
     cursor: pointer;
     display: none;
     float: right;
+    font-weight: bold;
   }
 
-  .hamburger {
+  .hamburger-icon {
     display: none;
     float: left;
     font-size: 24px;
-    margin-right: 15px;
+    margin-right: 20px;
   }
 
-  .join {
+  .plus-icon {
+    cursor: pointer;
     float: right;
-    cursor: pointer;
-  }
 
-  .people {
-    align-items: center;
-    color: gray;
-    cursor: pointer;
-    display: flex;
-    font-size: 13px;
-    position: absolute;
-    right: 34px;
-    top: 34px;
-    z-index: 1;
-
-    &.active {
-      color: #5babfc;
-    }
-
-    span {
-      margin-right: 8px;
+    &:hover {
+      color: #de2440;
     }
   }
 
   .overlay {
     align-items: center;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.5);
     bottom: 0;
     display: flex;
     justify-content: center;
@@ -157,110 +158,234 @@
     position: absolute;
     right: 0;
     top: 0;
-    z-index: 10;
+    z-index: 15;
   }
 
   .modal {
+    --member--hover__background: #f0f3f7;
+    --member__cursor: pointer;
+
     background: white;
     border-radius: 10px;
-    box-shadow: 0 6px 10px rgba(20, 20, 20, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    height: 50vh;
     width: 600px;
-    padding: 40px;
-    overflow: hidden;
 
-    h4 {
-      margin: 0 0 20px;
+    .header {
+      box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.2);
+      padding: 28px 28px 6px;
+      margin-bottom: 20px;
+      position: relative;
+      text-align: center;
+
+      h4 {
+        margin: 0 0 20px;
+      }
     }
 
-    .close {
+    .footer {
+      box-shadow: 0px -1px 5px rgba(0, 0, 0, 0.2);
+      padding: 28px;
+    }
+
+    .close-icon {
       display: block;
     }
   }
 
   .form {
-    margin: 60px 0 40px;
     display: flex;
 
     input,
     button {
       padding: 15px;
-      border: none;
       border-radius: 5px;
     }
 
     input {
-      border: 1px solid #aeb6c1;
       color: #585858;
+      border: 2px solid #f0f3f7;
+      background-color: #f0f3f7;
       flex: 1;
-      margin-right: 10px;
 
       &:focus {
         outline: none;
-        border-color: #48576b;
+        border-bottom-color: #de2440;
       }
     }
 
     button {
-      background-color: #5babfc;
+      background-color: #de2440;
+      border: none;
       color: white;
       cursor: pointer;
       font-weight: bold;
     }
+
+    input + button {
+      margin-left: 10px;
+    }
+
+    button[disabled] {
+      background-color: #bbb;
+      cursor: not-allowed;
+    }
   }
 
-  .filter {
-    color: #585858;
-    background-color: #f0f3f7;
-    border-radius: 5px;
-    border: 0;
+  .filter-input {
     margin: 10px 20px;
-    padding: 10px;
-    outline: none;
+    position: relative;
+
+    input {
+      box-sizing: border-box;
+      color: #585858;
+      background-color: #f0f3f7;
+      border-radius: 15px;
+      border: 0;
+      padding: 10px 15px;
+      outline: none;
+      width: 100%;
+    }
+
+    svg {
+      position: absolute;
+      right: 15px;
+      top: 10px;
+    }
+  }
+
+  .report-user-modal {
+    height: auto;
+
+    .content {
+      margin: 20px 40px 30px;
+    }
+
+    .user-info {
+      padding: 0 0 30px;
+    }
+  }
+
+  .public-channels-modal {
+    min-height: 500px;
+    padding-bottom: 10px;
+  }
+
+  .create-chat-modal {
+    min-height: 600px;
+
+    .form {
+      margin: 17px 20px 18px;
+    }
+
+    .back-icon {
+      color: #de2440;
+      cursor: pointer;
+      float: left;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+    }
+
+    .group-button {
+      align-items: center;
+      color: #de2440;
+      cursor: pointer;
+      display: flex;
+      font-size: 15px;
+      margin: 15px 0;
+      padding: 9px 24px;
+
+      &:hover {
+        background-color: #f0f3f7;
+      }
+
+      strong {
+        flex-grow: 1;
+      }
+    }
+
+    .people-icon {
+      background: rgba(239, 58, 67, 0.1);
+      border-radius: 100%;
+      margin-right: 24px;
+      padding: 10px;
+    }
+
+    .check-icon {
+      border-radius: 3px;
+      border: 2px solid #999999;
+      color: white;
+      height: 16px;
+      width: 16px;
+
+      &.checked {
+        background-color: #de2440;
+        border-color: #de2440;
+      }
+    }
+
+    .footer button {
+      background: none;
+      border: none;
+      color: #de2440;
+      cursor: pointer;
+      float: right;
+      font-size: 14px;
+      font-weight: bold;
+
+      &:disabled {
+        color: #585858;
+        cursor: not-allowed;
+      }
+    }
   }
 
   @media (max-width: 950px) {
-    .channels,
-    .members.shown {
+    .channels-panel,
+    .members-panel.shown {
       width: 200px;
     }
   }
 
   @media (max-width: 700px) {
-    .channels {
+    .channels-panel {
       height: 100%;
       position: absolute;
-      z-index: 10;
       transition: 0.3s ease-in-out;
       width: 100%;
+      z-index: 10;
 
       &:not(.shown) {
         transform: translateX(-100%);
       }
     }
 
-    .user {
+    .user-info {
       padding-top: 24px;
     }
 
-    .close {
+    .close-icon {
       display: inline-block;
     }
 
-    .chat {
+    .chat-window {
       margin: 5px;
     }
 
-    .hamburger {
+    .hamburger-icon {
       display: inline;
     }
 
-    .members {
+    .members-panel {
       &.shown {
         height: 100%;
         padding: 24px 0;
         position: absolute;
-        z-index: 10;
         width: 100%;
+        z-index: 10;
 
         h4 {
           margin-top: 0;
@@ -273,6 +398,7 @@
     }
 
     .modal {
+      border-radius: 0px;
       height: 100%;
       width: 100%;
     }
