@@ -3,6 +3,7 @@ import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { ThemeAtom } from "../state-atoms";
+import { getNameInitials, getPredefinedColor } from "../helpers";
 import "./member-list.scss";
 
 export interface MemberListProps {
@@ -11,6 +12,8 @@ export interface MemberListProps {
   members: UUIDMetadataObject<ObjectCustom>[] | string[];
   /** Pass a list of present member ids to mark them with a presence indicator */
   presentMembers?: string[];
+  /** This text will be added after current user's name */
+  selfText?: string;
   /** Provide extra actions renderer to add custom action buttons to each member */
   extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
   /** Provide custom user renderer to override themes and CSS variables. */
@@ -73,15 +76,21 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   /* Renderers
   */
 
-  const renderMember = (member) => {
+  const renderMember = (member: UUIDMetadataObject<ObjectCustom>) => {
     if (props.memberRenderer) return props.memberRenderer(member);
-    const youString = isOwnMember(member.id) ? "(You)" : "";
+    const youString = isOwnMember(member.id) ? props.selfText : "";
 
     return (
       <div key={member.id} className="pn-member" onClick={() => clickMember(member)}>
-        <div className="pn-member__avatar">
-          {member.profileUrl && <img src={member.profileUrl} alt="User avatar" />}
-          {!member.profileUrl && <div className="pn-member__avatar-placeholder" />}
+        <div
+          className="pn-member__avatar"
+          style={{ backgroundColor: getPredefinedColor(member.id) }}
+        >
+          {member.profileUrl ? (
+            <img src={member.profileUrl} alt="User avatar" />
+          ) : (
+            getNameInitials(member.name || member.id)
+          )}
           {isPresentMember(member.id) && <i className="pn-member__presence"></i>}
         </div>
         <div className="pn-member__main">
@@ -109,4 +118,5 @@ MemberList.defaultProps = {
   members: [],
   presentMembers: [],
   onMemberClicked: null,
+  selfText: "(You)",
 };

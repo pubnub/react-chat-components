@@ -65,7 +65,9 @@ const SampleApps = () => {
           <Route path="/">
             <div className="welcome">
               <h1>Pubnub Chat Components</h1>
-              <h3>Here are some example applications built using PubNub and Chat Components:</h3>
+              <h3>
+                Here are some example applications built using PubNub and React Chat Components:
+              </h3>
               <ul>
                 <li>
                   <Link to="/simple-chat">Simple Chat</Link>

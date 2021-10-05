@@ -29,6 +29,7 @@ import {
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
+import { getNameInitials, getPredefinedColor } from "../helpers";
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
@@ -110,8 +111,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const getTime = (timestamp: number) => {
     const ts = String(timestamp);
     const date = new Date(parseInt(ts) / 10000);
-    const minutes = date.getMinutes();
-    return `${date.getHours()}:${minutes > 9 ? minutes : "0" + minutes}`;
+    const formatter = new Intl.DateTimeFormat([], { timeStyle: "short" });
+    return formatter.format(date);
   };
 
   const scrollToBottom = () => {
@@ -413,9 +414,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
     return (
       <>
-        <div className="pn-msg__avatar">
-          {user?.profileUrl && <img src={user.profileUrl} alt="User avatar " />}
-          {!user?.profileUrl && <div className="pn-msg__avatar-placeholder" />}
+        <div className="pn-msg__avatar" style={{ backgroundColor: getPredefinedColor(user?.id) }}>
+          {user?.profileUrl ? (
+            <img src={user.profileUrl} alt="User avatar" />
+          ) : (
+            getNameInitials(user?.name || user.id)
+          )}
         </div>
         <div className="pn-msg__main">
           <div className="pn-msg__content">
@@ -460,7 +464,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
                   : addReaction(reaction, envelope.timetoken);
               }}
             >
-              {reaction} &nbsp; {instances.length}
+              {reaction} {instances.length}
             </div>
           );
         })}
@@ -548,6 +552,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           renderWelcomeMessages()}
         {messages && messages.map((m) => renderItem(m))}
 
+        {props.children}
+
         <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 
         {props.reactionsPicker && (
@@ -560,8 +566,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             {picker}
           </div>
         )}
-
-        {props.children}
       </div>
     </div>
   );

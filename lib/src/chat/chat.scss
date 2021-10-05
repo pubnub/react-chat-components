@@ -1,0 +1,41 @@
+@function hexToRGB($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+/*
+* Global color variables for light and dark theme
+* Warning! When hexToRGB is used on a color, the variable can only be used with rgba color function
+* inside of the actual CSS. To goal of this is to introduce alpha channels on some of the colors
+*/
+:root {
+  --chat--light__background--1: #f0f3f7;
+  --chat--light__background--2: #ffffff;
+  --chat--light__background--3: #eaeef3;
+  --chat--light__background--4: #01bd4c;
+  --chat--light__background--5-rgb: #{hexToRGB(#ef3a43)};
+  --chat--light__color--1: #585858;
+  --chat--light__color--2: #999999;
+  --chat--light__color--2-rgb: #{hexToRGB(#999999)};
+  --chat--light__border--1: #ced6e0;
+  --chat--light__border--2: #bcc6d1;
+  --chat--light__hover--1: #de2440;
+  --chat--light__hover--2: #e4e9f0;
+  --chat--light__hover--3: #e9eef4;
+  --chat--light__hover--4: #e1e8f0;
+
+  --chat--dark__background--1: #1c1c28;
+  --chat--dark__background--2: #2a2a39;
+  --chat--dark__background--2-rgb: #{hexToRGB(#2a2a39)};
+  // --chat--dark__background--3: ;
+  --chat--dark__background--4: #01bd4c;
+  --chat--dark__background--5: #{hexToRGB(#ef3a43)};
+  --chat--dark__color--1: #{rgba(#e4e4eb, 0.8)};
+  --chat--dark__color--2: #999999;
+  --chat--dark__border--1: #28293d;
+  // --chat--dark__border--2: ;
+  --chat--dark__hover--1: #de2440;
+  --chat--dark__hover--2: #232333;
+  // --chat--dark__hover--3: ;
+  --chat--dark__hover--4: #555770;
+  --chat--dark__hover--4-rgb: #{hexToRGB(#555770)};
+}

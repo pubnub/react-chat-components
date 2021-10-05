@@ -1,14 +1,5 @@
 import React, { useState, useEffect, useCallback, MouseEvent } from "react";
 import { ChannelMetadataObject, ObjectCustom, BaseObjectsEvent } from "pubnub";
-import {
-  PlusCircleIcon,
-  MegaphoneIcon,
-  SignOutIcon,
-  SearchIcon,
-  ChevronRightIcon,
-  XIcon,
-  ThreeBarsIcon,
-} from "@primer/octicons-react";
 import { Picker } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
 import {
@@ -25,12 +16,13 @@ import {
   useUser,
   useUserMemberships,
   useUsers,
+  Themes,
 } from "@pubnub/react-chat-components";
 import "emoji-mart/css/emoji-mart.css";
 
-import { CreateChatModal } from "./modals/create-chat-modal";
-import { ReportUserModal } from "./modals/report-user-modal";
-import { PublicChannelsModal } from "./modals/public-channels-modal";
+import { CreateChatModal } from "./components/create-chat-modal";
+import { ReportUserModal } from "./components/report-user-modal";
+import { PublicChannelsModal } from "./components/public-channels-modal";
 import "./moderated-chat.scss";
 
 type ChannelType = ChannelMetadataObject<ObjectCustom>;
@@ -46,6 +38,7 @@ export default function ModeratedChat() {
    * Component state related hooks
    * Those mostly store the current channel, modals and side panels being shown
    */
+  const [theme, setTheme] = useState<Themes>("light");
   const [currentChannel, setCurrentChannel] = useState(defaultChannel);
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
@@ -94,7 +87,6 @@ export default function ModeratedChat() {
       if (interlocutor) {
         c.custom = { thumb: interlocutor.profileUrl || "" };
         c.name = interlocutor.name;
-        c.description = (interlocutor.custom?.title as string) || "";
       }
       return c;
     })
@@ -157,12 +149,12 @@ export default function ModeratedChat() {
    * custom behaviors (channels modal, showing/hiding panels, responsive design)
    */
   return (
-    <div className="app-moderated">
+    <div className={`app-moderated app-moderated--${theme}`}>
       {/* Be sure to wrap Chat component in PubNubProvider from pubnub-react package.
         In this case it's done in the index.tsx file */}
       {/* Current uuid is passed to channels prop to subscribe and listen to User metadata changes */}
       <Chat
-        theme="light"
+        theme={theme}
         users={allUsers}
         currentChannel={currentChannel.id}
         channels={[...joinedChannels.map((c) => c.id), uuid]}
@@ -199,59 +191,77 @@ export default function ModeratedChat() {
           />
         )}
         {isUserBanned ? (
-          <p className="banned-error">Unfortunately, you were banned from the chat.</p>
+          <strong className="error">Unfortunately, you were banned from the chat.</strong>
         ) : (
           <>
             <div className={`channels-panel ${showChannels && "shown"}`}>
               <div className="user-info">
-                {currentUser && currentUser?.profileUrl && (
-                  <img src={currentUser?.profileUrl} alt="User avatar" className="thumb" />
-                )}
-                <div>
-                  <h4>
-                    {currentUser && currentUser?.name}
-                    <span className="close-icon" onClick={() => setShowChannels(false)}>
-                      <XIcon />
-                    </span>
-                  </h4>
-                </div>
+                {currentUser && <MemberList members={[currentUser]} selfText="" />}
+                <button
+                  className="mobile material-icons-outlined"
+                  onClick={() => setShowChannels(false)}
+                >
+                  close
+                </button>
+              </div>
+
+              <div className="theme-switcher">
+                <i className="material-icons-outlined">brightness_4</i>
+                <button
+                  className={theme}
+                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                >
+                  <span></span>
+                </button>
               </div>
 
               <div className="filter-input">
                 <input
                   onChange={(e) => setChannelsFilter(e.target.value)}
-                  placeholder="Search in channels"
+                  placeholder="Search in..."
                   type="text"
                   value={channelsFilter}
                 />
-                <SearchIcon />
+                <i className="material-icons-outlined">search</i>
               </div>
 
               <div className="channel-lists">
-                <h4 onClick={() => setShowPublicChannelsModal(true)}>
-                  Channels <PlusCircleIcon className="plus-icon" />
-                </h4>
+                <h2>
+                  Channels{" "}
+                  <button
+                    className="material-icons-outlined"
+                    onClick={() => setShowPublicChannelsModal(true)}
+                  >
+                    add_circle_outline
+                  </button>
+                </h2>
                 <div>
                   <ChannelList
                     channels={groupChannels}
                     onChannelSwitched={(channel) => setCurrentChannel(channel)}
                     extraActionsRenderer={(c) => (
                       <div onClick={(e) => leaveChannel(c, e)} title="Leave channel">
-                        <SignOutIcon verticalAlign="unset" />
+                        <i className="material-icons-outlined small">logout</i>
                       </div>
                     )}
                   />
                 </div>
-                <h4 onClick={() => setShowCreateChatModal(true)}>
-                  Direct chats <PlusCircleIcon className="plus-icon" />
-                </h4>
+                <h2>
+                  Direct chats{" "}
+                  <button
+                    className="material-icons-outlined"
+                    onClick={() => setShowCreateChatModal(true)}
+                  >
+                    add_circle_outline
+                  </button>
+                </h2>
                 <div>
                   <ChannelList
                     channels={directChannels}
                     onChannelSwitched={(channel) => setCurrentChannel(channel)}
                     extraActionsRenderer={(c) => (
                       <div onClick={(e) => leaveChannel(c, e)} title="Leave channel">
-                        <SignOutIcon verticalAlign="unset" />
+                        <i className="material-icons-outlined small">logout</i>
                       </div>
                     )}
                   />
@@ -261,21 +271,26 @@ export default function ModeratedChat() {
 
             <div className="chat-window">
               <div className="channel-info">
-                <span className="hamburger-icon" onClick={() => setShowChannels(true)}>
-                  <ThreeBarsIcon />
-                </span>
+                <button
+                  className="mobile material-icons-outlined"
+                  onClick={() => setShowChannels(true)}
+                >
+                  menu
+                </button>
                 <span onClick={() => setShowMembers(!showMembers)}>
-                  <h4>
-                    {currentChannel.name || currentChannel.id} <ChevronRightIcon />
-                  </h4>
-                  <br />
-                  <small>{totalChannelMembers} Members</small>
+                  <strong>
+                    {currentChannel.name || currentChannel.id}
+                    <i className="material-icons-outlined">arrow_right</i>
+                  </strong>
+                  <p>{totalChannelMembers} members</p>
                 </span>
                 <hr />
               </div>
 
               {isUserBlocked ? (
-                <p className="blocked-error">Unfortunately, you were blocked from this channel.</p>
+                <strong className="error">
+                  Unfortunately, you were blocked from this channel.
+                </strong>
               ) : (
                 <>
                   <MessageList
@@ -290,31 +305,31 @@ export default function ModeratedChat() {
                         }}
                         title="Report user"
                       >
-                        <MegaphoneIcon verticalAlign="unset" />
+                        <i className="material-icons-outlined">campaign</i>
                       </div>
                     )}
                   >
-                    <TypingIndicator showAsMessage />
+                    <TypingIndicator />
                   </MessageList>
+                  <hr />
                   <MessageInput
-                    senderInfo
                     disabled={isUserMuted}
                     typingIndicator
                     fileUpload="image"
                     emojiPicker={<Picker />}
-                    placeholder={isUserMuted ? "You were muted from this channel" : "Type Message"}
+                    placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
                   />
                 </>
               )}
             </div>
 
             <div className={`members-panel ${showMembers ? "shown" : "hidden"}`}>
-              <h4>
+              <h2>
                 Members
-                <span className="close-icon" onClick={() => setShowMembers(false)}>
-                  <XIcon />
-                </span>
-              </h4>
+                <button className="material-icons-outlined" onClick={() => setShowMembers(false)}>
+                  close
+                </button>
+              </h2>
               <div className="filter-input">
                 <input
                   onChange={(e) => setMembersFilter(e.target.value)}
@@ -322,7 +337,7 @@ export default function ModeratedChat() {
                   type="text"
                   value={membersFilter}
                 />
-                <SearchIcon />
+                <i className="material-icons-outlined">search</i>
               </div>
               <MemberList
                 members={channelMembers.filter((c) =>

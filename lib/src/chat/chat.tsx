@@ -26,6 +26,7 @@ import {
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
+import "./chat.scss";
 
 /**
  * Chat wrapper is used to configure various common options and feed the components with data.

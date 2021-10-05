@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { MemberList } from "@pubnub/react-chat-components";
+import { MemberList, getNameInitials, getPredefinedColor } from "@pubnub/react-chat-components";
 import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
-import {
-  XIcon,
-  SearchIcon,
-  PeopleIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  CheckIcon,
-} from "@primer/octicons-react";
 
 type UserType = UUIDMetadataObject<ObjectCustom>;
 type ChannelType = ChannelMetadataObject<ObjectCustom>;
@@ -98,15 +90,16 @@ export const CreateChatModal = ({
       <div className="modal create-chat-modal">
         <div className="header">
           {showGroups && (
-            <span className="back-icon" onClick={() => setShowGroups(false)}>
-              <ChevronLeftIcon size="medium" />
-            </span>
+            <button className="material-icons-outlined" onClick={() => setShowGroups(false)}>
+              chevron_left
+            </button>
           )}
-          <span className="close-icon" onClick={() => hideModal()}>
-            <XIcon />
-          </span>
-          <h4>New chat</h4>
+          <strong>New chat</strong>
+          <button className="material-icons-outlined" onClick={() => hideModal()}>
+            close
+          </button>
         </div>
+
         <div className="filter-input">
           <input
             onChange={(e) => setUsersFilter(e.target.value)}
@@ -114,24 +107,26 @@ export const CreateChatModal = ({
             type="text"
             value={usersFilter}
           />
-          <SearchIcon />
+          <i className="material-icons-outlined">search</i>
         </div>
+
         {showGroups ? (
-          <div className="form">
-            <input
-              onChange={(e) => setChannelName(e.target.value)}
-              placeholder="Group chat name (optional)"
-              type="text"
-              value={channelName}
-            />
-          </div>
+          <input
+            className="large"
+            onChange={(e) => setChannelName(e.target.value)}
+            placeholder="Group chat name (optional)"
+            type="text"
+            value={channelName}
+          />
         ) : (
-          <div className="group-button" onClick={() => setShowGroups(true)}>
-            <PeopleIcon className="people-icon" />
-            <strong>New group chat</strong>
-            <ChevronRightIcon />
-          </div>
+          <button className="group-button" onClick={() => setShowGroups(true)}>
+            <i className="material-icons-outlined">people</i>
+            <p>New group chat</p>
+            <i className="material-icons-outlined">chevron_right</i>
+          </button>
         )}
+
+        <h2>Users</h2>
         <MemberList
           members={users.filter((u) => u.name?.toLowerCase().includes(usersFilter))}
           onMemberClicked={(user) => createDirectChat(user)}
@@ -162,16 +157,19 @@ const SelectableUserRenderer = ({ user, selectedUsers, handleCheck }: any) => {
   const userSelected = selectedUsers.find((m: UserType) => m.id === user.id);
   return (
     <div key={user.id} className="pn-member" onClick={() => handleCheck(user)}>
-      <div className="pn-member__avatar">
-        {user.profileUrl && <img src={user.profileUrl} alt="User avatar" />}
-        {!user.profileUrl && <div className="pn-member__avatar-placeholder" />}
+      <div className="pn-member__avatar" style={{ backgroundColor: getPredefinedColor(user.id) }}>
+        {user.profileUrl ? (
+          <img src={user.profileUrl} alt="User avatar" />
+        ) : (
+          getNameInitials(user.name || user.id)
+        )}
       </div>
       <div className="pn-member__main">
         <p className="pn-member__name">{user.name}</p>
         <p className="pn-member__title">{user.custom?.title}</p>
       </div>
       <div className={`check-icon ${userSelected && "checked"}`}>
-        {userSelected && <CheckIcon verticalAlign="unset" />}
+        {userSelected && <i className="material-icons-outlined">check</i>}
       </div>
     </div>
   );

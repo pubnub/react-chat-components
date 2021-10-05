@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
 import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import { ChannelList } from "@pubnub/react-chat-components";
-import { XIcon, SearchIcon } from "@primer/octicons-react";
 
 type ChannelType = ChannelMetadataObject<ObjectCustom>;
 
@@ -34,10 +33,10 @@ export const PublicChannelsModal = ({
     <div className="overlay">
       <div className="public-channels-modal modal">
         <div className="header">
-          <span className="close-icon" onClick={() => hideModal()}>
-            <XIcon />
-          </span>
-          <h4>Join a channel</h4>
+          <strong>Join a channel</strong>
+          <button className="material-icons-outlined" onClick={() => hideModal()}>
+            close
+          </button>
         </div>
         <div className="filter-input">
           <input
@@ -46,8 +45,9 @@ export const PublicChannelsModal = ({
             type="text"
             value={channelsFilter}
           />
-          <SearchIcon />
+          <i className="material-icons-outlined">search</i>
         </div>
+        <h2>Channels</h2>
         <ChannelList
           channels={groupChannelsToJoin.filter((c) =>
             c.name?.toLowerCase().includes(channelsFilter)

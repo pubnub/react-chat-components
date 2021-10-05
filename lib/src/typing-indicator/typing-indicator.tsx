@@ -79,7 +79,7 @@ export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicator
 
   return (
     <>
-      {!props.showAsMessage && (
+      {!props.showAsMessage && !!activeUUIDs.length && (
         <div className={`pn-typing-indicator pn-typing-indicator--${theme}`}>
           {getIndicationString()}&nbsp;
         </div>

@@ -1,9 +1,11 @@
-body {
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
   color: #585858;
 }
 
@@ -16,11 +18,19 @@ code {
   line-height: 1.5;
   margin: 0 auto;
   width: 900px;
+  font-weight: 300;
 }
 
 .welcome {
   margin: 0 auto;
   width: 900px;
+}
+
+.welcome h1,
+.welcome h3,
+.pubnub-error h1 {
+  margin: 20px 0;
+  font-weight: 500;
 }
 
 .welcome a {
