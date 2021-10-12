@@ -190,5 +190,8 @@ export function PubNubMock(): Partial<PubNub> {
     stop: () => true,
     subscribe: () => true,
     unsubscribe: () => true,
+    _config: {
+      _addPnsdkSuffix: () => true,
+    },
   };
 }
