@@ -24,7 +24,7 @@
     "emoji-mart": "^3.0.0",
     "lodash.samplesize": "^4.2.0",
     "prompts": "^2.4.1",
-    "pubnub": "^4.29.10",
+    "pubnub": "^4.33.1",
     "pubnub-react": "^2.1.0",
     "react": "^16.14.0",
     "react-dark-mode-toggle": "^0.2.0",

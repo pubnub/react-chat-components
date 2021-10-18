@@ -1,5 +1,5 @@
 import React from "react";
-import PubNub from "pubnub";
+import PubNub, { PubnubConfig } from "pubnub";
 import ReactDOM from "react-dom";
 import { PubNubProvider } from "pubnub-react";
 import { HashRouter, Switch, Route, Link } from "react-router-dom";
@@ -20,7 +20,8 @@ import users from "../../data/users.json";
 const pubnub = new PubNub({
   ...pubnubKeys,
   uuid: users[Math.floor(Math.random() * users.length)].id,
-});
+  fileUploadPublishRetryLimit: 0,
+} as PubnubConfig);
 
 /** Detect PubNub access manager */
 let pamEnabled = false;
