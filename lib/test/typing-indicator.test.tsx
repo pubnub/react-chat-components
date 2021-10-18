@@ -19,7 +19,7 @@ describe("Typing Indicator", () => {
     expect(indicator).toBeVisible();
 
     userEvent.clear(screen.getByPlaceholderText("Send message"));
-    await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
+    await waitFor(() => expect(indicator).not.toBeVisible());
   });
 
   test("shows up when typing and then disappears when sending the message", async () => {
@@ -35,6 +35,6 @@ describe("Typing Indicator", () => {
     expect(indicator).toBeVisible();
 
     userEvent.click(screen.getByTitle("Send"));
-    await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
+    await waitFor(() => expect(indicator).not.toBeVisible);
   });
 });
