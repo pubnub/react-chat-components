@@ -29,7 +29,7 @@ import {
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
-import { getNameInitials, getPredefinedColor } from "../helpers";
+import { getNameInitials, getPredefinedColor, useOuterClick } from "../helpers";
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
@@ -96,7 +96,10 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useOuterClick((event) => {
+    if ((event.target as Element).closest(".pn-msg__reactions-toggle")) return;
+    setEmojiPickerShown(false);
+  });
   const spinnerObserver = useRef(
     new IntersectionObserver((e) => e[0].isIntersecting === true && fetchMoreHistory())
   );
@@ -302,22 +305,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const handleCloseReactions = (event: MouseEvent) => {
-    try {
-      setEmojiPickerShown((pickerShown) => {
-        if (
-          !pickerShown ||
-          pickerRef.current?.contains(event.target as Node) ||
-          (event.target as Element).classList.contains("pn-msg__reactions-toggle")
-        )
-          return pickerShown;
-        return false;
-      });
-    } catch (e) {
-      onError(e);
-    }
-  };
-
   /*
   /* Lifecycle
   */
@@ -346,14 +333,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     setupBottomObserver();
     setPrevMessages(messages);
   }, [messages]);
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleCloseReactions);
-
-    return () => {
-      document.removeEventListener("mousedown", handleCloseReactions);
-    };
-  }, []);
 
   /*
   /* Renderers
@@ -414,11 +393,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
     return (
       <>
-        <div className="pn-msg__avatar" style={{ backgroundColor: getPredefinedColor(user?.id) }}>
+        <div className="pn-msg__avatar" style={{ backgroundColor: getPredefinedColor(uuid) }}>
           {user?.profileUrl ? (
             <img src={user.profileUrl} alt="User avatar" />
           ) : (
-            getNameInitials(user?.name || user.id)
+            getNameInitials(user?.name || uuid)
           )}
         </div>
         <div className="pn-msg__main">

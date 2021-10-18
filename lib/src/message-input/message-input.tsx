@@ -10,6 +10,7 @@ import React, {
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
 import { EmojiPickerElementProps } from "../types";
+import { useOuterClick } from "../helpers";
 import {
   CurrentChannelAtom,
   ThemeAtom,
@@ -76,7 +77,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const pickerRef = useRef<HTMLDivElement>(null);
+  const pickerRef = useOuterClick(() => {
+    if ((event.target as Element).closest(".pn-msg-input__emoji-toggle")) return;
+    setEmojiPickerShown(false);
+  });
 
   /*
   /* Helper functions
@@ -165,17 +169,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
-  const handleClosePicker = (event: MouseEvent) => {
-    try {
-      setEmojiPickerShown((pickerShown) => {
-        if (!pickerShown || pickerRef.current?.contains(event.target as Node)) return pickerShown;
-        return false;
-      });
-    } catch (e) {
-      onError(e);
-    }
-  };
-
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     try {
       if (event.key === "Enter" && !event.shiftKey) {
@@ -216,15 +209,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   /*
   /* Lifecycle
   */
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClosePicker);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClosePicker);
-    };
-  }, []);
-
   useEffect(() => {
     if (React.isValidElement(props.emojiPicker)) {
       setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion }));
@@ -297,7 +281,9 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     >
       <div className="pn-msg-input__wrapper">
         <div className="pn-msg-input__icons">
-          {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+          <div className="pn-msg-input__emoji-toggle">
+            {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+          </div>
           {!props.disabled && props.fileUpload && renderFileUpload()}
           {props.extraActionsRenderer && props.extraActionsRenderer()}
         </div>

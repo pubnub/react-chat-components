@@ -12,7 +12,7 @@ import users from "../../data/users.json";
 import messages from "../../data/messages-lorem.json";
 import channels from "../../data/channels-work.json";
 
-export function PubNubMock(): Partial<PubNub> {
+export function PubNubMock(): Partial<PubNub> & { _config: any } {
   const uuid = "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
