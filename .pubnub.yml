@@ -1,12 +1,33 @@
 ---
 name: pubnub-react-chat-components
-version: v0.5.0
+version: v0.6.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - dist/index.js
   - dist/index.es.js
 changelog:
+  - changes:
+      - text: Major components redesign
+        type: feature
+      - text: Telemetry
+        type: feature
+      - text: MemberList - selfText property
+        type: feature
+      - text: MemberList - on member click callback
+        type: feature
+      - text: MessageList - automatic 12h/24h time format based on locale
+        type: feature
+      - text: useUserMemberships - prevent parallel re-fetches
+        type: feature
+      - text: useChannelMembers - prevent parallel re-fetches
+        type: feature
+      - text: useUserMemberships - remove reacting to other channel/uuid events
+        type: fix
+      - text: useChannelMembers - remove reacting to other channel/uuid events
+        type: fix
+    date: 2021-10-15
+    version: v0.6.0
   - changes:
       - text: MemberList present member indicators
         type: feature
