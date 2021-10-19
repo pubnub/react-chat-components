@@ -10,7 +10,6 @@ import {
   MessageInput,
   MessageList,
   TypingIndicator,
-  isFileMessage,
   useChannelMembers,
   useChannels,
   usePresence,
