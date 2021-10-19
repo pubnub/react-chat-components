@@ -11,4 +11,7 @@ const Template: Story<MessageListProps> = (args) => <MessageList {...args} />;
 
 export const Default = Template.bind({});
 
-Default.args = {};
+Default.args = {
+  fetchMessages: 10,
+  enableReactions: true,
+};

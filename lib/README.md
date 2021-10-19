@@ -1,4 +1,4 @@
-# React Chat Components (Beta)
+# React Chat Components
 
 PubNub's Chat Components library provides easy-to-use components to build chat applications using
 PubNub Chat on the React Framework. Our component library is the fastest way to add chat features
@@ -6,7 +6,7 @@ like direct and group messaging, typing indicators, reactions and more without g
 complexity of low-level architecture of realtime networks. At the same time it allows you to create
 apps for various use cases, with different functionalities and customizable looks.
 
-![PubNub Chat Components](https://i.imgur.com/CydXVNT.png)
+![PubNub Chat Components](https://i.imgur.com/992eLO8.png)
 
 ## Quick Links
 
