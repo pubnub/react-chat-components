@@ -73,7 +73,8 @@ export default function ModeratedChat() {
    */
   const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
   const groupChannels = joinedChannels.filter(
-    (c) => c.id?.startsWith("space_") && c.name?.toLowerCase().includes(channelsFilter)
+    (c) =>
+      c.id?.startsWith("space_") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
   );
   const groupChannelsToJoin = allChannels.filter(
     (c) => c.id.startsWith("space_") && !joinedChannels.some((b) => c.id === b.id)
@@ -90,7 +91,7 @@ export default function ModeratedChat() {
       }
       return c;
     })
-    .filter((c) => c.name?.toLowerCase().includes(channelsFilter));
+    .filter((c) => c.name?.toLowerCase().includes(channelsFilter.toLowerCase()));
 
   const isUserBanned = currentUser?.custom?.ban;
   const isUserMuted = (currentUser?.custom?.mutedChannels as string)
@@ -341,7 +342,7 @@ export default function ModeratedChat() {
               </div>
               <MemberList
                 members={channelMembers.filter((c) =>
-                  c.name?.toLowerCase().includes(membersFilter)
+                  c.name?.toLowerCase().includes(membersFilter.toLowerCase())
                 )}
                 presentMembers={presentUUIDs}
               />
