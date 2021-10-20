@@ -7,21 +7,21 @@ import "./member-list.scss";
 
 export interface MemberListProps {
   children?: ReactNode;
-  /** Pass a list of members, including metadata, to render on the list */
+  /** Option to pass a list of members, including metadata, to render on the list. */
   members: UUIDMetadataObject<ObjectCustom>[] | string[];
-  /** Pass a list of present member ids to mark them with a presence indicator */
+  /** Option to pass a list of present member IDs to mark them with a presence indicator. */
   presentMembers?: string[];
-  /** Provide extra actions renderer to add custom action buttons to each member */
+  /** Option to provide an extra actions renderer to add custom action buttons to each member. */
   extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
-  /** Provide custom user renderer to override themes and CSS variables. */
+  /** Option to provide a custom user renderer to override themes and CSS variables. */
   memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
 }
 
 /**
  * Renders a list of members. It can represent all users of the application, only members of
- * the current channel, users currently subscribed/present on the channel or whatever else is passed
- * into it. Custom memberRenderer can be used to modify how the users are rendered, so for example
- * presence indicators can be added.
+ * the current channel, users currently subscribed/present on the channel, or whatever else is passed
+ * into it. Custom memberRenderer can be used to modify how the users are rendered. For example
+ * you can add presence indicators.
  */
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const pubnub = usePubNub();

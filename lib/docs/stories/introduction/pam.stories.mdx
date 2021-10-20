@@ -18,8 +18,6 @@ users to have access to it.
 
 For more information, refer to the [Access Manager feature description](https://www.pubnub.com/docs/security/access-control).
 
-<br />
-
 ## Access Manager handling in components
 
 PubNub Chat Components as a purely client-side React components library does not do anything
@@ -30,13 +28,9 @@ written from scratch.
 You can expect the operations listed below to be executed internally by the components. To work properly, all of them should be granted access to the UUID passed to the PubNub
 instance.
 
-<br />
-
 ## Operations to permissions mapping
 
 The following tables show the mappings of API operations to resources and permissions.
-
-<br />
 
 ### Publish/Subscribe
 
@@ -51,8 +45,6 @@ The following tables show the mappings of API operations to resources and permis
 | Unsubscribe from channel | Channel | None required|
 | Unsubscribe from channel group | Channel Group | None required|
 
-<br />
-
 ### Presence
 
 | PubNub Operation | Resource | Permission |
@@ -62,8 +54,6 @@ The following tables show the mappings of API operations to resources and permis
 | Get State | Channel | Read |
 | Set State | Channel | Read |
 
-<br />
-
 ### Storage
 
 | PubNub Operation | Resource | Permission |
@@ -71,9 +61,6 @@ The following tables show the mappings of API operations to resources and permis
 | History - Fetch Messages | Channel | Read |
 | Message Counts | Channel | Read |
 | Delete Messages | Channel | Delete |
-
-
-<br />
 
 ### Files
 
@@ -84,8 +71,6 @@ The following tables show the mappings of API operations to resources and permis
 | Download file | Channel | Read |
 | Delete file | Channel | Delete |
 
-<br />
-
 ### Channel Groups
 
 | PubNub Operation | Resource | Permission |
@@ -94,8 +79,6 @@ The following tables show the mappings of API operations to resources and permis
 | Remove Channels from channel group | Channel Group | Manage |
 | List Channels in channel group | Channel Group | Manage |
 | Remove channel group | Channel Group | Manage |
-
-<br />
 
 ### Objects
 
@@ -116,16 +99,12 @@ The following tables show the mappings of API operations to resources and permis
 | Remove channel memberships | Channel, UUID | Channels: Join<br/>UUID: Update |
 | Get channel memberships | UUID | Get |
 
-<br />
-
 ### Push Notifications
 
 | PubNub Operation | Resource | Permission |
 | :--------------- | :------: | :--------: |
 | Register channel for push | Channel | Read |
 | Remove channel's push registration | Channel | Read |
-
-<br />
 
 ### Message Actions
 

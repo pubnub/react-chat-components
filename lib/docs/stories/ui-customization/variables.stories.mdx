@@ -2,15 +2,12 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="UI Customization/CSS Variables" />
 
-# CSS Variables
+# CSS variables
 
-Built in themes can be customized by changing the values of
-[CSS Variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that
-are internally used to style different parts of each component. You can see the full list of
-avilable variables along with its default values below.
+Built-in themes can be customized by changing the values of [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that
+are internally used to style different parts of each component. This document provides the full list of available variables along with their default values.
 
-For example, to remove the default padding around Message Input you can simply redefine the varaible
-in your CSS file:
+For example, to remove the default padding around `MessageInput`, you can simply redefine the varaible in your CSS file:
 
 ```css
 :root {
@@ -18,9 +15,8 @@ in your CSS file:
 }
 ```
 
-In some cases, where the variable value is redefined by the particular theme being used, a higher
-CSS specifity needs to be applied. So for example, to change the background of the Message List in
-dark mode, you need to use component class name instead of the `:root` element:
+In cases where the variable value is redefined by a particular theme in use, a higher
+CSS specification needs to be applied. For example, to change the background of `MessageList` in the dark mode, you must use a component class name instead of the `:root` element:
 
 ```css
 .pn-msg-list {
@@ -28,7 +24,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 }
 ```
 
-### Message List
+## Message list
 
 ```css
 --msg-list__background: #f0f3f7;
@@ -112,7 +108,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg__reaction__padding: 7px 10px;
 ```
 
-### Message Input
+## Message input
 
 ```css
 --msg-input__background: transparent;
@@ -164,7 +160,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --msg-input__textarea__width: 100%;
 ```
 
-### Member List
+## Member list
 
 ```css
 --member-list__background: transparent;
@@ -211,7 +207,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --member__actions__padding: 1px 6px;
 ```
 
-### Channel List
+## Channel list
 
 ```css
 --channel-list__background: #ffffff;
@@ -255,7 +251,7 @@ dark mode, you need to use component class name instead of the `:root` element:
 --channel__actions__padding: 1px 6px;
 ```
 
-### Typing Indicator
+## Typing indicator
 
 ```css
 --typing-indicator__background: #f0f3f7;

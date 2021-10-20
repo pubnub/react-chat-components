@@ -25,30 +25,30 @@ import XCircleIcon from "../icons/x-circle.svg";
 import SpinnerIcon from "../icons/spinner.svg";
 
 export interface MessageInputProps {
-  /** Set a placeholder message display in the text window. */
+  /** Option to set a placeholder message to display in the text window. */
   placeholder?: string;
-  /** Set a draft message to display in the text window. */
+  /** Option to set a draft message to display in the text window. */
   draftMessage?: string;
-  /** Enable this for high-throughput environemnts to attach sender data directly to each message.
-   * This is an alternative to providing a full list of users directly into Chat provider. */
+  /** Option to attach sender data directly to each message. Enable it for high-throughput environments. 
+   * This is an alternative to providing a full list of users directly into the Chat provider. */
   senderInfo?: boolean;
-  /** Enable/disable firing the typing events when user is typing a message. */
+  /** Option to enable/disable firing the typing events when a user is typing a message. */
   typingIndicator?: boolean;
-  /** Enable/disable internal file upload capabilty */
+  /** Option to enable/disable the internal file upload capability. */
   fileUpload?: "image" | "all";
-  /** Disable the input from composing and sending messages */
+  /** Option to disable the input from composing and sending messages. */
   disabled?: boolean;
-  /** Hides the Send button */
+  /** Option to hide the Send button. */
   hideSendButton?: boolean;
-  /** Custom UI component to override default display for the send button. */
+  /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
-  /** Pass in an emoji picker if you want it to be rendered in the input. See Emoji Pickers section of the docs to get more details */
+  /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
   emojiPicker?: ReactElement<EmojiPickerElementProps>;
-  /** Callback to handle event when the text value changes. */
+  /** Callback to handle an event when the text value changes. */
   onChange?: (value: string) => unknown;
-  /** Callback for extra actions while sending a message */
+  /** Callback for extra actions while sending a message. */
   onSend?: (value: unknown) => unknown;
-  /** Provide extra actions renderer to add custom action buttons to the input */
+  /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
 }
 
