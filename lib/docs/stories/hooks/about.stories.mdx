@@ -2,35 +2,37 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Custom Hooks/About" />
 
-# React Hooks
+# React hooks
 
-<br /><br />
-
-## What are hooks?
-Hooks is a new API for React introduced in version 16.8 (released in February 2019). They let us use
-state and other React features without writing classes.
+Hooks is a new API for React introduced in version 16.8 (released in February 2019). They allow for using state and other React features without writing classes.
 
 The main motivation behind this new API was the ability of creating reusable logic, including state,
-and plugging it into React components. So the goal is similar to Higher Order Components or Render
-Props patterns, but Hooks resolve a lot of the issues of its predecessors and are much simpler to
-use. Another big benefit is the possibility to put interconnected logic close to each other, and in
-reality components using hooks result in much shorter code. In general they provide a good developer
+and plugging it into React components. So the goal is similar to Higher-Order Components or render
+props patterns, but Hooks resolve a lot of the issues of its predecessors and are much simpler to
+use. Another big benefit is the possibility to put interconnected logic close to each other. In
+addition, components using Hooks result in much shorter code and provide a good developer
 experience.
 
-usePubNub from our React SDK is in fact a React hook, providing a PubNub instance into client
+`usePubNub` from our React SDK is in fact a React hook, providing a PubNub instance into client
 components. The word “use” at the beginning of every hook is a name convention set by the React
 authors.
 
-<br />
+## Custom chat hooks
 
-## Custom Chat Hooks
-
-Apart from the actual components, the Chat Components package comes with a set of custom React
-Hooks. The hooks were created to easily fetch metadata stored within **PubNub Objects** and pass it
-directly into components.
+Apart from the actual components, PubNub Chat Components for React come with a set of custom React
+hooks. The hooks were created to easily fetch the metadata stored within PubNub objects and pass it
+directly into the components.
 
 You can skip this section if metadata is handled externally. Otherwise, you can use PubNub's
-infrastrucutre to store your data prior to, or during the runtime of your application using our
+infrastructure to store your data prior to, or during runtime of your application using our
 standard JavaScript SDK methods.
 
+## Available hooks
+
+* [`useUsers`](http://localhost:6006/?path=/docs/custom-hooks-useusers--page)
+* [`useUser`](http://localhost:6006/?path=/docs/custom-hooks-useuser--page)
+* [`useChannels`](http://localhost:6006/?path=/docs/custom-hooks-usechannels--page)
+* [`useChannelMembers`](http://localhost:6006/?path=/docs/custom-hooks-usechannelmembers--page)
+* [`useUserMemberships`](http://localhost:6006/?path=/docs/custom-hooks-useusermemberships--page)
+* [`usePresence`](http://localhost:6006/?path=/docs/custom-hooks-usepresence--page)
 

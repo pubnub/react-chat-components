@@ -2,25 +2,18 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Introduction/Emoji Pickers" />
 
-# Emoji Pickers
+# Emoji pickers
 
-The components listed below are able to interact with _emoji pickers_ in order to achieve following
-functionalities:
+The following components interact with emoji pickers:
 
-- MessageInput - using emojis to compose text messages
-- MessageList - reacting to certain messages with any of the available emojis
+* `MessageInput` uses emojis to compose text messages.
+* `MessageList` uses emojis to react to text messages.
 
-In order to keep the components library lightweight, and at the same time provide maximum
-customizability, an emoji picker component is not included directly in the package. Instead, it is
-expected it will be installed directly in your application and provided into react-chat-components
-using _render props_.
+To keep the components library lightweight and provide maximum customizability, an emoji picker component is not included directly in the package. Instead, it's expected to be installed directly in your application and provided into `react-chat-components` using render props.
 
-## Expected interface
+## Interface
 
-In order to use any emoji picker component of your choosing it has to expose a `onSelect` method
-which is called whenever an emoji is picked by the user. In that method there is supposed to be a
-single object argument which has a `native` property that returns a native emoji image that can be
-rendered by your supported browsers.
+To use any emoji picker component of your choosing, it has to expose the `onSelect()` method which is called whenever an emoji is picked by the user. In that method, you must provide a single object argument which has the `native` property that returns a native emoji image that can be rendered by your app's supported browser.
 
 A TypeScript interface that you can import from the components looks like this:
 
@@ -30,75 +23,71 @@ interface EmojiPickerElementProps {
 }
 ```
 
-## Examples
-
-<br />
-
-### emoji-mart
+## Use `emoji-mart`
 
 [emoji-mart](https://www.npmjs.com/package/emoji-mart) is a very popular, customizable emoji picker
-component for React that is natively supported by react-chat-components. It uses the same interface
-so the usage is plug-and-play:
+component for React that is natively supported by PubNub Chat Components for React. It uses the same interface
+so the usage is plug-and-play.
 
-1. Start by installing the package
+1. Start by installing the package.
 
-```bash
-npm install --save emoji-mart
-```
+  ```bash
+  npm install --save emoji-mart
+  ```
 
-2. Import the component and required styles
+1. Import the component and required styles.
 
-```tsx
-import { Picker } from "emoji-mart";
-import "emoji-mart/css/emoji-mart.css";
-```
+  ```tsx
+  import { Picker } from "emoji-mart";
+  import "emoji-mart/css/emoji-mart.css";
+  ```
 
-3. Use it in your chat app
+1. Use it in your chat app.
 
-```tsx
-<Chat channel="channel">
-  <MessageList enableReactions reactionsPicker={<Picker />} />
-  <MessageInput typingIndicator emojiPicker={<Picker />} />
-</Chat>
-```
+  ```tsx
+  <Chat channel="channel">
+    <MessageList enableReactions reactionsPicker={<Picker />} />
+    <MessageInput typingIndicator emojiPicker={<Picker />} />
+  </Chat>
+  ```
 
-### emoji-picker-react (and others)
+## Use `emoji-picker-react`
 
 [emoji-picker-react](https://www.npmjs.com/package/emoji-picker-react) is another popular choice to
 provide emoji picking functionality. However, it uses a different interface so you have to write an
-adapter before rendering it in the components:
+adapter before rendering it in the components.
 
-1. Start by installing the package
+1. Start by installing the package.
 
-```bash
-npm install --save emoji-picker-react
-```
+  ```bash
+  npm install --save emoji-picker-react
+  ```
 
-2. Import the component (and a helpful interface if you are using TypeScript):
+1. Import the component (and a helpful interface if you are using TypeScript).
 
-```tsx
-import Picker, { IEmojiData } from "emoji-picker-react";
-import { EmojiPickerElementProps } from "@pubnub/react-chat-components";
-```
+  ```tsx
+  import Picker, { IEmojiData } from "emoji-picker-react";
+  import { EmojiPickerElementProps } from "@pubnub/react-chat-components";
+  ```
 
-3. Implement an adapter:
+1. Implement an adapter.
 
-```tsx
-export const PickerAdapter = (props: EmojiPickerElementProps) => {
-  // handling method should call onSelect with an object exposing a "native" property
-  const handleEmoji = (event: React.MouseEvent, emoji: IEmojiData) => {
-    if (props.onSelect) props.onSelect({ native: emoji.emoji });
+  ```tsx
+  export const PickerAdapter = (props: EmojiPickerElementProps) => {
+    // handling method should call onSelect with an object exposing the "native" property
+    const handleEmoji = (event: React.MouseEvent, emoji: IEmojiData) => {
+      if (props.onSelect) props.onSelect({ native: emoji.emoji });
+    };
+    // onEmojiClick is a method in emoji-picker-react used to handle emoji picking
+    return <Picker onEmojiClick={handleEmoji} />;
   };
-  // onEmojiClick is a method in emoji-picker-react used to handle emoji picking
-  return <Picker onEmojiClick={handleEmoji} />;
-};
-```
+  ```
 
-4. Use it in your chat app:
+1. Use it in your chat app.
 
-```tsx
-<Chat channel="channel">
-  <MessageList enableReactions reactionsPicker={<PickerAdapter />} />
-  <MessageInput typingIndicator emojiPicker={<PickerAdapter />} />
-</Chat>
-```
+  ```tsx
+  <Chat channel="channel">
+    <MessageList enableReactions reactionsPicker={<PickerAdapter />} />
+    <MessageInput typingIndicator emojiPicker={<PickerAdapter />} />
+  </Chat>
+  ```

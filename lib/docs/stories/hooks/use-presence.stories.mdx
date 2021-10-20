@@ -2,11 +2,11 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 <Meta title="Custom Hooks/usePresence" />
 
-## usePresence
+# `usePresence`
 
-Returns the list of unique user-ids currently subscribed to the channel. This hook also sets up a
-listener that will react to new presence events (joins and leaves/timeouts). However, this behavior
-requires a living subscription to the channels passed to the hook - this should be handled by the
+Returns the list of unique user IDs currently subscribed to the channel. 
+
+This hook also sets up a listener that reacts to new presence events (joins and leaves/timeouts). However, this behavior requires a living subscription to the channels passed to the hook - this should be handled by the
 components.
 
 Information returned by this hook can be used to show a presence indicator, or a number of people
@@ -20,31 +20,30 @@ const [channels, refetchPresence, totalPresence, error] = usePresence({
 return <p>Occupancy of the channel: {channels["test-channel"].occupancy}</p>;
 ```
 
-### Input
+## Input
 
-| Parameter     | Type    | Required | Defaults | Description                                                                                                                      |
-| ------------- | ------- | -------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| channels      | Array   | Optional |          | Specifies the channel name to return occupancy results. If channel is not provided, hereNow() will return data for all channels. |
-| channelGroups | Array   | Optional |          | The channel group for which here now information should be received.                                                             |
-| includeUUIDs  | Boolean | Optional | true     | Setting uuid to false disables the return of uuids.                                                                              |
-| includeState  | Boolean | Optional | false    | Setting state to true enables the return of subscriber state information.                                                        |
-
-<br />
-
-### Output
-
-| Parameter | Type              | Description                                                                                                   |
-| --------- | ----------------- | ------------------------------------------------------------------------------------------------------------- |
-| array[0]  | ChannelPresence[] | List of returned channel presence data.                                                                       |
-| array[1]  | Function          | Refetch presence from scratch. This is rarely needed since the hook sets up presence listeners to get updates |
-| array[2]  | Number            | Total number of present users across all passed channels.                                                     |
-| array[3]  | Error             | If there's an error fetching presence it will be available here.                                              |
+| Parameter     | Type    | Required | Defaults | Description     |
+| :------------- | :------- | :-------- | :-------- | :----------------- |
+| `channels`      | Array   | Optional |       n/a   | Channel name to return occupancy results. If channel is not provided, `hereNow()` will return data for all channels. |
+| `channelGroups` | Array   | Optional |       n/a   | Channel group for which `hereNow()` information should be received.                                                             |
+| `includeUUIDs`  | Boolean | Optional | `true`     | Option to disable returning uuids.                                                                              |
+| `includeState`  | Boolean | Optional | `false`    | Option to enable returning subscriber state information. 
+                                                        |
 
 <br />
 
-#### ChannelPresence interface
+## Output
 
-```
+| Parameter | Type   | Description        |
+| :--------- | :----------------- | :-------- |
+| `array[0]`  | `ChannelPresence[]` | List of returned channel presence data.                                                                       |
+| `array[1]`  | Function          | Refetching presence from scratch. This is rarely needed since the hook sets up presence listeners to get updates. |
+| `array[2]`  | Number            | Total number of present users across all passed channels.                                                     |
+| `array[3]`  | Error             | If there's an error fetching presence, it will be available here.                                              |
+
+### `ChannelPresence` interface
+
+```tsx
   [channel: string]: {
     name: string;
     occupancy: number;
