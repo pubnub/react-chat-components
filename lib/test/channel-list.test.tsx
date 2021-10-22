@@ -22,7 +22,7 @@ describe("Channel List", () => {
   test("renders current channel as active", () => {
     render(<ChannelList channels={channels} />, {
       providerProps: {
-        currentChannel: "space_ac4e67b98b34b44c4a39466e93e",
+        currentChannel: "space.ac4e67b98b34b44c4a39466e93e",
       },
     });
 

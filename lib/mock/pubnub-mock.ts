@@ -64,7 +64,7 @@ export function PubNubMock(): Partial<PubNub> & { _config: any } {
 
   const getUUID = () => uuid;
 
-  const getSubscribedChannels = () => ["space_ce466f2e445c38976168ba78e46"];
+  const getSubscribedChannels = () => ["space.ce466f2e445c38976168ba78e46"];
 
   const getSubscribedChannelGroups = () => [];
 
@@ -162,11 +162,11 @@ export function PubNubMock(): Partial<PubNub> & { _config: any } {
   // }),
   // getMemberships: () => ({
   //   data: [
-  //     { channel: { id: "space_ac4e67b98b34b44c4a39466e93e" } },
-  //     { channel: { id: "space_c1ee1eda28554d0a34f9b9df5cfe" } },
-  //     { channel: { id: "space_ce466f2e445c38976168ba78e46" } },
-  //     { channel: { id: "space_a204f87d215a40985d35cf84bf5" } },
-  //     { channel: { id: "space_149e60f311749f2a7c6515f7b34" } },
+  //     { channel: { id: "space.ac4e67b98b34b44c4a39466e93e" } },
+  //     { channel: { id: "space.c1ee1eda28554d0a34f9b9df5cfe" } },
+  //     { channel: { id: "space.ce466f2e445c38976168ba78e46" } },
+  //     { channel: { id: "space.a204f87d215a40985d35cf84bf5" } },
+  //     { channel: { id: "space.149e60f311749f2a7c6515f7b34" } },
   //   ],
   // }),
   // getUUIDMetadata: (args) => ({

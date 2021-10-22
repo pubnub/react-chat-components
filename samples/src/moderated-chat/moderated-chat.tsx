@@ -74,16 +74,16 @@ export default function ModeratedChat() {
   const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
   const groupChannels = joinedChannels.filter(
     (c) =>
-      c.id?.startsWith("space_") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
+      c.id?.startsWith("space.") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
   );
   const groupChannelsToJoin = allChannels.filter(
-    (c) => c.id.startsWith("space_") && !joinedChannels.some((b) => c.id === b.id)
+    (c) => c.id.startsWith("space.") && !joinedChannels.some((b) => c.id === b.id)
   );
   const directChannels = joinedChannels
-    .filter((c) => c.id?.startsWith("direct_") || c.id?.startsWith("group_"))
+    .filter((c) => c.id?.startsWith("direct.") || c.id?.startsWith("group."))
     .map((c) => {
-      if (!c.id?.startsWith("direct_")) return c;
-      const interlocutorId = c.id.replace(uuid, "").replace("direct_", "").replace("@", "");
+      if (!c.id?.startsWith("direct.")) return c;
+      const interlocutorId = c.id.replace(uuid, "").replace("direct.", "").replace("@", "");
       const interlocutor = allUsers.find((u) => u.id === interlocutorId);
       if (interlocutor) {
         c.custom = { thumb: interlocutor.profileUrl || "" };
