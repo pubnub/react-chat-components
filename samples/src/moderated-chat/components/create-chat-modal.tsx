@@ -16,7 +16,7 @@ interface CreateChatModalProps {
 /**
  * This modal is opened after clicking the "plus" icon next to the Direct chats header
  * It is used to create new private chats between selected users
- * It creates two kind of channels, direct_ and group_, depending on how many users were selected
+ * It creates two kind of channels, direct. and group., depending on how many users were selected
  */
 export const CreateChatModal = ({
   users,
@@ -44,7 +44,7 @@ export const CreateChatModal = ({
     if (creatingChannel) return;
     setCreatingChannel(true);
     const uuids = [uuid, user.id].sort();
-    const channel = `direct_${uuids.join("@")}`;
+    const channel = `direct.${uuids.join("@")}`;
     const data = {
       name: user.name,
       custom: {
@@ -65,7 +65,7 @@ export const CreateChatModal = ({
     const randomHex = [...Array(27)]
       .map(() => Math.floor(Math.random() * 16).toString(16))
       .join("");
-    const channel = `group_${randomHex}`;
+    const channel = `group.${randomHex}`;
     const name =
       channelName ||
       users
