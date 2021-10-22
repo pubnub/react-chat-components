@@ -35,6 +35,7 @@
     "@rollup/plugin-replace": "^3.0.0",
     "@svgr/rollup": "^5.4.0",
     "@svgr/webpack": "^5.5.0",
+    "@testing-library/dom": "^8.10.1",
     "@testing-library/jest-dom": "^5.11.9",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^13.1.1",
