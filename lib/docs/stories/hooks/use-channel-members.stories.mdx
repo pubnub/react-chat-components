@@ -4,11 +4,16 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # `useChannelMembers`
 
-The hook returns a list of members in a channel. 
+The hook returns a list of members in a channel.
 
-The list will include user metadata for members that have additional metadata stored in the database. Pagination is handled internally. You can adjust the `limit` of returned members on a single call (max/default 100) and call a function returned by the hook to get another page of results. 
+The list will include user metadata for members that have additional metadata stored in the
+database. Pagination is handled internally. You can adjust the `limit` of returned members on a
+single call (max/default 100) and call a function returned by the hook to get another page of
+results.
 
-This hook also sets up a listener that reacts to removals of already fetched members. Updates and new memberships are not handled due to technical limitations. However, this behavior requires a living subscription to the channel getting updated - this should be handled by the components.
+This hook also sets up a listener that reacts to removals of already fetched members. Updates and
+new memberships are not handled due to technical limitations. However, this behavior requires a
+living subscription to the channel getting updated - this should be handled by the components.
 
 ```js
 const [members, fetchPage, refetchChannelMembers, total, error] = useChannelMembers({
@@ -24,21 +29,21 @@ return (
 
 ## Input
 
-| Parameter               | Type    | Required | Defaults | Description   |
-| :----------------------- | :------- | :-------- | :-------- | :---------------------------------------- |
-| `include`                 | Object  | Optional |    n/a      | Option to include respective additional fields in the response.                                                                                                                                                                                                                          |
-| →&nbsp;`UUIDFields`       | Boolean | Optional | `false`    | Option to include fields for UUIDs metadata.                                                                                                                                                                                                                                             |
-| →&nbsp;`customUUIDFields` | Boolean | Optional | `false`    | Option to include custom fields for UUIDs metadata.                                                                                                                                                                                                                                      |
-| `filter`              | String  | Optional | n/a   | Expression used to filter the results. Only objects whose properties satisfy the given expression are returned. The filter language is [defined here](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects#objects-filtering-language-definition). |
-| `sort`                | Object  | Optional | `ascending` | Key-value pair of a property to sort by and a sort direction. <br/> <br/> Available options are `id`, `name`, and `updated`. <br/> <br/> Use `asc` or `desc` to specify sort direction, or specify `null` to take the default sort direction (ascending). <br/> <br/>Example: {`name: 'asc'}`               |
-| `limit`               | Number  | Optional | `100`      | Number of objects to return in response. <br/> <br/>Default is `100` which is also the maximum value. |                                                                                                                 
+| Parameter                 | Type    | Required | Defaults    | Description                                                                                                                                                                                                                                                                                   |
+| :------------------------ | :------ | :------- | :---------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `include`                 | Object  | Optional | n/a         | Option to include respective additional fields in the response.                                                                                                                                                                                                                               |
+| →&nbsp;`UUIDFields`       | Boolean | Optional | `false`     | Option to include fields for UUIDs metadata.                                                                                                                                                                                                                                                  |
+| →&nbsp;`customUUIDFields` | Boolean | Optional | `false`     | Option to include custom fields for UUIDs metadata.                                                                                                                                                                                                                                           |
+| `filter`                  | String  | Optional | n/a         | Expression used to filter the results. Only objects whose properties satisfy the given expression are returned. The filter language is [defined here](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects#objects-filtering-language-definition).                               |
+| `sort`                    | Object  | Optional | `ascending` | Key-value pair of a property to sort by and a sort direction. <br/> <br/> Available options are `id`, `name`, and `updated`. <br/> <br/> Use `asc` or `desc` to specify sort direction, or specify `null` to take the default sort direction (ascending). <br/> <br/>Example: {`name: 'asc'}` |
+| `limit`                   | Number  | Optional | `100`       | Number of objects to return in response. <br/> <br/>Default is `100` which is also the maximum value.                                                                                                                                                                                         |
 
 ## Output
 
-| Parameter | Type     | Description     |
-| :--------- | :-------- | --------- |
-| `array[0]`  | User[]   | List of returned members.                                                                                      |
-| `array[1] ` | Function | Function that can be called to fetch another page of members.                                                  |
+| Parameter   | Type     | Description                                                                                                     |
+| :---------- | :------- | --------------------------------------------------------------------------------------------------------------- |
+| `array[0]`  | User[]   | List of returned members.                                                                                       |
+| `array[1] ` | Function | Function that can be called to fetch another page of members.                                                   |
 | `array[2]`  | Function | Function that can be called to completely reset the hook. This can be used in case of expected members updates. |
-| `array[3]` | Number   | Total number of stored members.                                                                                |
+| `array[3]`  | Number   | Total number of stored members.                                                                                 |
 | `array[4]`  | Error    | If there's an error fetching members, it will be available here.                                                |

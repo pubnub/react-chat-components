@@ -6,23 +6,25 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 Passing wrong types of data into the components, unavailability or a limited network connection, and
 unexpected behaviors are all examples of what might cause exceptions to be thrown from inside of the
-components code. 
+components code.
 
-The results of those problems might vary, starting with some interactions being blocked and ending with your whole application crashing. That is why it is important to be able to add some form of error handling to your usage of components.
+The results of those problems might vary, starting with some interactions being blocked and ending
+with your whole application crashing. That is why it is important to be able to add some form of
+error handling to your usage of components.
 
 ## Error callback
 
 The fundamental way of capturing and handling errors coming from the components is by using the
-`onError` property of the `Chat` provider component and passing it to a custom callback function. This
-function will be called each time a JavaScript exception is raised within the components code with the
-actual error passed in as an argument.
+`onError` property of the `Chat` provider component and passing it to a custom callback function.
+This function will be called each time a JavaScript exception is raised within the components code
+with the actual error passed in as an argument.
 
 You can use the custom error callback for:
 
-* Debugging
-* Logging
-* Displaying notifications to the end user
-* Rerendering
+- Debugging
+- Logging
+- Displaying notifications to the end user
+- Rerendering
 
 An example of simple logging behavior can be as follows:
 
@@ -50,14 +52,15 @@ component functionalities (currently fetching messages history). It is disabled 
 be easily configured for environments in which network connection is not too stable, and you don't
 want the connections to fail immediately.
 
-To enable the retry behavior you must configure the `retryOptions` property on the `Chat`
-provider:
+To enable the retry behavior you must configure the `retryOptions` property on the `Chat` provider:
 
-* Provide the maximum number of retries.
-* Provide the timeout between requests.
-* Set a factor number for exponential timeout lengths (`1` results in linear timeouts) .
+- Provide the maximum number of retries.
+- Provide the timeout between requests.
+- Set a factor number for exponential timeout lengths (`1` results in linear timeouts) .
 
-In the example below, if the network connection is down, the components will try to fetch message history up to `5` times, with timeout between each request starting from `1` second, to `2`, `4`, and ending on `8` seconds before the last call.
+In the example below, if the network connection is down, the components will try to fetch message
+history up to `5` times, with timeout between each request starting from `1` second, to `2`, `4`,
+and ending on `8` seconds before the last call.
 
 ```js
 function RetryChat() {
@@ -80,10 +83,11 @@ function RetryChat() {
 
 ## Errors in custom hooks
 
-Custom hooks have their own way of handling errors. Every custom hook exposes the most recent error it
-ran into as the last element of its output array. 
+Custom hooks have their own way of handling errors. Every custom hook exposes the most recent error
+it ran into as the last element of its output array.
 
-You can easily detect changes to the variable using the standard React `useEffect` hook and put your custom handling logic there, or use the error to directly influence the UI.
+You can easily detect changes to the variable using the standard React `useEffect` hook and put your
+custom handling logic there, or use the error to directly influence the UI.
 
 ```js
 function ErrorHook() {

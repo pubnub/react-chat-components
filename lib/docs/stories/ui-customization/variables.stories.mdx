@@ -4,10 +4,13 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # CSS variables
 
-Built-in themes can be customized by changing the values of [CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that
-are internally used to style different parts of each component. This document provides the full list of available variables along with their default values.
+Built-in themes can be customized by changing the values of
+[CSS variables](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) that
+are internally used to style different parts of each component. This document provides the full list
+of available variables along with their default values.
 
-For example, to remove the default padding around `MessageInput`, you can simply redefine the varaible in your CSS file:
+For example, to remove the default padding around `MessageInput`, you can simply redefine the
+varaible in your CSS file:
 
 ```css
 :root {
@@ -15,8 +18,9 @@ For example, to remove the default padding around `MessageInput`, you can simply
 }
 ```
 
-In cases where the variable value is redefined by a particular theme in use, a higher
-CSS specification needs to be applied. For example, to change the background of `MessageList` in the dark mode, you must use a component class name instead of the `:root` element:
+In cases where the variable value is redefined by a particular theme in use, a higher CSS
+specification needs to be applied. For example, to change the background of `MessageList` in the
+dark mode, you must use a component class name instead of the `:root` element:
 
 ```css
 .pn-msg-list {
