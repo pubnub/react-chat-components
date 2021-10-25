@@ -39,6 +39,7 @@
   --msg-input__textarea__padding: 6px 14px 8px;
   --msg-input__textarea__resize: none;
   --msg-input__textarea__width: 100%;
+  --msg-input__textarea__overflow: hidden;
 }
 
 /* ************************
@@ -70,6 +71,7 @@
     padding: var(--msg-input__textarea__padding);
     resize: var(--msg-input__textarea__resize);
     width: var(--msg-input__textarea__width);
+    overflow: var(--msg-input__textarea__overflow);
 
     &:focus-within {
       outline: var(--msg-input__textarea--focus__outline);
