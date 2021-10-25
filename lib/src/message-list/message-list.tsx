@@ -46,31 +46,33 @@ export interface MessageRendererProps {
 
 export interface MessageListProps {
   children?: ReactNode;
-  /** Set a number from 0 to 100 to fetch past messages from storage on a channel. Defaults to 0 to fetch no messages from storage. */
+  /** Option to fetch past messages from storage and display them on a channel. Set a number from "0" to "100". Defaults to "0" to fetch no messages from storage. */
   fetchMessages?: number;
-  /** Enable to render reactions that were added to messages. Be sure to also set up reactionsPicker when this is enabled */
+  /** Option to enable rendering reactions that were added to messages. Make sure to also set up reactionsPicker when this option is enabled. */
   enableReactions?: boolean;
-  /** Provide custom welcome messages to replace the default one or set to false to disable */
+  /** Option to provide custom welcome messages to replace the default ones. Set to "false" to disable it. */
   welcomeMessages?: false | MessageEnvelope | MessageEnvelope[];
-  /** Pass in an emoji picker component if you want to enable message reactions. See Emoji Pickers section of the docs to get more details */
+  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
   reactionsPicker?: ReactElement<EmojiPickerElementProps>;
-  /** Provide extra actions renderer to add custom action buttons to each message */
+  /** Option to provide an extra actions renderer to add custom action buttons to each message. */
   extraActionsRenderer?: (message: MessageEnvelope) => JSX.Element;
-  /** Provide custom message item renderer if themes and CSS variables aren't enough */
+  /** Option to provide a custom message item renderer if themes and CSS variables aren't enough. */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
+  /** Option to provide a custom message bubble renderer if themes and CSS variables aren't enough. */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /** Use this function to render only some of the messages on your own. */
+  /** Option to render only selected messages. */
   filter?: (message: MessageEnvelope) => boolean;
-  /** A callback run on list scroll */
+  /** Callback run on a list scroll. */
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
 }
 
 /**
- * Fetches historical messages using scrolling pagination pattern and subscribes to the current
- * channel to stay up to date with new messages. Displays data in an interactive list, including
- * user names, avatars, times of sending and attachments (links, images). Allows to react to
- * messages with emojis and show those reactions immediately.
+ * Fetches historical messages using the scrolling pagination pattern and subscribes to the current
+ * channel to stay up to date with new messages. 
+ * 
+ * It also displays data in an interactive list, including
+ * user names, avatars, the time when a message was sent, and attachments (links, images) and allows to react to
+ * messages with emojis and to show those reactions immediately.
  */
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const pubnub = usePubNub();

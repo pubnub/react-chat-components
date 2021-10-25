@@ -4,10 +4,15 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Usage
 
-<br />
-<br />
+Set up and use PubNub Chat Components for React to build your own chat application.
 
-## PubNub Account
+## Requirements
+
+- React v16.8+ and ReactDOM v16.8+
+- [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/)
+- [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup)
+
+## Set up PubNub account
 
 1. Sign in or create an account to create an app on the
    [Admin Portal](https://dashboard.pubnub.com/) and get the keys to use in your application.
@@ -20,17 +25,15 @@ import { Meta } from "@storybook/addon-docs/blocks";
    include _Presence_, _Storage & Playback_ (including correct Retention) and _Objects_ (be sure to
    select a geographical region corresponding to most users of your application).
 
-## Installation
+## Install and use components
 
-Install the components and all required dependencies using npm:
+1. Install the components and all required dependencies using npm.
 
 ```bash
 npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
-## Usage
-
-1. Import PubNub, PubNub React Provider and the components
+2. Import PubNub, PubNub React Provider and the components.
 
 ```js
 import PubNub from "pubnub";
@@ -44,7 +47,7 @@ import {
 } from "@pubnub/react-chat-components";
 ```
 
-2. Create your PubNub client and rest of the configuration for the Chat provider.
+3. Create your PubNub client and rest of the configuration for the `Chat` provider.
 
 ```jsx
 const pubnub = new PubNub({
@@ -56,7 +59,7 @@ const currentChannel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
+4. Feed the PubNub Provider with your newly created client as with other PubNub React applications.
 
 ```jsx
 const MyComponent = () => {
@@ -64,7 +67,7 @@ const MyComponent = () => {
 };
 ```
 
-4. Place the components within the Chat state provider in any order that your app requires.
+5. Place the components within the Chat state provider in any order that your app requires.
    Components can be tweaked later on using option properties and CSS variables.
 
 ```jsx
@@ -80,7 +83,6 @@ const MyComponent = () => {
 };
 ```
 
-5. Check out the
-   [PubNub Chat Components Samples](https://pubnub.github.io/react-chat-components/samples) to see
-   what is possible using the components. Source code of the sample applications can be found in the
+6. Check out the [sample apps](https://pubnub.github.io/react-chat-components/samples) to see what
+   is possible using the components. Source code of the sample applications can be found in the
    `samples` folder in the repository root.

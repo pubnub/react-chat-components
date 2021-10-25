@@ -34,42 +34,42 @@ import "./chat.scss";
  */
 export interface ChatProps {
   children?: ReactNode;
-  /** A general theme to be used by the components.
+  /** General theme to be used by the components.
    * Exact looks can be tweaked later on with the use of CSS variables. */
   theme?: Themes;
-  /** A "current" channel to display the messages and members from. */
+  /** Current channel to display the messages and members from. */
   currentChannel: string;
-  /** Array of channels to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
+  /** Array of channels to subscribe to get events. Allows up to 50 channels. Setting this option will disable the auto subscription when switching the current channel. */
   channels?: string[];
-  /** Array of channels groups to subscribe to get events. Allows up to 50 channels. Setting this option will disable auto subscription when switchting current channel. */
+  /** Array of channel groups to subscribe to get events. Allows up to 50 channel groups. Setting this option will disable the auto subscription when switching the current channel group. */
   channelGroups?: string[];
-  /** Set to false to disable presence events. OccupancyIndicator and MemberList component will only work with memberships in that case. */
+  /** Option to disable presence events when set to "false." OccupancyIndicator and MemberList components will only work with memberships in that case. */
   enablePresence?: boolean;
-  /** Provide external list of user metadata. It's used to display information about senders on MessageList and TypingIndicator. */
+  /** Option to provide an external list of user metadata. It's used to display information about senders on MessageList and TypingIndicator. */
   users?: UUIDMetadataObject<ObjectCustom>[];
-  /** Define a timeout in seconds for typing indicators to hide after last types character. */
+  /** Option to define a timeout in seconds for typing indicators to hide after the last typed character. */
   typingIndicatorTimeout?: number;
-  /** Options for automatic retry on error behavior. */
+  /** Options for automatic retries on errors. */
   retryOptions?: RetryOptions;
-  /** A callback run on new messages. */
+  /** Callback run on new messages. */
   onMessage?: (message: MessageEnvelope) => unknown;
-  /** A callback run on signals. */
+  /** Callback run on signals. */
   onSignal?: (message: SignalEvent) => unknown;
-  /** A callback run on message actions. */
+  /** Callback run on message actions. */
   onMessageAction?: (event: MessageActionEvent) => unknown;
-  /** A callback run on presence events. */
+  /** Callback run on presence events. */
   onPresence?: (event: PresenceEvent) => unknown;
-  /** A callback run on object events. */
+  /** Callback run on object events. */
   onUser?: (event: BaseObjectsEvent) => unknown;
-  /** A callback run on object events. */
+  /** Callback run on object events. */
   onChannel?: (event: BaseObjectsEvent) => unknown;
-  /** A callback run on object events. */
+  /** Callback run on object events. */
   onMembership?: (event: BaseObjectsEvent) => unknown;
-  /** A callback run on file events. */
+  /** Callback run on file events. */
   onFile?: (event: FileEvent) => unknown;
-  /** A callback run on status events. */
+  /** Callback run on status events. */
   onStatus?: (event: StatusEvent) => unknown;
-  /** A callback run on any type of errors raised by the components. */
+  /** Callback run on any type of errors raised by the components. */
   onError?: (error: Error) => unknown;
 }
 

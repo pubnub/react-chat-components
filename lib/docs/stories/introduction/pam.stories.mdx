@@ -1,13 +1,13 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 
-<Meta title="Introduction/PAM" />
+<Meta title="Introduction/Access Manager" />
 
 # Access Manager
 
-Access Manager allows you to enforce security controls for client access to resources
-within the PubNub network. Your servers can grant their clients access to individual
-PubNub resources (channels, channel groups, and UUID metadata) for a limited duration, with the ability to renew access or add permissions for
-additional resources.
+Access Manager allows you to enforce security controls for client access to resources within the
+PubNub network. Your servers can grant their clients access to individual PubNub resources
+(channels, channel groups, and UUID metadata) for a limited duration, with the ability to renew
+access or add permissions for additional resources.
 
 With Access Manager enabled, your clients must have permissions to send requests to PubNub. You can
 grant access to your clients from a secure server using the secretKey. These grants allow you to
@@ -16,122 +16,102 @@ chat room private by only allowing the two users in that chat room to have read 
 permissions on the chat room channel. Alternatively, you can make a channel public by allowing all
 users to have access to it.
 
-More information about Access Manager can be found [here](https://www.pubnub.com/docs/security/access-control).
-
-<br />
+For more information, refer to the
+[Access Manager feature description](https://www.pubnub.com/docs/security/access-control).
 
 ## Access Manager handling in components
 
 PubNub Chat Components as a purely client-side React components library does not do anything
-specific to handle Access Manager internally. Once it is enabled on the PubNub keyset, the developer is
-expected to write custom code that would handle granting, just as if the app was
-written from scratch.
+specific to handle Access Manager internally. Once it is enabled on the PubNub keyset, the developer
+is expected to write custom code that would handle granting, just as if the app was written from
+scratch.
 
-You can expect the operations listed below to be executed internally by the components. To work properly, all of them should be granted access to the UUID passed to the PubNub
-instance.
-
-<br />
+You can expect the operations listed below to be executed internally by the components. To work
+properly, all of them should be granted access to the UUID passed to the PubNub instance.
 
 ## Operations to permissions mapping
 
 The following tables show the mappings of API operations to resources and permissions.
 
-<br />
-
 ### Publish/Subscribe
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| Publish on channel | Channel | Write |
-| Signal on channel | Channel | Write |
-| Subscribe to channel | Channel | Read |
-| Subscribe to presence channel | Presence Channel (`-pnpres`) | Read |
-| Subscribe to channel group | Channel Group | Read |
-| Subscribe to presence channel group | Presence Channel Group (`-pnpres`) | Read |
-| Unsubscribe from channel | Channel | None required|
-| Unsubscribe from channel group | Channel Group | None required|
-
-<br />
+| PubNub Operation                    | Resource                           | Permission    |
+| :---------------------------------- | :--------------------------------- | :------------ |
+| Publish on channel                  | Channel                            | Write         |
+| Signal on channel                   | Channel                            | Write         |
+| Subscribe to channel                | Channel                            | Read          |
+| Subscribe to presence channel       | Presence Channel (`-pnpres`)       | Read          |
+| Subscribe to channel group          | Channel Group                      | Read          |
+| Subscribe to presence channel group | Presence Channel Group (`-pnpres`) | Read          |
+| Unsubscribe from channel            | Channel                            | None required |
+| Unsubscribe from channel group      | Channel Group                      | None required |
 
 ### Presence
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| Here Now | Channel | Read |
-| Where Now | Channel |none required|
-| Get State | Channel | Read |
-| Set State | Channel | Read |
-
-<br />
+| PubNub Operation | Resource | Permission    |
+| :--------------- | :------- | :------------ |
+| Here Now         | Channel  | Read          |
+| Where Now        | Channel  | none required |
+| Get State        | Channel  | Read          |
+| Set State        | Channel  | Read          |
 
 ### Storage
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| History - Fetch Messages | Channel | Read |
-| Message Counts | Channel | Read |
-| Delete Messages | Channel | Delete |
-
-
-<br />
+| PubNub Operation         | Resource | Permission |
+| :----------------------- | :------- | :--------- |
+| History - Fetch Messages | Channel  | Read       |
+| Message Counts           | Channel  | Read       |
+| Delete Messages          | Channel  | Delete     |
 
 ### Files
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| Send file on channel | Channel | Write |
-| List files | Channel | Read |
-| Download file | Channel | Read |
-| Delete file | Channel | Delete |
-
-<br />
+| PubNub Operation     | Resource | Permission |
+| :------------------- | :------- | :--------- |
+| Send file on channel | Channel  | Write      |
+| List files           | Channel  | Read       |
+| Download file        | Channel  | Read       |
+| Delete file          | Channel  | Delete     |
 
 ### Channel Groups
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| Add Channels to channel group | Channel Group | Manage |
-| Remove Channels from channel group | Channel Group | Manage |
-| List Channels in channel group | Channel Group | Manage |
-| Remove channel group | Channel Group | Manage |
-
-<br />
+| PubNub Operation                   | Resource      | Permission |
+| :--------------------------------- | :------------ | :--------- |
+| Add Channels to channel group      | Channel Group | Manage     |
+| Remove Channels from channel group | Channel Group | Manage     |
+| List Channels in channel group     | Channel Group | Manage     |
+| Remove channel group               | Channel Group | Manage     |
 
 ### Objects
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------- | :--------- |
-| Set user metadata | UUID | Update |
-| Delete user metadata | UUID | Delete |
-| Get user metadata | UUID | Get |
-| Get all user metadata | UUID | Managed by a flag on the settings page. |
-| Set channel metadata | Channel | Update |
-| Delete channel metadata | Channel | Delete|
-| Get channel metadata | Channel | Get |
-| Get all channel metadata | Channel | Managed by a flag on the settings page. |
-| Set channel members | Channel | Manage |
-| Remove channel members | Channel | Delete|
-| Get channel members | Channel | Get |
-| Set channel memberships | Channel, UUID | Channels: Join<br/>UUID: Update |
-| Remove channel memberships | Channel, UUID | Channels: Join<br/>UUID: Update |
-| Get channel memberships | UUID | Get |
-
-<br />
+| PubNub Operation           | Resource      | Permission                              |
+| :------------------------- | :------------ | :-------------------------------------- |
+| Set user metadata          | UUID          | Update                                  |
+| Delete user metadata       | UUID          | Delete                                  |
+| Get user metadata          | UUID          | Get                                     |
+| Get all user metadata      | UUID          | Managed by a flag on the settings page. |
+| Set channel metadata       | Channel       | Update                                  |
+| Delete channel metadata    | Channel       | Delete                                  |
+| Get channel metadata       | Channel       | Get                                     |
+| Get all channel metadata   | Channel       | Managed by a flag on the settings page. |
+| Set channel members        | Channel       | Manage                                  |
+| Remove channel members     | Channel       | Delete                                  |
+| Get channel members        | Channel       | Get                                     |
+| Set channel memberships    | Channel, UUID | Channels: Join<br/>UUID: Update         |
+| Remove channel memberships | Channel, UUID | Channels: Join<br/>UUID: Update         |
+| Get channel memberships    | UUID          | Get                                     |
 
 ### Push Notifications
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------: | :--------: |
-| Register channel for push | Channel | Read |
-| Remove channel's push registration | Channel | Read |
-
-<br />
+| PubNub Operation                   | Resource | Permission |
+| :--------------------------------- | :------: | :--------: |
+| Register channel for push          | Channel  |    Read    |
+| Remove channel's push registration | Channel  |    Read    |
 
 ### Message Actions
 
-| PubNub Operation | Resource | Permission |
-| :--------------- | :------: | :--------: |
-| Add Message Action | Channel | Write |
-| Remove Message Action | Channel | Delete |
-| Get Message Actions | Channel | Read |
-| Get History with Actions | Channel | Read |
+| PubNub Operation         | Resource | Permission |
+| :----------------------- | :------: | :--------: |
+| Add Message Action       | Channel  |   Write    |
+| Remove Message Action    | Channel  |   Delete   |
+| Get Message Actions      | Channel  |    Read    |
+| Get History with Actions | Channel  |    Read    |

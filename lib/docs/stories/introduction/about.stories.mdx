@@ -3,65 +3,61 @@ import Screenshot from "../assets/screenshot.png";
 
 <Meta title="Introduction/About" />
 
-# React Chat Components
+# PubNub Chat Components for React
 
-PubNub's Chat Components library provides easy-to-use components to build chat applications using
-PubNub Chat on the React Framework. Our component library is the fastest way to add chat features
-like direct and group messaging, typing indicators, reactions and more without going through the
-complexity of low-level architecture of realtime networks. At the same time it allows you to create
-apps for various use cases, with different functionalities and customizable looks.
+PubNub Chat Components for React are the fastest way to add chat features like direct and group
+messaging, typing indicators, reactions, without going through the complexity of low-level
+architecture of realtime networks.
+
+- **Reduced Implementation Time**. Develop proof-of-concept and production ready apps faster using
+  predefined components.
+- **Fast and Simple Extensibility**. Add rich features like typing indicators, read receipts,
+  reactions etc. without writing complex code.
+- **Flexible and Customizable Components**. Customize component design and add custom components to
+  extend functionality.
+- **High Scalability**. Let PubNub take care of scaling and reliability as you grow your app.
+- **Easy Theming**. Use the built-in light and dark themes or create custom ones for various use
+  cases: group, support, and event chats.
+- **Strong Typing**. Utilize the power of TypeScript to develop your application.
 
 <img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "20px 0 0 -54px" }} />
 
 <br />
 
-## Quick Links
+## Sample apps
 
-- [Sample Apps](https://pubnub.github.io/react-chat-components/samples) - sample applications built
-  using Chat Components for React
-- [React Component Docs](https://pubnub.github.io/react-chat-components/docs) - describes the
-  components' features, options, customizations etc.
+Make sure to check out the
+[sample applications](https://pubnub.github.io/react-chat-components/samples) built using PubNub
+Chat Components for React.
 
-#### PubNub related docs:
+## Chat features
 
-- [PubNub Chat Docs](https://www.pubnub.com/docs/chat/overview) - look into this first to have a
-  general understanding of how PubNub works
-- [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - React wrapper can be used for
-  other types of applications as well
-
-## Features
-
-- User and Channel Metadata: fetching metadata about users, channels and memberships from PN Objects
-  storage using custom hooks
-- Subscriptions: automatic subscriptions to current channel, optional subscriptions to other
-  channels and channel groups
-- Messages: publishing and listening to text messages, fetching history for each channel
-- Presence: fetching currently present users and listening to new presence, publishing presence
-  events
-- Typing Indicators: typing indicators displayed as text notifications or messages
-- Message Reactions: publishing and displaying message reactions (emojis) for each message
-
-## Benefits
-
-- Ease of installation and setup
-- Allows to build fully-featured chat applications
-- No need to deal with server code
-- Useful component options to tweak the functionalities
-- Built-in light and dark themes for various use cases: group, support and event chats
-- Extra customization with CSS variables
-- TypeScript support
+- **User and Channel Metadata**: add additional information about the users, channels, and their
+  memberships from PubNub Objects storage using custom hooks
+- **Subscriptions**: subscribe to user channels automatically
+- **Messages**: publish and display new and historical text messages
+- **Presence**: get currently active users, observe their state, and notify about changes
+- **Typing Indicators**: display notifications that users are typing
+- **Message Reactions**: publish and add emojis to messages
 
 ## Requirements
 
-- `React 16.8+` and `ReactDOM 16.8+`
-- `PubNub JavaScript SDK 4.29+`
-- `PubNub React SDK 2.1.0+`
+- React v16.8+ and ReactDOM v16.8+
+- [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/)
+- [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup)
 
-## List of Components
+## Available components
 
-- Chat (obligatory state provider)
-- Message List
-- Message Input
-- Channel List
-- Channel Members
-- Typing Indicator
+- [Chat (obligatory state provider)](?path=/docs/components-chat-provider--default)
+- [Message List](?path=/docs/components-message-list--default)
+- [Message Input](?path=/docs/components-message-input--default)
+- [Channel List](?path=/docs/components-channel-list--default)
+- [Member List](?path=/docs/components-member-list--default)
+- [Typing Indicator](?path=/docs/components-typing-indicator--default)
+
+#### Other documentation
+
+- [PubNub Chat chat use-case](https://www.pubnub.com/docs/chat/overview) - documentation for the
+  chat use-case.
+- [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - API documentation for the
+  PubNub React SDK.
