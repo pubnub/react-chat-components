@@ -8,7 +8,7 @@ The hook returns a list of members in a channel.
 
 The list will include user metadata for members that have additional metadata stored in the database. Pagination is handled internally. You can adjust the `limit` of returned members on a single call (max/default 100) and call a function returned by the hook to get another page of results. 
 
-This hook also sets up a listener that reacts to removals of already fetched members. Updates and new memberships are not handled due totechnical limitations. However, this behavior requires a living subscription to the channel getting updated - this should be handled by the components.
+This hook also sets up a listener that reacts to removals of already fetched members. Updates and new memberships are not handled due to technical limitations. However, this behavior requires a living subscription to the channel getting updated - this should be handled by the components.
 
 ```js
 const [members, fetchPage, refetchChannelMembers, total, error] = useChannelMembers({
