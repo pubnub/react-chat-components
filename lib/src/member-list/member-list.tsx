@@ -23,7 +23,9 @@ export interface MemberListProps {
 }
 
 /**
- * Renders a list of members. It can represent all users of the application, only members of
+ * Renders a list of members. 
+ * 
+ * It can represent all users of the application, only members of
  * the current channel, users currently subscribed/present on the channel, or whatever else is passed
  * into it. Custom memberRenderer can be used to modify how the users are rendered. For example
  * you can add presence indicators.
