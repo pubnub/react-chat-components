@@ -152,6 +152,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const clearInput = () => {
     setFile(null);
     setText("");
+    autoSize();
     fileRef.current.value = null;
   };
 
