@@ -2,56 +2,22 @@
   --app-background: #ffffff;
   --app-color: #585858;
   --app-avatar-background: #f0f3f7;
-  --app-info-color: #9b9b9b;
+  --app-info-color: #999999;
   --app-info-border: #d7e0e9;
   --app-chat-background: #f0f3f7;
-  --app-people-color: gray;
+  --app-people-color: #585858;
   --app-people-active-color: #5babfc;
-
-  .pn-msg-input {
-    --msg-input__background: transparent;
-    --msg-input__send__background: #5babfc;
-  }
-
-  .pn-msg-list--light {
-    --msg-list__background: transparent;
-    --msg--hover__background: #e5e8ec;
-  }
-
-  .pn-channel-list--light {
-    --channel-list__background: #ffffff;
-    --channel--active__background: #f0f3f7;
-    --channel--hover__background: #5babfc;
-    --channel__name__color: #585858;
-    --channel--active__name__color: #585858;
-  }
 }
 
 .app-simple.dark {
   --app-background: #292b2f;
   --app-color: #ffffff;
   --app-avatar-background: #414348;
-  --app-info-color: #9b9b9b;
+  --app-info-color: #999999;
   --app-info-border: #414348;
   --app-chat-background: #2f3136;
-  --app-people-color: gray;
+  --app-people-color: #dcddde;
   --app-people-active-color: #de2440;
-
-  .pn-msg-input {
-    --msg-input__send__background: #de2440;
-  }
-
-  .pn-msg-list--dark {
-    --msg-list__background: transparent;
-  }
-
-  .pn-channel-list--dark {
-    --channel-list__background: #292b2f;
-    --channel--active__background: #2f3136;
-    --channel--hover__background: #de2440;
-    --channel__name__color: #9b9b9b;
-    --channel--active__name__color: #9b9b9b;
-  }
 }
 
 .app-simple {
@@ -61,30 +27,8 @@
   height: 100vh;
   overflow: hidden;
 
-  .pn-msg-input {
-    --msg-input__send__borderRadius: 25px;
-    --msg-input__send__padding: 10px 20px;
-    --msg-input__textarea__borderRadius: 25px;
-    --msg-input__textarea__padding: 12px 24px;
-  }
-
-  .pn-channel-list {
-    --channel__description__display: none;
-    --channel__name__fontSize: 13px;
-    --channel__name__fontWeight: 400;
-    --channel__padding: 12px 24px;
-  }
-
   .pn-member-list {
     --member__padding: 9px 0;
-    --member__name__margin: 8px 0 0;
-    --member__title__display: none;
-    --member--hover__background: transparent;
-  }
-
-  .pn-msg-list {
-    --member__padding: 9px 0;
-    --member--hover__background: transparent;
   }
 
   .toggle {
@@ -145,13 +89,6 @@
     small {
       color: var(--app-info-color);
     }
-
-    hr {
-      background-color: var(--app-info-border);
-      border: 0;
-      height: 1px;
-      margin: 18px 0 0;
-    }
   }
 
   .chat {
@@ -161,8 +98,14 @@
     flex-direction: column;
     flex-grow: 1;
     margin: 30px 30px 30px 0;
-    padding-bottom: 30px;
     position: relative;
+
+    hr {
+      background-color: var(--app-info-border);
+      border: 0;
+      height: 1px;
+      margin: 18px 0 0;
+    }
   }
 
   .members {

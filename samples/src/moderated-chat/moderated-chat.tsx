@@ -1,6 +1,6 @@
-import React, { useState, useEffect, MouseEvent } from "react";
+import React, { useState, useEffect, useCallback, MouseEvent } from "react";
+import { ChannelMetadataObject, ObjectCustom, BaseObjectsEvent } from "pubnub";
 import { Picker } from "emoji-mart";
-import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import {
   ChannelList,
@@ -16,105 +16,121 @@ import {
   useUser,
   useUserMemberships,
   useUsers,
+  Themes,
 } from "@pubnub/react-chat-components";
 import "emoji-mart/css/emoji-mart.css";
 
+import { CreateChatModal } from "./components/create-chat-modal";
+import { ReportUserModal } from "./components/report-user-modal";
+import { PublicChannelsModal } from "./components/public-channels-modal";
 import "./moderated-chat.scss";
-import { ReactComponent as PeopleGroup } from "../icons/people-group.svg";
-import { ReactComponent as PlusCircle } from "../icons/plus-circle.svg";
-import { ReactComponent as Megaphone } from "../icons/megaphone.svg";
-import { ReactComponent as SignOut } from "../icons/sign-out.svg";
 
-function ModeratedChat() {
+type ChannelType = ChannelMetadataObject<ObjectCustom>;
+
+const defaultChannel = {
+  id: "default",
+  name: "Default Channel",
+  description: "This is the default channel",
+} as Pick<ChannelType, "id" | "name" | "description">;
+
+export default function ModeratedChat() {
+  /**
+   * Component state related hooks
+   * Those mostly store the current channel, modals and side panels being shown
+   */
+  const [theme, setTheme] = useState<Themes>("light");
+  const [currentChannel, setCurrentChannel] = useState(defaultChannel);
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
-  const [showChannelsModal, setShowChannelsModal] = useState(false);
-  const [showFlaggingModal, setShowFlaggingModal] = useState(false);
+  const [showPublicChannelsModal, setShowPublicChannelsModal] = useState(false);
+  const [showCreateChatModal, setShowCreateChatModal] = useState(false);
+  const [showReportUserModal, setShowReportUserModal] = useState(false);
   const [channelsFilter, setChannelsFilter] = useState("");
   const [membersFilter, setMembersFilter] = useState("");
-  const [flaggingMessage, setFlaggingMessage] = useState<MessageEnvelope>();
-  const defaultChannel = {
-    id: "default",
-    name: "Default Channel",
-    description: "This is the default channel",
-    eTag: "",
-    updated: "",
-  };
+  const [reportedMessage, setReportedMessage] = useState<MessageEnvelope>();
 
   /**
    * All data related to Users, Channels and Memberships is stored within PubNub Objects API
-   * This can be easily accessed using React Chat Components hooks
+   * It can be easily accessed using React Chat Components hooks
    */
   const pubnub = usePubNub();
   const uuid = pubnub.getUUID();
   const [currentUser] = useUser({ uuid });
-  const [allUsers] = useUsers();
+  const [allUsers] = useUsers({ include: { customFields: true } });
   const [allChannels] = useChannels({ include: { customFields: true } });
   const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({
-    uuid,
     include: { channelFields: true, customChannelFields: true },
   });
-  const unJoinedChannels = allChannels.filter((a) => !joinedChannels.some((b) => a.id === b.id));
-  const [currentChannel, setCurrentChannel] = useState<ChannelMetadataObject<ObjectCustom>>(
-    defaultChannel
-  );
-  const [channelMembers, , , totalchannelMembers] = useChannelMembers({
-    channel: currentChannel?.id,
+  const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useChannelMembers({
+    channel: currentChannel.id,
     include: { customUUIDFields: true },
   });
   const [presenceData] = usePresence({ channels: joinedChannels.map((c) => c.id) });
-  const presentUUIDs = presenceData[currentChannel?.id]?.occupants?.map((o) => o.uuid);
 
-  const userBanned = currentUser?.custom?.ban;
-  const userMuted = (currentUser?.custom?.mutedChannels as string)
+  /**
+   * Some of the data related to current channel, current user and its' joined channels
+   * has to be filtered down and mapped from the hooks data
+   */
+  const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
+  const groupChannels = joinedChannels.filter(
+    (c) =>
+      c.id?.startsWith("space_") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
+  );
+  const groupChannelsToJoin = allChannels.filter(
+    (c) => c.id.startsWith("space_") && !joinedChannels.some((b) => c.id === b.id)
+  );
+  const directChannels = joinedChannels
+    .filter((c) => c.id?.startsWith("direct_") || c.id?.startsWith("group_"))
+    .map((c) => {
+      if (!c.id?.startsWith("direct_")) return c;
+      const interlocutorId = c.id.replace(uuid, "").replace("direct_", "").replace("@", "");
+      const interlocutor = allUsers.find((u) => u.id === interlocutorId);
+      if (interlocutor) {
+        c.custom = { thumb: interlocutor.profileUrl || "" };
+        c.name = interlocutor.name;
+      }
+      return c;
+    })
+    .filter((c) => c.name?.toLowerCase().includes(channelsFilter.toLowerCase()));
+
+  const isUserBanned = currentUser?.custom?.ban;
+  const isUserMuted = (currentUser?.custom?.mutedChannels as string)
     ?.split(",")
     .includes(currentChannel.id);
-  const userBlocked = (currentUser?.custom?.blockedChannels as string)
+  const isUserBlocked = (currentUser?.custom?.blockedChannels as string)
     ?.split(",")
     .includes(currentChannel.id);
 
-  const joinChannel = async (channel: ChannelMetadataObject<ObjectCustom>) => {
-    await pubnub.objects.setMemberships({ channels: [channel.id] });
-    refetchJoinedChannels();
-    setCurrentChannel(channel);
-    setShowChannelsModal(false);
-  };
-
-  const leaveChannel = async (channel: ChannelMetadataObject<ObjectCustom>, event: MouseEvent) => {
+  /**
+   * Creating and removing channel memberships (not subscriptions!)
+   */
+  const leaveChannel = async (channel: ChannelType, event: MouseEvent) => {
     event.stopPropagation();
     await pubnub.objects.removeMemberships({ channels: [channel.id] });
-    if (currentChannel.id === channel.id) {
-      const newCurrentChannel = joinedChannels?.find((ch) => ch.id !== channel.id);
+    setAnotherCurrentChannel(channel.id);
+  };
+
+  const refreshMemberships = useCallback(
+    (event: BaseObjectsEvent) => {
+      if (event.channel.startsWith("user_")) refetchJoinedChannels();
+      if (event.channel === currentChannel.id) refetchChannelMemberships();
+    },
+    [currentChannel, refetchJoinedChannels, refetchChannelMemberships]
+  );
+
+  const setAnotherCurrentChannel = (channelId: string) => {
+    if (currentChannel.id === channelId) {
+      const newCurrentChannel = joinedChannels?.find((ch) => ch.id !== channelId);
       if (newCurrentChannel) setCurrentChannel(newCurrentChannel);
     }
   };
 
-  const openFlaggingModal = (message: MessageEnvelope) => {
-    setFlaggingMessage(message);
-    setShowFlaggingModal(true);
-  };
-
-  const flagMessage = async (reason: string) => {
-    if (!flaggingMessage) return;
-    const uuid = flaggingMessage.uuid || flaggingMessage.publisher || "";
-    await pubnub.objects.setUUIDMetadata({
-      uuid,
-      data: {
-        custom: {
-          flag: true,
-          flaggedAt: Date.now(),
-          flaggedBy: `${currentUser.name} (${currentUser.id})`,
-          reason,
-        },
-      },
-    });
-    setFlaggingMessage(undefined);
-    setShowFlaggingModal(false);
-  };
-
+  /**
+   * Handling publish errors
+   */
   const handleError = (e: any) => {
     if (
-      (e.status.operation === "PNPublishOperation" && e.status.statusCode === 403) ||
+      (e.status?.operation === "PNPublishOperation" && e.status?.statusCode === 403) ||
       e.message.startsWith("Publish failed")
     ) {
       alert(
@@ -124,141 +140,209 @@ function ModeratedChat() {
   };
 
   useEffect(() => {
-    if (currentChannel?.id === "default" && joinedChannels.length)
+    if (currentChannel.id === "default" && joinedChannels.length)
       setCurrentChannel(joinedChannels[0]);
   }, [currentChannel, joinedChannels]);
 
-  /** Rendered markup is a mixture of PubNub Chat Components (Chat, ChannelList, MessageList,
+  /**
+   * Rendered markup is a mixture of PubNub Chat Components (Chat, ChannelList, MessageList,
    * MessageInput, MemberList) and some elements to display additional information and to handle
-   * custom behaviors (channels modal, showing/hiding panels, responsive design) */
+   * custom behaviors (channels modal, showing/hiding panels, responsive design)
+   */
   return (
-    <div className="app-moderated">
+    <div className={`app-moderated app-moderated--${theme}`}>
       {/* Be sure to wrap Chat component in PubNubProvider from pubnub-react package.
         In this case it's done in the index.tsx file */}
+      {/* Current uuid is passed to channels prop to subscribe and listen to User metadata changes */}
       <Chat
-        theme="light"
+        theme={theme}
         users={allUsers}
-        currentChannel={currentChannel?.id}
-        /** Current uuid is passed here to subscribe and listen to User metadata changes */
+        currentChannel={currentChannel.id}
         channels={[...joinedChannels.map((c) => c.id), uuid]}
-        onError={(e) => handleError(e)}
+        onError={handleError}
+        onMembership={(e) => refreshMemberships(e)}
       >
-        {showChannelsModal && (
-          <JoinChannelModal {...{ unJoinedChannels, setShowChannelsModal, joinChannel }} />
+        {showPublicChannelsModal && (
+          <PublicChannelsModal
+            {...{
+              groupChannelsToJoin,
+              hideModal: () => setShowPublicChannelsModal(false),
+              setCurrentChannel,
+            }}
+          />
         )}
-        {showFlaggingModal && (
-          <FlagMessageModal {...{ flaggingMessage, setShowFlaggingModal, flagMessage, allUsers }} />
+        {showCreateChatModal && (
+          <CreateChatModal
+            {...{
+              currentUser,
+              hideModal: () => setShowCreateChatModal(false),
+              setCurrentChannel,
+              users: allUsers.filter((u) => u.id !== uuid),
+            }}
+          />
         )}
-
-        {userBanned ? (
-          <BanNotification />
+        {showReportUserModal && (
+          <ReportUserModal
+            {...{
+              currentUser,
+              reportedMessage,
+              hideModal: () => setShowReportUserModal(false),
+              users: allUsers,
+            }}
+          />
+        )}
+        {isUserBanned ? (
+          <strong className="error">Unfortunately, you were banned from the chat.</strong>
         ) : (
           <>
-            <div className={`channels ${showChannels && "shown"}`}>
-              <div className="user">
-                {currentUser && currentUser?.profileUrl && (
-                  <img src={currentUser?.profileUrl} alt="User avatar " />
-                )}
-                <div>
-                  <h4>
-                    {currentUser && currentUser?.name}
-                    <span className="close" onClick={() => setShowChannels(false)}>
-                      ✕
-                    </span>
-                  </h4>
-                  <small>{currentUser?.custom?.title}</small>
-                </div>
+            <div className={`channels-panel ${showChannels && "shown"}`}>
+              <div className="user-info">
+                {currentUser && <MemberList members={[currentUser]} selfText="" />}
+                <button
+                  className="mobile material-icons-outlined"
+                  onClick={() => setShowChannels(false)}
+                >
+                  close
+                </button>
               </div>
-              <h4>
-                Channels <PlusCircle onClick={() => setShowChannelsModal(true)} className="join" />
-              </h4>
-              <input
-                className="filter"
-                onChange={(e) => setChannelsFilter(e.target.value)}
-                placeholder="Filter..."
-                type="text"
-                value={channelsFilter}
-              />
-              <div>
-                <ChannelList
-                  channels={joinedChannels.filter((c) =>
-                    c.name?.toLowerCase().includes(channelsFilter)
-                  )}
-                  extraActionsRenderer={(c) => (
-                    <div onClick={(e) => leaveChannel(c, e)}>
-                      <SignOut title="Leave channel" />
-                    </div>
-                  )}
-                  onChannelSwitched={(channel) => setCurrentChannel(channel)}
+
+              <div className="theme-switcher">
+                <i className="material-icons-outlined">brightness_4</i>
+                <button
+                  className={theme}
+                  onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+                >
+                  <span></span>
+                </button>
+              </div>
+
+              <div className="filter-input">
+                <input
+                  onChange={(e) => setChannelsFilter(e.target.value)}
+                  placeholder="Search in..."
+                  type="text"
+                  value={channelsFilter}
                 />
+                <i className="material-icons-outlined">search</i>
+              </div>
+
+              <div className="channel-lists">
+                <h2>
+                  Channels{" "}
+                  <button
+                    className="material-icons-outlined"
+                    onClick={() => setShowPublicChannelsModal(true)}
+                  >
+                    add_circle_outline
+                  </button>
+                </h2>
+                <div>
+                  <ChannelList
+                    channels={groupChannels}
+                    onChannelSwitched={(channel) => setCurrentChannel(channel)}
+                    extraActionsRenderer={(c) => (
+                      <div onClick={(e) => leaveChannel(c, e)} title="Leave channel">
+                        <i className="material-icons-outlined small">logout</i>
+                      </div>
+                    )}
+                  />
+                </div>
+                <h2>
+                  Direct chats{" "}
+                  <button
+                    className="material-icons-outlined"
+                    onClick={() => setShowCreateChatModal(true)}
+                  >
+                    add_circle_outline
+                  </button>
+                </h2>
+                <div>
+                  <ChannelList
+                    channels={directChannels}
+                    onChannelSwitched={(channel) => setCurrentChannel(channel)}
+                    extraActionsRenderer={(c) => (
+                      <div onClick={(e) => leaveChannel(c, e)} title="Leave channel">
+                        <i className="material-icons-outlined small">logout</i>
+                      </div>
+                    )}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="chat">
-              <div
-                className={`people ${showMembers ? "active" : ""}`}
-                onClick={() => setShowMembers(!showMembers)}
-              >
-                <span>
-                  <strong>{presenceData[currentChannel?.id]?.occupancy || 0} </strong>/{" "}
-                  {totalchannelMembers}
+            <div className="chat-window">
+              <div className="channel-info">
+                <button
+                  className="mobile material-icons-outlined"
+                  onClick={() => setShowChannels(true)}
+                >
+                  menu
+                </button>
+                <span onClick={() => setShowMembers(!showMembers)}>
+                  <strong>
+                    {currentChannel.name || currentChannel.id}
+                    <i className="material-icons-outlined">arrow_right</i>
+                  </strong>
+                  <p>{totalChannelMembers} members</p>
                 </span>
-                <PeopleGroup />
-              </div>
-
-              <div className="info">
-                <span className="hamburger" onClick={() => setShowChannels(true)}>
-                  ☰
-                </span>
-                <h4>{currentChannel?.name || currentChannel?.id}</h4>
-                <small>{currentChannel?.description || currentChannel?.id}</small>
                 <hr />
               </div>
 
-              {userBlocked ? (
-                <BlockedNotification />
+              {isUserBlocked ? (
+                <strong className="error">
+                  Unfortunately, you were blocked from this channel.
+                </strong>
               ) : (
                 <>
                   <MessageList
                     fetchMessages={20}
                     enableReactions
                     reactionsPicker={<Picker />}
-                    extraActionsRenderer={(m) => (
-                      <div onClick={() => openFlaggingModal(m)}>
-                        <Megaphone title="Report user" />
+                    extraActionsRenderer={(message) => (
+                      <div
+                        onClick={() => {
+                          setReportedMessage(message);
+                          setShowReportUserModal(true);
+                        }}
+                        title="Report user"
+                      >
+                        <i className="material-icons-outlined">campaign</i>
                       </div>
                     )}
                   >
-                    <TypingIndicator showAsMessage />
+                    <TypingIndicator />
                   </MessageList>
+                  <hr />
                   <MessageInput
-                    disabled={userMuted}
+                    disabled={isUserMuted}
                     typingIndicator
                     fileUpload="image"
                     emojiPicker={<Picker />}
-                    placeholder={userMuted ? "You were muted from this channel" : "Type Message"}
+                    placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
                   />
                 </>
               )}
             </div>
 
-            <div className={`members ${showMembers ? "shown" : "hidden"}`}>
-              <h4>
-                Channel Members
-                <span className="close" onClick={() => setShowMembers(false)}>
-                  ✕
-                </span>
-              </h4>
-              <input
-                className="filter"
-                onChange={(e) => setMembersFilter(e.target.value)}
-                placeholder="Filter..."
-                type="text"
-                value={membersFilter}
-              />
+            <div className={`members-panel ${showMembers ? "shown" : "hidden"}`}>
+              <h2>
+                Members
+                <button className="material-icons-outlined" onClick={() => setShowMembers(false)}>
+                  close
+                </button>
+              </h2>
+              <div className="filter-input">
+                <input
+                  onChange={(e) => setMembersFilter(e.target.value)}
+                  placeholder="Search in members"
+                  type="text"
+                  value={membersFilter}
+                />
+                <i className="material-icons-outlined">search</i>
+              </div>
               <MemberList
                 members={channelMembers.filter((c) =>
-                  c.name?.toLowerCase().includes(membersFilter)
+                  c.name?.toLowerCase().includes(membersFilter.toLowerCase())
                 )}
                 presentMembers={presentUUIDs}
               />
@@ -269,72 +353,3 @@ function ModeratedChat() {
     </div>
   );
 }
-
-const BanNotification = () => {
-  return <p className="banned">Unfortunately, you were banned from the chat.</p>;
-};
-
-const BlockedNotification = () => {
-  return <p className="blocked">Unfortunately, you were blocked from this channel.</p>;
-};
-
-const JoinChannelModal = ({ unJoinedChannels, setShowChannelsModal, joinChannel }: any) => {
-  return (
-    <div className="overlay">
-      <div className="modal">
-        <h4>
-          Join another channel
-          <span className="close" onClick={() => setShowChannelsModal(false)}>
-            ✕
-          </span>
-        </h4>
-        <ChannelList
-          channels={unJoinedChannels}
-          onChannelSwitched={(channel) => joinChannel(channel)}
-        />
-      </div>
-    </div>
-  );
-};
-
-const FlagMessageModal = ({
-  flaggingMessage,
-  setShowFlaggingModal,
-  flagMessage,
-  allUsers,
-}: any) => {
-  const [reason, setReason] = useState("");
-  const user = allUsers.find(
-    (u: UUIDMetadataObject<ObjectCustom>) => u.id === flaggingMessage?.uuid
-  );
-
-  return (
-    <div className="overlay">
-      <div className="modal">
-        <h4>
-          Report {user?.name}
-          <span
-            className="close"
-            onClick={() => {
-              setShowFlaggingModal(false);
-              setReason("");
-            }}
-          >
-            ✕
-          </span>
-        </h4>
-        <div className="form">
-          <input
-            type="text"
-            placeholder="Describe the report reason"
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-          />
-          <button onClick={() => flagMessage(reason)}>Submit</button>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export default ModeratedChat;

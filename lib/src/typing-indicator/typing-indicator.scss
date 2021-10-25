@@ -3,11 +3,11 @@
 ** ********************* */
 
 :root {
-  --typing-indicator__background: #f0f3f7;
-  --typing-indicator__color: #9b9b9b;
+  --typing-indicator__background: var(--chat--light__background--1);
+  --typing-indicator__color: var(--chat--light__color--1);
   --typing-indicator__display: inline-block;
   --typing-indicator__fontSize: 11px;
-  --typing-indicator__fontWeight: 500;
+  --typing-indicator__fontWeight: 300;
   --typing-indicator__padding: 8px 24px;
 
   --typing-indicator__dot__fontSize: 8px;
@@ -61,6 +61,6 @@
 .pn-typing-indicator--dark,
 .pn-typing-indicator--event-dark,
 .pn-typing-indicator--support-dark {
-  --typing-indicator__background: #2f3136;
-  --typing-indicator__color: #9b9b9b;
+  --typing-indicator__background: var(--chat--dark__background--1);
+  --typing-indicator__color: var(--chat--dark__color--1);
 }

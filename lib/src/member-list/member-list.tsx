@@ -3,6 +3,7 @@ import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { ThemeAtom } from "../state-atoms";
+import { getNameInitials, getPredefinedColor } from "../helpers";
 import "./member-list.scss";
 
 export interface MemberListProps {
@@ -11,10 +12,14 @@ export interface MemberListProps {
   members: UUIDMetadataObject<ObjectCustom>[] | string[];
   /** Option to pass a list of present member IDs to mark them with a presence indicator. */
   presentMembers?: string[];
-  /** Option to provide an extra actions renderer to add custom action buttons to each member. */
+  /** This text will be added after current user's name */
+  selfText?: string;
+  /** Provide extra actions renderer to add custom action buttons to each member */
   extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
   /** Option to provide a custom user renderer to override themes and CSS variables. */
   memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
+  /** A callback run when user clicked one of the members. */
+  onMemberClicked?: (member: UUIDMetadataObject<ObjectCustom>) => unknown;
 }
 
 /**
@@ -60,18 +65,32 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   /*
+  /* Commands
+  */
+
+  const clickMember = (member: UUIDMetadataObject<ObjectCustom>) => {
+    if (props.onMemberClicked) props.onMemberClicked(member);
+  };
+
+  /*
   /* Renderers
   */
 
-  const renderMember = (member) => {
+  const renderMember = (member: UUIDMetadataObject<ObjectCustom>) => {
     if (props.memberRenderer) return props.memberRenderer(member);
-    const youString = isOwnMember(member.id) ? "(You)" : "";
+    const youString = isOwnMember(member.id) ? props.selfText : "";
 
     return (
-      <div key={member.id} className="pn-member">
-        <div className="pn-member__avatar">
-          {member.profileUrl && <img src={member.profileUrl} alt="User avatar" />}
-          {!member.profileUrl && <div className="pn-member__avatar-placeholder" />}
+      <div key={member.id} className="pn-member" onClick={() => clickMember(member)}>
+        <div
+          className="pn-member__avatar"
+          style={{ backgroundColor: getPredefinedColor(member.id) }}
+        >
+          {member.profileUrl ? (
+            <img src={member.profileUrl} alt="User avatar" />
+          ) : (
+            getNameInitials(member.name || member.id)
+          )}
           {isPresentMember(member.id) && <i className="pn-member__presence"></i>}
         </div>
         <div className="pn-member__main">
@@ -98,4 +117,6 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
 MemberList.defaultProps = {
   members: [],
   presentMembers: [],
+  onMemberClicked: null,
+  selfText: "(You)",
 };

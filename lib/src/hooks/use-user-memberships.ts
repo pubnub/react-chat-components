@@ -21,6 +21,7 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
+  const [fetching, setFetching] = useState(false);
 
   const paginatedOptions = useMemo(
     () =>
@@ -41,6 +42,7 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
 
   const fetchPage = useCallback(async () => {
     setDoFetch(false);
+    setFetching(true);
     try {
       if (totalCount && channels.length >= totalCount) return;
       const response = await pubnub.objects.getMemberships(paginatedOptions);
@@ -52,6 +54,8 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
       setPage(response.next);
     } catch (e) {
       setError(e);
+    } finally {
+      setFetching(false);
     }
   }, [pubnub, paginatedOptions, channels.length, totalCount]);
 
@@ -86,8 +90,8 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
   }, [jsonOptions]);
 
   useEffect(() => {
-    if (doFetch) fetchPage();
-  }, [doFetch, fetchPage]);
+    if (doFetch && !fetching) fetchPage();
+  }, [doFetch, fetching, fetchPage]);
 
   return [channels, fetchPage, resetHook, totalCount, error];
 };

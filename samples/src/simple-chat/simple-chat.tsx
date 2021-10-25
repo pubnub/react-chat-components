@@ -127,6 +127,7 @@ function SimpleChat() {
           >
             <TypingIndicator showAsMessage />
           </MessageList>
+          <hr />
           <MessageInput typingIndicator fileUpload="all" emojiPicker={<Picker />} />
         </div>
 

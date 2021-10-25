@@ -31,7 +31,7 @@ describe("Message List", () => {
     render(<MessageList welcomeMessages={message} />);
 
     expect(screen.getByText("Welcome")).toBeVisible();
-    expect(screen.getByText("12:25")).toBeVisible();
+    expect(screen.getByText("12:25 PM")).toBeVisible();
   });
 
   test("renders messages with custom message renderer", async () => {
@@ -49,7 +49,7 @@ describe("Message List", () => {
     );
 
     expect(screen.getByText("Custom Welcome")).toBeVisible();
-    expect(screen.queryByText("12:25")).not.toBeInTheDocument();
+    expect(screen.queryByText("12:25 PM")).not.toBeInTheDocument();
   });
 
   test("renders messages with custom bubble renderer", async () => {
@@ -67,7 +67,7 @@ describe("Message List", () => {
     );
 
     expect(screen.getByText("Custom Welcome")).toBeVisible();
-    expect(screen.getByText("12:25")).toBeVisible();
+    expect(screen.getByText("12:25 PM")).toBeVisible();
   });
 
   test("renders extra actions", async () => {

@@ -14,12 +14,12 @@ describe("Typing Indicator", () => {
       </div>
     );
 
-    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
     const indicator = await screen.findByText("Unknown User is typing...");
     expect(indicator).toBeVisible();
 
-    userEvent.clear(screen.getByPlaceholderText("Type Message"));
-    await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
+    userEvent.clear(screen.getByPlaceholderText("Send message"));
+    await waitFor(() => expect(indicator).not.toBeVisible());
   });
 
   test("shows up when typing and then disappears when sending the message", async () => {
@@ -30,11 +30,11 @@ describe("Typing Indicator", () => {
       </div>
     );
 
-    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
     const indicator = await screen.findByText("Unknown User is typing...");
     expect(indicator).toBeVisible();
 
-    userEvent.click(screen.getByText("Send"));
-    await waitFor(() => expect(indicator).not.toHaveTextContent("Unknown User is typing..."));
+    userEvent.click(screen.getByTitle("Send"));
+    await waitFor(() => expect(indicator).not.toBeVisible);
   });
 });

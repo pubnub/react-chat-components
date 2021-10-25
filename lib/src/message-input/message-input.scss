@@ -2,46 +2,41 @@
 ** Variables
 ** ********************* */
 :root {
-  --msg-input__background: transparent;
-  --msg-input__padding: 0 24px;
-  --msg-input__emoji-picker__bottom: 0;
-  --msg-input__emoji-picker__right: 0;
-  --msg-input__icon__color: #585858;
-  --msg-input__icon__margin: 5px;
-  --msg-input__icon__fontSize: 22px;
-  --msg-input__indicator__color: #585858;
-  --msg-input__indicator__fontFamily: inherit;
-  --msg-input__indicator__fontSize: 11px;
-  --msg-input__indicator__fontWeight: normal;
-  --msg-input__indicator__margin: 10px 0 0;
-  --msg-input__indicator__minHeight: 16px;
-  --msg-input__indicator__padding: 0;
-  --msg-input__send__background: #5babfc;
-  --msg-input--disabled__send__background: transparent;
+  --msg-input__background: var(--chat--light__background--1);
+  --msg-input__padding: 10px 18px;
+  --msg-input__emoji-picker__bottom: 14px;
+  --msg-input__emoji-picker__left: 10px;
+  --msg-input__icon__color: var(--chat--light__color--2);
+  --msg-input__icon__margin: 0 18px 0 0;
+  --msg-input__icon__fontSize: 13px;
+  --msg-input__send__background: transparent;
   --msg-input__send__border: none;
   --msg-input__send__borderRadius: 5px;
-  --msg-input__send__color: #ffffff;
-  --msg-input--disabled__send__color: transparent;
+  --msg-input__send__color: var(--chat--light__color--2);
+  --msg-input__send--active__color: var(--chat--light__hover--1);
   --msg-input__send__fontFamily: inherit;
   --msg-input__send__fontSize: 13px;
   --msg-input__send__fontWeight: bold;
-  --msg-input__send__margin: 2px 2px 2px 8px;
-  --msg-input__send__minWidth: 53px;
-  --msg-input__send__padding: 10px;
-  --msg-input__textarea--focus__border: 1px solid #ffffff;
+  --msg-input__send__margin: 0 0 0 18px;
+  --msg-input__send__minWidth: 0;
+  --msg-input__send__padding: 0;
+  --msg-input--disabled__placeholder__color: rgba(var(--chat--light__color--2-rgb), 0.5);
+  --msg-input__placeholder__color: var(--chat--light__color--2);
+  --msg-input__textarea--focus__border: 1px solid transparent;
   --msg-input__textarea--focus__outline: none;
-  --msg-input__textarea__background: #ffffff;
-  --msg-input--disabled__textarea__background: #f6f9fc;
-  --msg-input__textarea__border: 1px solid #ffffff;
-  --msg-input--disabled__textarea__border: 1px solid #f6f9fc;
-  --msg-input__textarea__borderRadius: 5px;
-  --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
-  --msg-input__textarea__color: #585858;
+  --msg-input__textarea__background: var(--chat--light__hover--2);
+  --msg-input--disabled__textarea__background: var(--chat--light__background--3);
+  --msg-input__textarea__border: 1px solid transparent;
+  --msg-input--disabled__textarea__border: 1px solid transparent;
+  --msg-input__textarea__borderRadius: 20px;
+  --msg-input__textarea__boxShadow: none;
+  --msg-input__textarea__color: var(--chat--light__color--1);
   --msg-input__textarea__fontFamily: inherit;
   --msg-input__textarea__fontSize: 13px;
-  --msg-input__textarea__lineHeight: 15px;
+  --msg-input__textarea__height: 32px;
+  --msg-input__textarea__lineHeight: 18px;
   --msg-input__textarea__outline: none;
-  --msg-input__textarea__padding: 12px;
+  --msg-input__textarea__padding: 6px 14px 8px;
   --msg-input__textarea__resize: none;
   --msg-input__textarea__width: 100%;
 }
@@ -55,37 +50,35 @@
   padding: var(--msg-input__padding);
 
   &__wrapper {
+    align-items: center;
+    display: flex;
+    position: relative;
+  }
+
+  &__textarea {
     background: var(--msg-input__textarea__background);
     border-radius: var(--msg-input__textarea__borderRadius);
     border: var(--msg-input__textarea__border);
     box-shadow: var(--msg-input__textarea__boxShadow);
-    display: flex;
-    position: relative;
+    box-sizing: border-box;
+    color: var(--msg-input__textarea__color);
+    font-family: var(--msg-input__textarea__fontFamily);
+    font-size: var(--msg-input__textarea__fontSize);
+    height: var(--msg-input__textarea__height);
+    line-height: var(--msg-input__textarea__lineHeight);
+    outline: var(--msg-input__textarea__outline);
+    padding: var(--msg-input__textarea__padding);
+    resize: var(--msg-input__textarea__resize);
+    width: var(--msg-input__textarea__width);
 
     &:focus-within {
       outline: var(--msg-input__textarea--focus__outline);
       border: var(--msg-input__textarea--focus__border);
     }
-  }
 
-  &__spacer {
-    padding: var(--msg-input__textarea__padding);
-    width: 100%;
-  }
-
-  &__textarea {
-    background: transparent;
-    border: none;
-    box-sizing: border-box;
-    color: var(--msg-input__textarea__color);
-    font-family: var(--msg-input__textarea__fontFamily);
-    font-size: var(--msg-input__textarea__fontSize);
-    height: var(--msg-input__textarea__lineHeight);
-    line-height: var(--msg-input__textarea__lineHeight);
-    outline: var(--msg-input__textarea__outline);
-    padding: 0;
-    resize: var(--msg-input__textarea__resize);
-    width: var(--msg-input__textarea__width);
+    &::placeholder {
+      color: var(--msg-input__placeholder__color);
+    }
   }
 
   &__send {
@@ -104,15 +97,14 @@
     padding: var(--msg-input__send__padding);
     white-space: nowrap;
 
-    svg {
-      height: 18px;
-      width: 18px;
+    &--active {
+      color: var(--msg-input__send--active__color);
     }
   }
 
   &__emoji-picker {
     bottom: var(--msg-input__emoji-picker__bottom);
-    right: var(--msg-input__emoji-picker__right);
+    left: var(--msg-input__emoji-picker__left);
     position: absolute;
   }
 
@@ -128,16 +120,6 @@
     }
   }
 
-  &__indicator {
-    color: var(--msg-input__indicator__color);
-    font-family: var(--msg-input__indicator__fontFamily);
-    font-size: var(--msg-input__indicator__fontSize);
-    font-weight: var(--msg-input__indicator__fontWeight);
-    margin: var(--msg-input__indicator__margin);
-    min-height: var(--msg-input__indicator__minHeight);
-    padding: var(--msg-input__indicator__padding);
-  }
-
   &__fileLabel {
     cursor: pointer;
   }
@@ -148,19 +130,14 @@
 }
 
 .pn-msg-input--disabled {
-  .pn-msg-input__wrapper {
+  .pn-msg-input__textarea {
     background: var(--msg-input--disabled__textarea__background);
     border: var(--msg-input--disabled__textarea__border);
-  }
-
-  .pn-msg-input__textarea {
     cursor: not-allowed;
-  }
 
-  .pn-msg-input__send {
-    background: var(--msg-input--disabled__send__background);
-    color: var(--msg-input--disabled__send__color);
-    cursor: not-allowed;
+    &::placeholder {
+      color: var(--msg-input--disabled__placeholder__color);
+    }
   }
 }
 
@@ -171,19 +148,13 @@
 .pn-msg-input--dark,
 .pn-msg-input--event-dark,
 .pn-msg-input--support-dark {
-  --msg-input__icon__color: #dcddde;
-  --msg-input__indicator__color: #dcddde;
-  --msg-input__send__background: #de2440;
-  --msg-input__textarea--focus__border: 1px solid #36393f;
-  --msg-input__textarea__background: #36393f;
-  --msg-input__textarea__border: 1px solid #36393f;
-  --msg-input__textarea__boxShadow: 0 6px 10px rgba(20, 20, 20, 0.15);
-  --msg-input__textarea__color: #dcddde;
-}
-
-.pn-msg-input--disabled.pn-msg-input--dark,
-.pn-msg-input--disabled.pn-msg-input--event-dark,
-.pn-msg-input--disabled.pn-msg-input--support-dark {
-  --msg-input--disabled__textarea__background: #242529;
-  --msg-input--disabled__textarea__border: 1px solid #242529;
+  --msg-input__background: var(--chat--dark__background--1);
+  --msg-input__icon__color: var(--chat--dark__color--2);
+  --msg-input__send__color: var(--chat--dark__color--2);
+  --msg-input__send--active__color: var(--chat--dark__hover--1);
+  --msg-input--disabled__placeholder__color: rgba(var(--chat--dark__hover--4-rgb), 0.5);
+  --msg-input__placeholder__color: var(--chat--dark__hover--4);
+  --msg-input__textarea__background: var(--chat--dark__background--2);
+  --msg-input--disabled__textarea__background: rgba(var(--chat--dark__background--2-rgb), 0.5);
+  --msg-input__textarea__color: var(--chat--dark__color--1);
 }

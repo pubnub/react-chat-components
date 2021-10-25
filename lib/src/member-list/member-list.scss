@@ -6,40 +6,42 @@
   --member-list__background: transparent;
 
   --member__alignItems: center;
-  --member__padding: 9px 24px;
+  --member__cursor: auto;
+  --member__padding: 8px 16px;
   --member__background: transparent;
   --member--hover__background: transparent;
-  --member__avatar__background: #f0f3f7;
-  --member__avatar__display: block;
-  --member__avatar__margin: 0 24px 0 0;
+  --member__avatar__color: var(--chat--light__background--2);
+  --member__avatar__display: flex;
+  --member__avatar__fontSize: 10px;
+  --member__avatar__margin: 0 18px 0 0;
   --member__avatar__size: 36px;
   --member__avatar__borderRadius: 36px;
-  --member__name__color: #585858;
-  --member__name__fontSize: 15px;
-  --member__name__fontWeight: 500;
+  --member__name__color: var(--chat--light__color--1);
+  --member__name__fontSize: 13px;
+  --member__name__fontWeight: 400;
   --member__name__padding: 0;
   --member__name__margin: 0;
-  --member__title__color: #9b9b9b;
+  --member__title__color: var(--chat--light__color--2);
   --member__title__display: inline-block;
-  --member__title__fontSize: 13px;
+  --member__title__fontSize: 11px;
   --member__title__fontWeight: 400;
-  --member__title__padding: 5px 0 0;
+  --member__title__padding: 7px 0 0;
   --member__title__margin: 0;
-  --member__presence__border: 3px solid #ffffff;
+  --member__presence__border: 3px solid var(--chat--light__background--2);
   --member__presence__borderRadius: 100%;
-  --member__presence__color: #01bd4c;
-  --member__presence__left: 50px;
+  --member__presence__color: var(--chat--light__background--4);
+  --member__presence__left: 48px;
   --member__presence__position: absolute;
   --member__presence__size: 8px;
-  --member__presence__top: 36px;
-  --member__actions--hover__background: #5babfc;
-  --member__actions__background: #f0f3f7;
+  --member__presence__top: 34px;
+  --member__actions--hover__background: transparent;
+  --member__actions__background: transparent;
   --member__actions__borderRadius: 5px;
-  --member__actions__color: #585858;
-  --member__actions--hover__color: #ffffff;
-  --member__actions__fontSize: 22px;
+  --member__actions__color: var(--chat--light__color--2);
+  --member__actions--hover__color: var(--chat--light__hover--1);
+  --member__actions__fontSize: 18px;
   --member__actions__margin: 0 0 0 4px;
-  --member__actions__padding: 1px 6px;
+  --member__actions__padding: 3px 5px;
 }
 
 /* ************************
@@ -56,6 +58,7 @@
 .pn-member {
   align-items: var(--member__alignItems);
   background: var(--member__background);
+  cursor: var(--member__cursor);
   display: flex;
   padding: var(--member__padding);
   position: relative;
@@ -69,21 +72,21 @@
   }
 
   &__avatar {
+    align-items: center;
+    border-radius: var(--member__avatar__borderRadius);
+    color: var(--member__avatar__color);
     display: var(--member__avatar__display);
+    font-size: var(--member__avatar__fontSize);
+    height: var(--member__avatar__size);
+    justify-content: center;
     margin: var(--member__avatar__margin);
     width: var(--member__avatar__size);
 
     img {
       border-radius: var(--member__avatar__borderRadius);
+      height: 100%;
       width: 100%;
     }
-  }
-
-  &__avatar-placeholder {
-    background: var(--member__avatar__background);
-    border-radius: var(--member__avatar__borderRadius);
-    height: var(--member__avatar__size);
-    width: var(--member__avatar__size);
   }
 
   &__main {
@@ -123,13 +126,14 @@
   &__actions {
     color: var(--member__actions__color);
     cursor: pointer;
+    display: flex;
     visibility: hidden;
     font-size: var(--member__actions__fontSize);
 
     & > * {
       background: var(--member__actions__background);
       border-radius: var(--member__actions__borderRadius);
-      display: inline-block;
+      display: flex;
       margin: var(--member__actions__margin);
       padding: var(--member__actions__padding);
     }
@@ -148,13 +152,12 @@
 .pn-member-list--dark,
 .pn-member-list--event-dark,
 .pn-member-list--support-dark {
-  --member-list__background: #292b2f;
-  --member--hover__background: transparent;
-  --member__name__color: #dcddde;
-  --member__avatar__background: #36393f;
-  --member__actions--hover__background: #de2440;
-  --member__actions__background: #2f3136;
-  --member__actions__color: #ffffff;
-  --member__actions--hover__color: #ffffff;
-  --member__presence__border: 3px solid #292b2f;
+  --member-list__background: var(--chat--dark__background--2);
+  --member__avatar__color: var(--chat--dark__background--2);
+  --member__name__color: var(--chat--dark__color--1);
+  --member__title__color: var(--chat--dark__color--2);
+  --member__presence__border: 3px solid var(--chat--dark__background--2);
+  --member__presence__color: var(--chat--dark__background--4);
+  --member__actions__color: var(--chat--dark__color--2);
+  --member__actions--hover__color: var(--chat--dark__hover--1);
 }

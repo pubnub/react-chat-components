@@ -24,12 +24,12 @@
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "6.2.2",
-    "@storybook/addon-essentials": "6.2.2",
-    "@storybook/addon-links": "6.2.2",
-    "@storybook/addons": "6.2.2",
-    "@storybook/react": "6.2.2",
-    "@storybook/theming": "6.2.2",
+    "@storybook/addon-actions": "6.3.12",
+    "@storybook/addon-essentials": "6.3.12",
+    "@storybook/addon-links": "6.3.12",
+    "@storybook/addons": "6.3.12",
+    "@storybook/react": "6.3.12",
+    "@storybook/theming": "6.3.12",
     "concurrently": "^6.0.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.14.0",

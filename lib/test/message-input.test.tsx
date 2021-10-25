@@ -12,15 +12,15 @@ describe("Message Input", () => {
   test("renders with default options", () => {
     render(<MessageInput />);
 
-    expect(screen.getByText("Send")).toBeVisible();
-    expect(screen.getByPlaceholderText("Type Message")).toBeVisible();
+    expect(screen.getByTitle("Send")).toBeVisible();
+    expect(screen.getByPlaceholderText("Send message")).toBeVisible();
     expect(screen.queryByTitle("Add an emoji")).not.toBeInTheDocument();
   });
 
   test("accepts and renders input", () => {
     render(<MessageInput />);
 
-    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
 
     expect(screen.getByDisplayValue("Changed Value")).toBeVisible();
   });
@@ -29,7 +29,7 @@ describe("Message Input", () => {
     const handleChange = jest.fn();
     render(<MessageInput onChange={handleChange} />);
 
-    userEvent.type(screen.getByPlaceholderText("Type Message"), "Changed Value");
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
 
     expect(handleChange).toHaveBeenCalledWith("Changed Value");
   });
@@ -69,7 +69,7 @@ describe("Message Input", () => {
   test("sends the message on send button click", async () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
@@ -85,7 +85,7 @@ describe("Message Input", () => {
   test("nothing happens on trying to send empty message", () => {
     render(<MessageInput />);
 
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(screen.getByDisplayValue("")).toBeVisible();
   });
@@ -94,7 +94,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledTimes(1);
@@ -104,7 +104,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
@@ -119,7 +119,7 @@ describe("Message Input", () => {
       },
     });
 
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
@@ -148,7 +148,7 @@ describe("Message Input", () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
     userEvent.click(screen.getByTitle("Add an emoji"));
-    userEvent.click(screen.getByPlaceholderText("Type Message"));
+    userEvent.click(screen.getByPlaceholderText("Send message"));
 
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
@@ -202,7 +202,7 @@ describe("Message Input", () => {
     const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
 
     userEvent.upload(fileInput, file);
-    userEvent.click(screen.getByText("Send"));
+    userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
