@@ -1,0 +1,16 @@
+{
+  "extends": [
+    "@commitlint/config-conventional"
+  ],
+  "rules": {
+    "scope-enum": [
+      2,
+      "always",
+      [
+        "data",
+        "lib",
+        "samples"
+      ]
+    ]
+  }
+}
