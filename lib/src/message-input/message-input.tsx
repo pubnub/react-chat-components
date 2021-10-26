@@ -31,7 +31,7 @@ export interface MessageInputProps {
   placeholder?: string;
   /** Option to set a draft message to display in the text window. */
   draftMessage?: string;
-  /** Option to attach sender data directly to each message. Enable it for high-throughput environments. 
+  /** Option to attach sender data directly to each message. Enable it for high-throughput environments.
    * This is an alternative to providing a full list of users directly into the Chat provider. */
   senderInfo?: boolean;
   /** Option to enable/disable firing the typing events when a user is typing a message. */
