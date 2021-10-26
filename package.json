@@ -11,17 +11,35 @@
   "engines": {
     "npm": ">= 7.0.0"
   },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run eslint:base -- --fix",
+      "npm run prettier:base -- --write"
+    ],
+    "*.{json,md,mdx}": [
+      "npm run prettier:base -- --write"
+    ]
+  },
   "scripts": {
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
     "build": "cd lib && npm run build",
-    "test": "jest --config lib/jest.config.js",
-    "test:watch": "jest --config lib/jest.config.js --watch",
+    "eslint:base": "eslint --ignore-path .gitignore",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
+    "format:prettier": "npm run prettier:base -- --write \"**/*.{js,ts,tsx,json,md,mdx}\"",
+    "lint": "npm run lint:eslint",
+    "lint:eslint": "npm run eslint:base -- --max-warnings 0 \"**/*.{js,ts,tsx,mdx}\"",
+    "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "prepare": "husky install",
+    "prettier:base": "prettier --ignore-path .gitignore",
     "samples": "cd samples && npm run start",
     "samples:build": "cd samples && npm run build",
     "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
     "storybook": "start-storybook -p 6006 -c lib/docs",
     "storybook:build": "build-storybook -c lib/docs",
-    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",
+    "test": "jest --config lib/jest.config.js",
+    "test:watch": "jest --config lib/jest.config.js --watch"
   },
   "devDependencies": {
     "@storybook/addon-actions": "6.3.12",
@@ -36,6 +54,8 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.5",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.4",
     "prettier": "^2.1.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",

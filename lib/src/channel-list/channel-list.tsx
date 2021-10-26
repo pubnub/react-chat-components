@@ -17,8 +17,8 @@ export interface ChannelListProps {
 }
 
 /**
- * Renders an interactive list of channels. 
- * 
+ * Renders an interactive list of channels.
+ *
  * It can represent all channels of the application, only
  * channels joined by the current user, all channels available to be joined, or whatever else is
  * passed into it. A common pattern in chat applications is to render two instances of the

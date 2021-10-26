@@ -68,8 +68,8 @@ export interface MessageListProps {
 
 /**
  * Fetches historical messages using the scrolling pagination pattern and subscribes to the current
- * channel to stay up to date with new messages. 
- * 
+ * channel to stay up to date with new messages.
+ *
  * It also displays data in an interactive list, including
  * user names, avatars, the time when a message was sent, and attachments (links, images) and allows to react to
  * messages with emojis and to show those reactions immediately.
