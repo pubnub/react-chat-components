@@ -5,6 +5,7 @@ const fs = require("fs");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const sampleSize = require("lodash.sampleSize");
+require("dotenv").config();
 
 const users = require("../data/users.json");
 const channels = require("../data/channels-work.json");
@@ -27,7 +28,7 @@ const keyPrompt = `
   - User Metadata Events
   - Channel Metadata Events
   - Membership Events
-  Copy and paste your publish key and subscribe key into pubnub-keys.json before continuing.
+  Copy and paste your publish key and subscribe key into .env before continuing.
 `;
 
 let errorCount = 0;
@@ -40,8 +41,10 @@ const sleep = async (ms) => {
 };
 
 const getKeys = async () => {
-  const text = await fs.readFileSync("pubnub-keys.json", "utf-8");
-  return JSON.parse(text);
+  return {
+    publishKey: process.env.REACT_APP_PUB_KEY,
+    subscribeKey: process.env.REACT_APP_SUB_KEY,
+  };
 };
 
 const batch = (list, size) => {
@@ -162,7 +165,7 @@ const main = async () => {
     const { answer } = await prompts({
       type: "confirm",
       name: "answer",
-      message: "Does pubnub-keys.json contain PubNub keys?",
+      message: "Does .env contain PubNub keys?",
       initial: true,
     });
     if (!answer) {

@@ -97,10 +97,11 @@ npm install
 
 4. Follow steps from the
    [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account)
-   to create your own keys and paste them into `pubnub-keys.json`.
+   to create your own keys. Copy `.env.example` file as `.env` and paste your keys there.
 
 ```bash
-vi pubnub-keys.json
+cp .env.example .env
+vi .env
 ```
 
 5. Pre-populate the User and Channel Object metadata (required only for the moderated-chat sample).

@@ -4,7 +4,6 @@ const path = require("path");
 module.exports = function override(config) {
   config.resolve.plugins.forEach((plugin) => {
     if (plugin instanceof ModuleScopePlugin) {
-      plugin.allowedFiles.add(path.resolve("./pubnub-keys.json"));
       plugin.allowedFiles.add(path.resolve("../data/users.json"));
       plugin.allowedFiles.add(path.resolve("../data/messages-lorem.json"));
       plugin.allowedFiles.add(path.resolve("../data/messages-social.json"));

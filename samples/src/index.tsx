@@ -2,32 +2,25 @@ import React from "react";
 import PubNub, { PubnubConfig } from "pubnub";
 import ReactDOM from "react-dom";
 import { PubNubProvider } from "pubnub-react";
-import { HashRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-import SimpleChat from "./simple-chat/simple-chat";
-import EventChat from "./event-chat/event-chat";
-import GroupChat from "./group-chat/group-chat";
 import ModeratedChat from "./moderated-chat/moderated-chat";
 import "./index.css";
 
-import defaultKeys from "../pubnub-keys.json";
 import users from "../../data/users.json";
 
 /**
  * Prepare a PubNub instance and inject it into PubNubProvider
- * You should generate your own keyset on pubnub.com and paste it into pubnub-keys.json
+ * You should generate your own keyset on pubnub.com and paste it into .env
  */
 
 const hash = document.location.hash.split("?")[1];
 const params = new URLSearchParams(hash);
 const uuid = params.get("uuid");
-const queryKeys = {
-  publishKey: params.get("pubkey"),
-  subscribeKey: params.get("subkey"),
+const pubnubKeys = {
+  publishKey: params.get("pubkey") || process.env.REACT_APP_PUB_KEY,
+  subscribeKey: params.get("subkey") || process.env.REACT_APP_SUB_KEY,
 };
-const pubnubKeys = (queryKeys.publishKey && queryKeys.subscribeKey
-  ? queryKeys
-  : defaultKeys) as PubnubConfig;
 const pubnub = new PubNub({
   ...pubnubKeys,
   uuid: uuid || users[Math.floor(Math.random() * users.length)].id,
@@ -48,38 +41,13 @@ pubnub.addListener({
 const SampleApps = () => {
   return (
     <PubNubProvider client={pubnub}>
-      <HashRouter>
+      <BrowserRouter>
         <Switch>
-          <Route path="/group-chat">
-            <GroupChat />
-          </Route>
-          <Route path="/event-chat">
-            <EventChat />
-          </Route>
-          <Route path="/simple-chat">
-            <SimpleChat />
-          </Route>
-          <Route path="/moderated-chat">
+          <Route path="/">
             <ModeratedChat />
           </Route>
-          <Route path="/">
-            <div className="welcome">
-              <h1>Pubnub Chat Components</h1>
-              <h3>
-                Here are some example applications built using PubNub and React Chat Components:
-              </h3>
-              <ul>
-                <li>
-                  <Link to="/simple-chat">Simple Chat</Link>
-                </li>
-                <li>
-                  <Link to="/moderated-chat">Moderated Chat</Link>
-                </li>
-              </ul>
-            </div>
-          </Route>
         </Switch>
-      </HashRouter>
+      </BrowserRouter>
     </PubNubProvider>
   );
 };
@@ -124,7 +92,7 @@ const KeysError = () => {
         <li>Membership Events</li>
       </ul>
       <p>Copy and paste your publish key and subscribe key into: </p>
-      <pre>pubnub-keys.json</pre>
+      <pre>.env</pre>
       <p>before continuing.</p>
     </div>
   );
