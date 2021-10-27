@@ -1,12 +1,21 @@
 ---
 name: pubnub-react-chat-components
-version: v0.6.0
+version: v0.7.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - dist/index.js
   - dist/index.es.js
 changelog:
+  - changes:
+      - text: MessageInput - wrong spinner icon sizing
+        type: fix
+      - text: MessageInput - unwanted scrollbar showing up
+        type: fix
+      - text: MessageInput - textarea sizing after sending multi-line messages
+        type: fix
+    date: 2021-10-27
+    version: v0.7.0
   - changes:
       - text: Major components redesign
         type: feature
