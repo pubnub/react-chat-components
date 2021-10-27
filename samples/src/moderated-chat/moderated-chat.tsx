@@ -33,7 +33,7 @@ const defaultChannel = {
   description: "This is the default channel",
 } as Pick<ChannelType, "id" | "name" | "description">;
 
-export default function ModeratedChat() {
+export default function ModeratedChat(): JSX.Element {
   /**
    * Component state related hooks
    * Those mostly store the current channel, modals and side panels being shown

@@ -13,6 +13,12 @@ interface CreateChatModalProps {
   hideModal: () => void;
 }
 
+interface UserRendererProps {
+  user: UserType;
+  selectedUsers: UserType[];
+  handleCheck: (member: UserType) => void;
+}
+
 /**
  * This modal is opened after clicking the "plus" icon next to the Direct chats header
  * It is used to create new private chats between selected users
@@ -23,9 +29,8 @@ export const CreateChatModal = ({
   currentUser,
   setCurrentChannel,
   hideModal,
-}: CreateChatModalProps) => {
+}: CreateChatModalProps): JSX.Element => {
   const pubnub = usePubNub();
-  const uuid = pubnub.getUUID();
   const [creatingChannel, setCreatingChannel] = useState(false);
   const [showGroups, setShowGroups] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<UserType[]>([]);
@@ -40,47 +45,49 @@ export const CreateChatModal = ({
     });
   };
 
-  const createDirectChat = async (user: UserType) => {
+  const createChat = async (user?: UserType) => {
     if (creatingChannel) return;
     setCreatingChannel(true);
-    const uuids = [uuid, user.id].sort();
-    const channel = `direct.${uuids.join("@")}`;
-    const data = {
-      name: user.name,
-      custom: {
-        thumb: user.profileUrl,
-      },
-    };
-    await pubnub.objects.setChannelMembers({ channel, uuids });
-    setCurrentChannel({ id: channel, ...data });
-    hideModal();
-    setCreatingChannel(false);
-  };
-
-  const createGroupChat = async () => {
-    if (creatingChannel) return;
-    setCreatingChannel(true);
-    const users = [currentUser, ...selectedUsers];
-    const uuids = users.map((m) => m.id).sort();
+    let uuids, channel, localData, remoteData;
     const randomHex = [...Array(27)]
       .map(() => Math.floor(Math.random() * 16).toString(16))
       .join("");
-    const channel = `group.${randomHex}`;
-    const name =
-      channelName ||
-      users
-        .map((m) => m.name?.split(" ")[0])
-        .sort()
-        .join(", ");
-    const data = {
-      name,
-      custom: {
-        thumb: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon`,
-      },
-    };
-    await pubnub.objects.setChannelMetadata({ channel, data });
+    const custom = { thumb: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon` };
+
+    if (user) {
+      /** 1-on-1 chat */
+      const users = [currentUser, user];
+      uuids = users.map((m) => m.id).sort();
+      channel = `direct.${uuids.join("@")}`;
+      remoteData = {
+        name: users
+          .map((m) => m.name)
+          .sort()
+          .join(" and "),
+        custom,
+      };
+      localData = {
+        name: user.name,
+        custom: { thumb: user.profileUrl },
+      };
+    } else {
+      /** Group chat */
+      const users = [currentUser, ...selectedUsers];
+      uuids = users.map((m) => m.id).sort();
+      channel = `group.${randomHex}`;
+      const name =
+        channelName ||
+        users
+          .map((m) => m.name?.split(" ")[0])
+          .sort()
+          .join(", ");
+      remoteData = { name, custom };
+      localData = remoteData;
+    }
+
+    await pubnub.objects.setChannelMetadata({ channel, data: remoteData });
     await pubnub.objects.setChannelMembers({ channel, uuids });
-    setCurrentChannel({ id: channel, ...data });
+    setCurrentChannel({ id: channel, ...localData });
     hideModal();
     setCreatingChannel(false);
   };
@@ -129,7 +136,7 @@ export const CreateChatModal = ({
         <h2>Users</h2>
         <MemberList
           members={users.filter((u) => u.name?.toLowerCase().includes(usersFilter))}
-          onMemberClicked={(user) => createDirectChat(user)}
+          onMemberClicked={(user) => createChat(user)}
           memberRenderer={
             showGroups
               ? (user) => SelectableUserRenderer({ user, selectedUsers, handleCheck })
@@ -138,7 +145,7 @@ export const CreateChatModal = ({
         />
         {!!selectedUsers.length && (
           <div className="footer">
-            <button disabled={creatingChannel} onClick={createGroupChat}>
+            <button disabled={creatingChannel} onClick={() => createChat()}>
               Create group chat
             </button>
           </div>
@@ -153,7 +160,7 @@ export const CreateChatModal = ({
  * It is used to inject checked/unchecked icon into each member on the list
  * It uses most of the same classes as Components to look the same way apart of the icon
  */
-const SelectableUserRenderer = ({ user, selectedUsers, handleCheck }: any) => {
+const SelectableUserRenderer = ({ user, selectedUsers, handleCheck }: UserRendererProps) => {
   const userSelected = selectedUsers.find((m: UserType) => m.id === user.id);
   return (
     <div key={user.id} className="pn-member" onClick={() => handleCheck(user)}>

@@ -19,7 +19,7 @@ export const PublicChannelsModal = ({
   groupChannelsToJoin,
   setCurrentChannel,
   hideModal,
-}: PublicChannelsModalProps) => {
+}: PublicChannelsModalProps): JSX.Element => {
   const pubnub = usePubNub();
   const [channelsFilter, setChannelsFilter] = useState("");
 

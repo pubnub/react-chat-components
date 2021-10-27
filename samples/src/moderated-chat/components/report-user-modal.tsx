@@ -21,7 +21,7 @@ export const ReportUserModal = ({
   reportedMessage,
   hideModal,
   users,
-}: ReportUserModalProps) => {
+}: ReportUserModalProps): JSX.Element => {
   const pubnub = usePubNub();
   const [reported, setReported] = useState(false);
   const uuid = reportedMessage?.uuid || reportedMessage?.publisher || "";
@@ -116,7 +116,11 @@ export const ReportUserModal = ({
           <>
             <h2>Why are you reporting this comment?</h2>
             {reasons.map((reason) => (
-              <button className="report-button" onClick={() => reportUser(reason.text)}>
+              <button
+                className="report-button"
+                onClick={() => reportUser(reason.text)}
+                key={reason.icon}
+              >
                 <i className="material-icons-outlined">{reason.icon}</i>
                 <span>{reason.text}</span>
               </button>
