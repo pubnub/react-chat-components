@@ -67,8 +67,8 @@ Set up and use PubNub Chat Components for React to build your own chat applicati
 3. Some of the functionalities you might want to enable on your keyset depending on the use-case
    include _Presence_, _Files_, _Storage & Playback_ (including correct Retention Period) and
    _Objects_ (be sure to select a geographical region corresponding to most users of your
-   application). The moderated-chat sample _requires_ these features are set in order to work with
-   the
+   application and to enable User, Channel and Membership Events). The moderated-chat sample
+   _requires_ these features are set in order to work with the
    [moderation dashboard](https://github.com/pubnub/moderation-dashboard/blob/master/how-to-design-modertable-app.md).
 
 ## Run Sample Apps
