@@ -135,7 +135,7 @@ export const CreateChatModal = ({
 
         <h2>Users</h2>
         <MemberList
-          members={users.filter((u) => u.name?.toLowerCase().includes(usersFilter))}
+          members={users.filter((u) => u.name?.toLowerCase().includes(usersFilter.toLowerCase()))}
           onMemberClicked={(user) => createChat(user)}
           memberRenderer={
             showGroups
