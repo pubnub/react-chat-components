@@ -16,7 +16,6 @@ import {
   useUser,
   useUserMemberships,
   useUsers,
-  Themes,
 } from "@pubnub/react-chat-components";
 import "emoji-mart/css/emoji-mart.css";
 
@@ -38,7 +37,7 @@ export default function ModeratedChat(): JSX.Element {
    * Component state related hooks
    * Those mostly store the current channel, modals and side panels being shown
    */
-  const [theme, setTheme] = useState<Themes>("light");
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [currentChannel, setCurrentChannel] = useState(defaultChannel);
   const [showMembers, setShowMembers] = useState(false);
   const [showChannels, setShowChannels] = useState(true);
@@ -297,7 +296,7 @@ export default function ModeratedChat(): JSX.Element {
                   <MessageList
                     fetchMessages={20}
                     enableReactions
-                    reactionsPicker={<Picker />}
+                    reactionsPicker={<Picker theme={theme} />}
                     extraActionsRenderer={(message) => (
                       <div
                         onClick={() => {
@@ -317,7 +316,7 @@ export default function ModeratedChat(): JSX.Element {
                     disabled={isUserMuted}
                     typingIndicator
                     fileUpload="image"
-                    emojiPicker={<Picker />}
+                    emojiPicker={<Picker theme={theme} />}
                     placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
                   />
                 </>
