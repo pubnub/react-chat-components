@@ -88,8 +88,8 @@ export const CreateChatModal = ({
     await pubnub.objects.setChannelMetadata({ channel, data: remoteData });
     await pubnub.objects.setChannelMembers({ channel, uuids });
     setCurrentChannel({ id: channel, ...localData });
-    hideModal();
     setCreatingChannel(false);
+    hideModal();
   };
 
   return (
