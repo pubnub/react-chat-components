@@ -295,19 +295,23 @@ export default function ModeratedChat(): JSX.Element {
                 <>
                   <MessageList
                     fetchMessages={20}
-                    enableReactions
-                    reactionsPicker={<Picker theme={theme} />}
-                    extraActionsRenderer={(message) => (
-                      <div
-                        onClick={() => {
-                          setReportedMessage(message);
-                          setShowReportUserModal(true);
-                        }}
-                        title="Report user"
-                      >
-                        <i className="material-icons-outlined">campaign</i>
-                      </div>
-                    )}
+                    enableReactions={!isUserMuted}
+                    reactionsPicker={isUserMuted ? undefined : <Picker theme={theme} />}
+                    extraActionsRenderer={(message) =>
+                      isUserMuted ? (
+                        <></>
+                      ) : (
+                        <div
+                          onClick={() => {
+                            setReportedMessage(message);
+                            setShowReportUserModal(true);
+                          }}
+                          title="Report user"
+                        >
+                          <i className="material-icons-outlined">campaign</i>
+                        </div>
+                      )
+                    }
                   >
                     <TypingIndicator />
                   </MessageList>
