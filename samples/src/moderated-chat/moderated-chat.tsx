@@ -64,7 +64,9 @@ export default function ModeratedChat(): JSX.Element {
     channel: currentChannel.id,
     include: { customUUIDFields: true },
   });
-  const [presenceData] = usePresence({ channels: joinedChannels.map((c) => c.id) });
+  const [presenceData] = usePresence({
+    channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
+  });
 
   /**
    * Some of the data related to current channel, current user and its' joined channels
