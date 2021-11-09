@@ -282,7 +282,7 @@ export default function ModeratedChat(): JSX.Element {
                 <span onClick={() => setShowMembers(!showMembers)}>
                   <strong>
                     {currentChannel.name || currentChannel.id}
-                    <i className="material-icons-outlined">arrow_right</i>
+                    {!isUserBlocked && <i className="material-icons-outlined">arrow_right</i>}
                   </strong>
                   <p>{totalChannelMembers} members</p>
                 </span>
@@ -329,7 +329,7 @@ export default function ModeratedChat(): JSX.Element {
               )}
             </div>
 
-            <div className={`members-panel ${showMembers ? "shown" : "hidden"}`}>
+            <div className={`members-panel ${showMembers && !isUserBlocked ? "shown" : "hidden"}`}>
               <h2>
                 Members
                 <button className="material-icons-outlined" onClick={() => setShowMembers(false)}>
