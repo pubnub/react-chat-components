@@ -44,7 +44,7 @@ architecture of realtime networks.
 
 ## Related documentation
 
-- [PubNub documentation for React Chat Components](https://pubnub.github.io/react-chat-components/docs/) - documentation for the
+- [PubNub Chat Components for React Documentation](https://pubnub.github.io/react-chat-components/docs/) - documentation for the
   React Chat Components
 - [PubNub chat use-case](https://www.pubnub.com/docs/chat/overview) - documentation for the
   chat use-case
