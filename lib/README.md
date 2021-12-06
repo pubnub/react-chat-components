@@ -42,12 +42,13 @@ architecture of realtime networks.
 - [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
 - [Typing Indicator](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-typing-indicator--default)
 
-#### Other documentation
+## Related documentation
 
-- [PubNub Chat chat use-case](https://www.pubnub.com/docs/chat/overview) - documentation for the
-  chat use-case.
+- [PubNub Chat Components for React Documentation](https://pubnub.github.io/react-chat-components/docs/) - documentation explaining how to work with PubNub Chat Components for React
+- [PubNub chat use-case](https://www.pubnub.com/docs/chat/overview) - documentation for the
+  chat use-case
 - [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - API documentation for the
-  PubNub React SDK.
+  PubNub React SDK
 
 <br />
 
