@@ -6,14 +6,17 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 Create a sample chat app containing:
 
-- [**Message input**](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default) field
-- [**Message list**](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default) that will show when you start typing and sending messages
+- [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
+  field
+- [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
+  that will show when you start typing and sending messages
 
 ## Requirements
 
 You will use the following tools in the course of this guide:
 
-- [React v16.8+](https://www.npmjs.com/package/react/v/16.8.0) and [ReactDOM v16.8+](https://www.npmjs.com/package/react-dom)
+- [React v16.8+](https://www.npmjs.com/package/react/v/16.8.0) and
+  [ReactDOM v16.8+](https://www.npmjs.com/package/react-dom)
 - [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/)
 - [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup)
 - Code editor of your choice (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
@@ -24,22 +27,34 @@ Let's get started!
 
 ### Create a PubNub account
 
-Before you start, you need to get **Publish Key** and **Publish Key** for your chat app.
-Sign in or create an account on the [Admin Portal](https://dashboard.pubnub.com/) to create an app and a new keyset. 
+Before you start, you need to get **Publish Key** and **Publish Key** for your chat app. Sign in or
+create an account on the [Admin Portal](https://dashboard.pubnub.com/) to create an app and a new
+keyset.
 
->**TIP**: When you create a new app on the Admin Portal, the first set of keys is generated automatically, but a single app can have as many keysets as you like. We recommend that you create separate keysets for production and test environments. There are some of the functionalities you might need to enable on your keyset depending on the use case, but they won't be required to complete this Getting Started guide. These options include:
-   - [**PRESENCE**](https://www.pubnub.com/docs/sdks/javascript/api-reference/presence) to monitor the subscribers of channels and delivers information on their real-time status
-   - [**STORAGE & PLAYBACK**](https://www.pubnub.com/docs/sdks/javascript/api-reference/storage-and-playback) (including correct **Retention**) to persist all messages as they're published.
-   - [**OBJECTS**](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects) to easily store metadata about your application users and channels, and their membership associations, without the need to stand up your own databases. When using this feature, make sure you select a geographical region corresponding to most users of your application and to have these enabled: **User Metadata Events**, **Channel Metadata Events**, and **Membership Events**.
+> **TIP**: When you create a new app on the Admin Portal, the first set of keys is generated
+> automatically, but a single app can have as many keysets as you like. We recommend that you create
+> separate keysets for production and test environments. There are some of the functionalities you
+> might need to enable on your keyset depending on the use case, but they won't be required to
+> complete this Getting Started guide. These options include:
+
+- [**PRESENCE**](https://www.pubnub.com/docs/sdks/javascript/api-reference/presence) to monitor the
+  subscribers of channels and delivers information on their real-time status
+- [**STORAGE & PLAYBACK**](https://www.pubnub.com/docs/sdks/javascript/api-reference/storage-and-playback)
+  (including correct **Retention**) to persist all messages as they're published.
+- [**OBJECTS**](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects) to easily store
+  metadata about your application users and channels, and their membership associations, without the
+  need to stand up your own databases. When using this feature, make sure you select a geographical
+  region corresponding to most users of your application and to have these enabled: **User Metadata
+  Events**, **Channel Metadata Events**, and **Membership Events**.
 
 ### Create a new project for your app
 
-Create a sample React project you will use as a placeholder for your chat app code. 
-To use the [`react-sample-chat`](https://www.pubnub.com/docs/sdks/javascript/react/#download-the-react-wrapper) app, follow these steps:
+Create a React project you will use as a starter for your chat app code. To use the
+[`create-react-app`](https://create-react-app.dev/) together with TypeScript, follow these steps:
 
 ```js
-npx create-react-app react-sample-chat
-cd react-sample-chat
+npx create-react-app pubnub-react-chat --template typescript
+cd pubnub-react-chat
 ```
 
 ### Install components
@@ -54,8 +69,11 @@ npm install --save pubnub pubnub-react @pubnub/react-chat-components
 
 Configure the components:
 
-1. Open the `App.js` file in a code editor and import PubNub providers from the [Javascript SDK](https://www.pubnub.com/docs/sdks/javascript/api-reference/configuration#initialization) and [React SDK](https://www.pubnub.com/docs/sdks/javascript/react/api-reference/provider). 
-Also, import the chat components. In this guide, you will only utilize the `MessageInput` and `MessageList` components.
+1. Open the `App.tsx` file in a code editor and import PubNub providers from the
+   [Javascript SDK](https://www.pubnub.com/docs/sdks/javascript/api-reference/configuration#initialization)
+   and [React SDK](https://www.pubnub.com/docs/sdks/javascript/react/api-reference/provider). Also,
+   import the chat components. In this guide, you will only utilize the `MessageInput` and
+   `MessageList` components.
 
 ```jsx
 import PubNub from "pubnub";
@@ -69,7 +87,8 @@ import {
 } from "@pubnub/react-chat-components";
 ```
 
-2. Create and configure your PubNub client and set the default theme and channel for [`PubNubProvider`](http://localhost:6006/?path=/docs/components-chat-provider--default).
+2. Create and configure your PubNub client and set the default theme and channel for
+   [`PubNubProvider`](http://localhost:6006/?path=/docs/components-chat-provider--default).
 
 ```jsx
 const pubnub = new PubNub({
@@ -81,8 +100,9 @@ const currentChannel = "myCurrentChannel";
 const theme = "light";
 ```
 
-3. Feed the `PubNubProvider` with your newly created client and place the components within the generic Chat state component in any order that your app requires.
-You can later tweak the components using option properties and CSS variables.
+3. Feed the `PubNubProvider` with your newly created client and place the components within the
+   generic Chat state component in any order that your app requires. You can later tweak the
+   components using option properties and CSS variables.
 
 ```jsx
 function App() {
@@ -94,7 +114,7 @@ function App() {
       </Chat>
     </PubNubProvider>
   );
-};
+}
 ```
 
 At the end, `App.js` should resemble the following:
@@ -121,10 +141,10 @@ const theme = "light";
 function App() {
   return (
     <PubNubProvider client={pubnub}>
-        <Chat {...{ currentChannel, theme }}>
-          <MessageList />
-          <MessageInput />
-        </Chat>
+      <Chat {...{ currentChannel, theme }}>
+        <MessageList />
+        <MessageInput />
+      </Chat>
     </PubNubProvider>
   );
 }
@@ -140,5 +160,7 @@ Run the app on localhost to see a message input field where you can type sample 
 npm start
 ```
 
->**TIP**: To expand the app further, check out the [sample apps](https://pubnub.github.io/react-chat-components/samples) to see what is possible using the components. 
-You can find the source code of the sample applications in the `samples` folder at the root of the repository.
+> **TIP**: To expand the app further, check out the
+> [sample apps](https://pubnub.github.io/react-chat-components/samples) to see what is possible
+> using the components. You can find the source code of the sample applications in the `samples`
+> folder at the root of the repository.
