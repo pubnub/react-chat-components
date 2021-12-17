@@ -12,22 +12,31 @@ Create a sample chat app containing:
 - [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
   that will show when you start typing and sending messages
 
+  <img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
+
 ## Requirements
 
 You will use the following tools in the course of this guide:
 
+- [npm](https://docs.npmjs.com/cli/v6/commands/npm-install)
 - [Node.js](https://nodejs.org/en/download/)
 - Code editor of your choice (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
 
 ## Steps
 
-Let's get started!
+Let's get started.
+
+You can set up a chat app in two ways:
+- Download and run a ready app 
+- Create an empty React project or extend your own React app by installing chat components.
+
+For both paths, you will need an account on our [Admin Portal](https://dashboard.pubnub.com/).
 
 ### Create a PubNub account
 
-Before you start, you need to get **Subscribe Key** and **Publish Key** for your chat app. Sign in
+Before you start, you need to get **Publish Key** and **Subscribe Key** for your chat app. Sign in
 or create an account on the [Admin Portal](https://dashboard.pubnub.com/) to create an app and a new
-keyset.
+keyset, under which you will find the required keys.
 
 > **TIP**: When you create a new app on the Admin Portal, the first set of keys is generated
 > automatically, but a single app can have as many keysets as you like. We recommend that you create
@@ -47,7 +56,7 @@ keyset.
 
 <br />
 
-### Download and run the existing starter app...
+### Download and run the existing starter app
 
 <a
   href="https://github.com/pubnub/react-chat-components/archive/refs/heads/master.zip"
@@ -64,77 +73,71 @@ keyset.
   Download samples
 </a>
 
-1. Unpack the archive into your folder of choice
+1. Unpack the archive into the folder of your choice.
 
-2. Open a terminal app and go to `samples/getting-started` folder inside of the previous step
+2. Open a terminal app and go to the `samples/getting-started` folder.
 
-3. Install the dependencies
+3. Install the dependencies.
 
 ```sh
 npm install
 ```
 
-4. Run the app
+4. Run the app.
 
 ```sh
 npm run dev
 ```
 
-5. Open [local dev server](http://localhost:3000) to see the result
-
-6. Skip to
-   [next steps](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page#next-steps)
-   to tweak the app to match your own needs!
+5. Open the [dev server locally](http://localhost:3000) and send your first message.
 
 <br />
 
-### ... or add the components to your own React application
+### (Alternative) Add the components to a React app
 
-0. Create a React project you will use as a starter for your chat app code. To use the
-   [`create-react-app`](https://create-react-app.dev/) together with TypeScript, follow these steps:
+1. Create a React project to use as a starter for your chat app code. To use
+   [Create React App](https://create-react-app.dev/) with TypeScript, open a terminal app and follow the steps.
+
+   > **TIP**: You can skip this step completely if you already have a working React application.
 
 ```js
 npx create-react-app pubnub-react-chat --template typescript
 cd pubnub-react-chat
 ```
 
-> **TIP**: You can skip this step completely if you already have a working React application
-
-1. Add the PubNub JavaScript SDK, React framework packages, and PubNub Chat Components for React:
+2. Add the PubNub JavaScript SDK, React framework packages, and PubNub Chat Components for React.
 
 ```sh
 npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
-2. Copy over the snippet below into `App.tsx` or another file of choice. Be sure to replace the
-   keyset in PubNub instance configuration.
+3. Copy over the snippet below into `App.tsx` or another file of your choice. Remember to place your own keys from the Admin Portal for the
+   `publishKey` and `subscribeKey` parameters in the PubNub instance configuration.
 
 ```jsx
 /* Import PubNub JavaScript and React SDKs to create and access PubNub instance accross your app. */
-/* Import PubNub Chat Components to easily create Chat apps with PubNub! */
+/* Import PubNub Chat Components to easily create chat apps with PubNub. */
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 
-/* Create and configure your PubNub instance. Be sure to replace myPublishKey/mySubscribeKey with
-   your own keyset and assign a unique id to your default user. Depending on the use-case, this
-   code may live in some root file of your application. */
+/* Create and configure your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey" 
+with your own keyset and create a unique UUID for your default user. */
 const pubnub = new PubNub({
   publishKey: "myPublishKey",
   subscribeKey: "mySubscribeKey",
-  uuid: "myUniqueUUID",
+  uuid: "your-first-user",
 });
 const currentChannel = "myCurrentChannel";
 const theme = "light";
 
 function App() {
   return (
-    {/* PubNubProvider is a part of PubNub React SDK and it allows you to access PubNub instance
+    {/* PubNubProvider is a part of the PubNub React SDK and allows you to access PubNub instance
     in components down the tree. */}
     <PubNubProvider client={pubnub}>
       {/* Chat is an obligatory state provider. It allows you to configure some common component
-      options, like currently shown channel and general theme. Be sure to check out the documentation
-      for further customization features.*/}
+      options, like the current channel and the general theme for the app.*/}
       <Chat {...{ currentChannel, theme }}>
         <MessageList />
         <MessageInput />
@@ -146,23 +149,16 @@ function App() {
 export default App;
 ```
 
-3. Run your application. At this point it should look like on the screenshot below. Go ahead and
-   send your first message!
+4. Run your app and send your first message.
 
 ```sh
 npm start
 ```
 
-<img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
-
 ### Next steps
 
-To expand the app further, check out the
-[sample apps](https://pubnub.github.io/react-chat-components/samples) to see what is possible using
-the components. You can find the source code of the sample applications in the `samples` folder at
-the root of the repository.
+To expand your app further, check out:
 
-Be sure to checkout the documentation for
-[Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
-and rest of the components to see avilable options, customizations and so on, to make the app truly
-yours!
+- [Sample apps](https://pubnub.github.io/react-chat-components/samples) to see what you can do with PubNub Chat Components for React. 
+- [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
+and the rest of the components to see what customizations options can help you make the app truly yours.
