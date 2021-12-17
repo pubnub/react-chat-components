@@ -1,5 +1,6 @@
 import { Meta } from "@storybook/addon-docs/blocks";
 import Screenshot from "../assets/screenshot2.png";
+import { Tabs, Tab, TabButton } from "../../tabs";
 
 <Meta title="Introduction/Getting Started" />
 
@@ -27,7 +28,8 @@ You will use the following tools in the course of this guide:
 Let's get started.
 
 You can set up a chat app in two ways:
-- Download and run a ready app 
+
+- Download and run a ready app
 - Create an empty React project or extend your own React app by installing chat components.
 
 For both paths, you will need an account on our [Admin Portal](https://dashboard.pubnub.com/).
@@ -56,7 +58,8 @@ keyset, under which you will find the required keys.
 
 <br />
 
-### Download and run the existing starter app
+<Tabs>
+<Tab label="Download and run the starter app">
 
 <a
   href="https://github.com/pubnub/react-chat-components/archive/refs/heads/master.zip"
@@ -76,7 +79,6 @@ keyset, under which you will find the required keys.
 1. Unpack the archive into the folder of your choice.
 
 2. Open a terminal app and go to the `samples/getting-started` folder.
-
 3. Install the dependencies.
 
 ```sh
@@ -91,12 +93,12 @@ npm run dev
 
 5. Open the [dev server locally](http://localhost:3000) and send your first message.
 
-<br />
-
-### (Alternative) Add the components to a React app
+</Tab>
+<Tab label="Use pre-existing or create a new app">
 
 1. Create a React project to use as a starter for your chat app code. To use
-   [Create React App](https://create-react-app.dev/) with TypeScript, open a terminal app and follow the steps.
+   [Create React App](https://create-react-app.dev/) with TypeScript, open a terminal app and follow
+   the steps.
 
    > **TIP**: You can skip this step completely if you already have a working React application.
 
@@ -111,8 +113,9 @@ cd pubnub-react-chat
 npm install --save pubnub pubnub-react @pubnub/react-chat-components
 ```
 
-3. Copy over the snippet below into `App.tsx` or another file of your choice. Remember to place your own keys from the Admin Portal for the
-   `publishKey` and `subscribeKey` parameters in the PubNub instance configuration.
+3. Copy over the snippet below into `App.tsx` or another file of your choice. Remember to place your
+   own keys from the Admin Portal for the `publishKey` and `subscribeKey` parameters in the PubNub
+   instance configuration.
 
 ```jsx
 /* Import PubNub JavaScript and React SDKs to create and access PubNub instance accross your app. */
@@ -121,7 +124,7 @@ import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 
-/* Create and configure your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey" 
+/* Create and configure your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
 with your own keyset and create a unique UUID for your default user. */
 const pubnub = new PubNub({
   publishKey: "myPublishKey",
@@ -155,10 +158,17 @@ export default App;
 npm start
 ```
 
+</Tab>
+</Tabs>
+
+<br />
+
 ### Next steps
 
 To expand your app further, check out:
 
-- [Sample apps](https://pubnub.github.io/react-chat-components/samples) to see what you can do with PubNub Chat Components for React. 
+- [Sample apps](https://pubnub.github.io/react-chat-components/samples) to see what you can do with
+  PubNub Chat Components for React.
 - [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
-and the rest of the components to see what customizations options can help you make the app truly yours.
+  and the rest of the components to see what customizations options can help you make the app truly
+  yours.
