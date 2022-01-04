@@ -6,26 +6,25 @@ import { Tabs, Tab, TabButton } from "../../tabs";
 
 # Getting Started
 
-Create a sample chat app with
-[Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
+See how you can get a user-agent chat app up and running.
+
+This guide shows how chat components work. You will download a sample Android app that uses two PubNub Chat Components for React: [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
 and
-[Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
-components.
+[Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default). Then, you'll run the app and send your first message by typing it in the message input field. The messages will pile up on the screen as you send them.
 
-<img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
+## Prerequisites
 
-## Requirements
-
-You will need these tools:
-
+- [npm](https://docs.npmjs.com/cli/v6/commands/npm-install)
 - [Node.js](https://nodejs.org/en/download/)
 - Code editor (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
+
+> **TIP**: This guide uses [React v16.8+](https://www.npmjs.com/package/react/v/16.8.0), [ReactDOM v16.8+](https://www.npmjs.com/package/react-dom), [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/), and [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup).
 
 ## Steps
 
 <br />
 
-### 1. Create a PubNub account
+### Create a PubNub account
 
 Before you start, you need to get **Publish Key** and **Subscribe Key** for your chat app. Sign in
 or create an account on the [Admin Portal](https://dashboard.pubnub.com/) to create an app and a new
@@ -56,7 +55,7 @@ keyset under which you will find the required keys.
 <br />
 <br />
 
-### 2. Run a React app with chat components
+### Run the chat app
 
 Now that you have your keysets, you can set up a chat app in two ways:
 
@@ -170,7 +169,13 @@ npm start
 
 <br />
 
-### 3. Next steps
+### Send your first message
+
+When your application opens up, send your first message by typing it in the message input field.
+
+<img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
+
+#### Next steps
 
 With a React app running, find out how you can expand and customize it. Check out our
 [sample apps](https://pubnub.github.io/react-chat-components/samples) and other
