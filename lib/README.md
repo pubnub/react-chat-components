@@ -90,13 +90,7 @@ git clone https://github.com/pubnub/react-chat-components.git
 cd react-chat-components/samples
 ```
 
-3. Install the dependencies.
-
-```bash
-npm install
-```
-
-4. Follow steps from the
+3. Follow steps from the
    [PubNub Account section](https://github.com/pubnub/react-chat-components/blob/master/lib/README.md#pubnub-account)
    to create your own keys. Copy `.env.example` file as `.env` and paste your keys there.
 
@@ -105,7 +99,13 @@ cp .env.example .env
 vi .env
 ```
 
-5. Pre-populate the User and Channel Object metadata (required only for the moderated-chat sample).
+4. Pick one of the sample apps and go to its folder, eg.
+
+```bash
+cd group-chat
+```
+
+5. Pre-populate the User and Channel Object metadata (required only for the group-chat sample).
 
 ```bash
 npm run setup
