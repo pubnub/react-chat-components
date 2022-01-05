@@ -1,0 +1,99 @@
+html,
+body,
+#root {
+  height: 100%;
+  background: #232332;
+  color: #cfcfcf;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  display: flex;
+}
+
+.channels {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+}
+
+.event {
+  flex-grow: 1;
+}
+
+.stream {
+  overflow: hidden;
+  padding-top: 56.25%;
+  position: relative;
+}
+
+.stream iframe {
+  border: 0;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.avatar {
+  border-radius: 100%;
+  margin-right: 16px;
+  width: 36px;
+}
+
+.info {
+  align-items: center;
+  padding: 20px;
+  display: flex;
+}
+
+.info h2 {
+  flex-grow: 1;
+}
+
+.info .live {
+  background: #de2440;
+  border-radius: 2px;
+  font-weight: 700;
+  margin-left: 16px;
+  padding: 4px;
+  text-transform: uppercase;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+}
+
+.chat h4 {
+  padding: 20px;
+}
+
+.pn-channel__title {
+  min-width: 0;
+}
+
+.pn-channel__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
