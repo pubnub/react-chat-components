@@ -59,30 +59,36 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     }
   }, [pubnub, paginatedOptions, members.length, totalCount]);
 
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "membership") return;
-
-    setMembers((members) => {
-      const membersCopy = cloneDeep(members);
-      const member = membersCopy.find((u) => u.id === message.data.uuid.id);
-
-      // Make sure the event is for the same channel as the hook
-      if (message.data.channel !== options.channel) return membersCopy;
-
-      // Set events are not handled since there are no events fired for data updates
-      // New memberships are not handled in order to conform to filters and pagination
-      if (member && message.event === "delete") {
-        membersCopy.splice(membersCopy.indexOf(member), 1);
-      }
-
-      return membersCopy;
-    });
-  };
-
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-  }, [pubnub]);
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "membership") return;
+
+        setMembers((members) => {
+          const membersCopy = cloneDeep(members);
+          const member = membersCopy.find((u) => u.id === message.data.uuid.id);
+
+          // Make sure the event is for the same channel as the hook
+          if (message.data.channel.id !== paginatedOptions.channel) return membersCopy;
+
+          // Set events are not handled since there are no events fired for data updates
+          // New memberships are not handled in order to conform to filters and pagination
+          if (member && message.event === "delete") {
+            membersCopy.splice(membersCopy.indexOf(member), 1);
+          }
+
+          return membersCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub, paginatedOptions.channel]);
 
   useEffect(() => {
     resetHook();
