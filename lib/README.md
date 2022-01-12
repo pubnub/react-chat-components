@@ -48,7 +48,7 @@ Start by exploring our [sample apps](https://pubnub.github.io/react-chat-compone
 
 Follow the steps in the [Getting Started guide](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) to:
 
-* Set up one of the sample chat apps and send your first message.
+* Set up a sample chat app and send your first message.
 * Install chat components to extend your existing React applications.
 
 ## Related documentation
