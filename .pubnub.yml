@@ -8,6 +8,11 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: useChannelMembers and useUserMemberships - fix and refactor event listeners
+        type: fix
+    date: 2021-11-25
+    version: v0.8.0
+  - changes:
       - text: MessageInput - wrong spinner icon sizing
         type: fix
       - text: MessageInput - unwanted scrollbar showing up

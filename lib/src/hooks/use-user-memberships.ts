@@ -59,31 +59,37 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     }
   }, [pubnub, paginatedOptions, channels.length, totalCount]);
 
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "membership") return;
-
-    setChannels((channels) => {
-      const channelsCopy = cloneDeep(channels);
-      const channel = channelsCopy.find((u) => u.id === message.data.channel.id);
-      const currentUuid = options.uuid || pubnub.getUUID();
-
-      // Make sure the event is for the same uuid as the hook
-      if (message.data.uuid.id !== currentUuid) return channelsCopy;
-
-      // Set events are not handled since there are no events fired for data updates
-      // New memberships are not handled in order to conform to filters and pagination
-      if (channel && message.event === "delete") {
-        channelsCopy.splice(channelsCopy.indexOf(channel), 1);
-      }
-
-      return channelsCopy;
-    });
-  };
-
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-  }, [pubnub]);
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "membership") return;
+
+        setChannels((channels) => {
+          const channelsCopy = cloneDeep(channels);
+          const channel = channelsCopy.find((u) => u.id === message.data.channel.id);
+          const currentUuid = paginatedOptions.uuid || pubnub.getUUID();
+
+          // Make sure the event is for the same uuid as the hook
+          if (message.data.uuid.id !== currentUuid) return channelsCopy;
+
+          // Set events are not handled since there are no events fired for data updates
+          // New memberships are not handled in order to conform to filters and pagination
+          if (channel && message.event === "delete") {
+            channelsCopy.splice(channelsCopy.indexOf(channel), 1);
+          }
+
+          return channelsCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub, paginatedOptions.uuid]);
 
   useEffect(() => {
     resetHook();
