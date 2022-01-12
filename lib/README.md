@@ -58,3 +58,7 @@ Follow the steps in the [Getting Started guide](https://pubnub.github.io/react-c
   chat use-case
 * [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - API documentation for the
   PubNub React SDK
+
+## Support
+
+If you need help or have a general question, [contact support](mailto:support@pubnub.com).
