@@ -42,6 +42,15 @@ architecture of realtime networks.
 - [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
 - [Typing Indicator](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-typing-indicator--default)
 
+## Usage
+
+Start by exploring our [sample apps](https://pubnub.github.io/react-chat-components/samples) that are built using chat components.
+
+Follow the steps in the [Getting Started guide](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) to:
+
+- Set up one of the sample chat apps and send your first message.
+- Install chat components to extend your existing React applications.
+
 ## Related documentation
 
 - [PubNub Chat Components for React Documentation](https://pubnub.github.io/react-chat-components/docs/) - documentation explaining how to work with PubNub Chat Components for React
@@ -49,12 +58,3 @@ architecture of realtime networks.
   chat use-case
 - [PubNub React SDK](https://www.pubnub.com/docs/chat/react/setup) - API documentation for the
   PubNub React SDK
-
-## Usage
-
-Start by exploring our [sample apps](https://pubnub.github.io/react-chat-components/samples) that are built using chat components.
-
-Follow the steps in the [Getting Started guide](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) to:
-
-* Set up one of the sample chat apps and send your first message.
-* Install chat components to extend your existing React applications.
