@@ -17,7 +17,7 @@ architecture of realtime networks.
 
 ![PubNub Chat Components](https://i.imgur.com/992eLO8.png)
 
-## Chat features
+## Features
 
 - **User and Channel Metadata**: add additional information about the users, channels, and their
   memberships from PubNub Objects storage using custom hooks
@@ -27,12 +27,6 @@ architecture of realtime networks.
 - **Typing Indicators**: display notifications that users are typing
 - **Message Reactions**: publish and add emojis to messages
 
-## Requirements
-
-- React v16.8+ and ReactDOM v16.8+
-- [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/)
-- [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup)
-
 ## Available components
 
 - [Chat (obligatory state provider)](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
@@ -41,6 +35,12 @@ architecture of realtime networks.
 - [Channel List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-channel-list--default)
 - [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
 - [Typing Indicator](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-typing-indicator--default)
+
+## Requirements
+
+- React v16.8+ and ReactDOM v16.8+
+- [PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/)
+- [PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup)
 
 ## Usage
 
