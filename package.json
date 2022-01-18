@@ -6,7 +6,7 @@
   "main": "index.js",
   "workspaces": [
     "lib",
-    "samples"
+    "samples/*"
   ],
   "engines": {
     "npm": ">= 7.0.0"
@@ -31,10 +31,7 @@
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "prepare": "husky install",
     "prettier:base": "prettier --ignore-path .gitignore",
-    "samples": "cd samples && npm run start",
-    "samples:build": "cd samples && npm run build",
-    "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
     "storybook": "start-storybook -p 6006 -c lib/docs",
     "storybook:build": "build-storybook -c lib/docs",
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",
