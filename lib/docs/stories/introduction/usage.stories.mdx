@@ -90,15 +90,15 @@ Now that you have your keyset, you can set up a chat app in two ways:
   npm install
   ```
 
-5. Open the app in the code editor, navigate to the and `src/getting-started.tsx` file and replace `My Publish Key` and `My Subscribe Key`
+5. Open the app in the code editor, navigate to the and `src/getting-started.tsx` file and replace `myPublishKey` and `mySubscribeKey`
 with your own Publish and Subscribe Keys from the keyset on the Admin Portal. 
 To associate a sender/current user with the PubNub messages, it's required to configure the [`uuid`](/docs/connections/users-and-devices) parameter. 
 If you wish, modify the default value for the chat user.
 
   ```jsx
-  publishKey: "My Publish Key",
-  subscribeKey: "My Subscribe Key",
-  uuid: "My First User",
+  publishKey: "myPublishKey",
+  subscribeKey: "mySubscribeKey",
+  uuid: "myFirstUser",
   ```
 
   The complete `getting-started.tsx` file looks as follows:
@@ -111,12 +111,12 @@ If you wish, modify the default value for the chat user.
     import { PubNubProvider } from "pubnub-react";
     import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 
-    /* Creates and configures your PubNub instance. Be sure to replace "My Publish Key" and "My Subscribe Key"
-    with your own keyset. If you wish, modify the default "My First User" uuid value for the chat user. */
+    /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
+    with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
     const pubnub = new PubNub({
-      publishKey: "My Publish Key",
-      subscribeKey: "My Subscribe Key",
-      uuid: "My First User",
+      publishKey: "myPublishKey",
+      subscribeKey: "mySubscribeKey",
+      uuid: "myFirstUser",
     });
     const currentChannel = "Default";
     const theme = "light";
@@ -166,12 +166,12 @@ If you wish, modify the default value for the chat user.
   import { PubNubProvider } from "pubnub-react";
   import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 
-  /* Creates and configures your PubNub instance. Be sure to replace "My Publish Key" and "My Subscribe Key"
-  with your own keyset. If you wish, modify the default "My First User" uuid value for the chat user. */
+  /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
+  with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
   const pubnub = new PubNub({
-    publishKey: "My Publish Key",
-    subscribeKey: "My Subscribe Key",
-    uuid: "My First User",
+    publishKey: "myPublishKey",
+    subscribeKey: "mySubscribeKey",
+    uuid: "myFirstUser",
   });
   const currentChannel = "Default";
   const theme = "light";
@@ -210,7 +210,6 @@ If you wish, modify the default value for the chat user.
 1. Open the dev server at the default address [localhost:3000](http://localhost:3000).
 
 2. Type and send your first message. The messages will pile up on the screen as you send them. 
-
 
   <img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
 
