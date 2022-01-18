@@ -28,10 +28,6 @@ import {
 } from "../state-atoms";
 import "./chat.scss";
 
-/**
- * Chat wrapper is used to configure various common options and feed the components with data.
- * It expects at least a configured PubNub object and a "current" channel to display within components.
- */
 export interface ChatProps {
   children?: ReactNode;
   /** General theme to be used by the components.
@@ -73,6 +69,14 @@ export interface ChatProps {
   onError?: (error: Error) => unknown;
 }
 
+/**
+ * Chat provider is used to configure various common options and feed the components with data.
+ * It expects at least a "current" channel to display within components.
+ *
+ * Chat itself is supposed to be wrapped with a PubNubProvider component that is a part of the
+ * PubNub React SDK. You should use it to pre-configure your PubNub instance. Please see Getting
+ * Started page for details.
+ */
 export class Chat extends Component<ChatProps> {
   constructor(props: ChatProps) {
     super(props);
