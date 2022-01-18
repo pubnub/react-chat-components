@@ -6,7 +6,7 @@
   "main": "index.js",
   "workspaces": [
     "lib",
-    "samples"
+    "samples/*"
   ],
   "engines": {
     "npm": ">= 7.0.0"
@@ -31,10 +31,7 @@
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "prepare": "husky install",
     "prettier:base": "prettier --ignore-path .gitignore",
-    "samples": "cd samples && npm run start",
-    "samples:build": "cd samples && npm run build",
-    "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
     "storybook": "start-storybook -p 6006 -c lib/docs",
     "storybook:build": "build-storybook -c lib/docs",
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",
@@ -44,12 +41,12 @@
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
-    "@storybook/addon-actions": "6.3.12",
-    "@storybook/addon-essentials": "6.3.12",
-    "@storybook/addon-links": "6.3.12",
-    "@storybook/addons": "6.3.12",
-    "@storybook/react": "6.3.12",
-    "@storybook/theming": "6.3.12",
+    "@storybook/addon-actions": "6.4.13",
+    "@storybook/addon-essentials": "6.4.13",
+    "@storybook/addon-links": "6.4.13",
+    "@storybook/addons": "6.4.13",
+    "@storybook/react": "6.4.13",
+    "@storybook/theming": "6.4.13",
     "concurrently": "^6.0.0",
     "eslint": "^7.11.0",
     "eslint-config-prettier": "^6.14.0",
