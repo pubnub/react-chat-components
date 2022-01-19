@@ -17,8 +17,8 @@ const hash = document.location.hash.split("?")[1];
 const params = new URLSearchParams(hash);
 const uuid = params.get("uuid");
 const pubnubKeys = {
-  publishKey: params.get("pubkey") || import.meta.env.REACT_APP_PUB_KEY,
-  subscribeKey: params.get("subkey") || import.meta.env.REACT_APP_SUB_KEY,
+  publishKey: params.get("pubkey") || (import.meta.env.REACT_APP_PUB_KEY as string),
+  subscribeKey: params.get("subkey") || (import.meta.env.REACT_APP_SUB_KEY as string),
 };
 const pubnub = new PubNub({
   ...pubnubKeys,
