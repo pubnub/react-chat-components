@@ -167,7 +167,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const handleEmojiInsertion = (emoji: { native: string }) => {
     try {
       if (!("native" in emoji)) return;
-      setText(text + emoji.native);
+      setText((text) => text + emoji.native);
       setEmojiPickerShown(false);
     } catch (e) {
       onError(e);
