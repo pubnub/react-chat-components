@@ -10,6 +10,7 @@ import userEvent from "@testing-library/user-event";
 describe("Message List", () => {
   let scrollIntoViewMock;
   let intersectionObserverMock;
+  let resizeObserverMock;
 
   beforeEach(() => {
     scrollIntoViewMock = jest.fn();
@@ -18,9 +19,15 @@ describe("Message List", () => {
       unobserve: jest.fn(),
       disconnect: jest.fn(),
     });
+    resizeObserverMock = jest.fn().mockReturnValue({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn(),
+    });
 
     window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     window.IntersectionObserver = intersectionObserverMock;
+    window.ResizeObserver = resizeObserverMock;
   });
 
   test("renders with custom welcome messages", async () => {

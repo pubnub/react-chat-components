@@ -314,9 +314,8 @@ export default function ModeratedChat(): JSX.Element {
                         </div>
                       )
                     }
-                  >
-                    <TypingIndicator />
-                  </MessageList>
+                  />
+                  <TypingIndicator />
                   <hr />
                   <MessageInput
                     disabled={isUserMuted}
