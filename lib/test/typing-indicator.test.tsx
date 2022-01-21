@@ -11,7 +11,12 @@ describe("Typing Indicator", () => {
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>
+      </div>,
+      {
+        pubnubProps: {
+          returnedUuid: "another-random-uuid",
+        },
+      }
     );
 
     userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
@@ -27,7 +32,12 @@ describe("Typing Indicator", () => {
       <div>
         <MessageInput typingIndicator />
         <TypingIndicator />
-      </div>
+      </div>,
+      {
+        pubnubProps: {
+          returnedUuid: "another-random-uuid",
+        },
+      }
     );
 
     userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");

@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect, useCallback, useRef } from "react";
+import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import {
   CurrentChannelTypingIndicatorAtom,
@@ -21,6 +22,8 @@ export interface TypingIndicatorProps {
  * a message that can be renderer inside MessageList.
  */
 export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicatorProps) => {
+  const pubnub = usePubNub();
+
   const [theme] = useAtom(ThemeAtom);
   const [users] = useAtom(UsersMetaAtom);
   const [typingIndicators] = useAtom(CurrentChannelTypingIndicatorAtom);
@@ -36,7 +39,8 @@ export const TypingIndicator: FC<TypingIndicatorProps> = (props: TypingIndicator
     const currentActiveUUIDs = Object.keys(typingIndicators).filter(
       (id) => Date.now() - parseInt(typingIndicators[id]) / 10000 < typingIndicatorTimeout * 1000
     );
-    setActiveUUIDs(currentActiveUUIDs);
+    const currentActiveUUIDsWoCurrent = currentActiveUUIDs.filter((id) => id !== pubnub.getUUID());
+    setActiveUUIDs(currentActiveUUIDsWoCurrent);
   }, [typingIndicatorsRef.current]);
 
   const getIndicationString = () => {

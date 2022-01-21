@@ -12,8 +12,13 @@ import users from "../../data/users.json";
 import messages from "../../data/messages-lorem.json";
 import channels from "../../data/channels-work.json";
 
-export function PubNubMock(): Partial<PubNub> & { _config: any } {
-  const uuid = "user_63ea15931d8541a3bd35e5b1f09087dc";
+export interface PubNubMockOptions {
+  uuid?: string;
+  returnedUuid?: string;
+}
+
+export function PubNubMock(options: PubNubMockOptions): Partial<PubNub> & { _config: any } {
+  const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
 
@@ -62,7 +67,7 @@ export function PubNubMock(): Partial<PubNub> & { _config: any } {
     return `https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg`;
   };
 
-  const getUUID = () => uuid;
+  const getUUID = () => options.returnedUuid || uuid;
 
   const getSubscribedChannels = () => ["space.ce466f2e445c38976168ba78e46"];
 
