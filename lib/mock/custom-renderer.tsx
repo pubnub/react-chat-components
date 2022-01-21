@@ -3,21 +3,21 @@ import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { render, RenderResult } from "@testing-library/react";
 import { Chat, ChatProps } from "../src/chat";
-import { PubNubMock } from "./pubnub-mock";
-
-const pubnub = PubNubMock() as PubNub;
+import { PubNubMock, PubNubMockOptions } from "./pubnub-mock";
 
 const defaultOptions = {
   providerProps: {
     currentChannel: "test-general",
   },
+  pubnubProps: {},
 };
 
 const customRender = (
   ui: ReactNode,
-  options: { providerProps: ChatProps } = defaultOptions
+  options: { providerProps?: ChatProps; pubnubProps?: PubNubMockOptions } = defaultOptions
 ): RenderResult => {
-  const { providerProps, ...renderOptions } = options;
+  const { providerProps, pubnubProps, ...renderOptions } = options;
+  const pubnub = PubNubMock(pubnubProps || {}) as PubNub;
 
   return render(
     <PubNubProvider client={pubnub}>

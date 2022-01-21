@@ -8,6 +8,8 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: TypingIndicator - showing current user's indicator
+        type: fix
       - text: MessageList - inconsistent automatic scrolling behavior
         type: fix
       - text: MessageInput - selecting emojis clears current input
