@@ -1,7 +1,6 @@
 {
-  "name": "@pubnub/react-chat-components-monorepo",
-  "version": "1.0.0",
-  "private": true,
+  "name": "@goodpath/react-chat-components-monorepo",
+  "version": "1.0.1",
   "description": "This monorepository uses npm v7 workspaces feature to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "workspaces": [
@@ -60,5 +59,11 @@
     "react-dom": "^16.14.0",
     "sass": "^1.38.0",
     "sass-loader": "^10.1.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goodpath/react-chat-components.git"
+  },
+  "author": "goodpath",
+  "license": "ISC"
 }
