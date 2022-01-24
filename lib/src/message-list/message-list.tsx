@@ -40,6 +40,7 @@ export interface MessageRendererProps {
   isOwn: boolean;
   message: MessageEnvelope;
   time: string;
+  date: string;
   editedText: string;
   user?: UUIDMetadataObject<ObjectCustom>;
 }
@@ -50,6 +51,8 @@ export interface MessageListProps {
   fetchMessages?: number;
   /** Option to enable rendering reactions that were added to messages. Make sure to also set up reactionsPicker when this option is enabled. */
   enableReactions?: boolean;
+  /** Option to enable date instead of time for each message. */
+  enableDate?: boolean;
   /** Option to provide custom welcome messages to replace the default ones. Set to "false" to disable it. */
   welcomeMessages?: false | MessageEnvelope | MessageEnvelope[];
   /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
@@ -93,7 +96,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [picker, setPicker] = useState<ReactElement>();
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
-  const [reactingToMessage, setReactingToMessage] = useState(null);
+  const [reactingToMessag, setReactingToMessage] = useState(null);
 
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -117,6 +120,13 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const ts = String(timestamp);
     const date = new Date(parseInt(ts) / 10000);
     const formatter = new Intl.DateTimeFormat([], { timeStyle: "short" });
+    return formatter.format(date);
+  };
+
+  const getDate = (timestamp: number) => {
+    const ts = String(timestamp);
+    const date = new Date(parseInt(ts) / 10000);
+    const formatter = new Intl.DateTimeFormat([], { dateStyle: "full", timeStyle: "short" });
     return formatter.format(date);
   };
 
@@ -382,6 +392,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderMessage = (envelope: MessageEnvelope) => {
     const uuid = envelope.uuid || envelope.publisher || "";
     const time = getTime(envelope.timetoken as number);
+    const date = getDate(envelope.timetoken as number);
     const isOwn = isOwnMessage(uuid);
     const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
     const user = message?.sender || getUser(uuid);
@@ -391,7 +402,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
     if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
-      return props.messageRenderer({ message: envelope, user, time, isOwn, editedText });
+      return props.messageRenderer({ message: envelope, user, time, date, isOwn, editedText });
 
     return (
       <>
@@ -406,11 +417,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           <div className="pn-msg__content">
             <div className="pn-msg__title">
               <span className="pn-msg__author">{user?.name || uuid}</span>
-              <span className="pn-msg__time">{time}</span>
+              <span className="pn-msg__time">{props.enableReactions ? date : time}</span>
             </div>
             {message?.text &&
               (props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
-                props.bubbleRenderer({ message: envelope, user, time, isOwn, editedText })
+                props.bubbleRenderer({ message: envelope, user, time, date, isOwn, editedText })
               ) : (
                 <div className="pn-msg__bubble">{editedText || message?.text}</div>
               ))}
@@ -554,5 +565,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
 MessageList.defaultProps = {
   enableReactions: false,
+  enableDate: false,
   fetchMessages: 0,
 };
