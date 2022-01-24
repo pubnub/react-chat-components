@@ -96,7 +96,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [picker, setPicker] = useState<ReactElement>();
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
-  const [reactingToMessag, setReactingToMessage] = useState(null);
+  const [reactingToMessage, setReactingToMessage] = useState(null);
 
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
