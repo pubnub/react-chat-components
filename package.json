@@ -31,7 +31,7 @@
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "prepare": "husky install",
     "prettier:base": "prettier --ignore-path .gitignore",
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/live-event-chat && npm run start\"",
     "storybook": "start-storybook -p 6006 -c lib/docs",
     "storybook:build": "build-storybook -c lib/docs",
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",

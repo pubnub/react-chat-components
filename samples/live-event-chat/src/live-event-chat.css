@@ -28,6 +28,20 @@ body {
   width: 350px;
 }
 
+.online {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.online .live {
+  width: 5px;
+  height: 5px;
+  background: #de2440;
+  border-radius: 100%;
+  margin-right: 4px;
+}
+
 .event {
   flex-grow: 1;
 }
@@ -96,4 +110,8 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.pn-channel__actions {
+  visibility: visible;
 }
