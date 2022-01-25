@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
+import { Picker } from "emoji-mart";
 import {
   Chat,
   MessageList,
@@ -8,20 +9,21 @@ import {
   usePresence,
 } from "@pubnub/react-chat-components";
 import eventChannels from "../../../data/channels-event.json";
+import "emoji-mart/css/emoji-mart.css";
 import "./live-event-chat.css";
 
 const channels: ChannelMetadataObject<ObjectCustom>[] = eventChannels;
 
 const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JSX.Element => {
   const [currentChannel, setCurrentChannel] = useState(channels[0]);
-  const [presence] = usePresence({ channels: [currentChannel.id] });
-  // const [presence] = usePresence({ channels: channels.map((ch) => ch.id) });
+  const [presence] = usePresence({ channels: channels.map((ch) => ch.id) });
   console.log(presence);
 
   return (
     <Chat
       currentChannel={currentChannel.id}
-      channels={[currentChannel.id]}
+      /** Manually pass '-pnpres' channels here to get presence data for channels you don't want to be subscribed to */
+      channels={[currentChannel.id, ...channels.map((ch) => `${ch.id}-pnpres`)]}
       users={[user]}
       theme="event-dark"
     >
@@ -30,7 +32,16 @@ const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JS
           {user.profileUrl && <img src={user.profileUrl} className="avatar" alt="Channel Thumb" />}
           <h4>Live events</h4>
         </div>
-        <ChannelList channels={channels} onChannelSwitched={(ch) => setCurrentChannel(ch)} />
+        <ChannelList
+          channels={channels}
+          onChannelSwitched={(ch) => setCurrentChannel(ch)}
+          extraActionsRenderer={(ch) => (
+            <span className="online">
+              <span className="live"></span>
+              {presence[ch.id]?.occupancy || 0}
+            </span>
+          )}
+        />
       </div>
       <div className="event">
         <div className="stream">
@@ -52,14 +63,16 @@ const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JS
             />
           )}
           <h2>{currentChannel.name}</h2>
-          <p>{presence[currentChannel.id]?.occupancy || 1} watching now</p>
+          {presence[currentChannel.id]?.occupancy && (
+            <p>{presence[currentChannel.id]?.occupancy} watching now</p>
+          )}
           <span className="live">Live</span>
         </div>
       </div>
       <div className="chat">
         <h4>Live chat</h4>
         <MessageList />
-        <MessageInput senderInfo />
+        <MessageInput senderInfo emojiPicker={<Picker theme="dark" />} />
       </div>
     </Chat>
   );
