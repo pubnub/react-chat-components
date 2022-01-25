@@ -104,7 +104,6 @@
     overflow: auto;
     overscroll-behavior-y: contain;
     position: relative;
-    scroll-snap-type: y proximity;
     transform: translateZ(0);
     width: 100%;
   }
@@ -136,7 +135,6 @@
   &__bottom-ref {
     flex-shrink: 0;
     height: 1px;
-    scroll-snap-align: end;
     width: 100%;
   }
 

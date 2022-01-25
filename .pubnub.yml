@@ -8,6 +8,19 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: TypingIndicator - showing current user's indicator
+        type: fix
+      - text: MessageList - inconsistent automatic scrolling behavior
+        type: fix
+      - text: MessageInput - selecting emojis clears current input
+        type: fix
+      - text: MessageInput - sending whitespace-only messages
+        type: fix
+      - text: useChannelMembers and useUserMemberships - fix and refactor event listeners
+        type: fix
+    date: 2022-01-21
+    version: v0.8.0
+  - changes:
       - text: MessageInput - wrong spinner icon sizing
         type: fix
       - text: MessageInput - unwanted scrollbar showing up
