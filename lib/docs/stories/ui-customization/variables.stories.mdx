@@ -253,15 +253,21 @@ dark mode, you must use a component class name instead of the `:root` element:
 --member__name__color: var(--chat--light__color--1);
 --member__name__fontSize: 13px;
 --member__name__fontWeight: 400;
---member__name__padding: 0;
 --member__name__margin: 0;
+--member__name__overflow: hidden;
+--member__name__padding: 0;
+--member__name__textOverflow: ellipsis;
+--member__name__whiteSpace: nowrap;
 
 --member__title__color: var(--chat--light__color--2);
---member__title__display: inline-block;
+--member__title__display: block;
 --member__title__fontSize: 11px;
 --member__title__fontWeight: 400;
---member__title__padding: 7px 0 0;
 --member__title__margin: 0;
+--member__title__overflow: hidden;
+--member__title__padding: 7px 0 0;
+--member__title__textOverflow: ellipsis;
+--member__title__whiteSpace: nowrap;
 
 --member__presence__border: 3px solid var(--chat--light__background--2);
 --member__presence__borderRadius: 100%;
@@ -279,6 +285,7 @@ dark mode, you must use a component class name instead of the `:root` element:
 --member__actions__fontSize: 18px;
 --member__actions__margin: 0 0 0 4px;
 --member__actions__padding: 3px 5px;
+--member__actions__visibility: hidden;
 ```
 
 ### Member List (Dark)
@@ -316,17 +323,23 @@ dark mode, you must use a component class name instead of the `:root` element:
 --channel--active__name__color: var(--chat--light__color--1);
 --channel__name__fontSize: 13px;
 --channel__name__fontWeight: 400;
---channel__name__padding: 0;
 --channel__name__margin: 0;
+--channel__name__overflow: hidden;
+--channel__name__padding: 0;
+--channel__name__textOverflow: ellipsis;
+--channel__name__whiteSpace: nowrap;
 
 --channel__description__color: var(--chat--light__color--2);
 --channel--hover__description__color: var(--chat--light__color--2);
 --channel--active__description__color: var(--chat--light__color--2);
---channel__description__display: inline-block;
+--channel__description__display: block;
 --channel__description__fontSize: 11px;
 --channel__description__fontWeight: 400;
---channel__description__padding: 7px 0 0;
 --channel__description__margin: 0;
+--channel__description__overflow: hidden;
+--channel__description__padding: 7px 0 0;
+--channel__description__textOverflow: ellipsis;
+--channel__description__whiteSpace: nowrap;
 
 --channel__actions--hover__background: transparent;
 --channel__actions__background: transparent;
@@ -336,6 +349,7 @@ dark mode, you must use a component class name instead of the `:root` element:
 --channel__actions__fontSize: 18px;
 --channel__actions__margin: 0 0 0 4px;
 --channel__actions__padding: 3px 5px;
+--channel__actions__visibility: hidden;
 ```
 
 ### Channel List (Dark)
