@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
+import { ChannelMetadataObject, ObjectCustom } from "pubnub";
+import { usePubNub } from "pubnub-react";
 import { Picker } from "emoji-mart";
 import {
   Chat,
   MessageList,
   MessageInput,
+  MemberList,
   ChannelList,
   usePresence,
 } from "@pubnub/react-chat-components";
@@ -14,22 +16,22 @@ import "./live-event-chat.css";
 
 const channels: ChannelMetadataObject<ObjectCustom>[] = eventChannels;
 
-const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JSX.Element => {
+const LiveEventChat = (): JSX.Element => {
+  const pubnub = usePubNub();
   const [currentChannel, setCurrentChannel] = useState(channels[0]);
   const [presence] = usePresence({ channels: channels.map((ch) => ch.id) });
-  console.log(presence);
+  const [showMembers, setShowMembers] = useState(false);
+  const members = presence[currentChannel.id]?.occupants.map((o) => o.uuid);
 
   return (
     <Chat
       currentChannel={currentChannel.id}
       /** Manually pass '-pnpres' channels here to get presence data for channels you don't want to be subscribed to */
       channels={[currentChannel.id, ...channels.map((ch) => `${ch.id}-pnpres`)]}
-      users={[user]}
       theme="event-dark"
     >
       <div className="channels">
-        <div className="user">
-          {user.profileUrl && <img src={user.profileUrl} className="avatar" alt="Channel Thumb" />}
+        <div className="header">
           <h4>Live events</h4>
         </div>
         <ChannelList
@@ -42,6 +44,7 @@ const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JS
             </span>
           )}
         />
+        <MemberList members={[pubnub.getUUID()]} selfText="" />
       </div>
       <div className="event">
         <div className="stream">
@@ -69,11 +72,29 @@ const LiveEventChat = ({ user }: { user: UUIDMetadataObject<ObjectCustom> }): JS
           <span className="live">Live</span>
         </div>
       </div>
-      <div className="chat">
-        <h4>Live chat</h4>
-        <MessageList />
-        <MessageInput senderInfo emojiPicker={<Picker theme="dark" />} />
-      </div>
+
+      {showMembers ? (
+        <div className="members">
+          <div className="header">
+            <h4>Currently watching </h4>
+            <i className="material-icons-outlined" onClick={() => setShowMembers(false)}>
+              close
+            </i>
+          </div>
+          <MemberList members={members} />
+        </div>
+      ) : (
+        <div className="chat">
+          <div className="header">
+            <h4>Live chat </h4>
+            <i className="material-icons-outlined" onClick={() => setShowMembers(true)}>
+              group
+            </i>
+          </div>
+          <MessageList />
+          <MessageInput senderInfo emojiPicker={<Picker theme="dark" />} />
+        </div>
+      )}
     </Chat>
   );
 };
