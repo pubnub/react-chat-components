@@ -19,14 +19,20 @@
   --member__name__color: var(--chat--light__color--1);
   --member__name__fontSize: 13px;
   --member__name__fontWeight: 400;
-  --member__name__padding: 0;
   --member__name__margin: 0;
+  --member__name__overflow: hidden;
+  --member__name__padding: 0;
+  --member__name__textOverflow: ellipsis;
+  --member__name__whiteSpace: nowrap;
   --member__title__color: var(--chat--light__color--2);
-  --member__title__display: inline-block;
+  --member__title__display: block;
   --member__title__fontSize: 11px;
   --member__title__fontWeight: 400;
-  --member__title__padding: 7px 0 0;
   --member__title__margin: 0;
+  --member__title__overflow: hidden;
+  --member__title__padding: 7px 0 0;
+  --member__title__textOverflow: ellipsis;
+  --member__title__whiteSpace: nowrap;
   --member__presence__border: 3px solid var(--chat--light__background--2);
   --member__presence__borderRadius: 100%;
   --member__presence__color: var(--chat--light__background--4);
@@ -42,6 +48,7 @@
   --member__actions__fontSize: 18px;
   --member__actions__margin: 0 0 0 4px;
   --member__actions__padding: 3px 5px;
+  --member__actions__visibility: hidden;
 }
 
 /* ************************
@@ -91,6 +98,7 @@
 
   &__main {
     flex: 1;
+    min-width: 0;
   }
 
   &__name {
@@ -98,8 +106,11 @@
     font-size: var(--member__name__fontSize);
     font-weight: var(--member__name__fontWeight);
     margin: var(--member__name__margin);
+    overflow: var(--member__name__overflow);
     padding: var(--member__name__padding);
     text-align: left;
+    text-overflow: var(--member__name__textOverflow);
+    white-space: var(--member__name__whiteSpace);
   }
 
   &__title {
@@ -108,8 +119,11 @@
     font-size: var(--member__title__fontSize);
     font-weight: var(--member__title__fontWeight);
     margin: var(--member__title__margin);
+    overflow: var(--member__title__overflow);
     padding: var(--member__title__padding);
     text-align: left;
+    text-overflow: var(--member__title__textOverflow);
+    white-space: var(--member__title__whiteSpace);
   }
 
   &__presence {
@@ -127,7 +141,7 @@
     color: var(--member__actions__color);
     cursor: pointer;
     display: flex;
-    visibility: hidden;
+    visibility: var(--member__actions__visibility);
     font-size: var(--member__actions__fontSize);
 
     & > * {

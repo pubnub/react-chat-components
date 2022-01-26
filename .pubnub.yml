@@ -8,6 +8,8 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: Channel/MemberList - truncating long titles and descriptions with ellipses
+        type: feature
       - text: Chat - automatic unsubscribes on channels removed from the 'channels' option
         type: feature
       - text: TypingIndicator - showing current user's indicator
