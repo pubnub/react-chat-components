@@ -19,13 +19,34 @@ body {
 }
 
 #root {
+  --channel__actions__visibility: visible;
+  --member__title__display: none;
   display: flex;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+}
+
+.header h4 {
+  flex: 1;
+}
+
+.header i {
+  cursor: pointer;
 }
 
 .channels {
   display: flex;
   flex-direction: column;
   width: 350px;
+}
+
+.channels .pn-member-list {
+  height: auto;
+  padding: 16px 0;
 }
 
 .online {
@@ -86,32 +107,9 @@ body {
   text-transform: uppercase;
 }
 
-.user {
-  display: flex;
-  align-items: center;
-  padding: 10px 16px;
-}
-
-.chat {
+.chat,
+.members {
   display: flex;
   flex-direction: column;
   width: 400px;
-}
-
-.chat h4 {
-  padding: 20px;
-}
-
-.pn-channel__title {
-  min-width: 0;
-}
-
-.pn-channel__name {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.pn-channel__actions {
-  visibility: visible;
 }
