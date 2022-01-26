@@ -8,6 +8,8 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: Chat - automatic unsubscribes on channels removed from the 'channels' option
+        type: feature
       - text: TypingIndicator - showing current user's indicator
         type: fix
       - text: MessageList - inconsistent automatic scrolling behavior
@@ -18,7 +20,7 @@ changelog:
         type: fix
       - text: useChannelMembers and useUserMemberships - fix and refactor event listeners
         type: fix
-    date: 2022-01-21
+    date: 2022-01-26
     version: v0.8.0
   - changes:
       - text: MessageInput - wrong spinner icon sizing
