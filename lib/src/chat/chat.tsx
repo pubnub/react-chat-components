@@ -249,15 +249,24 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     try {
       const currentSubscriptions = pubnub.getSubscribedChannels();
       const newChannels = channels.filter((c) => !currentSubscriptions.includes(c));
+      const oldChannels = currentSubscriptions.filter((c) => !channels.includes(c));
 
       const currentGroups = pubnub.getSubscribedChannelGroups();
       const newGroups = channelGroups.filter((c) => !currentGroups.includes(c));
+      const oldGroups = currentGroups.filter((c) => !channelGroups.includes(c));
 
       if (newChannels.length || newGroups.length) {
         pubnub.subscribe({
           channels: newChannels,
           channelGroups: newGroups,
           withPresence: props.enablePresence,
+        });
+      }
+
+      if (oldChannels.length || oldGroups.length) {
+        pubnub.unsubscribe({
+          channels: oldChannels,
+          channelGroups: oldGroups,
         });
       }
     } catch (e) {
