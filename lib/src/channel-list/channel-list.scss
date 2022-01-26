@@ -20,16 +20,22 @@
   --channel--active__name__color: var(--chat--light__color--1);
   --channel__name__fontSize: 13px;
   --channel__name__fontWeight: 400;
-  --channel__name__padding: 0;
   --channel__name__margin: 0;
+  --channel__name__overflow: hidden;
+  --channel__name__padding: 0;
+  --channel__name__textOverflow: ellipsis;
+  --channel__name__whiteSpace: nowrap;
   --channel__description__color: var(--chat--light__color--2);
   --channel--hover__description__color: var(--chat--light__color--2);
   --channel--active__description__color: var(--chat--light__color--2);
-  --channel__description__display: inline-block;
+  --channel__description__display: block;
   --channel__description__fontSize: 11px;
   --channel__description__fontWeight: 400;
-  --channel__description__padding: 7px 0 0;
   --channel__description__margin: 0;
+  --channel__description__overflow: hidden;
+  --channel__description__padding: 7px 0 0;
+  --channel__description__textOverflow: ellipsis;
+  --channel__description__whiteSpace: nowrap;
   --channel__actions--hover__background: transparent;
   --channel__actions__background: transparent;
   --channel__actions__borderRadius: 5px;
@@ -38,6 +44,7 @@
   --channel__actions__fontSize: 18px;
   --channel__actions__margin: 0 0 0 4px;
   --channel__actions__padding: 3px 5px;
+  --channel__actions__visibility: hidden;
 }
 
 /* ************************
@@ -101,6 +108,7 @@
 
   &__title {
     flex: 1;
+    min-width: 0;
   }
 
   &__name {
@@ -108,9 +116,11 @@
     font-size: var(--channel__name__fontSize);
     font-weight: var(--channel__name__fontWeight);
     margin: var(--channel__name__margin);
+    overflow: var(--channel__name__overflow);
     padding: var(--channel__name__padding);
     text-align: left;
-    word-break: break-word;
+    text-overflow: var(--channel__name__textOverflow);
+    white-space: var(--channel__name__whiteSpace);
   }
 
   &__description {
@@ -119,15 +129,18 @@
     font-size: var(--channel__description__fontSize);
     font-weight: var(--channel__description__fontWeight);
     margin: var(--channel__description__margin);
+    overflow: var(--channel__description__overflow);
     padding: var(--channel__description__padding);
     text-align: left;
+    text-overflow: var(--channel__description__textOverflow);
+    white-space: var(--channel__description__whiteSpace);
   }
 
   &__actions {
     color: var(--channel__actions__color);
     cursor: pointer;
     display: flex;
-    visibility: hidden;
+    visibility: var(--channel__actions__visibility);
     font-size: var(--channel__actions__fontSize);
 
     & > * {
