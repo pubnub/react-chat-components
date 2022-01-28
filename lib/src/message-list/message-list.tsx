@@ -459,11 +459,18 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         {Object.keys(reactions).map((reaction) => {
           const instances = reactions[reaction];
           const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
+          const userNames = instances.map((i) => {
+            const user = users.find((u) => u.id === i.uuid);
+            return user ? user.name : i.uuid;
+          });
 
           return (
             <div
-              className={`pn-msg__reaction ${userReaction ? "pn-msg__reaction--active" : ""}`}
+              className={`pn-tooltip pn-msg__reaction ${
+                userReaction ? "pn-msg__reaction--active" : ""
+              }`}
               key={reaction}
+              data-tooltip={userNames.join(", ")}
               onClick={() => {
                 userReaction
                   ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)

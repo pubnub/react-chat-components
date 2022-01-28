@@ -39,9 +39,11 @@ dark mode, you must use a component class name instead of the `:root` element:
 --chat--light__background--3: #eaeef3;
 --chat--light__background--4: #01bd4c;
 --chat--light__background--5-rgb: #{hexToRGB(#ef3a43)};
+--chat--light__background--6: #{rgba(#1c1c1c, 0.8)};
 --chat--light__color--1: #585858;
 --chat--light__color--2: #999999;
 --chat--light__color--2-rgb: #{hexToRGB(#999999)};
+--chat--light__color--3: #eeeeee;
 --chat--light__border--1: #ced6e0;
 --chat--light__border--2: #bcc6d1;
 --chat--light__hover--1: #de2440;
@@ -55,8 +57,10 @@ dark mode, you must use a component class name instead of the `:root` element:
 --chat--dark__background--3: #2a2a39;
 --chat--dark__background--4: #01bd4c;
 --chat--dark__background--5: #{hexToRGB(#ef3a43)};
+--chat--dark__background--6: #{rgba(#f0f3f7, 0.8)};
 --chat--dark__color--1: rgba(#e4e4eb, 0.8);
 --chat--dark__color--2: #999999;
+--chat--dark__color--3: #111111;
 --chat--dark__border--1: #28293d;
 --chat--dark__hover--1: #de2440;
 --chat--dark__hover--2: #232333;
@@ -391,4 +395,25 @@ dark mode, you must use a component class name instead of the `:root` element:
 ```css
 --typing-indicator__background: var(--chat--dark__background--1);
 --typing-indicator__color: var(--chat--dark__color--1);
+```
+
+## Common elements
+
+```css
+--tooltip__transition: all 0.3s ease;
+--tooltip__background: var(--chat--light__background--6);
+--tooltip__borderRadius: 5px;
+--tooltip__color: var(--chat--light__color--3);
+--tooltip__margin: 8px;
+--tooltip__padding: 5px;
+--tooltip__minWidth: 100px;
+--tooltip__arrow__size: 4px;
+--tooltip__arrow__margin: 0px;
+```
+
+### Common elements (Dark)
+
+```css
+--tooltip__background: var(--chat--dark__background--6);
+--tooltip__color: var(--chat--dark__color--3);
 ```
