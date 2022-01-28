@@ -17,7 +17,7 @@ export interface PubNubMockOptions {
   returnedUuid?: string;
 }
 
-export function PubNubMock(options: PubNubMockOptions): Partial<PubNub> & { _config: any } {
+export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & { _config: any } {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
