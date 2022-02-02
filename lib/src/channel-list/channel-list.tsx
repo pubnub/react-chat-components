@@ -10,10 +10,16 @@ export interface ChannelListProps {
   channels: ChannelMetadataObject<ObjectCustom>[] | string[];
   /** Option to provide an extra actions renderer to add custom action buttons to each channel. */
   extraActionsRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
+  titleRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** Option to provide a custom channel renderer to override default themes and CSS variables. */
   channelRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** Callback run when a user clicked one of the channels. Can be used to switch the current channel. */
   onChannelSwitched?: (channel: ChannelMetadataObject<ObjectCustom>) => unknown;
+  /** Provide a custom sorter function to sort the channels. */
+  channelSorter?: (
+    a: ChannelMetadataObject<ObjectCustom>,
+    b: ChannelMetadataObject<ObjectCustom>
+  ) => number;
 }
 
 /**
@@ -85,8 +91,16 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
           />
         )}
         <div className="pn-channel__title">
-          <p className="pn-channel__name">{channel.name || channel.id}</p>
-          {channel.description && <p className="pn-channel__description">{channel.description}</p>}
+          {props.titleRenderer ? (
+            props.titleRenderer(channel)
+          ) : (
+            <>
+              <p className="pn-channel__name">{channel.name || channel.id}</p>
+              {channel.description && (
+                <p className="pn-channel__description">{channel.description}</p>
+              )}
+            </>
+          )}
         </div>
         <div className="pn-channel__actions">
           {props.extraActionsRenderer && props.extraActionsRenderer(channel)}
@@ -97,7 +111,10 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
 
   return (
     <div className={`pn-channel-list pn-channel-list--${theme}`}>
-      {(props.channels as string[]).map(channelFromString).sort(channelSorter).map(renderChannel)}
+      {(props.channels as string[])
+        .map(channelFromString)
+        .sort(props.channelSorter ? props.channelSorter : channelSorter)
+        .map(renderChannel)}
       <>{props.children}</>
     </div>
   );
