@@ -391,13 +391,6 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     } catch (e) {
       onErrorProp(e);
     }
-
-    return () => {
-      pubnub.unsubscribe({
-        channels: currentSubscriptions,
-        channelGroups: currentGroups,
-      });
-    };
   }, [channels, channelGroups, enablePresenceProp, onErrorProp, pubnub]);
 
   /**
