@@ -14,6 +14,10 @@ changelog:
         type: feature
       - text: Chat - automatic unsubscribes on channels that were removed from the 'channels' option
         type: feature
+      - text: Chat - root callbacks (like onMessage) not getting updated after external change
+        type: fix
+      - text: Chat - root callbacks causing problems with Components when throwing errors internally
+        type: fix
       - text: TypingIndicator - showing current user's indicator
         type: fix
       - text: MessageList - inconsistent automatic scrolling behavior
