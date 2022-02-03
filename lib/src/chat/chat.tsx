@@ -134,11 +134,38 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const [channelGroups, setChannelGroups] = useAtom(SubscribeChannelGroupsAtom);
 
   /**
+   * Destructure props to easily pass them to dependency arrays
+   */
+
+  const {
+    children: childrenProp,
+    theme: themeProp,
+    currentChannel: currentChannelProp,
+    channels: channelsProp,
+    channelGroups: channelGroupsProp,
+    enablePresence: enablePresenceProp,
+    users: usersProp,
+    typingIndicatorTimeout: typingIndicatorTimeoutProp,
+    retryOptions: retryOptionsProp,
+    onMessage: onMessageProp,
+    onSignal: onSignalProp,
+    onMessageAction: onMessageActionProp,
+    onPresence: onPresenceProp,
+    onUser: onUserProp,
+    onChannel: onChannelProp,
+    onMembership: onMembershipProp,
+    onFile: onFileProp,
+    onStatus: onStatusProp,
+    onError: onErrorProp,
+  } = props;
+
+  /**
    * Helpers
    */
+
   const retryOnError = useCallback(
     async <T,>(fn: () => Promise<T>): Promise<T> => {
-      const { maxRetries, timeout, exponentialFactor } = props.retryOptions;
+      const { maxRetries, timeout, exponentialFactor } = retryOptionsProp;
       for (let i = 0; i < maxRetries; i++) {
         try {
           return await fn();
@@ -148,110 +175,202 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         }
       }
     },
-    [props.retryOptions]
+    [retryOptionsProp]
   );
 
   /**
-   * Lifecycle: load one-off props
+   * Event handlers
    */
-  useEffect(() => {
-    (pubnub as any)._config._addPnsdkSuffix("chat-components", "RCC/__VERSION__");
-  }, []);
 
-  useEffect(() => {
-    setTypingIndicatorTimeout(props.typingIndicatorTimeout);
-  }, []);
+  const handleMessage = useCallback(
+    (message: MessageEnvelope) => {
+      try {
+        setMessages((messages) => {
+          const messagesClone = cloneDeep(messages) || {};
+          messagesClone[message.channel] = messagesClone[message.channel] || [];
+          messagesClone[message.channel].push(message);
+          return messagesClone;
+        });
 
-  useEffect(() => {
-    setUsersMeta(props.users);
-  }, [props.users]);
+        if (onMessageProp) onMessageProp(message);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onMessageProp, onErrorProp, setMessages]
+  );
+
+  const handleSignalEvent = useCallback(
+    (signal: SignalEvent) => {
+      try {
+        if (["typing_on", "typing_off"].includes(signal.message.type)) {
+          setTypingIndicator((indicators) => {
+            const indicatorsClone = cloneDeep(indicators);
+            const value = signal.message.type === "typing_on" ? signal.timetoken : null;
+            setDeep(indicatorsClone, [signal.channel, signal.publisher], value);
+            return indicatorsClone;
+          });
+        }
+
+        if (onSignalProp) onSignalProp(signal);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onSignalProp, onErrorProp, setTypingIndicator]
+  );
+
+  const handlePresenceEvent = useCallback(
+    (event: PresenceEvent) => {
+      try {
+        if (onPresenceProp) onPresenceProp(event);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onPresenceProp, onErrorProp]
+  );
+
+  const handleObjectsEvent = useCallback(
+    (event: BaseObjectsEvent) => {
+      try {
+        if (event.message.type === "membership" && onMembershipProp) onMembershipProp(event);
+        if (event.message.type === "channel" && onChannelProp) onChannelProp(event);
+        if (event.message.type === "uuid" && onUserProp) onUserProp(event);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onMembershipProp, onChannelProp, onUserProp, onErrorProp]
+  );
+
+  const handleAction = useCallback(
+    (action: MessageActionEvent) => {
+      try {
+        setMessages((messages) => {
+          if (!messages || !messages[action.channel]) return;
+
+          const { channel, event } = action;
+          const { type, value, actionTimetoken, messageTimetoken, uuid } = action.data;
+          const messagesClone = cloneDeep(messages);
+          const message = messagesClone[channel].find((m) => m.timetoken === messageTimetoken);
+          const actions = message?.actions?.[type]?.[value] || [];
+
+          if (message && event === "added") {
+            const newActions = [...actions, { uuid, actionTimetoken }];
+            setDeep(message, ["actions", type, value], newActions);
+          }
+
+          if (message && event === "removed") {
+            const newActions = actions.filter((a) => a.actionTimetoken !== actionTimetoken);
+            newActions.length
+              ? setDeep(message, ["actions", type, value], newActions)
+              : delete message.actions[type][value];
+          }
+
+          return messagesClone;
+        });
+
+        if (onMessageActionProp) onMessageActionProp(action);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onMessageActionProp, onErrorProp, setMessages]
+  );
+
+  const handleFileEvent = useCallback(
+    (event: FileEvent) => {
+      try {
+        setMessages((messages) => {
+          const { file, message, ...payload } = event;
+          const newMessage = { ...payload, message: { file, message }, messageType: 4 };
+          const messagesClone = cloneDeep(messages) || {};
+          messagesClone[newMessage.channel] = messagesClone[newMessage.channel] || [];
+          messagesClone[newMessage.channel].push(newMessage);
+          return messagesClone;
+        });
+
+        if (onFileProp) onFileProp(event);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onFileProp, onErrorProp, setMessages]
+  );
+
+  const handleStatusEvent = useCallback(
+    (event: StatusEvent) => {
+      try {
+        if (onStatusProp) onStatusProp(event);
+      } catch (e) {
+        onErrorProp(e);
+      }
+    },
+    [onStatusProp, onErrorProp]
+  );
 
   /**
    * Lifecycle: load updateable props
    */
-  useEffect(() => {
-    setTheme(props.theme);
-  }, [props.theme]);
 
   useEffect(() => {
-    setCurrentChannel(props.currentChannel);
-  }, [props.currentChannel]);
+    setUsersMeta(usersProp);
+  }, [usersProp, setUsersMeta]);
 
   useEffect(() => {
-    setChannels(props.channels);
-  }, [props.channels]);
+    setTheme(themeProp);
+  }, [themeProp, setTheme]);
 
   useEffect(() => {
-    setChannelGroups(props.channelGroups);
-  }, [props.channelGroups]);
+    setCurrentChannel(currentChannelProp);
+  }, [currentChannelProp, setCurrentChannel]);
 
   useEffect(() => {
-    setErrorFunction({ function: (error) => props.onError(error) });
-  }, [props.onError]);
+    setChannels(channelsProp);
+  }, [channelsProp, setChannels]);
+
+  useEffect(() => {
+    setChannelGroups(channelGroupsProp);
+  }, [channelGroupsProp, setChannelGroups]);
+
+  useEffect(() => {
+    setTypingIndicatorTimeout(typingIndicatorTimeoutProp);
+  }, [typingIndicatorTimeoutProp, setTypingIndicatorTimeout]);
+
+  useEffect(() => {
+    setErrorFunction({ function: (error) => onErrorProp(error) });
+  }, [onErrorProp, setErrorFunction]);
 
   useEffect(() => {
     setRetryFunction({ function: (fn) => retryOnError(fn) });
-  }, [retryOnError]);
+  }, [retryOnError, setRetryFunction]);
 
   /**
-   * Lifecycle: react to state changes
+   * Lifecycle: use currentChannel for subscription if neither channels nor channelGroups are passed
    */
-  useEffect(() => {
-    if (!pubnub) return;
-    setupListeners();
-
-    /* Try to unsubscribe beofore window is unloaded */
-    window.addEventListener("beforeunload", () => {
-      pubnub.stop();
-    });
-
-    return () => {
-      pubnub.stop();
-    };
-  }, [pubnub]);
 
   useEffect(() => {
     if (!currentChannel) return;
-    if (
-      !channels.includes(currentChannel) &&
-      !props.channels.length &&
-      !props.channelGroups.length
-    ) {
+    if (!channels.includes(currentChannel) && !channelsProp.length && !channelGroupsProp.length) {
       setChannels([...channels, currentChannel]);
     }
-  }, [currentChannel]);
+  }, [currentChannel, channels, channelsProp.length, channelGroupsProp.length, setChannels]);
+
+  /**
+   * Lifecycle: setup subscriptions for channels and channelGroups arrays if used
+   */
 
   useEffect(() => {
     if (!channels.length && !channelGroups.length) return;
-    setupSubscriptions();
-  }, [channels, channelGroups]);
 
-  /**
-   * Commands
-   */
-  const setupListeners = () => {
-    try {
-      pubnub.addListener({
-        message: (m) => handleMessage(m),
-        messageAction: (m) => handleAction(m),
-        presence: (e) => handlePresenceEvent(e),
-        objects: (e) => handleObjectsEvent(e),
-        signal: (e) => handleSignalEvent(e),
-        file: (e) => handleFileEvent(e),
-        status: (e) => handleStatusEvent(e),
-      });
-    } catch (e) {
-      props.onError(e);
-    }
-  };
+    const currentSubscriptions = pubnub.getSubscribedChannels();
+    const currentGroups = pubnub.getSubscribedChannelGroups();
 
-  const setupSubscriptions = () => {
     try {
-      const currentSubscriptions = pubnub.getSubscribedChannels();
       const newChannels = channels.filter((c) => !currentSubscriptions.includes(c));
       const oldChannels = currentSubscriptions.filter((c) => !channels.includes(c));
 
-      const currentGroups = pubnub.getSubscribedChannelGroups();
       const newGroups = channelGroups.filter((c) => !currentGroups.includes(c));
       const oldGroups = currentGroups.filter((c) => !channelGroups.includes(c));
 
@@ -259,7 +378,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         pubnub.subscribe({
           channels: newChannels,
           channelGroups: newGroups,
-          withPresence: props.enablePresence,
+          withPresence: enablePresenceProp,
         });
       }
 
@@ -270,107 +389,59 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         });
       }
     } catch (e) {
-      props.onError(e);
+      onErrorProp(e);
     }
-  };
+  }, [channels, channelGroups, enablePresenceProp, onErrorProp, pubnub]);
 
   /**
-   * Event handlers
+   * Lifecycle: setup event listeners
    */
-  const handleMessage = (message: MessageEnvelope) => {
-    if (props.onMessage) props.onMessage(message);
+
+  useEffect(() => {
+    if (!pubnub) return;
+
+    const listener = {
+      message: (m) => handleMessage(m),
+      messageAction: (m) => handleAction(m),
+      presence: (e) => handlePresenceEvent(e),
+      objects: (e) => handleObjectsEvent(e),
+      signal: (e) => handleSignalEvent(e),
+      file: (e) => handleFileEvent(e),
+      status: (e) => handleStatusEvent(e),
+    };
 
     try {
-      setMessages((messages) => {
-        const messagesClone = cloneDeep(messages) || {};
-        messagesClone[message.channel] = messagesClone[message.channel] || [];
-        messagesClone[message.channel].push(message);
-        return messagesClone;
-      });
+      pubnub.addListener(listener);
     } catch (e) {
-      props.onError(e);
+      onErrorProp(e);
     }
-  };
 
-  const handleSignalEvent = (signal: SignalEvent) => {
-    if (props.onSignal) props.onSignal(signal);
-
-    try {
-      if (["typing_on", "typing_off"].includes(signal.message.type)) {
-        setTypingIndicator((indicators) => {
-          const indicatorsClone = cloneDeep(indicators);
-          const value = signal.message.type === "typing_on" ? signal.timetoken : null;
-          setDeep(indicatorsClone, [signal.channel, signal.publisher], value);
-          return indicatorsClone;
-        });
+    return () => {
+      if (pubnub && pubnub.removeListener) {
+        pubnub.removeListener(listener);
       }
-    } catch (e) {
-      props.onError(e);
-    }
-  };
+    };
+  }, [
+    pubnub,
+    handleMessage,
+    handleAction,
+    handlePresenceEvent,
+    handleObjectsEvent,
+    handleSignalEvent,
+    handleFileEvent,
+    handleStatusEvent,
+    onErrorProp,
+  ]);
 
-  const handlePresenceEvent = (event: PresenceEvent) => {
-    if (props.onPresence) props.onPresence(event);
-  };
+  /**
+   * Lifecycle: add telemetry config to PubNub instance
+   */
 
-  const handleObjectsEvent = (event: BaseObjectsEvent) => {
-    if (event.message.type === "membership" && props.onMembership) props.onMembership(event);
-    if (event.message.type === "channel" && props.onChannel) props.onChannel(event);
-    if (event.message.type === "uuid" && props.onUser) props.onUser(event);
-  };
+  useEffect(() => {
+    if (!pubnub) return;
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    (pubnub as any)._config._addPnsdkSuffix("chat-components", "RCC/__VERSION__");
+  }, [pubnub]);
 
-  const handleAction = (action: MessageActionEvent) => {
-    if (props.onMessageAction) props.onMessageAction(action);
-
-    try {
-      setMessages((messages) => {
-        if (!messages || !messages[action.channel]) return;
-
-        const { channel, event } = action;
-        const { type, value, actionTimetoken, messageTimetoken, uuid } = action.data;
-        const messagesClone = cloneDeep(messages);
-        const message = messagesClone[channel].find((m) => m.timetoken === messageTimetoken);
-        const actions = message?.actions?.[type]?.[value] || [];
-
-        if (message && event === "added") {
-          const newActions = [...actions, { uuid, actionTimetoken }];
-          setDeep(message, ["actions", type, value], newActions);
-        }
-
-        if (message && event === "removed") {
-          const newActions = actions.filter((a) => a.actionTimetoken !== actionTimetoken);
-          newActions.length
-            ? setDeep(message, ["actions", type, value], newActions)
-            : delete message.actions[type][value];
-        }
-
-        return messagesClone;
-      });
-    } catch (e) {
-      props.onError(e);
-    }
-  };
-
-  const handleFileEvent = (event: FileEvent) => {
-    if (props.onFile) props.onFile(event);
-
-    try {
-      setMessages((messages) => {
-        const { file, message, ...payload } = event;
-        const newMessage = { ...payload, message: { file, message }, messageType: 4 };
-        const messagesClone = cloneDeep(messages) || {};
-        messagesClone[newMessage.channel] = messagesClone[newMessage.channel] || [];
-        messagesClone[newMessage.channel].push(newMessage);
-        return messagesClone;
-      });
-    } catch (e) {
-      props.onError(e);
-    }
-  };
-
-  const handleStatusEvent = (event: StatusEvent) => {
-    if (props.onStatus) props.onStatus(event);
-  };
-
-  return <>{props.children}</>;
+  return <>{childrenProp}</>;
 };
