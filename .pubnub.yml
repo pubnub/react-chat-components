@@ -8,10 +8,16 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: MessageList - tooltips showing the authors of message reactions
+        type: feature
       - text: Channel/MemberList - truncating long titles and descriptions with ellipses
         type: feature
-      - text: Chat - automatic unsubscribes on channels removed from the 'channels' option
+      - text: Chat - automatic unsubscribes on channels that were removed from the 'channels' option
         type: feature
+      - text: Chat - root callbacks (like onMessage) not getting updated after external change
+        type: fix
+      - text: Chat - root callbacks causing problems with Components when throwing errors internally
+        type: fix
       - text: TypingIndicator - showing current user's indicator
         type: fix
       - text: MessageList - inconsistent automatic scrolling behavior
@@ -22,7 +28,7 @@ changelog:
         type: fix
       - text: useChannelMembers and useUserMemberships - fix and refactor event listeners
         type: fix
-    date: 2022-01-26
+    date: 2022-01-28
     version: v0.8.0
   - changes:
       - text: MessageInput - wrong spinner icon sizing
