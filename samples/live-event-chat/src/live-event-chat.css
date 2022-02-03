@@ -45,6 +45,7 @@ body {
 }
 
 .channels .pn-member-list {
+  flex-shrink: 0;
   height: auto;
   padding: 16px 0;
 }
