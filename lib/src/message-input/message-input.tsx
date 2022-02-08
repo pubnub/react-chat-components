@@ -52,6 +52,8 @@ export interface MessageInputProps {
   onSend?: (value: unknown) => unknown;
   /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
+  /** Option to provide rows numer in message input **/
+  rows: number;
 }
 
 /**
@@ -297,7 +299,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           onKeyPress={(e) => handleKeyPress(e)}
           placeholder={props.placeholder}
           ref={inputRef}
-          rows={1}
+          rows={props.rows}
           value={text}
         />
 
@@ -324,4 +326,5 @@ MessageInput.defaultProps = {
   sendButton: <AirplaneIcon />,
   senderInfo: false,
   typingIndicator: false,
+  rows: 1,
 };
