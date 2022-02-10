@@ -1,6 +1,6 @@
 {
   "name": "@pubnub/react-chat-components",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "PubNub Chat Components is a development kit of React components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
   "author": "PubNub <support@pubnub.com>",
   "main": "dist/index.js",
@@ -42,6 +42,7 @@
     "@types/jest": "^26.0.20",
     "@types/pubnub": "^4.29.1",
     "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
     "babel-loader": "^8.1.0",
@@ -64,8 +65,8 @@
   "peerDependencies": {
     "pubnub": "^4.29.9",
     "pubnub-react": "^2.1.0",
-    "react": ">=16.8.0 || ^17.0.0 || ^18.0.0",
-    "react-dom": ">=16.8.0 || ^17.0.0 || ^18.0.0"
+    "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
     "jotai": "^1.3.0",

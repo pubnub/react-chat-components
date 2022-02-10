@@ -8,7 +8,7 @@
     "setup": "node populate-pn-objects.js"
   },
   "dependencies": {
-    "@pubnub/react-chat-components": "^0.7.0",
+    "@pubnub/react-chat-components": "*",
     "emoji-mart": "^3.0.0",
     "pubnub": "^4.36.0",
     "pubnub-react": "^2.1.1",
@@ -20,7 +20,7 @@
   "devDependencies": {
     "@types/emoji-mart": "^3.0.4",
     "@types/pubnub": "^4.29.1",
-    "@types/react": "^17.0.33",
+    "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.10",
     "@vitejs/plugin-react": "^1.0.7",
     "cli-progress": "^3.9.0",

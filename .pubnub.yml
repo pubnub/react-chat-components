@@ -1,6 +1,6 @@
 ---
 name: pubnub-react-chat-components
-version: v0.7.0
+version: v0.8.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
@@ -28,7 +28,7 @@ changelog:
         type: fix
       - text: useChannelMembers and useUserMemberships - fix and refactor event listeners
         type: fix
-    date: 2022-01-28
+    date: 2022-02-07
     version: v0.8.0
   - changes:
       - text: MessageInput - wrong spinner icon sizing

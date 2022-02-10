@@ -44,8 +44,10 @@ architecture of realtime networks.
 
 ## Usage
 
-Start by exploring our [sample apps](https://pubnub.github.io/react-chat-components/samples) that
-are built using chat components.
+Start by exploring our demos that were built using chat components:
+
+- [Moderated Chat](https://react-components-chat.pubnub.com/)
+  ([source code](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat))
 
 Follow the steps in the
 [Getting Started guide](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page)

@@ -347,7 +347,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [retryOnError, setRetryFunction]);
 
   /**
-   * Lifecycle: use currentChannel for subscription if neither channels nor channelGroups are passed
+   * Lifecycle: use currentChannel for subscriptions when neither channels or channelGroups is passed
    */
 
   useEffect(() => {
@@ -358,7 +358,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [currentChannel, channels, channelsProp.length, channelGroupsProp.length, setChannels]);
 
   /**
-   * Lifecycle: setup subscriptions for channels and channelGroups arrays if used
+   * Lifecycle: setup correct subscriptions based on channels and channelGroups
    */
 
   useEffect(() => {
