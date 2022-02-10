@@ -1,0 +1,66 @@
+/* ************************
+** Variables
+** ********************* */
+
+:root {
+  --typing-indicator__background: var(--chat--light__background--1);
+  --typing-indicator__color: var(--chat--light__color--1);
+  --typing-indicator__display: inline-block;
+  --typing-indicator__fontSize: 11px;
+  --typing-indicator__fontWeight: 300;
+  --typing-indicator__padding: 8px 24px;
+
+  --typing-indicator__dot__fontSize: 8px;
+  --typing-indicator__dot__margin: 0 3px 0 0;
+  --typing-indicator__dot__animationTravel: -12px;
+  --typing-indicator__dot__animationDuration: 1.3s;
+  --typing-indicator__dot__animationTimeout1: -1.1s;
+  --typing-indicator__dot__animationTimeout2: -0.9s;
+}
+
+/* ************************
+** Styles
+** ********************* */
+
+.pn-typing-indicator {
+  background: var(--typing-indicator__background);
+  color: var(--typing-indicator__color);
+  display: var(--typing-indicator__display);
+  font-size: var(--typing-indicator__fontSize);
+  font-weight: var(--typing-indicator__fontWeight);
+  padding: var(--typing-indicator__padding);
+}
+
+.pn-typing-indicator-dot {
+  display: inline-block;
+  font-size: var(--typing-indicator__dot__fontSize);
+  margin: var(--typing-indicator__dot__margin);
+  animation: wave var(--typing-indicator__dot__animationDuration) linear infinite;
+
+  &:nth-child(2) {
+    animation-delay: var(--typing-indicator__dot__animationTimeout1);
+  }
+
+  &:nth-child(3) {
+    animation-delay: var(--typing-indicator__dot__animationTimeout2);
+  }
+}
+
+@keyframes wave {
+  0%,
+  60%,
+  100% {
+    transform: initial;
+  }
+
+  30% {
+    transform: translateY(var(--typing-indicator__dot__animationTravel));
+  }
+}
+
+.pn-typing-indicator--dark,
+.pn-typing-indicator--event-dark,
+.pn-typing-indicator--support-dark {
+  --typing-indicator__background: var(--chat--dark__background--1);
+  --typing-indicator__color: var(--chat--dark__color--1);
+}

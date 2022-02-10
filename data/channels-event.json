@@ -1,0 +1,79 @@
+[
+  {
+    "id": "channel-1",
+    "name": "Camo & Krooked (DJ Set), Live From A Hot Air Balloon",
+    "description": "UKF On Air",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-1.svg",
+      "source": "https://www.youtube.com/embed/rj5nq5SnrmQ"
+    }
+  },
+  {
+    "id": "channel-2",
+    "name": "F1 2021 Saudi Arabian GP - Post-Race Press Conference",
+    "description": "Formula 1",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-2.svg",
+      "source": "https://www.youtube.com/embed/WR-RSUkWZwM"
+    }
+  },
+  {
+    "id": "channel-3",
+    "name": "Functional Programming in 40 Minutes • Russ Olsen",
+    "description": "GOTO Conferences",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-3.svg",
+      "source": "https://www.youtube.com/embed/0if71HOyVjY"
+    }
+  },
+  {
+    "id": "channel-4",
+    "name": "Hello 2021: Maduk",
+    "description": "Liquicity Events",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-4.svg",
+      "source": "https://www.youtube.com/embed/i9KkBlvaBzE"
+    }
+  },
+  {
+    "id": "channel-5",
+    "name": "How I Built a Website in 2021 - Kent C. Dodds",
+    "description": "UtahJS",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-5.svg",
+      "source": "https://www.youtube.com/embed/owOZMwNPAyc"
+    }
+  },
+  {
+    "id": "channel-6",
+    "name": "The Soul of Erlang and Elixir • Saša Jurić",
+    "description": "GOTO Conferences",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-6.svg",
+      "source": "https://www.youtube.com/embed/JvBT4XBdoUE"
+    }
+  },
+  {
+    "id": "channel-7",
+    "name": "Why does the universe exist? | Jim Holt",
+    "description": "TED Talks",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "https://avatars.dicebear.com/api/jdenticon/channel-7.svg",
+      "source": "https://www.youtube.com/embed/zORUUqJd81M"
+    }
+  }
+]

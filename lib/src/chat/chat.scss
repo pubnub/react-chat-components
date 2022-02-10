@@ -1,0 +1,119 @@
+@function hexToRGB($hex) {
+  @return red($hex), green($hex), blue($hex);
+}
+
+/*
+* Global color variables for light and dark theme
+* Warning! When hexToRGB is used on a color, the variable can only be used with rgba color function
+* inside of the actual CSS. To goal of this is to introduce alpha channels on some of the colors
+*/
+:root {
+  --chat--light__background--1: #f0f3f7;
+  --chat--light__background--2: #ffffff;
+  --chat--light__background--3: #eaeef3;
+  --chat--light__background--4: #01bd4c;
+  --chat--light__background--5-rgb: #{hexToRGB(#ef3a43)};
+  --chat--light__background--6: #{rgba(#1c1c1c, 0.8)};
+  --chat--light__color--1: #585858;
+  --chat--light__color--2: #999999;
+  --chat--light__color--2-rgb: #{hexToRGB(#999999)};
+  --chat--light__color--3: #eeeeee;
+  --chat--light__border--1: #ced6e0;
+  --chat--light__border--2: #bcc6d1;
+  --chat--light__hover--1: #de2440;
+  --chat--light__hover--2: #e4e9f0;
+  --chat--light__hover--3: #e9eef4;
+  --chat--light__hover--4: #e1e8f0;
+
+  --chat--dark__background--1: #1c1c28;
+  --chat--dark__background--2: #2a2a39;
+  --chat--dark__background--2-rgb: #{hexToRGB(#2a2a39)};
+  // --chat--dark__background--3: ;
+  --chat--dark__background--4: #01bd4c;
+  --chat--dark__background--5: #{hexToRGB(#ef3a43)};
+  --chat--dark__background--6: #{rgba(#f0f3f7, 0.8)};
+  --chat--dark__color--1: #{rgba(#e4e4eb, 0.8)};
+  --chat--dark__color--2: #999999;
+  --chat--dark__color--3: #111111;
+  --chat--dark__border--1: #28293d;
+  // --chat--dark__border--2: ;
+  --chat--dark__hover--1: #de2440;
+  --chat--dark__hover--2: #232333;
+  // --chat--dark__hover--3: ;
+  --chat--dark__hover--4: #555770;
+  --chat--dark__hover--4-rgb: #{hexToRGB(#555770)};
+}
+
+/*
+* Style elements common to all components
+*/
+:root {
+  --tooltip__transition: all 0.3s ease;
+  --tooltip__background: var(--chat--light__background--6);
+  --tooltip__borderRadius: 5px;
+  --tooltip__color: var(--chat--light__color--3);
+  --tooltip__margin: 8px;
+  --tooltip__padding: 5px;
+  --tooltip__minWidth: 100px;
+  --tooltip__arrow__size: 4px;
+  --tooltip__arrow__margin: 0px;
+}
+
+.pn-tooltip {
+  position: relative;
+
+  &:before,
+  &:after {
+    bottom: 100%;
+    left: 50%;
+    opacity: 0;
+    position: absolute;
+    transform: translateX(-50%);
+    transition: var(--tooltip__transition);
+    visibility: hidden;
+  }
+
+  &:before {
+    background: var(--tooltip__background);
+    border-radius: var(--tooltip__borderRadius);
+    color: var(--tooltip__color);
+    content: attr(data-tooltip);
+    margin-bottom: var(--tooltip__margin);
+    padding: var(--tooltip__padding);
+    text-align: center;
+    min-width: var(--tooltip__minWidth);
+    z-index: 5;
+  }
+
+  &:after {
+    border: var(--tooltip__arrow__size) solid;
+    margin-bottom: var(--tooltip__arrow__margin);
+    border-color: var(--tooltip__background) transparent transparent transparent;
+    content: "";
+  }
+
+  &:hover:before,
+  &:hover:after {
+    visibility: visible;
+    opacity: 1;
+  }
+}
+
+.pn-msg-list--dark .pn-tooltip,
+.pn-msg-list--support-dark .pn-tooltip,
+.pn-msg-list--event-dark .pn-tooltip,
+.pn-msg-input--dark .pn-tooltip,
+.pn-msg-input--event-dark .pn-tooltip,
+.pn-msg-input--support-dark .pn-tooltip,
+.pn-member-list--dark .pn-tooltip,
+.pn-member-list--event-dark .pn-tooltip,
+.pn-member-list--support-dark .pn-tooltip,
+.pn-channel-list--dark .pn-tooltip,
+.pn-channel-list--event-dark .pn-tooltip,
+.pn-channel-list--support-dark .pn-tooltip,
+.pn-typing-indicator--dark .pn-tooltip,
+.pn-typing-indicator--event-dark .pn-tooltip,
+.pn-typing-indicator--support-dark .pn-tooltip {
+  --tooltip__background: var(--chat--dark__background--6);
+  --tooltip__color: var(--chat--dark__color--3);
+}

@@ -1,0 +1,177 @@
+/* ************************
+** Variables
+** ********************* */
+
+:root {
+  --member-list__background: transparent;
+
+  --member__alignItems: center;
+  --member__cursor: auto;
+  --member__padding: 8px 16px;
+  --member__background: transparent;
+  --member--hover__background: transparent;
+  --member__avatar__color: var(--chat--light__background--2);
+  --member__avatar__display: flex;
+  --member__avatar__fontSize: 10px;
+  --member__avatar__margin: 0 18px 0 0;
+  --member__avatar__size: 36px;
+  --member__avatar__borderRadius: 36px;
+  --member__name__color: var(--chat--light__color--1);
+  --member__name__fontSize: 13px;
+  --member__name__fontWeight: 400;
+  --member__name__margin: 0;
+  --member__name__overflow: hidden;
+  --member__name__padding: 0;
+  --member__name__textOverflow: ellipsis;
+  --member__name__whiteSpace: nowrap;
+  --member__title__color: var(--chat--light__color--2);
+  --member__title__display: block;
+  --member__title__fontSize: 11px;
+  --member__title__fontWeight: 400;
+  --member__title__margin: 0;
+  --member__title__overflow: hidden;
+  --member__title__padding: 7px 0 0;
+  --member__title__textOverflow: ellipsis;
+  --member__title__whiteSpace: nowrap;
+  --member__presence__border: 3px solid var(--chat--light__background--2);
+  --member__presence__borderRadius: 100%;
+  --member__presence__color: var(--chat--light__background--4);
+  --member__presence__left: 48px;
+  --member__presence__position: absolute;
+  --member__presence__size: 8px;
+  --member__presence__top: 34px;
+  --member__actions--hover__background: transparent;
+  --member__actions__background: transparent;
+  --member__actions__borderRadius: 5px;
+  --member__actions__color: var(--chat--light__color--2);
+  --member__actions--hover__color: var(--chat--light__hover--1);
+  --member__actions__fontSize: 18px;
+  --member__actions__margin: 0 0 0 4px;
+  --member__actions__padding: 3px 5px;
+  --member__actions__visibility: hidden;
+}
+
+/* ************************
+** Styles
+** ********************* */
+
+.pn-member-list {
+  height: 100%;
+  overflow-y: auto;
+  width: 100%;
+  background: var(--member-list__background);
+}
+
+.pn-member {
+  align-items: var(--member__alignItems);
+  background: var(--member__background);
+  cursor: var(--member__cursor);
+  display: flex;
+  padding: var(--member__padding);
+  position: relative;
+
+  &:hover {
+    background: var(--member--hover__background);
+
+    .pn-member__actions {
+      visibility: visible;
+    }
+  }
+
+  &__avatar {
+    align-items: center;
+    border-radius: var(--member__avatar__borderRadius);
+    color: var(--member__avatar__color);
+    display: var(--member__avatar__display);
+    font-size: var(--member__avatar__fontSize);
+    height: var(--member__avatar__size);
+    justify-content: center;
+    margin: var(--member__avatar__margin);
+    width: var(--member__avatar__size);
+
+    img {
+      border-radius: var(--member__avatar__borderRadius);
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__name {
+    color: var(--member__name__color);
+    font-size: var(--member__name__fontSize);
+    font-weight: var(--member__name__fontWeight);
+    margin: var(--member__name__margin);
+    overflow: var(--member__name__overflow);
+    padding: var(--member__name__padding);
+    text-align: left;
+    text-overflow: var(--member__name__textOverflow);
+    white-space: var(--member__name__whiteSpace);
+  }
+
+  &__title {
+    color: var(--member__title__color);
+    display: var(--member__title__display);
+    font-size: var(--member__title__fontSize);
+    font-weight: var(--member__title__fontWeight);
+    margin: var(--member__title__margin);
+    overflow: var(--member__title__overflow);
+    padding: var(--member__title__padding);
+    text-align: left;
+    text-overflow: var(--member__title__textOverflow);
+    white-space: var(--member__title__whiteSpace);
+  }
+
+  &__presence {
+    background: var(--member__presence__color);
+    border: var(--member__presence__border);
+    border-radius: var(--member__presence__borderRadius);
+    height: var(--member__presence__size);
+    left: var(--member__presence__left);
+    position: var(--member__presence__position);
+    top: var(--member__presence__top);
+    width: var(--member__presence__size);
+  }
+
+  &__actions {
+    color: var(--member__actions__color);
+    cursor: pointer;
+    display: flex;
+    visibility: var(--member__actions__visibility);
+    font-size: var(--member__actions__fontSize);
+
+    & > * {
+      background: var(--member__actions__background);
+      border-radius: var(--member__actions__borderRadius);
+      display: flex;
+      margin: var(--member__actions__margin);
+      padding: var(--member__actions__padding);
+    }
+
+    & > *:hover {
+      background: var(--member__actions--hover__background);
+      color: var(--member__actions--hover__color);
+    }
+  }
+}
+
+/* ************************
+** Themes
+** ********************* */
+
+.pn-member-list--dark,
+.pn-member-list--event-dark,
+.pn-member-list--support-dark {
+  --member-list__background: var(--chat--dark__background--2);
+  --member__avatar__color: var(--chat--dark__background--2);
+  --member__name__color: var(--chat--dark__color--1);
+  --member__title__color: var(--chat--dark__color--2);
+  --member__presence__border: 3px solid var(--chat--dark__background--2);
+  --member__presence__color: var(--chat--dark__background--4);
+  --member__actions__color: var(--chat--dark__color--2);
+  --member__actions--hover__color: var(--chat--dark__hover--1);
+}

@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Victoria",
+    "custom": {
+      "thumb": "https://randomuser.me/api/portraits/women/4.jpg"
+    },
+    "description": "Direct chat with Victoria",
+    "eTag": "AbOx6N+6vu3zoAE",
+    "id": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
+    "updated": "2020-09-23T09:23:37.175764Z"
+  },
+  {
+    "name": "Ellen",
+    "custom": {
+      "thumb": "https://randomuser.me/api/portraits/women/8.jpg"
+    },
+    "description": "Direct chat with Ellen",
+    "eTag": "AbOx6N+6vu3zoAE",
+    "id": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "updated": "2020-09-23T09:23:37.175764Z"
+  }
+]

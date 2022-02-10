@@ -1,0 +1,287 @@
+[
+  {
+    "timetoken": "161673695571766362",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "The weather is gorgeous today. Who's available to meet up for lunch at Bob’s Diner? 🌞",
+      "attachments": [
+        {
+          "type": "image",
+          "image": {
+            "source": "https://pubnub.github.io/react-chat-components/samples/clouds.jpg"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "timetoken": "161673697571766362",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
+    "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Yes. Count me in. What time should we meet?"
+    }
+  },
+  {
+    "timetoken": "161673698571766362",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
+    "uuid": "user_47557ad75d4047efab1b6577cec3efe7",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Does noon work for everyone?"
+    }
+  },
+  {
+    "timetoken": "161673699571766362",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
+    "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Noon is perfect!"
+    }
+  },
+  {
+    "timetoken": "161673700571766362",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
+    "uuid": "user_142da3c419804a82a3057cedc86acaa6",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Awesome, see you all then!"
+    }
+  },
+  {
+    "timetoken": "16166852571766367",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
+    "uuid": "user_4e2f18aba20640cf922c8bc485941f8e",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hi, are you going to practice? ⚽"
+    }
+  },
+  {
+    "timetoken": "16166853571766368",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Yes, do you need a ride?"
+    }
+  },
+  {
+    "timetoken": "16166854571766369",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
+    "uuid": "user_4e2f18aba20640cf922c8bc485941f8e",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Yes, thank you. You’re the best!"
+    }
+  },
+  {
+    "timetoken": "16166855571766370",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "I’ll pick you up in an hour. Don’t forget your cleats!"
+    }
+  },
+  {
+    "timetoken": "16167852571766371",
+    "channel": "space.5f3547a18f448e567e84ba097db",
+    "uuid": "Mom",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hey! Have you tried the new restaurant in town? I’ve been meaning to stop by and wanted to get your thoughts.",
+      "sender": {
+        "profileUrl": "https://randomuser.me/api/portraits/women/58.jpg",
+        "id": "Mom"
+      }
+    }
+  },
+  {
+    "timetoken": "16167853571766372",
+    "channel": "space.5f3547a18f448e567e84ba097db",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Yes, they have great food!"
+    }
+  },
+  {
+    "timetoken": "16167854571766373",
+    "channel": "space.5f3547a18f448e567e84ba097db",
+    "uuid": "Dad",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "What do you recommend?",
+      "sender": {
+        "profileUrl": "https://randomuser.me/api/portraits/men/93.jpg",
+        "id": "Dad"
+      }
+    }
+  },
+  {
+    "timetoken": "16167855571766374",
+    "channel": "space.5f3547a18f448e567e84ba097db",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "I really enjoyed the pizza.",
+      "attachments": [
+        {
+          "type": "image",
+          "image": {
+            "source": "https://pubnub.github.io/react-chat-components/samples/pizza.jpg"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "timetoken": "16167857571766375",
+    "channel": "space.5f3547a18f448e567e84ba097db",
+    "uuid": "Mom",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Nice! We will have to try it.",
+      "sender": {
+        "profileUrl": "https://randomuser.me/api/portraits/women/58.jpg",
+        "id": "Mom"
+      }
+    }
+  },
+  {
+    "timetoken": "161673657571766376",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hi Victoria, have you had a chance to review my notes from the meeting?"
+    }
+  },
+  {
+    "timetoken": "161673659571766377",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
+    "uuid": "user_142da3c419804a82a3057cedc86acaa6",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Hey, thank you for the reminder. I will take a look at them now."
+    }
+  },
+  {
+    "timetoken": "161673660571766378",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Wonderful! Should we schedule a quick meeting to go over the new action items?"
+    }
+  },
+  {
+    "timetoken": "161673662571766379",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
+    "uuid": "user_142da3c419804a82a3057cedc86acaa6",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Yes, that’s a great idea. Sending you a calendar invite. 👍 ",
+      "attachments": [
+        {
+          "type": "link",
+          "title": "Real-Time In-App Chat and Communication Platform",
+          "description": "Leverage the power of hosted real-time APIs to build engaging remote experiences using in-app chat, push notifications, location tracking and more.",
+          "provider": {
+            "url": "https://www.pubnub.com/",
+            "name": "PubNub"
+          },
+          "icon": {
+            "source": "https://www.pubnub.com/images/favicon.png"
+          },
+          "image": {
+            "source": "https://images.ctfassets.net/3prze68gbwl1/3roUbsKJAysxW6gUUxczrY/89eeaa8940ccf2ed10b348adaca99b64/pubnub-powered-apps.png"
+          }
+        }
+      ]
+    }
+  },
+  {
+    "timetoken": "161673757571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Lol yeah"
+    }
+  },
+  {
+    "timetoken": "161673759571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "You could have shouted, but no one would believes you"
+    }
+  },
+  {
+    "timetoken": "161673760571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Sure haha"
+    }
+  },
+  {
+    "timetoken": "161673762571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Order on Wenser’s page. This one’s on me."
+    }
+  },
+  {
+    "timetoken": "161673763571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "current_user",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "Thank you"
+    }
+  },
+  {
+    "timetoken": "161673765571766376",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
+    "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "actions": {},
+    "message": {
+      "type": "welcome",
+      "text": "No problem :)"
+    }
+  }
+]

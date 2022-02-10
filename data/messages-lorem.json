@@ -1,0 +1,73 @@
+[
+  {
+    "message": {
+      "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "type": "text"
+    },
+    "timetoken": "16068528857793347",
+    "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
+    "channel": "any",
+    "actions": {}
+  },
+  {
+    "message": {
+      "text": "Vivamus ut justo rhoncus mi elementum blandit vel vel velit.",
+      "type": "text"
+    },
+    "timetoken": "16069194583897454",
+    "uuid": "user_3c4400761cba4b65b77b6cae55fc21eb",
+    "channel": "any",
+    "actions": {}
+  },
+  {
+    "message": {
+      "text": "In at sapien nec tortor viverra laoreet sit amet vitae mauris.",
+      "type": "text"
+    },
+    "timetoken": "16069255760118490",
+    "uuid": "user_def709b1adfc4e67b98bb7a820f581b1",
+    "channel": "any",
+    "actions": {}
+  },
+  {
+    "message": {
+      "text": "Integer sollicitudin eros nec libero vulputate, nec faucibus erat tristique.",
+      "type": "text"
+    },
+    "timetoken": "16069261926915892",
+    "uuid": "user_a56c20222c484ff8987ec9b69b0c8f5b",
+    "channel": "any",
+    "actions": {}
+  },
+  {
+    "message": {
+      "text": "Curabitur id quam ac mauris aliquet imperdiet quis eget nisl.",
+      "type": "text"
+    },
+    "timetoken": "16070944454879114",
+    "uuid": "user_e0e43601f93249c382415521188f0208",
+    "channel": "any",
+    "actions": {
+      "reaction": {
+        "🙂": [
+          {
+            "uuid": "user_3c4400761cba4b65b77b6cae55fc21eb",
+            "actionTimetoken": "16069174870966352"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "message": {
+      "text": "Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.",
+      "type": "text",
+      "file": { "name": "pubnub-logo-docs.svg", "id": "random-file-uuid" }
+    },
+    "messageType": 4,
+    "timetoken": "16070949464879837",
+    "uuid": "user_ed145d8b0f094b83a2d51d428a59d0cb",
+    "channel": "any",
+    "actions": {}
+  }
+]
