@@ -8,6 +8,11 @@ files:
   - dist/index.es.js
 changelog:
   - changes:
+      - text: MessageList - limit the shown number of instances for a single reaction to 99
+        type: feature
+    date: 2022-02-23
+    version: v0.9.0
+  - changes:
       - text: MessageList - tooltips showing the authors of message reactions
         type: feature
       - text: Channel/MemberList - truncating long titles and descriptions with ellipses
