@@ -2,14 +2,15 @@
   "name": "@pubnub/react-chat-components-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "This monorepository uses npm v7 workspaces feature to crosslink dependencies between components library and sample applications.",
+  "description": "This monorepository uses yarn workspaces to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "workspaces": [
     "lib",
     "samples/*"
   ],
   "engines": {
-    "npm": ">= 7.0.0"
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.22.0"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [
