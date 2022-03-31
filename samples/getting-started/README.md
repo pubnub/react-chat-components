@@ -2,7 +2,7 @@
 
 `getting-started` is a simple app that allows you to get a 1:1 chat app quickly up and running through the PubNub Network. It features a simple chat window with a message input field. After starting the app, you can send sample messages as a default `myFirstUser` by typing them in an input field and messages will pile up on the screen as you send them.
 
-<img src="../assets/getting-started.png" alt="Getting Started app for React" style="width:300px"/> 
+![Getting Started app for React](../assets/getting-started.png")
 
 ## Prerequisites
 
@@ -24,6 +24,6 @@ Follow the steps in the [Getting Started guide](https://pubnub.github.io/react-c
 
 The `getting-started` app showcases these PubNub Chat Components for React:
 
-* [Chat Provider)](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
+* [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
 * [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default)
 * [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)

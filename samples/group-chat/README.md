@@ -2,7 +2,7 @@
 
 `group-chat` is an app that showcases a complex chat use case allowing you to see most PubNub Chat Components for React in action. After running the app, you can send messages as a sample user in a 1:1 and group channel, upload files, and add message reactions to messages. Additionally, this app (also referred to as "moderated chat app") works as a showcase app on which you can test features offered by our [Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started) to learn how to moderate and manage users, messages, and channels with PubNub.
 
-<img src="../assets/group-chat.png" alt="Group chat app for React" style="width:300px"/> 
+![Group chat app for React](../assets/group-chat.png")
 
 ## Prerequisites
 
@@ -60,7 +60,7 @@ Follow the steps to run the app locally.
 
 The `group-chat` app showcases these PubNub Chat Components for React:
 
-* [Chat Provider)](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
+* [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
 * [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default)
 * [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
 * [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
