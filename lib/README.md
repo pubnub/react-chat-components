@@ -47,7 +47,7 @@ architecture of realtime networks.
 Start by exploring our demo apps that were built using chat components:
 
 - [Getting started](/samples/getting-started) - send your first message.
-- [Group chat](/samples/group-chat) also known as "moderated chat app" (see [interactive demo](https://react-components-chat.pubnub.com/)) - explore most features offered by our chat components and run it with [Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started) to test its features.
+- [Group chat](/samples/group-chat) also known as the "moderated chat app" - explore most features offered by our chat components and run it with [Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started) to test its features. See also the app's [interactive demo](https://react-components-chat.pubnub.com/).
 
 ## Related documentation
 
