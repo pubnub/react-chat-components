@@ -44,7 +44,7 @@ Follow the steps to run the app locally.
 
 1. Copy the `.env.example` file as `.env` and paste your Publish and Subscribe Keys there.
 
-1. Prepopulate sample user and channel object metadata (required if you want to test the sample app against [Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started)).
+1. Prepopulate sample user and channel object metadata.
 
     ```bash
     npm run setup
