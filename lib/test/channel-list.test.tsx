@@ -75,4 +75,12 @@ describe("Channel List", () => {
 
     expect(handleClick).not.toHaveBeenCalled();
   });
+
+  test("sorts channels with custom function", () => {
+    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
+    const { container } = render(<ChannelList channels={channels} sort={customSorter} />);
+
+    expect(container.firstChild.firstChild).toHaveTextContent("Running");
+    expect(container.firstChild.lastChild).toHaveTextContent("Company Culture");
+  });
 });
