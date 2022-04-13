@@ -5,16 +5,24 @@ import { PubNubProvider } from "pubnub-react";
 import users from "../../../../data/users.json";
 import messages from "../../../../data/messages-lorem.json";
 const pubnub = new PubNubMock({ uuid: "user_a56c20222c484ff8987ec9b69b0c8f5b" });
-import "./customizations.css";
+import "./customization.css";
 
-<Meta title="UI Customization/Examples" />
+<Meta title="Code Examples/Customization" />
 
-# Example UI customizations
+# Customization examples
 
 <br />
 <br />
 
 ## Change style of current user messages
+
+Differentiating the looks of messages, depending on who sent them, is a common use case across some
+types of chat.
+
+React Chat Components do not come with a separate set of CSS variables for messages that were sent
+by the "current" chat user. A dedicated `pn-msg--own` CSS class should be used instead.
+
+Here is an example on how to align your own messages to the right side of the chat window:
 
 ```css
 .pn-msg--own {
