@@ -1,0 +1,75 @@
+main.doctor-view {
+  border-radius: 10px;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.18), 4px 4px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: end;
+  margin: 0 20px;
+  overflow: hidden;
+  width: 640px;
+
+  header {
+    height: 70px;
+    padding: 23px 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  aside {
+    display: flex;
+    flex-direction: column;
+  }
+
+  aside nav {
+    background: var(--background-secondary);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 250px;
+  }
+
+  aside header {
+    background: var(--accent-primary);
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  aside header img {
+    margin: 0 18px 0 6px;
+    height: 30px;
+  }
+
+  aside footer {
+    background: var(--background-primary);
+    color: var(--text-secondary);
+    font-size: 14px;
+    padding: 11px 12px;
+  }
+
+  aside footer small {
+    color: #838383;
+  }
+
+  aside footer button {
+    width: 18px;
+    height: 18px;
+  }
+
+  section {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  section header {
+    background: var(--accent-secondary);
+    color: var(--text-secondary);
+  }
+
+  section article {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+}
