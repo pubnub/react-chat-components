@@ -58,4 +58,5 @@ jobs:
         uses: ./.github/.release/actions/actions/services/github-release
         with:
           token: ${{ secrets.GH_TOKEN }}
+          last-service: true
 
