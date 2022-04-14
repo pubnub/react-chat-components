@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { HereNowParameters, HereNowResponse } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import cloneDeep from "lodash.clonedeep";
@@ -6,12 +6,7 @@ import cloneDeep from "lodash.clonedeep";
 type ChannelsOccupancy = HereNowResponse["channels"];
 type HookReturnValue = [ChannelsOccupancy, () => Promise<void>, number, Error];
 
-export const usePresence = ({
-  channels,
-  channelGroups,
-  includeUUIDs,
-  includeState,
-}: HereNowParameters = {}): HookReturnValue => {
+export const usePresence = (options: HereNowParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
   const [presence, setPresence] = useState<ChannelsOccupancy>({});
@@ -20,13 +15,6 @@ export const usePresence = ({
   const presenceValues = Object.values(presence);
   const total = presenceValues.map((ch) => ch.occupancy).reduce((prev, cur) => prev + cur, 0);
 
-  const options = useMemo(() => ({ channels, channelGroups, includeUUIDs, includeState }), [
-    channels,
-    channelGroups,
-    includeUUIDs,
-    includeState,
-  ]);
-
   const command = useCallback(async () => {
     try {
       const response = await pubnub.hereNow(options);
@@ -34,13 +22,14 @@ export const usePresence = ({
     } catch (e) {
       setError(e);
     }
-  }, [pubnub, options]);
+  }, [pubnub, JSON.stringify(options)]);
 
   const handlePresence = useCallback(
     (event) => {
       setPresence((presence) => {
         const presenceClone = cloneDeep(presence);
-        if (!presenceClone[event.channel]) presenceClone[event.channel] = {};
+        if (!presenceClone[event.channel])
+          presenceClone[event.channel] = { name: event.channel, occupancy: 0, occupants: [] };
         const channel = presenceClone[event.channel];
 
         if (event.action === "join") {

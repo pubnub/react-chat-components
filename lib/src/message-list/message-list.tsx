@@ -12,7 +12,14 @@ import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub"
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
-import { Message, ImageAttachment, LinkAttachment, EmojiPickerElementProps } from "../types";
+import {
+  MessageEnvelope,
+  isFileMessage,
+  ImageAttachment,
+  LinkAttachment,
+  EmojiPickerElementProps,
+  FileAttachment,
+} from "../types";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
@@ -22,41 +29,50 @@ import {
   RetryFunctionAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
-import SpinnerIcon from "./spinner.svg";
+import { getNameInitials, getPredefinedColor, useOuterClick } from "../helpers";
+import SpinnerIcon from "../icons/spinner.svg";
+import EmojiIcon from "../icons/emoji.svg";
+import DownloadIcon from "../icons/download.svg";
+import ArrowDownIcon from "../icons/arrow-down.svg";
 import "./message-list.scss";
 
 export interface MessageRendererProps {
   isOwn: boolean;
-  message: Message;
+  message: MessageEnvelope;
   time: string;
+  editedText: string;
   user?: UUIDMetadataObject<ObjectCustom>;
 }
 
 export interface MessageListProps {
   children?: ReactNode;
-  /** Set a number from 0 to 100 to fetch past messages from storage on a channel. Defaults to 0 to fetch no messages from storage. */
+  /** Option to fetch past messages from storage and display them on a channel. Set a number from "0" to "100". Defaults to "0" to fetch no messages from storage. */
   fetchMessages?: number;
-  /** Enable to render reactions that were added to messages. Be sure to also set up reactionsPicker when this is enabled */
+  /** Option to enable rendering reactions that were added to messages. Make sure to also set up reactionsPicker when this option is enabled. */
   enableReactions?: boolean;
-  /** Provide custom welcome messages to replace the default one or set to false to disable */
-  welcomeMessages?: false | Message | Message[];
-  /** Pass in an emoji picker component if you want to enable message reactions. See Emoji Pickers section of the docs to get more details */
+  /** Option to provide custom welcome messages to replace the default ones. Set to "false" to disable it. */
+  welcomeMessages?: false | MessageEnvelope | MessageEnvelope[];
+  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
   reactionsPicker?: ReactElement<EmojiPickerElementProps>;
-  /** Provide custom message item renderer if themes and CSS variables aren't enough */
+  /** Option to provide an extra actions renderer to add custom action buttons to each message. */
+  extraActionsRenderer?: (message: MessageEnvelope) => JSX.Element;
+  /** Option to provide a custom message item renderer if themes and CSS variables aren't enough. */
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /** Provide custom message bubble renderer if themes and CSS variables aren't enough */
+  /** Option to provide a custom message bubble renderer if themes and CSS variables aren't enough. */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
-  /** Use this function to render only some of the messages on your own. */
-  filter?: (message: Message) => boolean;
-  /** A callback run on list scroll */
+  /** Option to render only selected messages. */
+  filter?: (message: MessageEnvelope) => boolean;
+  /** Callback run on a list scroll. */
   onScroll?: (event: UIEvent<HTMLElement>) => unknown;
 }
 
 /**
- * Fetches historical messages using scrolling pagination pattern and subscribes to the current
- * channel to stay up to date with new messages. Displays data in an interactive list, including
- * user names, avatars, times of sending and attachments (links, images). Allows to react to
- * messages with emojis and show those reactions immediately.
+ * Fetches historical messages using the scrolling pagination pattern and subscribes to the current
+ * channel to stay up to date with new messages.
+ *
+ * It also displays data in an interactive list, including
+ * user names, avatars, the time when a message was sent, and attachments (links, images) and allows to react to
+ * messages with emojis and to show those reactions immediately.
  */
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const pubnub = usePubNub();
@@ -82,12 +98,17 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
-  const pickerRef = useRef<HTMLDivElement>(null);
-  const spinnerObserver = useRef(
+  const pickerRef = useOuterClick((event) => {
+    if ((event.target as Element).closest(".pn-msg__reactions-toggle")) return;
+    setEmojiPickerShown(false);
+  });
+  const listSizeObserver = useRef(new ResizeObserver(() => handleListMutations()));
+  const listMutObserver = useRef(new MutationObserver(() => handleListMutations()));
+  const spinnerIntObserver = useRef(
     new IntersectionObserver((e) => e[0].isIntersecting === true && fetchMoreHistory())
   );
-  const bottomObserver = useRef(
-    new IntersectionObserver((e) => handleBottomScroll(e[0].isIntersecting))
+  const bottomIntObserver = useRef(
+    new IntersectionObserver((e) => handleBottomIntersection(e[0].isIntersecting))
   );
 
   /*
@@ -97,24 +118,35 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const getTime = (timestamp: number) => {
     const ts = String(timestamp);
     const date = new Date(parseInt(ts) / 10000);
-    const minutes = date.getMinutes();
-    return `${date.getHours()}:${minutes > 9 ? minutes : "0" + minutes}`;
+    const formatter = new Intl.DateTimeFormat([], { timeStyle: "short" });
+    return formatter.format(date);
   };
 
   const scrollToBottom = () => {
     if (!endRef.current) return;
-    endRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    setScrolledBottom(true);
+    endRef.current.scrollIntoView({ block: "end" });
   };
 
   const setupSpinnerObserver = () => {
     if (!spinnerRef.current) return;
-    spinnerObserver.current.observe(spinnerRef.current);
+    spinnerIntObserver.current.observe(spinnerRef.current);
   };
 
   const setupBottomObserver = () => {
     if (!endRef.current) return;
-    bottomObserver.current.disconnect();
-    bottomObserver.current.observe(endRef.current);
+    bottomIntObserver.current.disconnect();
+    bottomIntObserver.current.observe(endRef.current);
+  };
+
+  const setupListObservers = () => {
+    if (!listRef.current) return;
+
+    listSizeObserver.current.disconnect();
+    listSizeObserver.current.observe(listRef.current);
+
+    listMutObserver.current.disconnect();
+    listMutObserver.current.observe(listRef.current, { childList: true });
   };
 
   const getUser = (uuid: string) => {
@@ -204,6 +236,24 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
+  const fetchFileUrl = (envelope: MessageEnvelope) => {
+    if (!isFileMessage(envelope.message)) return envelope;
+
+    try {
+      const url = pubnub.getFileUrl({
+        channel: envelope.channel,
+        id: envelope.message.file.id,
+        name: envelope.message.file.name,
+      });
+
+      envelope.message.file.url = url;
+    } catch (e) {
+      onError(e);
+    } finally {
+      return envelope;
+    }
+  };
+
   /*
   /* Event handlers
   */
@@ -221,10 +271,21 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     [reactingToMessage]
   );
 
-  const handleBottomScroll = (scrolledBottom: boolean) => {
+  const handleBottomIntersection = (isIntersecting: boolean) => {
     try {
-      if (scrolledBottom) setUnreadMessages(0);
-      setScrolledBottom(scrolledBottom);
+      if (isIntersecting) setUnreadMessages(0);
+      setScrolledBottom(isIntersecting);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
+  const handleListMutations = () => {
+    try {
+      setScrolledBottom((scrolledBottom) => {
+        if (scrolledBottom) scrollToBottom();
+        return scrolledBottom;
+      });
     } catch (e) {
       onError(e);
     }
@@ -234,7 +295,10 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     useCallback((get, set, response: FetchMessagesResponse) => {
       const channel = get(CurrentChannelAtom);
       const messages = get(CurrentChannelMessagesAtom);
-      const newMessages = (response?.channels[channel] as Message[]) || [];
+      const newMessages =
+        ((response?.channels[channel] || []).map((m) =>
+          m.messageType === 4 ? fetchFileUrl(m) : m
+        ) as MessageEnvelope[]) || [];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
@@ -267,22 +331,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const handleCloseReactions = (event: MouseEvent) => {
-    try {
-      setEmojiPickerShown((pickerShown) => {
-        if (
-          !pickerShown ||
-          pickerRef.current?.contains(event.target as Node) ||
-          (event.target as Element).classList.contains("pn-msg__reactions-toggle")
-        )
-          return pickerShown;
-        return false;
-      });
-    } catch (e) {
-      onError(e);
-    }
-  };
-
   /*
   /* Lifecycle
   */
@@ -291,6 +339,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     if (!pubnub || !channel) return;
     if (!messages?.length) fetchHistory();
     setupSpinnerObserver();
+    setupListObservers();
   }, [channel]);
 
   useEffect(() => {
@@ -312,14 +361,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     setPrevMessages(messages);
   }, [messages]);
 
-  useEffect(() => {
-    document.addEventListener("mousedown", handleCloseReactions);
-
-    return () => {
-      document.removeEventListener("mousedown", handleCloseReactions);
-    };
-  }, []);
-
   /*
   /* Renderers
   */
@@ -331,46 +372,60 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       : renderItem(props.welcomeMessages);
   };
 
-  const renderItem = (message: Message) => {
-    const uuid = message.uuid || message.publisher || "";
+  const renderItem = (envelope: MessageEnvelope) => {
+    const uuid = envelope.uuid || envelope.publisher || "";
     const currentUserClass = isOwnMessage(uuid) ? "pn-msg--own" : "";
+    const actions = envelope.actions;
+    const deleted = !!Object.keys(actions?.deleted || {}).length;
+    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
+
+    if (deleted) return;
 
     return (
-      <div className={`pn-msg ${currentUserClass}`} key={message.timetoken}>
-        {renderMessage(message)}
-        {props.reactionsPicker && message.message.type !== "welcome" && (
-          <div className="pn-msg__actions">
+      <div className={`pn-msg ${currentUserClass}`} key={envelope.timetoken}>
+        {renderMessage(envelope)}
+        <div className="pn-msg__actions">
+          {props.extraActionsRenderer && props.extraActionsRenderer(envelope)}
+          {props.reactionsPicker && message?.type !== "welcome" && (
             <div
               className="pn-msg__reactions-toggle"
+              title="Add a reaction"
               onClick={(e) => {
-                emojiPickerShown && reactingToMessage === message.timetoken
+                emojiPickerShown && reactingToMessage === envelope.timetoken
                   ? setEmojiPickerShown(false)
-                  : handleOpenReactions(e, message.timetoken);
+                  : handleOpenReactions(e, envelope.timetoken);
               }}
             >
-              ☺
+              <EmojiIcon />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     );
   };
 
-  const renderMessage = (message: Message) => {
-    const uuid = message.uuid || message.publisher || "";
-    const user = message.message.sender || getUser(uuid);
-    const time = getTime(message.timetoken as number);
+  const renderMessage = (envelope: MessageEnvelope) => {
+    const uuid = envelope.uuid || envelope.publisher || "";
+    const time = getTime(envelope.timetoken as number);
     const isOwn = isOwnMessage(uuid);
-    const attachments = message.message?.attachments || [];
+    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
+    const user = message?.sender || getUser(uuid);
+    const attachments = message?.attachments || [];
+    const file = isFileMessage(envelope.message) && envelope.message.file;
+    const actions = envelope.actions;
+    const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
-    if (props.messageRenderer && (props.filter ? props.filter(message) : true))
-      return props.messageRenderer({ message, user, time, isOwn });
+    if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
+      return props.messageRenderer({ message: envelope, user, time, isOwn, editedText });
 
     return (
       <>
-        <div className="pn-msg__avatar">
-          {user?.profileUrl && <img src={user.profileUrl} alt="User avatar " />}
-          {!user?.profileUrl && <div className="pn-msg__avatar-placeholder" />}
+        <div className="pn-msg__avatar" style={{ backgroundColor: getPredefinedColor(uuid) }}>
+          {user?.profileUrl ? (
+            <img src={user.profileUrl} alt="User avatar" />
+          ) : (
+            getNameInitials(user?.name || uuid)
+          )}
         </div>
         <div className="pn-msg__main">
           <div className="pn-msg__content">
@@ -378,23 +433,25 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__author">{user?.name || uuid}</span>
               <span className="pn-msg__time">{time}</span>
             </div>
-            {props.bubbleRenderer && (props.filter ? props.filter(message) : true) ? (
-              props.bubbleRenderer({ message, user, time, isOwn })
-            ) : (
-              <div className="pn-msg__bubble">{message.message.text}</div>
-            )}
+            {message?.text &&
+              (props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
+                props.bubbleRenderer({ message: envelope, user, time, isOwn, editedText })
+              ) : (
+                <div className="pn-msg__bubble">{editedText || message?.text}</div>
+              ))}
           </div>
           <div className="pn-msg__extras">
+            {file && file.name && renderFile(file)}
             {attachments.map(renderAttachment)}
-            {props.enableReactions && renderReactions(message)}
+            {props.enableReactions && renderReactions(envelope)}
           </div>
         </div>
       </>
     );
   };
 
-  const renderReactions = (message: Message) => {
-    const reactions = message.actions?.reaction;
+  const renderReactions = (envelope: MessageEnvelope) => {
+    const reactions = envelope.actions?.reaction;
     if (!reactions) return;
 
     return (
@@ -402,21 +459,58 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         {Object.keys(reactions).map((reaction) => {
           const instances = reactions[reaction];
           const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
+          const userNames = instances.map((i) => {
+            const user = users.find((u) => u.id === i.uuid);
+            return user ? user.name : i.uuid;
+          });
 
           return (
             <div
-              className={`pn-msg__reaction ${userReaction ? "pn-msg__reaction--active" : ""}`}
+              className={`pn-tooltip pn-msg__reaction ${
+                userReaction ? "pn-msg__reaction--active" : ""
+              }`}
               key={reaction}
+              data-tooltip={userNames.join(", ")}
               onClick={() => {
                 userReaction
-                  ? removeReaction(reaction, message.timetoken, userReaction.actionTimetoken)
-                  : addReaction(reaction, message.timetoken);
+                  ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
+                  : addReaction(reaction, envelope.timetoken);
               }}
             >
-              {reaction} &nbsp; {instances.length}
+              {reaction} {instances.length}
             </div>
           );
         })}
+      </div>
+    );
+  };
+
+  const renderFile = (file: FileAttachment) => {
+    return (
+      <div className="pn-msg__file">
+        {/\.(svg|gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
+          <img
+            alt={file.name}
+            className="pn-msg__image"
+            src={file.url}
+            onLoad={() => {
+              if (scrolledBottom) scrollToBottom();
+            }}
+          />
+        ) : (
+          <div className="pn-msg__bubble">
+            <a
+              className="pn-msg__nonImage"
+              href={file.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              download
+            >
+              {file.name}
+              <DownloadIcon className="pn-msg__downloadIcon" />
+            </a>
+          </div>
+        )}
       </div>
     );
   };
@@ -454,7 +548,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     <div className={`pn-msg-list pn-msg-list--${theme}`}>
       {unreadMessages > 0 && (
         <div className="pn-msg-list__unread" onClick={() => scrollToBottom()}>
-          {unreadMessages} new messages ↓
+          {unreadMessages} new message{unreadMessages > 1 ? "s" : ""} <ArrowDownIcon />
         </div>
       )}
 
@@ -471,6 +565,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           renderWelcomeMessages()}
         {messages && messages.map((m) => renderItem(m))}
 
+        {props.children}
+
         <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
 
         {props.reactionsPicker && (
@@ -483,8 +579,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             {picker}
           </div>
         )}
-
-        {props.children}
       </div>
     </div>
   );

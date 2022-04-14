@@ -1,25 +1,48 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { ObjectCustom, UUIDMetadataObject, GetChannelMembersParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 
-type HookReturnValue = [UUIDMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
+type HookReturnValue = [
+  UUIDMetadataObject<ObjectCustom>[],
+  () => Promise<void>,
+  () => void,
+  number,
+  Error
+];
 
 export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
-  const pubnub = usePubNub();
+  const jsonOptions = JSON.stringify(options);
 
+  const pubnub = usePubNub();
   const [members, setMembers] = useState<UUIDMetadataObject<ObjectCustom>[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
+  const [doFetch, setDoFetch] = useState(true);
+  const [fetching, setFetching] = useState(false);
 
-  const paginatedOptions = merge({}, options, {
-    page: { next: page },
-    include: { totalCount: true },
-  }) as GetChannelMembersParameters;
+  const paginatedOptions = useMemo(
+    () =>
+      merge({}, JSON.parse(jsonOptions), {
+        page: { next: page },
+        include: { totalCount: true },
+      }) as GetChannelMembersParameters,
+    [page, jsonOptions]
+  );
 
-  const command = async () => {
+  const resetHook = () => {
+    setMembers([]);
+    setTotalCount(0);
+    setPage("");
+    setError(undefined);
+    setDoFetch(true);
+  };
+
+  const fetchPage = useCallback(async () => {
+    setDoFetch(false);
+    setFetching(true);
     try {
       if (totalCount && members.length >= totalCount) return;
       const response = await pubnub.objects.getChannelMembers(paginatedOptions);
@@ -31,31 +54,45 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
       setPage(response.next);
     } catch (e) {
       setError(e);
+    } finally {
+      setFetching(false);
     }
-  };
-
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "membership") return;
-
-    setMembers((members) => {
-      const membersCopy = cloneDeep(members);
-      const member = membersCopy.find((u) => u.id === message.data.uuid.id);
-
-      // Set events are not handled since there are no events fired for data updates
-      // New memberships are not handled in order to conform to filters and pagination
-
-      if (member && message.event === "delete") {
-        membersCopy.splice(membersCopy.indexOf(member), 1);
-      }
-
-      return membersCopy;
-    });
-  };
+  }, [pubnub, paginatedOptions, members.length, totalCount]);
 
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-  }, []);
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "membership") return;
+
+        setMembers((members) => {
+          const membersCopy = cloneDeep(members);
+          const member = membersCopy.find((u) => u.id === message.data.uuid.id);
+
+          // Make sure the event is for the same channel as the hook
+          if (message.data.channel.id !== paginatedOptions.channel) return membersCopy;
+
+          // Set events are not handled since there are no events fired for data updates
+          // New memberships are not handled in order to conform to filters and pagination
+          if (member && message.event === "delete") {
+            membersCopy.splice(membersCopy.indexOf(member), 1);
+          }
+
+          return membersCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub, paginatedOptions.channel]);
+
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
 
   useEffect(() => {
     setMembers([]);
@@ -64,8 +101,8 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
   }, [options.channel]);
 
   useEffect(() => {
-    if (!page) command();
-  }, [page]);
+    if (doFetch && !fetching) fetchPage();
+  }, [doFetch, fetching, fetchPage]);
 
-  return [members, command, totalCount, error];
+  return [members, fetchPage, resetHook, totalCount, error];
 };

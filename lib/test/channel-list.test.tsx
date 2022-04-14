@@ -22,7 +22,7 @@ describe("Channel List", () => {
   test("renders current channel as active", () => {
     render(<ChannelList channels={channels} />, {
       providerProps: {
-        currentChannel: "space_ac4e67b98b34b44c4a39466e93e",
+        currentChannel: "space.ac4e67b98b34b44c4a39466e93e",
       },
     });
 
@@ -51,6 +51,13 @@ describe("Channel List", () => {
 
     expect(screen.getByText("Custom Introductions")).toBeVisible();
     expect(screen.queryByText("Introductions")).not.toBeInTheDocument();
+  });
+
+  test("renders extra actions", () => {
+    const customRenderer = (channel) => <p key={channel.name}>{channel.name} Extra Action</p>;
+    render(<ChannelList channels={channels} extraActionsRenderer={customRenderer} />);
+
+    expect(screen.getByText("Introductions Extra Action")).toBeVisible();
   });
 
   test("emits events on channel clicks", () => {

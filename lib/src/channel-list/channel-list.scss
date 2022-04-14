@@ -3,44 +3,48 @@
 ** ********************* */
 
 :root {
-  --channel-list__background: linear-gradient(rgb(142, 45, 226) 0%, rgb(74, 0, 224) 100%);
+  --channel-list__background: var(--chat--light__background--2);
 
   --channel__alignItems: center;
-  --channel__padding: 12px 40px 12px 24px;
+  --channel__padding: 8px 16px;
   --channel__justifyContent: flex-start;
   --channel__background: transparent;
-  --channel--hover__background: rgba(255, 255, 255, 0.1);
-  --channel--active__background: rgba(0, 0, 0, 0.1);
-  --channel__name__color: white;
-  --channel--hover__name__color: white;
-  --channel--active__name__color: white;
+  --channel--hover__background: var(--chat--light__hover--2);
+  --channel--active__background: var(--chat--light__background--1);
   --channel__thumb__display: block;
-  --channel__thumb__margin: 0 24px 0 0;
+  --channel__thumb__margin: 0 18px 0 0;
   --channel__thumb__size: 36px;
   --channel__thumb__borderRadius: 36px;
-  --channel__name__fontSize: 15px;
-  --channel__name__fontWeight: 500;
-  --channel__name__padding: 0;
+  --channel__name__color: var(--chat--light__color--1);
+  --channel--hover__name__color: var(--chat--light__color--1);
+  --channel--active__name__color: var(--chat--light__color--1);
+  --channel__name__fontSize: 13px;
+  --channel__name__fontWeight: 400;
   --channel__name__margin: 0;
-  --channel__description__color: #c7c7c7;
-  --channel--hover__description__color: #c7c7c7;
-  --channel--active__description__color: #c7c7c7;
-  --channel__description__display: inline-block;
-  --channel__description__fontSize: 13px;
+  --channel__name__overflow: hidden;
+  --channel__name__padding: 0;
+  --channel__name__textOverflow: ellipsis;
+  --channel__name__whiteSpace: nowrap;
+  --channel__description__color: var(--chat--light__color--2);
+  --channel--hover__description__color: var(--chat--light__color--2);
+  --channel--active__description__color: var(--chat--light__color--2);
+  --channel__description__display: block;
+  --channel__description__fontSize: 11px;
   --channel__description__fontWeight: 400;
-  --channel__description__padding: 3px 0 0;
   --channel__description__margin: 0;
-  --channel__leave__color: white;
-  --channel__leave__size: 20px;
-  --channel__leave__right: 20px;
-  --channel__leave__top: auto;
-  --channel__membership__borderRadius: 5px;
-  --channel__membership__color: #62e905;
-  --channel__membership__display: inline-block;
-  --channel__membership__left: 10px;
-  --channel__membership__position: absolute;
-  --channel__membership__size: 6px;
-  --channel__membership__top: 19px;
+  --channel__description__overflow: hidden;
+  --channel__description__padding: 7px 0 0;
+  --channel__description__textOverflow: ellipsis;
+  --channel__description__whiteSpace: nowrap;
+  --channel__actions--hover__background: transparent;
+  --channel__actions__background: transparent;
+  --channel__actions__borderRadius: 5px;
+  --channel__actions__color: var(--chat--light__color--2);
+  --channel__actions--hover__color: var(--chat--light__hover--1);
+  --channel__actions__fontSize: 18px;
+  --channel__actions__margin: 0 0 0 4px;
+  --channel__actions__padding: 3px 5px;
+  --channel__actions__visibility: hidden;
 }
 
 /* ************************
@@ -77,6 +81,10 @@
     .pn-channel__description {
       color: var(--channel--hover__description__color);
     }
+
+    .pn-channel__actions {
+      visibility: visible;
+    }
   }
 
   &--active {
@@ -98,13 +106,21 @@
     width: var(--channel__thumb__size);
   }
 
+  &__title {
+    flex: 1;
+    min-width: 0;
+  }
+
   &__name {
     color: var(--channel__name__color);
     font-size: var(--channel__name__fontSize);
     font-weight: var(--channel__name__fontWeight);
     margin: var(--channel__name__margin);
+    overflow: var(--channel__name__overflow);
     padding: var(--channel__name__padding);
     text-align: left;
+    text-overflow: var(--channel__name__textOverflow);
+    white-space: var(--channel__name__whiteSpace);
   }
 
   &__description {
@@ -113,8 +129,32 @@
     font-size: var(--channel__description__fontSize);
     font-weight: var(--channel__description__fontWeight);
     margin: var(--channel__description__margin);
+    overflow: var(--channel__description__overflow);
     padding: var(--channel__description__padding);
     text-align: left;
+    text-overflow: var(--channel__description__textOverflow);
+    white-space: var(--channel__description__whiteSpace);
+  }
+
+  &__actions {
+    color: var(--channel__actions__color);
+    cursor: pointer;
+    display: flex;
+    visibility: var(--channel__actions__visibility);
+    font-size: var(--channel__actions__fontSize);
+
+    & > * {
+      background: var(--channel__actions__background);
+      border-radius: var(--channel__actions__borderRadius);
+      display: flex;
+      margin: var(--channel__actions__margin);
+      padding: var(--channel__actions__padding);
+    }
+
+    & > *:hover {
+      background: var(--channel__actions--hover__background);
+      color: var(--channel__actions--hover__color);
+    }
   }
 
   &__leave {
@@ -126,17 +166,6 @@
     top: var(--channel__leave__top);
     width: var(--channel__leave__size);
   }
-
-  &__membership {
-    background: var(--channel__membership__color);
-    border-radius: var(--channel__membership__borderRadius);
-    display: var(--channel__membership__display);
-    height: var(--channel__membership__size);
-    left: var(--channel__membership__left);
-    position: var(--channel__membership__position);
-    top: var(--channel__membership__top);
-    width: var(--channel__membership__size);
-  }
 }
 
 /* ************************
@@ -146,10 +175,15 @@
 .pn-channel-list--dark,
 .pn-channel-list--event-dark,
 .pn-channel-list--support-dark {
-  --channel-list__background: linear-gradient(rgb(41 43 47) 0%, rgb(47 49 54) 100%);
-  --channel--hover__background: #36393f;
-  --channel--active__background: #2f3136;
-  --channel__description__color: #929292;
-  --channel__name__color: #dcddde;
-  --channel__leave__color: #dcddde;
+  --channel-list__background: var(--chat--dark__background--2);
+  --channel--hover__background: var(--chat--dark__hover--2);
+  --channel--active__background: var(--chat--dark__background--1);
+  --channel__name__color: var(--chat--dark__color--1);
+  --channel--hover__name__color: var(--chat--dark__color--1);
+  --channel--active__name__color: var(--chat--dark__color--1);
+  --channel__description__color: var(--chat--dark__color--2);
+  --channel--hover__description__color: var(--chat--dark__color--2);
+  --channel--active__description__color: var(--chat--dark__color--2);
+  --channel__actions__color: var(--chat--dark__color--2);
+  --channel__actions--hover__color: var(--chat--dark__hover--1);
 }

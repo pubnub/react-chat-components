@@ -1,7 +1,7 @@
 [
   {
     "timetoken": "161673695571766362",
-    "channel": "space_bc03548bcb11eb8dcd0242c1303",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -19,7 +19,7 @@
   },
   {
     "timetoken": "161673697571766362",
-    "channel": "space_bc03548bcb11eb8dcd0242c1303",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
     "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
     "actions": {},
     "message": {
@@ -29,7 +29,7 @@
   },
   {
     "timetoken": "161673698571766362",
-    "channel": "space_bc03548bcb11eb8dcd0242c1303",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
     "uuid": "user_47557ad75d4047efab1b6577cec3efe7",
     "actions": {},
     "message": {
@@ -39,7 +39,7 @@
   },
   {
     "timetoken": "161673699571766362",
-    "channel": "space_bc03548bcb11eb8dcd0242c1303",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
     "uuid": "user_63ea15931d8541a3bd35e5b1f09087dc",
     "actions": {},
     "message": {
@@ -49,7 +49,7 @@
   },
   {
     "timetoken": "161673700571766362",
-    "channel": "space_bc03548bcb11eb8dcd0242c1303",
+    "channel": "space.bc03548bcb11eb8dcd0242c1303",
     "uuid": "user_142da3c419804a82a3057cedc86acaa6",
     "actions": {},
     "message": {
@@ -59,7 +59,7 @@
   },
   {
     "timetoken": "16166852571766367",
-    "channel": "space_937989646abaa2bf3ed12dbd0a3",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
     "uuid": "user_4e2f18aba20640cf922c8bc485941f8e",
     "actions": {},
     "message": {
@@ -69,7 +69,7 @@
   },
   {
     "timetoken": "16166853571766368",
-    "channel": "space_937989646abaa2bf3ed12dbd0a3",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -79,7 +79,7 @@
   },
   {
     "timetoken": "16166854571766369",
-    "channel": "space_937989646abaa2bf3ed12dbd0a3",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
     "uuid": "user_4e2f18aba20640cf922c8bc485941f8e",
     "actions": {},
     "message": {
@@ -89,7 +89,7 @@
   },
   {
     "timetoken": "16166855571766370",
-    "channel": "space_937989646abaa2bf3ed12dbd0a3",
+    "channel": "space.937989646abaa2bf3ed12dbd0a3",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -99,7 +99,7 @@
   },
   {
     "timetoken": "16167852571766371",
-    "channel": "space_5f3547a18f448e567e84ba097db",
+    "channel": "space.5f3547a18f448e567e84ba097db",
     "uuid": "Mom",
     "actions": {},
     "message": {
@@ -113,7 +113,7 @@
   },
   {
     "timetoken": "16167853571766372",
-    "channel": "space_5f3547a18f448e567e84ba097db",
+    "channel": "space.5f3547a18f448e567e84ba097db",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -123,7 +123,7 @@
   },
   {
     "timetoken": "16167854571766373",
-    "channel": "space_5f3547a18f448e567e84ba097db",
+    "channel": "space.5f3547a18f448e567e84ba097db",
     "uuid": "Dad",
     "actions": {},
     "message": {
@@ -137,7 +137,7 @@
   },
   {
     "timetoken": "16167855571766374",
-    "channel": "space_5f3547a18f448e567e84ba097db",
+    "channel": "space.5f3547a18f448e567e84ba097db",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -155,7 +155,7 @@
   },
   {
     "timetoken": "16167857571766375",
-    "channel": "space_5f3547a18f448e567e84ba097db",
+    "channel": "space.5f3547a18f448e567e84ba097db",
     "uuid": "Mom",
     "actions": {},
     "message": {
@@ -169,7 +169,7 @@
   },
   {
     "timetoken": "161673657571766376",
-    "channel": "space_515fc9a2a1b043c3847a29f29f3b3c2a",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -179,7 +179,7 @@
   },
   {
     "timetoken": "161673659571766377",
-    "channel": "space_515fc9a2a1b043c3847a29f29f3b3c2a",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
     "uuid": "user_142da3c419804a82a3057cedc86acaa6",
     "actions": {},
     "message": {
@@ -189,7 +189,7 @@
   },
   {
     "timetoken": "161673660571766378",
-    "channel": "space_515fc9a2a1b043c3847a29f29f3b3c2a",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -199,7 +199,7 @@
   },
   {
     "timetoken": "161673662571766379",
-    "channel": "space_515fc9a2a1b043c3847a29f29f3b3c2a",
+    "channel": "space.515fc9a2a1b043c3847a29f29f3b3c2a",
     "uuid": "user_142da3c419804a82a3057cedc86acaa6",
     "actions": {},
     "message": {
@@ -226,7 +226,7 @@
   },
   {
     "timetoken": "161673757571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -236,7 +236,7 @@
   },
   {
     "timetoken": "161673759571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -246,7 +246,7 @@
   },
   {
     "timetoken": "161673760571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
     "actions": {},
     "message": {
@@ -256,7 +256,7 @@
   },
   {
     "timetoken": "161673762571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
     "actions": {},
     "message": {
@@ -266,7 +266,7 @@
   },
   {
     "timetoken": "161673763571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "current_user",
     "actions": {},
     "message": {
@@ -276,7 +276,7 @@
   },
   {
     "timetoken": "161673765571766376",
-    "channel": "space_efc5b3ef96ea4bffbde733e249c8cbb3",
+    "channel": "space.efc5b3ef96ea4bffbde733e249c8cbb3",
     "uuid": "user_efc5b3ef96ea4bffbde733e249c8cbb3",
     "actions": {},
     "message": {

@@ -6,13 +6,19 @@ import type {
   HereNowResponse,
   PublishResponse,
   SignalResponse,
+  SendFileResponse,
 } from "pubnub";
 import users from "../../data/users.json";
 import messages from "../../data/messages-lorem.json";
 import channels from "../../data/channels-work.json";
 
-export function PubNubMock(): Partial<PubNub> {
-  const uuid = "user_63ea15931d8541a3bd35e5b1f09087dc";
+export interface PubNubMockOptions {
+  uuid?: string;
+  returnedUuid?: string;
+}
+
+export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & { _config: any } {
+  const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
 
@@ -57,9 +63,13 @@ export function PubNubMock(): Partial<PubNub> {
     });
   };
 
-  const getUUID = () => uuid;
+  const getFileUrl = ({ channel, id, name }) => {
+    return `https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg`;
+  };
 
-  const getSubscribedChannels = () => ["space_ce466f2e445c38976168ba78e46"];
+  const getUUID = () => options.returnedUuid || uuid;
+
+  const getSubscribedChannels = () => ["space.ce466f2e445c38976168ba78e46"];
 
   const getSubscribedChannelGroups = () => [];
 
@@ -133,6 +143,18 @@ export function PubNubMock(): Partial<PubNub> {
     });
   };
 
+  const sendFile = (args) => {
+    // TODO: generate file message
+
+    return new Promise<SendFileResponse>((resolve) => {
+      resolve({
+        timetoken: Date.now() + "0000",
+        id: "random-file-uuid",
+        name: args.file.name,
+      });
+    });
+  };
+
   // const objects = {
   // getAllUUIDMetadata: () => ({
   //   data: users.map((u) => u.uuid),
@@ -145,11 +167,11 @@ export function PubNubMock(): Partial<PubNub> {
   // }),
   // getMemberships: () => ({
   //   data: [
-  //     { channel: { id: "space_ac4e67b98b34b44c4a39466e93e" } },
-  //     { channel: { id: "space_c1ee1eda28554d0a34f9b9df5cfe" } },
-  //     { channel: { id: "space_ce466f2e445c38976168ba78e46" } },
-  //     { channel: { id: "space_a204f87d215a40985d35cf84bf5" } },
-  //     { channel: { id: "space_149e60f311749f2a7c6515f7b34" } },
+  //     { channel: { id: "space.ac4e67b98b34b44c4a39466e93e" } },
+  //     { channel: { id: "space.c1ee1eda28554d0a34f9b9df5cfe" } },
+  //     { channel: { id: "space.ce466f2e445c38976168ba78e46" } },
+  //     { channel: { id: "space.a204f87d215a40985d35cf84bf5" } },
+  //     { channel: { id: "space.149e60f311749f2a7c6515f7b34" } },
   //   ],
   // }),
   // getUUIDMetadata: (args) => ({
@@ -161,6 +183,7 @@ export function PubNubMock(): Partial<PubNub> {
     addMessageAction,
     addListener,
     fetchMessages,
+    getFileUrl,
     getUUID,
     getSubscribedChannels,
     getSubscribedChannelGroups,
@@ -168,8 +191,12 @@ export function PubNubMock(): Partial<PubNub> {
     publish,
     removeMessageAction,
     signal,
+    sendFile,
     stop: () => true,
     subscribe: () => true,
     unsubscribe: () => true,
+    _config: {
+      _addPnsdkSuffix: () => true,
+    },
   };
 }

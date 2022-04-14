@@ -1,0 +1,51 @@
+* {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  color: #585858;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.pubnub-error {
+  color: rgb(168, 0, 0);
+  line-height: 1.5;
+  margin: 0 auto;
+  width: 900px;
+  font-weight: 300;
+}
+
+.welcome {
+  margin: 0 auto;
+  width: 900px;
+}
+
+.welcome h1,
+.welcome h3,
+.pubnub-error h1 {
+  margin: 20px 0;
+  font-weight: 500;
+}
+
+.welcome a {
+  color: #de2440;
+  text-decoration: none;
+}
+
+.welcome a:hover {
+  text-decoration: underline;
+}
+
+.welcome ul {
+  padding-left: 16px;
+}
+
+.welcome li {
+  margin: 10px 0;
+}

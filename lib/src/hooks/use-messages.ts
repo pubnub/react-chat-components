@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { FetchMessagesParameters, MessageActionEvent, MessageEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { Message } from "../types";
+import { MessageEnvelope } from "../types";
 import merge from "lodash.merge";
 import mergeWith from "lodash.mergewith";
 import cloneDeep from "lodash.clonedeep";
 import setDeep from "lodash.set";
 
 interface MessagesByChannel {
-  [channel: string]: Message[];
+  [channel: string]: MessageEnvelope[];
 }
 
 type HookReturnValue = [MessagesByChannel, () => Promise<void>, Error];

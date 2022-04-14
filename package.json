@@ -2,37 +2,64 @@
   "name": "@pubnub/react-chat-components-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "This monorepository uses npm v7 workspaces feature to crosslink dependencies between components library and sample applications.",
+  "description": "This monorepository uses yarn workspaces to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "workspaces": [
     "lib",
-    "samples"
+    "samples/*"
   ],
   "engines": {
-    "npm": ">= 7.0.0"
+    "npm": ">= 8.5.0",
+    "yarn": ">= 1.22.0"
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "npm run eslint:base -- --fix",
+      "npm run prettier:base -- --write"
+    ],
+    "*.{json,md,mdx}": [
+      "npm run prettier:base -- --write"
+    ]
   },
   "scripts": {
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples && npm run start\"",
     "build": "cd lib && npm run build",
-    "test": "jest --config lib/jest.config.js",
-    "test:watch": "jest --config lib/jest.config.js --watch",
-    "samples": "cd samples && npm run start",
-    "samples:build": "cd samples && npm run build",
-    "samples:deploy": "npm run samples:build && gh-pages -d samples/build -e samples",
+    "eslint:base": "eslint --ignore-path .gitignore",
+    "format": "npm run format:eslint && npm run format:prettier",
+    "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
+    "format:prettier": "npm run prettier:base -- --write \"**/*.{js,ts,tsx,json,md,mdx}\"",
+    "lint": "npm run lint:eslint",
+    "lint:eslint": "npm run eslint:base -- --max-warnings 0 \"**/*.{js,ts,tsx,mdx}\"",
+    "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
+    "prettier:base": "prettier --ignore-path .gitignore",
+    "postinstall": "npm run build -w ./lib",
+    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
     "storybook": "start-storybook -p 6006 -c lib/docs",
     "storybook:build": "build-storybook -c lib/docs",
-    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs"
+    "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",
+    "test": "jest --config lib/jest.config.js",
+    "test:watch": "jest --config lib/jest.config.js --watch"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "6.2.2",
-    "@storybook/addon-essentials": "6.2.2",
-    "@storybook/addon-links": "6.2.2",
-    "@storybook/addons": "6.2.2",
-    "@storybook/react": "6.2.2",
-    "@storybook/theming": "6.2.2",
+    "@commitlint/cli": "^13.2.1",
+    "@commitlint/config-conventional": "^13.2.0",
+    "@storybook/addon-actions": "6.4.13",
+    "@storybook/addon-essentials": "6.4.13",
+    "@storybook/addon-links": "6.4.13",
+    "@storybook/addons": "6.4.13",
+    "@storybook/react": "6.4.13",
+    "@storybook/theming": "6.4.13",
     "concurrently": "^6.0.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "eslint": "^7.11.0",
+    "eslint-config-prettier": "^6.14.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.4",
+    "prettier": "^2.1.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "sass": "^1.38.0",
     "sass-loader": "^10.1.0"
   }
