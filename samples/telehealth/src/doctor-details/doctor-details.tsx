@@ -1,4 +1,5 @@
-import React from "react";
+import React, { ReactNode } from "react";
+import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import "./doctor-details.scss";
 
 type DoctorDetailsProps = {
@@ -12,7 +13,7 @@ function DoctorDetails(props: DoctorDetailsProps): JSX.Element {
 
   return (
     <address className={`doctor-details ${big ? "big" : ""}`}>
-      <img src={doctor.profileUrl} alt={`${doctor.name}'s Avatar`} />
+      {doctor.profileUrl && <img src={doctor.profileUrl} alt={`${doctor.name}'s Avatar`} />}
 
       <div>
         <p>{doctor.name}</p>
