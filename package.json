@@ -5,6 +5,7 @@
   "description": "This monorepository uses yarn workspaces to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "workspaces": [
+    "data",
     "lib",
     "samples/*"
   ],

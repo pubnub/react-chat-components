@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
-import "./doctor-details.scss";
+
+import "./DoctorDetails.scss";
 
 type DoctorDetailsProps = {
   doctor: UUIDMetadataObject<ObjectCustom>;
@@ -12,7 +13,7 @@ function DoctorDetails(props: DoctorDetailsProps): JSX.Element {
   const { doctor, children, big } = props;
 
   return (
-    <address className={`doctor-details ${big ? "big" : ""}`}>
+    <address className={`doctor-details ${big ? "big" : "regular"}`}>
       {doctor.profileUrl && <img src={doctor.profileUrl} alt={`${doctor.name}'s Avatar`} />}
 
       <div>

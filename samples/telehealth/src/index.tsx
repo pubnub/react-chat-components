@@ -2,9 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
-import PatientView from "./patient-view/patient-view";
-import DoctorView from "./doctor-view/doctor-view";
-import users from "../../../data/users.json";
+import { users } from "@pubnub/react-chat-data";
+
+import PatientView from "./containers/PatientView";
+import DoctorView from "./containers/DoctorView";
 import "./index.css";
 
 const patients = users.slice(0, 10);
