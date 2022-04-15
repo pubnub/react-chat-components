@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { Chat, MemberList, MessageInput, MessageList } from "@pubnub/react-chat-components";
 
 import { ReactComponent as MedicalIcon } from "../assets/clipboard-medical.svg";
-import { ReactComponent as EllipsisIcon } from "../assets/ellipsis-vertical.svg";
 import { ReactComponent as ArrowUp } from "../assets/arrow-turn-up.svg";
 import DoctorDetails from "../components/DoctorDetails";
 import "./DoctorView.scss";
@@ -16,10 +15,9 @@ type DoctorViewProps = {
 
 function DoctorView(props: DoctorViewProps): JSX.Element {
   const { patient, doctor, channel } = props;
-  const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <main className={`doctor-view ${darkMode ? "dark" : "light"}`}>
+    <main className="doctor-view">
       <Chat currentChannel={channel} users={[patient, doctor]}>
         <aside>
           <header>
@@ -32,11 +30,7 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
           </nav>
 
           <footer>
-            <DoctorDetails doctor={doctor}>
-              <button onClick={() => setDarkMode(!darkMode)}>
-                <EllipsisIcon />
-              </button>
-            </DoctorDetails>
+            <DoctorDetails doctor={doctor} />
           </footer>
         </aside>
 
