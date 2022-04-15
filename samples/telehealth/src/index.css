@@ -57,6 +57,8 @@ button {
   --msg-input__background: #E9E9E9;
   --msg-input__padding: 9px 18px 9px 0;
   --msg-input__send--active__color: #7D99B5;
+  --msg-input__send__color: #7D99B5;
+  --msg-input__send--active__color: #7D99B5;
   --msg-input__textarea__background: #FFFFFF;
   --msg-input__textarea__borderRadius: 8px;
   --msg-input__textarea__fontSize: 15px;
@@ -97,6 +99,8 @@ button {
   --member__name__color: #FFFFFF;
   --member__title__color: #ADADAD;
   --msg-input__background: #383838;
+  --msg-input__send__color: #FFFFFF;
+  --msg-input__send--active__color: #FFFFFF;
   --msg-input__textarea__background: #606060;
   --msg-input__textarea__color: #FFFFFF;
   --msg-list__background: #606060;

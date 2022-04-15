@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { Chat, MemberList, MessageInput, MessageList } from "@pubnub/react-chat-components";
-import DoctorDetails from "../doctor-details/doctor-details";
-import medicalIconUrl from "../../assets/clipboard-medical.svg";
-import ellipsisIconUrl from "../../assets/ellipsis-vertical.svg";
-import arrowIconUrl from "../../assets/arrow-turn-up.svg";
-import "./doctor-view.scss";
-import { useState } from "react";
+
+import { ReactComponent as MedicalIcon } from "../assets/clipboard-medical.svg";
+import { ReactComponent as EllipsisIcon } from "../assets/ellipsis-vertical.svg";
+import { ReactComponent as ArrowUp } from "../assets/arrow-turn-up.svg";
+import DoctorDetails from "../components/DoctorDetails";
+import "./DoctorView.scss";
 
 type DoctorViewProps = {
   patient: UUIDMetadataObject<ObjectCustom>;
@@ -19,11 +19,11 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
   const [darkMode, setDarkMode] = useState(false);
 
   return (
-    <main className={`doctor-view ${darkMode ? "dark" : ""}`}>
+    <main className={`doctor-view ${darkMode ? "dark" : "light"}`}>
       <Chat currentChannel={channel} users={[patient, doctor]}>
         <aside>
           <header>
-            <img src={medicalIconUrl} alt="Medical Clipboard Icon" />
+            <MedicalIcon />
             <span>Patient Queue</span>
           </header>
 
@@ -33,10 +33,9 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
 
           <footer>
             <DoctorDetails doctor={doctor}>
-              <button
-                style={{ backgroundImage: `url(${ellipsisIconUrl})` }}
-                onClick={() => setDarkMode(!darkMode)}
-              />
+              <button onClick={() => setDarkMode(!darkMode)}>
+                <EllipsisIcon />
+              </button>
             </DoctorDetails>
           </footer>
         </aside>
@@ -48,7 +47,7 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
 
           <article>
             <MessageList />
-            <MessageInput sendButton={<img src={arrowIconUrl} />} />
+            <MessageInput sendButton={<ArrowUp />} />
           </article>
         </section>
       </Chat>

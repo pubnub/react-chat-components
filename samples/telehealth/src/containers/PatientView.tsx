@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { Chat, MessageInput, MessageList } from "@pubnub/react-chat-components";
-import DoctorDetails from "../doctor-details/doctor-details";
-import arrowIconUrl from "../../assets/arrow-turn-up.svg";
-import "./patient-view.scss";
+
+import { ReactComponent as ArrowUp } from "../assets/arrow-turn-up.svg";
+import DoctorDetails from "../components/DoctorDetails";
+import "./PatientView.scss";
 
 type PatientViewProps = {
   patient: UUIDMetadataObject<ObjectCustom>;
@@ -28,7 +29,7 @@ function PatientView(props: PatientViewProps): JSX.Element {
 
             <article>
               <MessageList />
-              <MessageInput sendButton={<img src={arrowIconUrl} />} />
+              <MessageInput sendButton={<ArrowUp />} />
             </article>
           </section>
         )}
