@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MemberList } from "../src/member-list/member-list";
-import members from "../../data/users.json";
+import { users as members } from "@pubnub/react-chat-data";
 import { render, screen } from "../mock/custom-renderer";
 
 describe("Member List", () => {
@@ -51,5 +51,13 @@ describe("Member List", () => {
     render(<MemberList members={members} extraActionsRenderer={customRenderer} />);
 
     expect(screen.queryByText("Anna Gordon")).toBeVisible();
+  });
+
+  test("sorts members with custom function", () => {
+    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
+    const { container } = render(<MemberList members={members} sort={customSorter} />);
+
+    expect(container.firstChild.firstChild).toHaveTextContent("Victoria Torres");
+    expect(container.firstChild.lastChild).toHaveTextContent("Anna Gordon");
   });
 });

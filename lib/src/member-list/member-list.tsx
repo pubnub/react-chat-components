@@ -14,6 +14,8 @@ export interface MemberListProps {
   presentMembers?: string[];
   /** This text will be added after current user's name */
   selfText?: string;
+  /** Members are sorted by presence and alphabetically by default, you can override that by providing a sorter function */
+  sort?: (a: UUIDMetadataObject<ObjectCustom>, b: UUIDMetadataObject<ObjectCustom>) => -1 | 0 | 1;
   /** Provide extra actions renderer to add custom action buttons to each member */
   extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
   /** Option to provide a custom user renderer to override themes and CSS variables. */
@@ -47,6 +49,8 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   const memberSorter = (a, b) => {
+    if (props.sort) return props.sort(a, b);
+
     if (isOwnMember(a.id)) return -1;
     if (isOwnMember(b.id)) return 1;
 

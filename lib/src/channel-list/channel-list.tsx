@@ -8,6 +8,11 @@ export interface ChannelListProps {
   children?: ReactNode;
   /** Option to pass a list of channels, including metadata, to render on the list. */
   channels: ChannelMetadataObject<ObjectCustom>[] | string[];
+  /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
+  sort?: (
+    a: ChannelMetadataObject<ObjectCustom>,
+    b: ChannelMetadataObject<ObjectCustom>
+  ) => -1 | 0 | 1;
   /** Option to provide an extra actions renderer to add custom action buttons to each channel. */
   extraActionsRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
   /** Option to provide a custom channel renderer to override default themes and CSS variables. */
@@ -41,6 +46,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
     a: ChannelMetadataObject<ObjectCustom>,
     b: ChannelMetadataObject<ObjectCustom>
   ) => {
+    if (props.sort) return props.sort(a, b);
     return a?.name?.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 

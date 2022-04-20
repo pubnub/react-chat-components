@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ChannelList } from "../src/channel-list/channel-list";
-import channels from "../../data/channels-work.json";
+import { workChannels as channels } from "@pubnub/react-chat-data";
 import { render, screen } from "../mock/custom-renderer";
 import userEvent from "@testing-library/user-event";
 
@@ -74,5 +74,13 @@ describe("Channel List", () => {
     userEvent.click(screen.getByText("Introductions"));
 
     expect(handleClick).not.toHaveBeenCalled();
+  });
+
+  test("sorts channels with custom function", () => {
+    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
+    const { container } = render(<ChannelList channels={channels} sort={customSorter} />);
+
+    expect(container.firstChild.firstChild).toHaveTextContent("Running");
+    expect(container.firstChild.lastChild).toHaveTextContent("Company Culture");
   });
 });

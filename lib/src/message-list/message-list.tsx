@@ -458,11 +458,18 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       <div className="pn-msg__reactions">
         {Object.keys(reactions).map((reaction) => {
           const instances = reactions[reaction];
+          const instancesLimit = 99;
+          const instancesLimited = instances.slice(0, instancesLimit);
+          const instancesOverLimit = instances.length - instancesLimited.length;
           const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
-          const userNames = instances.map((i) => {
+          const userNames = instancesLimited.map((i) => {
             const user = users.find((u) => u.id === i.uuid);
             return user ? user.name : i.uuid;
           });
+          const tooltipContent = `
+            ${userNames.join(", ")}
+            ${instancesOverLimit ? `and ${instancesOverLimit} more` : ``}
+          `;
 
           return (
             <div
@@ -470,14 +477,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
                 userReaction ? "pn-msg__reaction--active" : ""
               }`}
               key={reaction}
-              data-tooltip={userNames.join(", ")}
+              data-tooltip={tooltipContent}
               onClick={() => {
                 userReaction
                   ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
                   : addReaction(reaction, envelope.timetoken);
               }}
             >
-              {reaction} {instances.length}
+              {reaction} {instancesLimited.length}
+              {instancesOverLimit ? "+" : ""}
             </div>
           );
         })}

@@ -6,8 +6,8 @@ const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const sampleSize = require("lodash.sampleSize");
 
-const users = require("../../data/users.json");
-const channels = require("../../data/channels-work.json");
+const { users, workChannels } = require("@pubnub/react-chat-data");
+const channels = workChannels;
 
 require("dotenv").config({ path: "../.env" });
 /* eslint-enable */
