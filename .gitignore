@@ -10,6 +10,11 @@ coverage
 build
 dist
 storybook-static
+keys.json
+
+# GitHub Actions #
+##################
+.github/.release
 
 # misc
 TODO.md

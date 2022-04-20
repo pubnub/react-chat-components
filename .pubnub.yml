@@ -4,8 +4,8 @@ version: v0.9.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
-  - dist/index.js
-  - dist/index.es.js
+  - lib/dist/index.js
+  - lib/dist/index.es.js
 changelog:
   - changes:
       - text: Channel/MemberList - added option for custom sorting
