@@ -2,11 +2,10 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PubNub, { PubnubConfig } from "pubnub";
 import { PubNubProvider } from "pubnub-react";
+import { users } from "@pubnub/react-chat-data";
 
 import ModeratedChat from "./moderated-chat";
 import "./index.css";
-
-import users from "../../../data/users.json";
 
 /**
  * Prepare a PubNub instance and inject it into PubNubProvider
