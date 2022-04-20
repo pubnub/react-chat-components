@@ -52,4 +52,12 @@ describe("Member List", () => {
 
     expect(screen.queryByText("Anna Gordon")).toBeVisible();
   });
+
+  test("sorts members with custom function", () => {
+    const customSorter = (a, b) => b.name.localeCompare(a.name, "en", { sensitivity: "base" });
+    const { container } = render(<MemberList members={members} sort={customSorter} />);
+
+    expect(container.firstChild.firstChild).toHaveTextContent("Victoria Torres");
+    expect(container.firstChild.lastChild).toHaveTextContent("Anna Gordon");
+  });
 });

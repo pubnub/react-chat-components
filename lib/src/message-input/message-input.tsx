@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
-import { EmojiPickerElementProps } from "../types";
+import { StandardMessage, EmojiPickerElementProps } from "../types";
 import { useOuterClick } from "../helpers";
 import {
   CurrentChannelAtom,
@@ -47,9 +47,11 @@ export interface MessageInputProps {
   /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
   emojiPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback to handle an event when the text value changes. */
-  onChange?: (value: string) => unknown;
-  /** Callback for extra actions while sending a message. */
-  onSend?: (value: unknown) => unknown;
+  onChange?: (value: string) => void;
+  /** Callback to modify message content before sending it. This only works for text messages, not files. */
+  onBeforeSend?: (value: StandardMessage) => StandardMessage;
+  /** Callback for extra actions after sending a message. */
+  onSend?: (value: StandardMessage | File) => void;
   /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
 }
@@ -113,11 +115,12 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         await pubnub.sendFile({ channel, file });
         props.onSend && props.onSend(file);
       } else if (text) {
-        const message = {
+        let message = {
           type: "text",
           text,
           ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
-        };
+        } as StandardMessage;
+        if (props.onBeforeSend) message = props.onBeforeSend(message) || message;
         await pubnub.publish({ channel, message });
         props.onSend && props.onSend(message);
       }
