@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+.events-view.narrow {
+  --channel__padding: 10px 16px;
+}
+
+.events-view.narrow .pn-channel__title,
+.events-view.narrow .pn-channel__actions,
+.events-view.narrow .pn-member__main {
+  display: none;
+}
+
+.pn-msg__avatar,
+.pn-member__avatar {
+  font-weight: bold;
+}
+
+.pn-msg__content {
+  display: block;
+}
+
+.pn-msg__bubble {
+  display: inline;
+}
+
+#root {
+  --channel__actions__visibility: visible;
+  --channel__description__fontSize: 13px;
+  --channel__description__padding: 0;
+  --channel__name__fontSize: 14px;
+  --member__actions__margin: 0;
+  --member__actions__padding: 6px 12px;
+  --member__actions__visibility: visible;
+  --member__padding: 11px 16px;
+  --member__title__display: none;
+  --msg-input__padding: 9px 10px 9px 18px;
+  --msg-input__send__margin: 0 0 0 6px;
+  --msg-input__textarea__borderRadius: 8px;
+  --msg-input__textarea__fontSize: 15px;
+  --msg-input__textarea__height: 40px;
+  --msg-input__textarea__padding: 11px;
+  --msg__alignItems: center;
+  --msg__author__fontSize: 13px;
+  --msg__avatar__margin: 0 8px 0 0;
+  --msg__avatar__size: 16px;
+  --msg__content__alignItems: center;
+  --msg__content__flexDirection: row;
+  --msg__main__maxWidth: 100%;
+  --msg__padding: 3px 10px;
+  --msg__time__display: none;
+  --msg__title__display: inline;
+  --msg__title__margin: 0 10px 0 0;
+}
+
+#root .dark {
+  --channel--active__background: theme(colors.navy.900);
+  --channel--active__name__color: theme(colors.gray.200);
+  --channel--hover__background: theme(colors.navy.800);
+  --channel--hover__name__color: theme(colors.gray.200);
+  --channel-list__background: theme(colors.navy.700);
+  --channel__name__color: theme(colors.gray.200);
+  --member-list__background: theme(colors.navy.700);
+  --member__avatar__color: theme(colors.navy.700);
+  --member__name__color: theme(colors.gray.200);
+  --msg--hover__background: theme(colors.navy.800);
+  --msg-input__background: theme(colors.navy.700);
+  --msg-input__icon__color: theme(colors.gray.200);
+  --msg-input__send--active__color: theme(colors.gray.200);
+  --msg-input__textarea__background: theme(colors.navy.600);
+  --msg-input__textarea__color: theme(colors.gray.200);
+  --msg-list__background: theme(colors.navy.700);
+  --msg__author__color: theme(colors.gray.200);
+  --msg__bubble__color: theme(colors.gray.200);
+}
+
+#root .light {
+  --channel--active__background: theme(colors.gray.400);
+  --channel--active__description__color: theme(colors.navy.700);
+  --channel--active__name__color: theme(colors.ocean.800);
+  --channel--hover__background: theme(colors.gray.300);
+  --channel--hover__description__color: theme(colors.navy.700);
+  --channel--hover__name__color: theme(colors.ocean.800);
+  --channel__description__color: theme(colors.navy.700);
+  --channel__name__color: theme(colors.ocean.800);
+  --member-list__background: theme(colors.white);
+  --msg--hover__background: theme(colors.gray.300);
+  --msg-input__background: theme(colors.gray.300);
+  --msg-input__icon__color: theme(colors.ocean.800);
+  --msg-input__send--active__color: theme(colors.ocean.800);
+  --msg-input__textarea__background: theme(colors.white);
+  --msg-list__background: theme(colors.white);
+  --msg__author__color: theme(colors.navy.700);
+  --msg__bubble__color: theme(colors.navy.700);
+}
