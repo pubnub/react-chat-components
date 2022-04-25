@@ -7,15 +7,6 @@ files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
-  - date: 2022-04-20
-    version: v0.9.0
-    changes:
-      - type: feature
-        text: "Channel/MemberList - added option for custom sorting."
-      - type: feature
-        text: "MessageInput - added onBeforeSend callback prop to handle changes to message payloads."
-      - type: feature
-        text: "MessageList - limit the shown number of instances for a single reaction to 99."
   - changes:
       - text: Channel/MemberList - added option for custom sorting
         type: feature
