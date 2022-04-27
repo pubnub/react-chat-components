@@ -14,9 +14,7 @@ To use the app, you need:
 * [Node.js](https://nodejs.org/en/download/)
 * Code editor (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
 * PubNub [account](https://www.pubnub.com/docs/setup/account-setup) on the
-[Admin Portal](https://admin.pubnub.com/) with [Publish and Subscribe Keys](https://www.pubnub.com/docs/basics/initialize-pubnub) for your chat app with this configuration enabled:
-    * Message persistence
-    * Objects (select a region and enable User Metadata Events)
+[Admin Portal](https://admin.pubnub.com/) with [Publish and Subscribe Keys](https://www.pubnub.com/docs/basics/initialize-pubnub) for your chat app with the default configuration.
 
 ## Usage
 
