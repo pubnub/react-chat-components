@@ -46,15 +46,12 @@ architecture of realtime networks.
 
 Start by exploring our demos that were built using chat components:
 
-- [Moderated Chat](https://react-components-chat.pubnub.com/)
-  ([source code](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat))
+| Source code | Demo / Tutorial | Description |
+| :-------- | :--- |  :---------- |
+| [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/getting-started) | [Tutorial](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) | Sample 1:1 chat app to get started | 
+| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat) | [Demo](https://react-components-chat.pubnub.com/) | Complex moderated group chat app | 
+| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/telehealth) | [Demo](https://rcc-telehealth.surge.sh/) | Simple patient-doctor chat app | 
 
-Follow the steps in the
-[Getting Started guide](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page)
-to:
-
-- Set up a sample chat app and send your first message.
-- Install chat components to extend your existing React applications.
 
 ## Related documentation
 
