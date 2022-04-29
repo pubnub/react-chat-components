@@ -228,6 +228,7 @@
     font-weight: var(--msg__bubble__fontWeight);
     margin: var(--msg__bubble__margin);
     padding: var(--msg__bubble__padding);
+    word-break: break-word;
   }
 
   &__author {

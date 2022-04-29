@@ -1,14 +1,10 @@
-# Group Chat
+# Live Event Chat
 
-`group-chat` is an app that showcases a complex chat use case allowing you to see all PubNub Chat
-Components for React in action. After running the app, you can send messages as a sample user in a
-1:1 and group channel, upload files, and add message reactions to messages. Additionally, this app
-(also referred to as the "moderated chat app") works as a showcase app on which you can test
-features offered by our
-[Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started) to
-learn how to moderate and manage users, messages, and channels with PubNub.
+`live-event-chat` is an app that simulates a live event. You can switch between multiple chananels,
+send messages, view channel occupancy and the participant list. The app comes with the light and
+dark themes.
 
-![Group chat app for React](screenshot.png)
+![Life event chat app for React](screenshot.png)
 
 ## Prerequisites
 
@@ -25,9 +21,7 @@ To use the app, you need:
 - PubNub [account](https://www.pubnub.com/docs/setup/account-setup) on the
   [Admin Portal](https://admin.pubnub.com/) with
   [Publish and Subscribe Keys](https://www.pubnub.com/docs/basics/initialize-pubnub) for your chat
-  app with this configuration enabled: _ Presence _ Files (select a region) _ Message persistence _
-  Objects (select a region and enable User Metadata Events, Channel Metadata Events, and Membership
-  Events)
+  app with the default configuration.
 
 ## Usage
 
@@ -39,10 +33,10 @@ Follow the steps to run the app locally.
    git clone https://github.com/pubnub/react-chat-components.git
    ```
 
-1. Go to the `samples/group-chat` folder.
+1. Go to the `samples/live-event-chat` folder.
 
    ```bash
-   cd samples/group-chat
+   cd samples/live-event-chat
    ```
 
 1. Install the dependencies.
@@ -53,12 +47,6 @@ Follow the steps to run the app locally.
 
 1. Copy the `.env.example` file as `.env` and paste your Publish and Subscribe Keys there.
 
-1. Prepopulate sample user and channel object metadata.
-
-   ```bash
-   npm run setup
-   ```
-
 1. Run the application.
 
    ```bash
@@ -67,11 +55,10 @@ Follow the steps to run the app locally.
 
 ## Components
 
-The `group-chat` app showcases these PubNub Chat Components for React:
+The `live-event-chat` app showcases these PubNub Chat Components for React:
 
 - [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
 - [Channel List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-channel-list--default)
 - [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
 - [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default)
 - [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
-- [Typing Indicator](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-typing-indicator--default)
