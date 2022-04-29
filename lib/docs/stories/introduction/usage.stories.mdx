@@ -51,7 +51,7 @@ contains the configuration required to complete this guide.
 
 - [**PRESENCE**](https://www.pubnub.com/docs/sdks/javascript/api-reference/presence) to monitor the
   subscribers of channels and delivers information on their real-time status
-- [**STORAGE & PLAYBACK**](https://www.pubnub.com/docs/sdks/javascript/api-reference/storage-and-playback)
+- [**MESSAGE PERSISTENCE**](https://www.pubnub.com/docs/sdks/javascript/api-reference/storage-and-playback)
   (including correct **Retention**) to persist all messages as they're published.
 - [**OBJECTS**](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects) to easily store
   metadata about your application users and channels, and their membership associations, without the
@@ -238,10 +238,14 @@ npm start
 
 <img src={Screenshot} alt="PubNub Chat Components" style={{ margin: "-20px 0 0 -54px" }} />
 
+3. To verify that the app is connected to the PubNub Network, mock a real-live chat conversation
+   with `myFirstUser`. Open localhost in a new browser tab, send a message from one tab and reply to
+   it from another.
+
 ### Next steps
 
 With a React app running, find out how you can expand and customize it. Check out our:
 
 - Sample group chat ([preview](https://react-components-chat.pubnub.com/) and
-  [GitHub sources](https://github.com/pubnub/react-chat-components/tree/master/samples)).
+  [GitHub sources](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat)).
 - [Documentation for PubNub Chat Components for React](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default).
