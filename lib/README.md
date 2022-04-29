@@ -50,6 +50,7 @@ Start by exploring our demo apps that were built using chat components:
 | :------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :--------------------------------- |
 | [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/getting-started) | [Tutorial](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) | Sample 1:1 chat app to get started |
 | [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat)           | [Demo](https://react-components-chat.pubnub.com/)                                                              | Complex moderated group chat app   |
+| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/live-events)         | [Demo](https://rcc-live-event.surge.sh/)                                                                       | Live events app with a chat panel  |
 | [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/telehealth)           | [Demo](https://rcc-telehealth.surge.sh/)                                                                       | Simple patient-doctor chat app     |
 
 ## Related documentation

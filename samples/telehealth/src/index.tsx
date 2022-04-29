@@ -36,11 +36,11 @@ function AppView(): JSX.Element {
 
   return (
     <main
-      className={`app-view ${darkMode ? "dark" : "light"} flex justify-center h-[650px] relative`}
+      className={`app-view ${darkMode ? "dark" : "light"} flex justify-center h-[670px] relative`}
     >
-      <section className="flex flex-col mr-5 w-[330px]">
-        <header className="mb-6 pb-2 border-b border-solid border-gray-300">
-          <h1 className="text-gray-500 font-bold">Patient&apos;s Interface</h1>
+      <section className="flex flex-col w-[370px]">
+        <header className="mx-5 pb-2 border-b border-solid border-gray-300">
+          <h1 className="text-gray-400 font-bold">Patient&apos;s Interface</h1>
           <h2 className="text-gray-400">
             Logged in as: <strong>{randomPatient.name}</strong>
           </h2>
@@ -51,9 +51,9 @@ function AppView(): JSX.Element {
         </PubNubProvider>
       </section>
 
-      <section className="flex flex-col ml-5 w-[640px]">
-        <header className="mb-6 pb-2 border-b border-solid border-gray-300">
-          <h1 className="text-gray-500 font-bold">Doctor&apos;s Interface</h1>
+      <section className="flex flex-col w-[680px]">
+        <header className="mx-5 pb-2 border-b border-solid border-gray-300">
+          <h1 className="text-gray-400 font-bold">Doctor&apos;s Interface</h1>
           <h2 className="text-gray-400">
             Logged in as: <strong>{randomDoctor.name}</strong>
           </h2>
@@ -66,7 +66,7 @@ function AppView(): JSX.Element {
 
       <button
         onClick={() => setDarkMode(!darkMode)}
-        className="absolute bottom-0 left-0 p-4 m-4 text-xs underline ease-in-out duration-300
+        className="absolute bottom-0 left-0 p-4 m-8 text-xs underline ease-in-out duration-300
                    text-cyan-700 hover:text-slate-700 dark:text-slate-700 dark:hover:text-cyan-700"
       >
         {darkMode ? <MoonOverSun className="inline" /> : <MoonStars className="inline" />}
