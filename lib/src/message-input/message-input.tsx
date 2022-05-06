@@ -109,16 +109,23 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const sendMessage = async () => {
     try {
       if (!file && !isValidInputText()) return;
+      const senderInfo = props.senderInfo && {
+        sender: users.find((u) => u.id === pubnub.getUUID()),
+      };
       setLoader(true);
 
       if (file) {
-        await pubnub.sendFile({ channel, file });
+        await pubnub.sendFile({
+          channel,
+          file,
+          ...(senderInfo && { message: { ...senderInfo } }),
+        });
         props.onSend && props.onSend(file);
       } else if (text) {
         let message = {
           type: "text",
           text,
-          ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+          ...senderInfo,
         } as StandardMessage;
         if (props.onBeforeSend) message = props.onBeforeSend(message) || message;
         await pubnub.publish({ channel, message });

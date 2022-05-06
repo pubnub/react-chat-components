@@ -47,7 +47,7 @@ const ChatView = ({ channelOccupants, darkMode }: ChatViewProps): JSX.Element =>
         </button>
       </header>
 
-      <section className={`h-full flex-col flex ${!chatExpanded && "hidden"}`}>
+      <section className={`h-full flex-col flex overflow-hidden ${!chatExpanded && "hidden"}`}>
         {showMembers ? (
           <MemberList members={members} />
         ) : (
