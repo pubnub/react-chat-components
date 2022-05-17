@@ -1,12 +1,19 @@
 ---
 name: pubnub-react-chat-components
-version: v0.9.0
+version: v0.10.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2022-05-17
+    version: v0.10.0
+    changes:
+      - type: bug
+        text: "MessageInput - user metadata not attached to File messages with senderInfo option enabled."
+      - type: bug
+        text: "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
   - changes:
       - text: Channel/MemberList - added option for custom sorting
         type: feature

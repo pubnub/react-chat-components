@@ -46,8 +46,12 @@ architecture of realtime networks.
 
 Start by exploring our demo apps that were built using chat components:
 
-- [Getting Started](/samples/getting-started) - send your first message.
-- [Group Chat](/samples/group-chat) also known as the "moderated chat app" - explore most features offered by our chat components and run the app with [Moderation Dashboard](https://www.pubnub.com/docs/chat/moderation-dashboard/getting-started) to test its features. See also the app's [interactive demo](https://react-components-chat.pubnub.com/).
+| Source code                                                                                              | Demo / Tutorial                                                                                                | Description                        |
+| :------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :--------------------------------- |
+| [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/getting-started) | [Tutorial](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) | Sample 1:1 chat app to get started |
+| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat)           | [Demo](https://react-components-chat.pubnub.com/)                                                              | Complex moderated group chat app   |
+| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/live-events)         | [Demo](https://rcc-live-event.surge.sh/)                                                                       | Live events app with a chat panel  |
+| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/telehealth)           | [Demo](https://rcc-telehealth.surge.sh/)                                                                       | Simple patient-doctor chat app     |
 
 ## Related documentation
 

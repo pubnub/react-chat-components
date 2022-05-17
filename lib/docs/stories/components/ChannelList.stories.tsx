@@ -1,7 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { ChannelList, ChannelListProps } from "../../../src";
-import channels from "../../../../data/channels-work.json";
+import { workChannels as channels } from "@pubnub/react-chat-data";
 
 export default {
   title: "Components/Channel List",

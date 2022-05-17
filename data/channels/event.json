@@ -1,0 +1,106 @@
+[
+  {
+    "id": "channel-1",
+    "name": "Surviving a LIGHTNING STORM and serious Boat Repairs WEEKS from land! Ep.3",
+    "description": "Sailing La Vagabonde",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-1.png",
+      "source": "https://www.youtube.com/embed/eVS6EfrSA3I",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "1.7M"
+    }
+  },
+  {
+    "id": "channel-2",
+    "name": "We Sailed Into The Middle Of The Ocean | Boat Life Ep. 49",
+    "description": "Wild We Roam",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-2.png",
+      "source": "https://www.youtube.com/embed/2FsNABTvtmI",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "317k"
+    }
+  },
+  {
+    "id": "channel-3",
+    "name": "Our Most EXPENSIVE Ocean Crossing! | Pirates on the High Seas 🏴‍☠️ (Ep 189)",
+    "description": "Sailing Zatara",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-3.png",
+      "source": "https://www.youtube.com/embed/Yz6iENdFHZM",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "412k"
+    }
+  },
+  {
+    "id": "channel-4",
+    "name": "Living on a Sailboat in the Pacific NorthWest",
+    "description": "Tula's Endless Summer ",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-4.png",
+      "source": "https://www.youtube.com/embed/xrPyKDMOqUo",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "159k"
+    }
+  },
+  {
+    "id": "channel-5",
+    "name": "Living OFF GRID on a BUDGET Sailboat | S04E24",
+    "description": "Sailing Project Atticus",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-5.png",
+      "source": "https://www.youtube.com/embed/hRHskbdRFFs",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "241k"
+    }
+  },
+  {
+    "id": "channel-6",
+    "name": "AUSTRALIA! 🦘TEASER! Get ready for SEASON 2 of Expedition Drenched ⛵️",
+    "description": "Expedition Drenched",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-6.png",
+      "source": "https://www.youtube.com/embed/f7IsYFUdD6w",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "131k"
+    }
+  },
+  {
+    "id": "channel-7",
+    "name": "BOAT LIFE with a BABY! What is it really like? Ep 259",
+    "description": "Sailing Nandji - Frothlyfe",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-7.png",
+      "source": "https://www.youtube.com/embed/0L4v2rdQAes",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "124k"
+    }
+  },
+  {
+    "id": "channel-8",
+    "name": "NOMADIC & FREE: Family Life at Sea! SV Delos Ep. 364",
+    "description": "Sailing SV Delos",
+    "eTag": "",
+    "updated": "",
+    "custom": {
+      "thumb": "/boat-8.png",
+      "source": "https://www.youtube.com/embed/cvbsSSxeoAY",
+      "tags": "#sailingyoutubers #whywesail #sailboatcruising",
+      "subscribers": "786k"
+    }
+  }
+]

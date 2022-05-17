@@ -1,7 +1,7 @@
 import React from "react";
 
 import { MemberList } from "../src/member-list/member-list";
-import members from "../../data/users.json";
+import { users as members } from "@pubnub/react-chat-data";
 import { render, screen } from "../mock/custom-renderer";
 
 describe("Member List", () => {

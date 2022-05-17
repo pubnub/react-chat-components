@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ChannelList } from "../src/channel-list/channel-list";
-import channels from "../../data/channels-work.json";
+import { workChannels as channels } from "@pubnub/react-chat-data";
 import { render, screen } from "../mock/custom-renderer";
 import userEvent from "@testing-library/user-event";
 

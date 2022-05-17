@@ -102,6 +102,7 @@
   &__thumb {
     border-radius: var(--channel__thumb__borderRadius);
     display: var(--channel__thumb__display);
+    flex: none;
     margin: var(--channel__thumb__margin);
     width: var(--channel__thumb__size);
   }

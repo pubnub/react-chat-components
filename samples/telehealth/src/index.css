@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  height: 100%;
+}
+
+.pn-msg--own .pn-msg__author,
+.pn-msg-list__unread {
+  display: none;
+}
+
+.pn-member {
+  transition: all 0.2s ease-in-out;
+}
+
+#root {
+  --member--hover__background: theme(colors.cyan.300);
+  --member__avatar__size: 46px;
+  --member__background: theme(colors.white);
+  --member__cursor: pointer;
+  --member__name__color: theme(colors.black);
+  --member__name__fontSize: 16px;
+  --member__padding: 12px 16px;
+  --member__title__color: theme(colors.gray.500);
+  --member__title__fontSize: 14px;
+  --member__title__padding: 0;
+  --msg--hover__background: transparent;
+  --msg-input__background: theme(colors.gray.200);
+  --msg-input__padding: 9px 18px 9px 0;
+  --msg-input__send--active__color: theme(colors.blue.600);
+  --msg-input__send__color: theme(colors.blue.600);
+  --msg-input__textarea__background: theme(colors.white);
+  --msg-input__textarea__borderRadius: 8px;
+  --msg-input__textarea__fontSize: 15px;
+  --msg-input__textarea__height: 40px;
+  --msg-input__textarea__padding: 11px;
+  --msg-list__background: theme(colors.white);
+  --msg__author__color: theme(colors.blue.600);
+  --msg__author__fontSize: 12px;
+  --msg__author__fontWeight: bold;
+  --msg__avatar__margin: 0 14px 0 0;
+  --msg__avatar__size: 32px;
+  --msg__bubble__background: theme(colors.blue.100);
+  --msg__bubble__borderRadius: 8px;
+  --msg__bubble__color: theme(colors.black);
+  --msg__bubble__fontSize: 15px;
+  --msg__bubble__padding: 10px;
+  --msg__padding: 10px 9px;
+  --msg__time__color: theme(colors.blue.500);
+  --msg__time__fontSize: 12px;
+}
+
+#root .pn-msg--own {
+  --msg__avatar__display: none;
+  --msg__bubble__background: theme(colors.cyan.300);
+  --msg__content__alignItems: end;
+  --msg__flexDirection: row-reverse;
+}
+
+#root .dark {
+  --member--hover__background: theme(colors.slate.700);
+  --member__background: theme(colors.gray.500);
+  --member__name__color: theme(colors.white);
+  --member__title__color: theme(colors.gray.400);
+  --msg-input__background: theme(colors.gray.800);
+  --msg-input__send__color: theme(colors.white);
+  --msg-input__send--active__color: theme(colors.white);
+  --msg-input__textarea__background: theme(colors.gray.500);
+  --msg-input__textarea__color: theme(colors.white);
+  --msg-list__background: theme(colors.gray.500);
+  --msg__author__color: theme(colors.white);
+  --msg__bubble__background: theme(colors.gray.600);
+  --msg__bubble__color: theme(colors.gray.300);
+  --msg__time__color: theme(colors.gray.300);
+}
+
+#root .dark .pn-msg--own {
+  --msg__bubble__background: theme(colors.slate.700);
+  --msg__bubble__color: theme(colors.white);
+}

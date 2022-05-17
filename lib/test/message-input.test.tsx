@@ -4,7 +4,7 @@ import { MessageInput } from "../src/message-input/message-input";
 import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
-import users from "../../data/users.json";
+import { users } from "@pubnub/react-chat-data";
 
 describe("Message Input", () => {
   /** Basic renderers and properties */

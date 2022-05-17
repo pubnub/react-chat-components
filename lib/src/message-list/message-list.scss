@@ -228,6 +228,7 @@
     font-weight: var(--msg__bubble__fontWeight);
     margin: var(--msg__bubble__margin);
     padding: var(--msg__bubble__padding);
+    word-break: break-word;
   }
 
   &__author {
@@ -250,6 +251,7 @@
     border-radius: var(--msg__avatar__borderRadius);
     color: var(--msg-list__background);
     display: var(--msg__avatar__display);
+    flex: none;
     font-size: var(--msg__avatar__fontSize);
     height: var(--msg__avatar__size);
     justify-content: center;
