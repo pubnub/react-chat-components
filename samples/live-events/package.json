@@ -9,7 +9,6 @@
   "dependencies": {
     "@faker-js/faker": "^6.0.0-alpha.5",
     "@pubnub/react-chat-components": "^0.9.0",
-    "@pubnub/react-chat-data": "^1.0.0",
     "emoji-mart": "^3.0.0",
     "pubnub": "^4.36.0",
     "pubnub-react": "^2.1.1",

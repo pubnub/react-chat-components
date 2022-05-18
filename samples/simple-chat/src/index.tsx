@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import SimpleChat from "./simple-chat";
-import { users } from "@pubnub/react-chat-data";
+import users from "../../../data/users/users.json";
 
 const pubnub = new PubNub({
   publishKey: import.meta.env.REACT_APP_PUB_KEY as string,

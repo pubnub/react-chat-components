@@ -7,13 +7,16 @@ files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
-  - date: 2022-05-17
+  - date: 2022-05-18
     version: v0.10.0
     changes:
-      - type: bug
-        text: "MessageInput - user metadata not attached to File messages with senderInfo option enabled."
-      - type: bug
-        text: "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
+      - type: fix
+        text:
+          "MessageInput - user metadata not attached to File messages with senderInfo option
+          enabled."
+      - type: fix
+        text:
+          "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
   - changes:
       - text: Channel/MemberList - added option for custom sorting
         type: feature

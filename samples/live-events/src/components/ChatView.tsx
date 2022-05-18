@@ -55,6 +55,7 @@ const ChatView = ({ channelOccupants, darkMode }: ChatViewProps): JSX.Element =>
             <MessageList />
             <hr className="dark:border-navy-600 border-1" />
             <MessageInput
+              fileUpload="image"
               senderInfo
               emojiPicker={<Picker theme={darkMode ? "dark" : "light"} />}
               sendButton={

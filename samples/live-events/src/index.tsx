@@ -4,7 +4,7 @@ import PubNub, { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import faker from "@faker-js/faker";
 import { Chat, usePresence } from "@pubnub/react-chat-components";
-import { eventChannels } from "@pubnub/react-chat-data";
+import eventChannels from "../../../data/channels/event.json";
 
 import StreamView from "./components/StreamView";
 import ChannelsView from "./components/ChannelsView";
