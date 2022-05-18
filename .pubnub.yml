@@ -10,6 +10,13 @@ changelog:
   - date: 2022-05-18
     version: v0.10.0
     changes:
+      - type: bug
+        text: "MessageInput - user metadata not attached to File messages with senderInfo option enabled."
+      - type: bug
+        text: "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
+  - date: 2022-05-18
+    version: v0.10.0
+    changes:
       - type: fix
         text:
           "MessageInput - user metadata not attached to File messages with senderInfo option
