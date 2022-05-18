@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
-import { users } from "@pubnub/react-chat-data";
+import users from "../../../data/users/users.json";
 
 import { ReactComponent as MoonOverSun } from "./assets/moon-over-sun.svg";
 import { ReactComponent as MoonStars } from "./assets/moon-stars.svg";

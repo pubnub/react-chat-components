@@ -25,12 +25,10 @@ import "emoji-mart/css/emoji-mart.css";
  * external source or loaded from PubNub Objects storage with custom hooks included in the package.
  * Sample messages are fully optional.
  * */
-import {
-  users as rawUsers,
-  socialMessages as rawMessages,
-  socialChannels,
-  directChannels,
-} from "@pubnub/react-chat-data";
+import rawUsers from "../../../data/users/users.json";
+import rawMessages from "../../../data/messages/social.json";
+import socialChannels from "../../../data/channels/social.json";
+import directChannels from "../../../data/channels/direct.json";
 const users: UUIDMetadataObject<ObjectCustom>[] = rawUsers;
 const socialChannelList: ChannelMetadataObject<ObjectCustom>[] = socialChannels;
 const directChannelList: ChannelMetadataObject<ObjectCustom>[] = directChannels;
