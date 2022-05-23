@@ -8,7 +8,7 @@ export interface EmojiPickerElementProps {
 
 export interface MessageEnvelope {
   channel?: string;
-  message: StandardMessage | FileMessage;
+  message: MessagePayload | FileMessage;
   timetoken: string | number;
   messageType?: string | number;
   publisher?: string;
@@ -26,20 +26,22 @@ export interface MessageEnvelope {
   };
 }
 
-export interface StandardMessage {
+export interface MessagePayload {
+  id: string;
   type?: string;
   text?: string;
   sender?: UUIDMetadataObject<ObjectCustom>;
   attachments?: Array<ImageAttachment | LinkAttachment>;
+  createdAt?: string;
   [key: string]: unknown;
 }
 
 export interface FileMessage {
-  message?: StandardMessage;
+  message?: MessagePayload;
   file: FileAttachment;
 }
 
-export function isFileMessage(message: StandardMessage | FileMessage): message is FileMessage {
+export function isFileMessage(message: MessagePayload | FileMessage): message is FileMessage {
   return (message as FileMessage).file !== undefined;
 }
 

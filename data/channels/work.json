@@ -1,6 +1,8 @@
 [
   {
-    "name": "Movies",
+    "name": "Movies Test",
+    "type": "default",
+    "randomField": "randomValue",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/149e60f311749f2a7c6515f7b34?s=256&d=identicon"
     },
@@ -11,6 +13,7 @@
   },
   {
     "name": "Daily Standup",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/2ada61db17878cd388f95da34f9?s=256&d=identicon"
     },
@@ -21,6 +24,7 @@
   },
   {
     "name": "Running",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/363d9255193e45f190539e0c7d5?s=256&d=identicon"
     },
@@ -31,6 +35,7 @@
   },
   {
     "name": "India Office",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/515fc9a2a1a895f4059c84b2971?s=256&d=identicon"
     },
@@ -41,6 +46,7 @@
   },
   {
     "name": "Off Topic",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/a204f87d215a40985d35cf84bf5?s=256&d=identicon"
     },
@@ -51,6 +57,7 @@
   },
   {
     "name": "London Office",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/a652eb6cc340334ff0b244c4a39?s=256&d=identicon"
     },
@@ -61,6 +68,7 @@
   },
   {
     "name": "Introductions",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/ac4e67b98b34b44c4a39466e93e?s=256&d=identicon"
     },
@@ -71,6 +79,7 @@
   },
   {
     "name": "Poland Office",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/c1ee1eda28554d0a34f9b9df5cfe?s=256&d=identicon"
     },
@@ -81,6 +90,7 @@
   },
   {
     "name": "Company Culture",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/ce466f2e445c38976168ba78e46?s=256&d=identicon"
     },
@@ -91,6 +101,7 @@
   },
   {
     "name": "Exec AMA",
+    "type": "default",
     "custom": {
       "thumb": "https://www.gravatar.com/avatar/e1eda2fd92e551358e4af1b6174?s=256&d=identicon"
     },

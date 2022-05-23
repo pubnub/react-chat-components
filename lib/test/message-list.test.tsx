@@ -2,7 +2,7 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { StandardMessage } from "../src/types";
+import { MessagePayload } from "../src/types";
 import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
@@ -50,7 +50,7 @@ describe("Message List", () => {
       <MessageList
         welcomeMessages={message}
         messageRenderer={(props) => (
-          <div>Custom {(props.message.message as StandardMessage).text}</div>
+          <div>Custom {(props.message.message as MessagePayload).text}</div>
         )}
       />
     );
@@ -68,7 +68,7 @@ describe("Message List", () => {
       <MessageList
         welcomeMessages={message}
         bubbleRenderer={(props) => (
-          <div>Custom {(props.message.message as StandardMessage).text}</div>
+          <div>Custom {(props.message.message as MessagePayload).text}</div>
         )}
       />
     );

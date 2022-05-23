@@ -11,9 +11,12 @@ changelog:
     version: v0.10.0
     changes:
       - type: bug
-        text: "MessageInput - user metadata not attached to File messages with senderInfo option enabled."
+        text:
+          "MessageInput - user metadata not attached to File messages with senderInfo option
+          enabled."
       - type: bug
-        text: "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
+        text:
+          "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
   - date: 2022-05-18
     version: v0.10.0
     changes:
@@ -112,7 +115,7 @@ changelog:
         type: feature
       - text: Ability to refetch data in useChannelMembers and useUserMemberships
         type: feature
-      - text: Renamed Message interface to MessageEnvelope, added StandardMessage and FileMessage
+      - text: Renamed Message interface to MessageEnvelope, added MessagePayload and FileMessage
         type: feature
       - text: Improved MessageList scrolling behavior and detection
         type: fix

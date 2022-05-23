@@ -7,7 +7,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@pubnub/react-chat-components": "^0.9.0",
+    "@pubnub/react-chat-components": "^0.10.0",
     "pubnub": "^4.36.0",
     "pubnub-react": "^2.1.1",
     "react": "^17.0.2",
