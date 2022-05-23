@@ -75,7 +75,7 @@ const ChatView = ({
           <MemberList members={members} />
         ) : (
           <>
-            <MessageList />
+            <MessageList fetchMessages={1} />
             <hr className="dark:border-navy-600 border-1" />
             <MessageInput
               senderInfo
