@@ -28,7 +28,7 @@
     "lodash.samplesize": "^4.2.0",
     "prompts": "^2.4.1",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2",
+    "vite": "^2.9.9",
     "yargs": "^17.1.1"
   }
 }
