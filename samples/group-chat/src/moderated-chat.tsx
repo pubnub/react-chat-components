@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, MouseEvent } from "react";
-import { ChannelMetadataObject, ObjectCustom, BaseObjectsEvent } from "pubnub";
+import { BaseObjectsEvent } from "pubnub";
 import { Picker } from "emoji-mart";
 import { usePubNub } from "pubnub-react";
 import {
+  ChannelEntity,
   ChannelList,
   Chat,
   MemberList,
@@ -24,7 +25,7 @@ import { ReportUserModal } from "./components/report-user-modal";
 import { PublicChannelsModal } from "./components/public-channels-modal";
 import "./moderated-chat.scss";
 
-type ChannelType = ChannelMetadataObject<ObjectCustom>;
+type ChannelType = ChannelEntity;
 
 const defaultChannel = {
   id: "default",

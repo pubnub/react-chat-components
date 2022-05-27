@@ -8,12 +8,12 @@ Some components require providing lists of channels and users that should be dis
 those work fine with simple lists of `strings`, although look much better when provided with
 metadata about the entities. See the reference below to understand what's expected where and why:
 
-| Component         | Description                                                                                                           | Property                       | Data type (see below)                                 |
-| :---------------- | :-------------------------------------------------------------------------------------------------------------------- | :----------------------------- | ----------------------------------------------------- |
-| `ChannelList`     | Displays channel names with descriptions.                                                                             | `channels`                     | `string[]` or `ChannelMetadataObject<ObjectCustom>[]` |
-| `MemberList`      | Displays full user names, avatars and an additional line of text that can serve as a user's description/title/status. | `members`                      | `string[]` or `UUIDMetadataObject<ObjectCustom>[]`    |
-| `MessageList`     | Displays full user names and avatars.                                                                                 | `users` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]`                  |
-| `TypingIndicator` | Displays full user names or avatars, depending on the type of the indicator.                                          | `users` of the `Chat` provider | `UUIDMetadataObject<ObjectCustom>[]`                  |
+| Component         | Description                                                                                                           | Property                       | Data type (see below)           |
+| :---------------- | :-------------------------------------------------------------------------------------------------------------------- | :----------------------------- | ------------------------------- |
+| `ChannelList`     | Displays channel names with descriptions.                                                                             | `channels`                     | `string[]` or `ChannelEntity[]` |
+| `MemberList`      | Displays full user names, avatars and an additional line of text that can serve as a user's description/title/status. | `members`                      | `string[]` or `UserEntity[]`    |
+| `MessageList`     | Displays full user names and avatars.                                                                                 | `users` of the `Chat` provider | `UserEntity[]`                  |
+| `TypingIndicator` | Displays full user names or avatars, depending on the type of the indicator.                                          | `users` of the `Chat` provider | `UserEntity[]`                  |
 
 ## Data source
 
@@ -32,7 +32,7 @@ to the components using our custom
 ### Channel data type
 
 ```jsx
-interface ChannelMetadataObject<ObjectCustom> {
+interface ChannelEntity {
   id: string; // used as an unique channel identifier across the components
   name: string; // displayed on the ChannelList (first line)
   description?: string; // displayed on the ChannelList (second line)
@@ -47,7 +47,7 @@ interface ChannelMetadataObject<ObjectCustom> {
 ### User data type
 
 ```jsx
-interface UUIDMetadataObject<ObjectCustom> {
+interface UserEntity {
   id: string;                  // used as an unique user identifier across the components
   name: string;                // displayed on Messages, Typing Indicator, and Member List
   profileUrl?: string | null;  // expects an image URL to display the user avatar

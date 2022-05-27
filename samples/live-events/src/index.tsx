@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import PubNub, { ChannelMetadataObject, ObjectCustom } from "pubnub";
+import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import faker from "@faker-js/faker";
-import { Chat, usePresence } from "@pubnub/react-chat-components";
+import { ChannelEntity, Chat, usePresence } from "@pubnub/react-chat-components";
 import eventChannels from "../../../data/channels/event.json";
 
 import StreamView from "./components/StreamView";
@@ -18,7 +18,7 @@ const pubnub = new PubNub({
   uuid: faker.internet.userName(),
 });
 
-const channels: ChannelMetadataObject<ObjectCustom>[] = eventChannels;
+const channels: ChannelEntity[] = eventChannels;
 
 const LiveEventChat = (): JSX.Element => {
   const [darkMode, setDarkMode] = useState(true);

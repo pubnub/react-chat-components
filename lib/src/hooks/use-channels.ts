@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { ChannelMetadataObject, GetAllMetadataParameters, ObjectCustom } from "pubnub";
+import { GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
+import { ChannelEntity } from "../types";
 
-type HookReturnValue = [ChannelMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
+type HookReturnValue = [ChannelEntity[], () => Promise<void>, number, Error];
 
 export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
-  const [channels, setChannels] = useState<ChannelMetadataObject<ObjectCustom>[]>([]);
+  const [channels, setChannels] = useState<ChannelEntity[]>([]);
   const [page, setPage] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<Error>();

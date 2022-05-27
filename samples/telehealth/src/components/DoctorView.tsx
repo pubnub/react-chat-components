@@ -1,13 +1,18 @@
 import React from "react";
-import { UUIDMetadataObject, ObjectCustom } from "pubnub";
-import { Chat, MemberList, MessageInput, MessageList } from "@pubnub/react-chat-components";
+import {
+  UserEntity,
+  MessageList,
+  MessageInput,
+  MemberList,
+  Chat,
+} from "@pubnub/react-chat-components";
 
 import { ReactComponent as MedicalIcon } from "../assets/clipboard-medical.svg";
 import { ReactComponent as ArrowUp } from "../assets/arrow-turn-up.svg";
 
 type DoctorViewProps = {
-  patient: UUIDMetadataObject<ObjectCustom>;
-  doctor: UUIDMetadataObject<ObjectCustom>;
+  patient: UserEntity;
+  doctor: UserEntity;
   channel: string;
 };
 

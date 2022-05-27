@@ -1,6 +1,7 @@
 [
   {
     "id": "channel-1",
+    "type": "default",
     "name": "Surviving a LIGHTNING STORM and serious Boat Repairs WEEKS from land! Ep.3",
     "description": "Sailing La Vagabonde",
     "eTag": "",
@@ -14,6 +15,7 @@
   },
   {
     "id": "channel-2",
+    "type": "default",
     "name": "We Sailed Into The Middle Of The Ocean | Boat Life Ep. 49",
     "description": "Wild We Roam",
     "eTag": "",
@@ -27,6 +29,7 @@
   },
   {
     "id": "channel-3",
+    "type": "default",
     "name": "Our Most EXPENSIVE Ocean Crossing! | Pirates on the High Seas 🏴‍☠️ (Ep 189)",
     "description": "Sailing Zatara",
     "eTag": "",
@@ -40,6 +43,7 @@
   },
   {
     "id": "channel-4",
+    "type": "default",
     "name": "Living on a Sailboat in the Pacific NorthWest",
     "description": "Tula's Endless Summer ",
     "eTag": "",
@@ -53,6 +57,7 @@
   },
   {
     "id": "channel-5",
+    "type": "default",
     "name": "Living OFF GRID on a BUDGET Sailboat | S04E24",
     "description": "Sailing Project Atticus",
     "eTag": "",
@@ -66,6 +71,7 @@
   },
   {
     "id": "channel-6",
+    "type": "default",
     "name": "AUSTRALIA! 🦘TEASER! Get ready for SEASON 2 of Expedition Drenched ⛵️",
     "description": "Expedition Drenched",
     "eTag": "",
@@ -79,6 +85,7 @@
   },
   {
     "id": "channel-7",
+    "type": "default",
     "name": "BOAT LIFE with a BABY! What is it really like? Ep 259",
     "description": "Sailing Nandji - Frothlyfe",
     "eTag": "",
@@ -92,6 +99,7 @@
   },
   {
     "id": "channel-8",
+    "type": "default",
     "name": "NOMADIC & FREE: Family Life at Sea! SV Delos Ep. 364",
     "description": "Sailing SV Delos",
     "eTag": "",

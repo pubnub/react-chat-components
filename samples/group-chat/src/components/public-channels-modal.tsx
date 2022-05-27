@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { ChannelMetadataObject, ObjectCustom } from "pubnub";
-import { ChannelList } from "@pubnub/react-chat-components";
-
-type ChannelType = ChannelMetadataObject<ObjectCustom>;
+import { ChannelEntity, ChannelList } from "@pubnub/react-chat-components";
 
 interface PublicChannelsModalProps {
-  groupChannelsToJoin: ChannelType[];
-  setCurrentChannel: (channel: ChannelType) => void;
+  groupChannelsToJoin: ChannelEntity[];
+  setCurrentChannel: (channel: ChannelEntity) => void;
   hideModal: () => void;
 }
 
@@ -23,7 +20,7 @@ export const PublicChannelsModal = ({
   const pubnub = usePubNub();
   const [channelsFilter, setChannelsFilter] = useState("");
 
-  const joinGroupChannel = async (channel: ChannelType) => {
+  const joinGroupChannel = async (channel: ChannelEntity) => {
     await pubnub.objects.setMemberships({ channels: [channel.id] });
     setCurrentChannel(channel);
     hideModal();

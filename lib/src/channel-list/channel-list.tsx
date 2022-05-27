@@ -1,24 +1,21 @@
 import React, { FC, ReactNode } from "react";
 import { useAtom } from "jotai";
-import { ChannelMetadataObject, ObjectCustom } from "pubnub";
+import { ChannelEntity } from "../types";
 import { ThemeAtom, CurrentChannelAtom } from "../state-atoms";
 import "./channel-list.scss";
 
 export interface ChannelListProps {
   children?: ReactNode;
   /** Option to pass a list of channels, including metadata, to render on the list. */
-  channels: ChannelMetadataObject<ObjectCustom>[] | string[];
+  channels: ChannelEntity[] | string[];
   /** Channels are sorted alphabetically by default, you can override that by providing a sorter function */
-  sort?: (
-    a: ChannelMetadataObject<ObjectCustom>,
-    b: ChannelMetadataObject<ObjectCustom>
-  ) => -1 | 0 | 1;
+  sort?: (a: ChannelEntity, b: ChannelEntity) => -1 | 0 | 1;
   /** Option to provide an extra actions renderer to add custom action buttons to each channel. */
-  extraActionsRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
+  extraActionsRenderer?: (channel: ChannelEntity) => JSX.Element;
   /** Option to provide a custom channel renderer to override default themes and CSS variables. */
-  channelRenderer?: (channel: ChannelMetadataObject<ObjectCustom>) => JSX.Element;
+  channelRenderer?: (channel: ChannelEntity) => JSX.Element;
   /** Callback run when a user clicked one of the channels. Can be used to switch the current channel. */
-  onChannelSwitched?: (channel: ChannelMetadataObject<ObjectCustom>) => unknown;
+  onChannelSwitched?: (channel: ChannelEntity) => unknown;
 }
 
 /**
@@ -38,19 +35,16 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /*
   /* Helper functions
   */
-  const isChannelActive = (ch: ChannelMetadataObject<ObjectCustom>) => {
+  const isChannelActive = (ch: ChannelEntity) => {
     return currentChannel === ch.id;
   };
 
-  const channelSorter = (
-    a: ChannelMetadataObject<ObjectCustom>,
-    b: ChannelMetadataObject<ObjectCustom>
-  ) => {
+  const channelSorter = (a: ChannelEntity, b: ChannelEntity) => {
     if (props.sort) return props.sort(a, b);
     return a?.name?.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
-  const channelFromString = (channel: ChannelMetadataObject<ObjectCustom> | string) => {
+  const channelFromString = (channel: ChannelEntity | string) => {
     if (typeof channel === "string") {
       return {
         id: channel,
@@ -64,7 +58,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /* Commands
   */
 
-  const switchChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
+  const switchChannel = (channel: ChannelEntity) => {
     if (props.onChannelSwitched) props.onChannelSwitched(channel);
   };
 
@@ -72,7 +66,7 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   /* Renderers
   */
 
-  const renderChannel = (channel: ChannelMetadataObject<ObjectCustom>) => {
+  const renderChannel = (channel: ChannelEntity) => {
     if (props.channelRenderer) return props.channelRenderer(channel);
     const channelActive = isChannelActive(channel);
     const activeClass = channelActive ? "pn-channel--active" : "";

@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
-import { ChannelMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import useClickAway from "react-use/lib/useClickAway";
 import {
+  ChannelEntity,
   ChannelList,
   usePresence,
   getNameInitials,
@@ -16,10 +16,10 @@ import { ReactComponent as MoonIcon } from "../assets/moon-over-sun.svg";
 import { ReactComponent as QuestionIcon } from "../assets/question-check.svg";
 
 type ChannelsViewProps = {
-  channels: ChannelMetadataObject<ObjectCustom>[];
+  channels: ChannelEntity[];
   darkMode: boolean;
   presence: ReturnType<typeof usePresence>[0];
-  setCurrentChannel: (val: ChannelMetadataObject<ObjectCustom>) => void;
+  setCurrentChannel: (val: ChannelEntity) => void;
   setDarkMode: (val: boolean) => void;
 };
 

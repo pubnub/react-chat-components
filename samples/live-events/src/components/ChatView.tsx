@@ -52,7 +52,7 @@ const ChatView = ({ channelOccupants, darkMode }: ChatViewProps): JSX.Element =>
           <MemberList members={members} />
         ) : (
           <>
-            <MessageList fetchMessages={1} />
+            <MessageList />
             <hr className="dark:border-navy-600 border-1" />
             <MessageInput
               fileUpload="image"

@@ -1,6 +1,6 @@
 import React from "react";
 import faker from "@faker-js/faker";
-import { ChannelMetadataObject, ObjectCustom } from "pubnub";
+import { ChannelEntity } from "@pubnub/react-chat-components";
 
 import { ReactComponent as GroupIcon } from "../assets/user-group.svg";
 
@@ -9,7 +9,7 @@ const randomText1 = faker.random.words(50);
 const randomText2 = faker.random.words(50);
 
 type StreamViewProps = {
-  currentChannel: ChannelMetadataObject<ObjectCustom>;
+  currentChannel: ChannelEntity;
   channelOccupancy: number;
 };
 

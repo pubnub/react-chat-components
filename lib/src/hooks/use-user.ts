@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
-import { UUIDMetadataObject, ObjectCustom, GetUUIDMetadataParameters } from "pubnub";
+import { GetUUIDMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import cloneDeep from "lodash.clonedeep";
+import { UserEntity } from "../types";
 
-export const useUser = (
-  options: GetUUIDMetadataParameters = {}
-): [UUIDMetadataObject<ObjectCustom>, Error] => {
+export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {
   const pubnub = usePubNub();
 
   const [user, setUser] = useState(null);

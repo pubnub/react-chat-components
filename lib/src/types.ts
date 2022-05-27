@@ -1,4 +1,4 @@
-import { UUIDMetadataObject, ObjectCustom } from "pubnub";
+import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
@@ -6,9 +6,18 @@ export interface EmojiPickerElementProps {
   onSelect?: ({ native: string }) => void;
 }
 
+interface VSPEntity {
+  type?: string;
+  status?: string;
+}
+
+export type ChannelEntity = ChannelMetadataObject<ObjectCustom> & VSPEntity;
+
+export type UserEntity = UUIDMetadataObject<ObjectCustom> & VSPEntity;
+
 export interface MessageEnvelope {
   channel?: string;
-  message: MessagePayload | FileMessage;
+  message: MessagePayload | FilePayload;
   timetoken: string | number;
   messageType?: string | number;
   publisher?: string;
@@ -36,13 +45,13 @@ export interface MessagePayload {
   [key: string]: unknown;
 }
 
-export interface FileMessage {
+export interface FilePayload {
   message?: MessagePayload;
   file: FileAttachment;
 }
 
-export function isFileMessage(message: MessagePayload | FileMessage): message is FileMessage {
-  return (message as FileMessage).file !== undefined;
+export function isFilePayload(message: MessagePayload | FilePayload): message is FilePayload {
+  return (message as FilePayload).file !== undefined;
 }
 
 export interface FileAttachment {

@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from "react";
-import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
+import { UserEntity } from "../types";
 import { ThemeAtom } from "../state-atoms";
 import { getNameInitials, getPredefinedColor } from "../helpers";
 import "./member-list.scss";
@@ -9,19 +9,19 @@ import "./member-list.scss";
 export interface MemberListProps {
   children?: ReactNode;
   /** Option to pass a list of members, including metadata, to render on the list. */
-  members: UUIDMetadataObject<ObjectCustom>[] | string[];
+  members: UserEntity[] | string[];
   /** Option to pass a list of present member IDs to mark them with a presence indicator. */
   presentMembers?: string[];
   /** This text will be added after current user's name */
   selfText?: string;
   /** Members are sorted by presence and alphabetically by default, you can override that by providing a sorter function */
-  sort?: (a: UUIDMetadataObject<ObjectCustom>, b: UUIDMetadataObject<ObjectCustom>) => -1 | 0 | 1;
+  sort?: (a: UserEntity, b: UserEntity) => -1 | 0 | 1;
   /** Provide extra actions renderer to add custom action buttons to each member */
-  extraActionsRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
+  extraActionsRenderer?: (member: UserEntity) => JSX.Element;
   /** Option to provide a custom user renderer to override themes and CSS variables. */
-  memberRenderer?: (member: UUIDMetadataObject<ObjectCustom>) => JSX.Element;
+  memberRenderer?: (member: UserEntity) => JSX.Element;
   /** A callback run when user clicked one of the members. */
-  onMemberClicked?: (member: UUIDMetadataObject<ObjectCustom>) => unknown;
+  onMemberClicked?: (member: UserEntity) => unknown;
 }
 
 /**
@@ -60,7 +60,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
     return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
   };
 
-  const memberFromString = (member: UUIDMetadataObject<ObjectCustom> | string) => {
+  const memberFromString = (member: UserEntity | string) => {
     if (typeof member === "string") {
       return {
         id: member,
@@ -74,7 +74,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   /* Commands
   */
 
-  const clickMember = (member: UUIDMetadataObject<ObjectCustom>) => {
+  const clickMember = (member: UserEntity) => {
     if (props.onMemberClicked) props.onMemberClicked(member);
   };
 
@@ -82,7 +82,7 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   /* Renderers
   */
 
-  const renderMember = (member: UUIDMetadataObject<ObjectCustom>) => {
+  const renderMember = (member: UserEntity) => {
     if (props.memberRenderer) return props.memberRenderer(member);
     const youString = isOwnMember(member.id) ? props.selfText : "";
 

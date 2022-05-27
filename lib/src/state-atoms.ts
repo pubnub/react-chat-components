@@ -1,12 +1,11 @@
-import { UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { atom } from "jotai";
-import { MessageEnvelope, Themes } from "./types";
+import { UserEntity, MessageEnvelope, Themes } from "./types";
 
 export const ThemeAtom = atom<Themes | "">("light");
 export const CurrentChannelAtom = atom<string>("");
 export const SubscribeChannelsAtom = atom<string[]>([]);
 export const SubscribeChannelGroupsAtom = atom<string[]>([]);
-export const UsersMetaAtom = atom<UUIDMetadataObject<ObjectCustom>[]>([]);
+export const UsersMetaAtom = atom<UserEntity[]>([]);
 export const MessagesAtom = atom<{ [channel: string]: MessageEnvelope[] }>({});
 export const PaginationAtom = atom<{ [channel: string]: boolean }>({});
 export const TypingIndicatorAtom = atom({});
