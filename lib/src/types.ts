@@ -6,9 +6,14 @@ export interface EmojiPickerElementProps {
   onSelect?: ({ native: string }) => void;
 }
 
-export type ChannelEntity = ChannelMetadataObject<ObjectCustom>;
+interface VSPEntity {
+  type?: string;
+  status?: string;
+}
 
-export type UserEntity = UUIDMetadataObject<ObjectCustom>;
+export type ChannelEntity = ChannelMetadataObject<ObjectCustom> & VSPEntity;
+
+export type UserEntity = UUIDMetadataObject<ObjectCustom> & VSPEntity;
 
 export interface MessageEnvelope {
   channel?: string;
