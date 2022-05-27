@@ -117,7 +117,7 @@ changelog:
         type: feature
       - text: Ability to refetch data in useChannelMembers and useUserMemberships
         type: feature
-      - text: Renamed Message interface to MessageEnvelope, added MessagePayload and FileMessage
+      - text: Renamed Message interface to MessageEnvelope, added StandardMessage and FileMessage
         type: feature
       - text: Improved MessageList scrolling behavior and detection
         type: fix
