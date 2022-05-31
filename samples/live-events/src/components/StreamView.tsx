@@ -52,9 +52,9 @@ const StreamView = ({ currentChannel, channelOccupancy }: StreamViewProps): JSX.
         {/* Content */}
         <div className="bg-gray-300 dark:bg-navy-700 dark:text-gray-600 flex flex-col grow p-5 text-gray-700 text-sm">
           <header className="flex items-center my-3">
-            {currentChannel?.custom?.thumb && (
+            {currentChannel?.custom?.profileUrl && (
               <img
-                src={currentChannel.custom.thumb as string}
+                src={currentChannel.custom.profileUrl as string}
                 className="h-10 mr-4 rounded-full w-10"
                 alt="Channel Thumb"
               />

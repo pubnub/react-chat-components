@@ -88,7 +88,7 @@ export default function ModeratedChat(): JSX.Element {
       const interlocutorId = c.id.replace(uuid, "").replace("direct.", "").replace("@", "");
       const interlocutor = allUsers.find((u) => u.id === interlocutorId);
       if (interlocutor) {
-        c.custom = { thumb: interlocutor.profileUrl || "" };
+        c.custom = { profileUrl: interlocutor.profileUrl || "" };
         c.name = interlocutor.name;
       }
       return c;

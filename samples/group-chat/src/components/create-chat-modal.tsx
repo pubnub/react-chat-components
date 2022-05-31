@@ -54,7 +54,7 @@ export const CreateChatModal = ({
     const randomHex = [...Array(27)]
       .map(() => Math.floor(Math.random() * 16).toString(16))
       .join("");
-    const custom = { thumb: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon` };
+    const custom = { profileUrl: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon` };
 
     if (user) {
       /** 1-on-1 chat */
@@ -70,7 +70,7 @@ export const CreateChatModal = ({
       };
       localData = {
         name: user.name,
-        custom: { thumb: user.profileUrl },
+        custom: { profileUrl: user.profileUrl },
       };
     } else {
       /** Group chat */
