@@ -102,12 +102,23 @@ describe("Message Input", () => {
 
   test("sends messages in a correct format", async () => {
     const handleSend = jest.fn();
+    // const dateSpy = jest.spyOn(global, "Date");
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
     userEvent.click(screen.getByTitle("Send"));
 
+    // const date = dateSpy.mock.instances[0];
     expect(await screen.findByDisplayValue("")).toBeVisible();
-    expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
+    expect(handleSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: expect.any(String),
+        createdAt: expect.any(String),
+        type: "text",
+        text: "Initial Value",
+      })
+    );
+
+    // dateSpy.mockRestore();
   });
 
   test("attaches sender info in messages", async () => {

@@ -32,7 +32,7 @@ describe("Message List", () => {
 
   test("renders with custom welcome messages", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(<MessageList welcomeMessages={message} />);
@@ -43,7 +43,7 @@ describe("Message List", () => {
 
   test("renders messages with custom message renderer", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
@@ -61,7 +61,7 @@ describe("Message List", () => {
 
   test("renders messages with custom bubble renderer", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
@@ -79,7 +79,7 @@ describe("Message List", () => {
 
   test("renders extra actions", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
@@ -214,7 +214,7 @@ describe("Message List", () => {
 
   test("renders message text edits", async () => {
     const message = {
-      message: { type: "text", text: "Original text" },
+      message: { id: "id-1", type: "text", text: "Original text" },
       timetoken: "16165851271766362",
       actions: {
         updated: {
@@ -231,7 +231,7 @@ describe("Message List", () => {
 
   test("renders message text edits", async () => {
     const message = {
-      message: { type: "text", text: "Original text" },
+      message: { id: "id-1", type: "text", text: "Original text" },
       timetoken: "16165851271766362",
       actions: {
         deleted: {

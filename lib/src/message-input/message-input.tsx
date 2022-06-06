@@ -113,6 +113,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       let message = {
         id: uuidv4(),
         text: file ? "" : text,
+        type: file ? "" : "default",
         ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
         createdAt: new Date().toISOString(),
       } as MessagePayload;
