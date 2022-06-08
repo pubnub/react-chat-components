@@ -34,7 +34,7 @@ const StreamView = ({ currentChannel, channelOccupancy }: StreamViewProps): JSX.
         <div className="bg-gray-300 dark:bg-navy-900 flex items-center p-4">
           <div className="grow">
             <h4 className="dark:text-gray-200 text-lg text-navy-700">{currentChannel?.name}</h4>
-            <span className="dark:text-ocean-600 space-x-5 text-ocean-800 text-sm">
+            <span className="dark:text-ocean-600 space-x-5 text-ocean-800 text-sm break-all">
               {(currentChannel?.custom?.tags as string).split(" ").map((tag) => (
                 <span key={tag}>{tag}</span>
               ))}

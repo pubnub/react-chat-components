@@ -17,18 +17,27 @@ import { ReactComponent as QuestionIcon } from "../assets/question-check.svg";
 
 type ChannelsViewProps = {
   channels: ChannelMetadataObject<ObjectCustom>[];
+  channelsExpanded: boolean;
   darkMode: boolean;
   presence: ReturnType<typeof usePresence>[0];
+  setChannelsExpanded: (val: boolean) => void;
   setCurrentChannel: (val: ChannelMetadataObject<ObjectCustom>) => void;
   setDarkMode: (val: boolean) => void;
 };
 
 const ChannelsView = (props: ChannelsViewProps): JSX.Element => {
-  const { channels, darkMode, presence, setCurrentChannel, setDarkMode } = props;
+  const {
+    channels,
+    channelsExpanded,
+    darkMode,
+    presence,
+    setChannelsExpanded,
+    setCurrentChannel,
+    setDarkMode,
+  } = props;
   const pubnub = usePubNub();
   const userName = pubnub.getUUID();
   const userMenuRef = useRef(null);
-  const [channelsExpanded, setChannelsExpanded] = useState(true);
   const [showUserMenu, setShowUserMenu] = useState(false);
   useClickAway(userMenuRef, () => setShowUserMenu(!showUserMenu), ["click"]);
 
@@ -36,7 +45,7 @@ const ChannelsView = (props: ChannelsViewProps): JSX.Element => {
     <aside
       className={`events-view flex flex-col ${
         channelsExpanded
-          ? "absolute h-full md:static md:w-[350px] w-full wide z-10"
+          ? "absolute h-full md:static md:w-[280px] xl:w-[360px] w-full wide z-10"
           : "narrow w-[70px]"
       }`}
     >
