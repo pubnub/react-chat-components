@@ -6,6 +6,7 @@ import {
   UserEntity,
   MemberList,
   ChannelEntity,
+  VSPPubnub,
 } from "@pubnub/react-chat-components";
 
 interface CreateChatModalProps {
@@ -32,7 +33,7 @@ export const CreateChatModal = ({
   setCurrentChannel,
   hideModal,
 }: CreateChatModalProps): JSX.Element => {
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
   const [creatingChannel, setCreatingChannel] = useState(false);
   const [showGroups, setShowGroups] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState<UserEntity[]>([]);
@@ -87,7 +88,7 @@ export const CreateChatModal = ({
       localData = remoteData;
     }
 
-    await pubnub.objects.setChannelMetadata({ channel, data: remoteData });
+    await pubnub.createSpace({ spaceId: channel, data: remoteData });
     await pubnub.objects.setChannelMembers({ channel, uuids });
     setCurrentChannel({ id: channel, ...localData });
     setCreatingChannel(false);

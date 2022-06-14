@@ -3,12 +3,12 @@ import { GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
-import { ChannelEntity } from "../types";
+import { VSPPubnub, ChannelEntity } from "../types";
 
 type HookReturnValue = [ChannelEntity[], () => void, number, Error];
 
 export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnValue => {
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
 
   const [channels, setChannels] = useState<ChannelEntity[]>([]);
   const [page, setPage] = useState("");
@@ -32,7 +32,7 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     async function fetchPage() {
       try {
         if (totalCount && channels.length >= totalCount) return;
-        const response = await pubnub.objects.getAllChannelMetadata(paginatedOptions);
+        const response = await pubnub.fetchSpaces(paginatedOptions);
         if (ignoreRequest) return;
         setDoFetch(false);
         setChannels((channels) => [...channels, ...response.data]);
@@ -47,7 +47,7 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     return () => {
       ignoreRequest = true;
     };
-  }, [channels.length, doFetch, paginatedOptions, pubnub.objects, totalCount]);
+  }, [channels.length, doFetch, paginatedOptions, pubnub, totalCount]);
 
   useEffect(() => {
     const listener = {

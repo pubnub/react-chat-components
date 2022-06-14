@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { ChannelEntity, ChannelList } from "@pubnub/react-chat-components";
+import { ChannelEntity, ChannelList, VSPPubnub } from "@pubnub/react-chat-components";
 
 interface PublicChannelsModalProps {
   groupChannelsToJoin: ChannelEntity[];
@@ -17,7 +17,7 @@ export const PublicChannelsModal = ({
   setCurrentChannel,
   hideModal,
 }: PublicChannelsModalProps): JSX.Element => {
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
   const [channelsFilter, setChannelsFilter] = useState("");
 
   const joinGroupChannel = async (channel: ChannelEntity) => {

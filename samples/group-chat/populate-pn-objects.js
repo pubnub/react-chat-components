@@ -46,6 +46,7 @@ const getKeys = async () => {
   return {
     publishKey: process.env.REACT_APP_PUB_KEY,
     subscribeKey: process.env.REACT_APP_SUB_KEY,
+    uuid: "populate-matadata-script",
   };
 };
 
@@ -99,8 +100,8 @@ const initializeUUID =
   (pubnub, status) =>
   async ({ id: uuid, ...data }) => {
     try {
-      const response = await pubnub.objects.setUUIDMetadata({
-        uuid,
+      const response = await pubnub.createUser({
+        userId: uuid,
         data: clean(data),
       });
       if (response.status === 200) {
@@ -118,8 +119,8 @@ const initializeChannel =
   (pubnub, status) =>
   async ({ id: channel, ...data }) => {
     try {
-      const response = await pubnub.objects.setChannelMetadata({
-        channel,
+      const response = await pubnub.createSpace({
+        spaceId: channel,
         data: clean(data),
       });
       if (response.status === 200) {

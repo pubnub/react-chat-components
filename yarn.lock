@@ -1093,7 +1093,7 @@
     pirates "^4.0.5"
     source-map-support "^0.5.16"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.5", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.8", "@babel/runtime@^7.17.8", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.14.8", "@babel/runtime@^7.17.8", "@babel/runtime@^7.3.1", "@babel/runtime@^7.5.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.7.2", "@babel/runtime@^7.7.6", "@babel/runtime@^7.8.4", "@babel/runtime@^7.9.2":
   version "7.17.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.17.9.tgz#d19fbf802d01a8cb6cf053a64e472d42c434ba72"
   integrity sha512-lSiBBvodq29uShpWGNbgFdKYNiFDo5/HIYsaCEY9ff4sb10x9jizo2+pRrSyF4jKZCXqgzuqBOQKbUm90gQwJg==
@@ -2938,11 +2938,6 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@tsconfig/node12@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@tsconfig/node12/-/node12-1.0.9.tgz#62c1f6dee2ebd9aead80dc3afa56810e58e1a04c"
-  integrity sha512-/yBMcem+fbvhSREH+s14YJi18sp7J9jpuhYByADT2rypfajMZZN4WQ6zBGgBKp53NKmqI36wFYDb3yaMPurITw==
-
 "@types/aria-query@^4.2.0":
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@types/aria-query/-/aria-query-4.2.2.tgz#ed4e0ad92306a704f9fb132a0cfcf77486dbe2bc"
@@ -2993,7 +2988,7 @@
   resolved "https://registry.yarnpkg.com/@types/color-name/-/color-name-1.1.1.tgz#1c1261bbeaa10a8055bbc5d8ab84b7b2afc846a0"
   integrity sha512-rr+OQyAjxze7GgWrSaJwydHStIhHq2lvY3BOC2Mj7KnzI7XK0Uw1TOOdI9lDoajEbSWLiYgoo4f1R51erQfhPQ==
 
-"@types/emoji-mart@^3.0.4":
+"@types/emoji-mart@^3.0.9":
   version "3.0.9"
   resolved "https://registry.yarnpkg.com/@types/emoji-mart/-/emoji-mart-3.0.9.tgz#2f7ef5d9ec194f28029c46c81a5fc1e5b0efa73c"
   integrity sha512-qdBo/2Y8MXaJ/2spKjDZocuq79GpnOhkwMHnK2GnVFa8WYFgfA+ei6sil3aeWQPCreOKIx9ogPpR5+7MaOqYAA==
@@ -3162,10 +3157,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
   integrity sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==
 
-"@types/pubnub@^4.29.1":
-  version "4.29.7"
-  resolved "https://registry.yarnpkg.com/@types/pubnub/-/pubnub-4.29.7.tgz#7e6813eb6749d894a82f4b89e5054725d453f4b3"
-  integrity sha512-zV2ObsMXeVXEk8TKClia12PZY5ZFrEXhTXf4xwuAZHjUYsixsh4KYWI8vfjIWPFuIc+oq0x8bp4WW+0SpNPSgA==
+"@types/pubnub@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@types/pubnub/-/pubnub-7.0.0.tgz#fec04d105d81c1e6d016ff39db532d009eb4b5fb"
+  integrity sha512-u5YUIk+57g87W09eGNpSi82K4lsVSvlNbSE9gCtxBR/eb6X56Is7QQRG14fnc/RGvoep5vwN4yhIRDx+8Go35w==
 
 "@types/q@^1.5.1":
   version "1.5.5"
@@ -11282,20 +11277,18 @@ pubnub-demo-integration@^0.1.1:
   dependencies:
     node-fetch "^3.2.6"
 
-pubnub-react@^2.1.0, pubnub-react@^2.1.1:
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/pubnub-react/-/pubnub-react-2.1.1.tgz#0382837523dc83fef238bddbd5da5124b2f90b51"
-  integrity sha512-0KP+C/hFcL1J0d99B/0tg3fpBW1CPjV2VeVApxu8p5y57c0a4yL/AisvBlBLX+wk3uYXm2+GmdBCF9XatheT3g==
+pubnub-react@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/pubnub-react/-/pubnub-react-3.0.0.tgz#b7717d45ad3cc1dc5dde91b530e4ed19848de317"
+  integrity sha512-w1kXFZhjtHRhvcDXot5re8IX6zBLn7YdSCz/ETIUIRsXlI9nGt+INBXFz/3TgU/+3OzHOsBHhxENW/+E8LcRmw==
   dependencies:
     ts-invariant "^0.4.4"
 
-pubnub@^4.29.10, pubnub@^4.36.0:
-  version "4.37.0"
-  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-4.37.0.tgz#43d6e8a3a14ad81a753d1b63977b645406de0712"
-  integrity sha512-NyVViKkjHZL5AC59wBXfF4QWTe38b7VaESitRIsd5mA7/B7aVuyu752lqfa5P0qjnVnRSw/+fxqDykeL/jmz1Q==
+pubnub@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-7.0.1.tgz#0e954daabd91037c9beefefd875d1151b8a419c2"
+  integrity sha512-EGT82WMrDq8PDiSWCTlFR1aP2Jh9H/0TbLTBafOm0NddhkWwL6jMj7rr5RHB4zMwLM93AeOYumkl9DJSohzLuA==
   dependencies:
-    "@babel/runtime" "^7.10.5"
-    "@tsconfig/node12" "^1.0.9"
     agentkeepalive "^3.5.2"
     buffer "^6.0.3"
     cbor-js "^0.1.0"

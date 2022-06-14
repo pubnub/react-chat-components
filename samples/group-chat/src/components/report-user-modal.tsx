@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { MessageEnvelope, UserEntity } from "@pubnub/react-chat-components";
+import { MessageEnvelope, UserEntity, VSPPubnub } from "@pubnub/react-chat-components";
 
 interface ReportUserModalProps {
   currentUser: UserEntity;
@@ -19,7 +19,7 @@ export const ReportUserModal = ({
   hideModal,
   users,
 }: ReportUserModalProps): JSX.Element => {
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
   const [reported, setReported] = useState(false);
   const uuid = reportedMessage?.uuid || reportedMessage?.publisher || "";
 
@@ -61,13 +61,13 @@ export const ReportUserModal = ({
   const reportUser = async (reason: string) => {
     if (!reportedMessage) return;
     setReported(true);
-    const fullUserData = await pubnub.objects.getUUIDMetadata({
-      uuid,
+    const fullUserData = await pubnub.fetchUser({
+      userId: uuid,
       include: { customFields: true },
     });
     const existingMetadata = fullUserData.data.custom;
-    await pubnub.objects.setUUIDMetadata({
-      uuid,
+    await pubnub.createUser({
+      userId: uuid,
       data: {
         custom: {
           ...existingMetadata,

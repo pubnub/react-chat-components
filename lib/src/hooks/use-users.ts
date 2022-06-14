@@ -3,12 +3,12 @@ import { GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
-import { UserEntity } from "../types";
+import { VSPPubnub, UserEntity } from "../types";
 
 type HookReturnValue = [UserEntity[], () => void, number, Error];
 
 export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValue => {
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
 
   const [users, setUsers] = useState<UserEntity[]>([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -32,7 +32,7 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
     async function fetchPage() {
       try {
         if (totalCount && users.length >= totalCount) return;
-        const response = await pubnub.objects.getAllUUIDMetadata(paginatedOptions);
+        const response = await pubnub.fetchUsers(paginatedOptions);
         if (ignoreRequest) return;
         setDoFetch(false);
         setUsers((users) => [...users, ...response.data]);
@@ -47,7 +47,7 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
     return () => {
       ignoreRequest = true;
     };
-  }, [doFetch, paginatedOptions, pubnub.objects, totalCount, users.length]);
+  }, [doFetch, paginatedOptions, pubnub, totalCount, users.length]);
 
   useEffect(() => {
     const listener = {

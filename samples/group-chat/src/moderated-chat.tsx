@@ -55,7 +55,7 @@ export default function ModeratedChat(): JSX.Element {
    */
   const pubnub = usePubNub();
   const uuid = pubnub.getUUID();
-  const [currentUser] = useUser({ uuid });
+  const [currentUser] = useUser({ userId: uuid });
   const [allUsers] = useUsers({ include: { customFields: true } });
   const [allChannels] = useChannels({ include: { customFields: true } });
   const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({

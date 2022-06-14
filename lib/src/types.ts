@@ -1,9 +1,57 @@
-import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
+import Pubnub, {
+  ChannelMetadata,
+  ChannelMetadataObject,
+  GetAllMetadataParameters,
+  ObjectCustom,
+  UUIDMetadata,
+  UUIDMetadataObject,
+} from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
 export interface EmojiPickerElementProps {
   onSelect?: ({ native: string }) => void;
+}
+
+export interface FetchUserParameters {
+  userId?: string | undefined;
+  include?:
+    | {
+        customFields?: boolean | undefined;
+      }
+    | undefined;
+}
+
+export interface CreateSpaceParameters {
+  spaceId: string;
+  data: ChannelMetadata<ObjectCustom>;
+  include?:
+    | {
+        customFields?: boolean | undefined;
+      }
+    | undefined;
+}
+
+export interface CreateUserParameters {
+  userId?: string | undefined;
+  data: UUIDMetadata<ObjectCustom>;
+  include?:
+    | {
+        customFields?: boolean | undefined;
+      }
+    | undefined;
+}
+
+export interface VSPPubnub extends Pubnub {
+  fetchUser: (options: FetchUserParameters) => Pubnub.GetUUIDMetadataResponse<ObjectCustom>;
+  fetchUsers: (
+    options: GetAllMetadataParameters
+  ) => Pubnub.GetAllUUIDMetadataResponse<ObjectCustom>;
+  fetchSpaces: (
+    options: GetAllMetadataParameters
+  ) => Pubnub.GetAllChannelMetadataResponse<ObjectCustom>;
+  createSpace: (options: CreateSpaceParameters) => Pubnub.SetChannelMetadataResponse<ObjectCustom>;
+  createUser: (options: CreateUserParameters) => Pubnub.SetUUIDMetadataResponse<ObjectCustom>;
 }
 
 interface VSPEntity {

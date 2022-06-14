@@ -40,7 +40,7 @@
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.1.1",
     "@types/jest": "^26.0.20",
-    "@types/pubnub": "^4.29.1",
+    "@types/pubnub": "^7.0.0",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.6",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
@@ -49,8 +49,8 @@
     "gh-pages": "^3.1.0",
     "jest": "26.6.0",
     "jest-scss-transform": "^1.0.1",
-    "pubnub": "^4.29.10",
-    "pubnub-react": "^2.1.0",
+    "pubnub": "^7.0.1",
+    "pubnub-react": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "rollup": "^2.32.1",
@@ -63,8 +63,8 @@
     "typescript": "^4.1.5"
   },
   "peerDependencies": {
-    "pubnub": "^4.29.9",
-    "pubnub-react": "^2.1.0",
+    "pubnub": "^7.0.1",
+    "pubnub-react": "^3.0.0",
     "react": ">=16.8.0 || ^17.0.0 || ^18.0.0",
     "react-dom": ">=16.8.0 || ^17.0.0 || ^18.0.0"
   },

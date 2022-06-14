@@ -1,13 +1,12 @@
 import { useState, useEffect } from "react";
-import { GetUUIDMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import cloneDeep from "lodash.clonedeep";
-import { UserEntity } from "../types";
+import { VSPPubnub, FetchUserParameters, UserEntity } from "../types";
 
-export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {
+export const useUser = (options: FetchUserParameters = {}): [UserEntity, Error] => {
   const jsonOptions = JSON.stringify(options);
 
-  const pubnub = usePubNub();
+  const pubnub = usePubNub() as VSPPubnub;
   const [user, setUser] = useState(null);
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
@@ -28,7 +27,7 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
 
     async function fetch() {
       try {
-        const response = await pubnub.objects.getUUIDMetadata(options);
+        const response = await pubnub.fetchUser(options);
         if (ignoreRequest) return;
         setDoFetch(false);
         setUser(response.data);
@@ -41,7 +40,7 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
     return () => {
       ignoreRequest = true;
     };
-  }, [doFetch, options, pubnub.objects]);
+  }, [doFetch, options, pubnub]);
 
   useEffect(() => {
     const listener = {
