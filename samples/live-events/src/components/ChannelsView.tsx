@@ -15,6 +15,8 @@ import { ReactComponent as EllipsisIcon } from "../assets/ellipsis-vertical.svg"
 import { ReactComponent as MoonIcon } from "../assets/moon-over-sun.svg";
 import { ReactComponent as QuestionIcon } from "../assets/question-check.svg";
 
+import {actionCompleted} from "pubnub-demo-integration";
+
 type ChannelsViewProps = {
   channels: ChannelEntity[];
   channelsExpanded: boolean;
@@ -113,6 +115,8 @@ const ChannelsView = (props: ChannelsViewProps): JSX.Element => {
               onClick={() => {
                 setDarkMode(!darkMode);
                 setShowUserMenu(false);
+                if (darkMode)
+                  actionCompleted({action: "Switch to Light Mode", blockDuplicateCalls:true, debug:false});
               }}
             >
               <MoonIcon className="mr-3 w-6" />

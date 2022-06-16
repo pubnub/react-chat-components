@@ -16,6 +16,8 @@ import "./index.css";
 const mdBreakpoint = 768;
 const lgBreakpoint = 1024;
 
+import {actionCompleted} from "pubnub-demo-integration";
+
 const pubnub = new PubNub({
   publishKey: (import.meta.env?.REACT_APP_PUB_KEY as string) || "",
   subscribeKey: (import.meta.env?.REACT_APP_SUB_KEY as string) || "",
@@ -52,6 +54,18 @@ const LiveEventChat = (): JSX.Element => {
     if (!prevChannelsExpanded) setChatExpanded(false);
     if (!prevChatExpanded) setChannelsExpanded(false);
   }, [width, chatExpanded, prevChatExpanded, channelsExpanded, prevChannelsExpanded]);
+
+  useEffect(() => {
+    if (channelOccupancy && channelOccupancy > 1) {
+      actionCompleted({action: "Be in a Channel with 2 or More People", blockDuplicateCalls: true, debug: false});
+    } 
+  }, [channelOccupancy])
+
+  useEffect(() => {
+    if (currentChannel != channels[0]) {
+      actionCompleted({action: "Switch to a Different Channel", blockDuplicateCalls: true, debug: false});
+    } 
+  }, [currentChannel])
 
   return (
     <main className={`flex ${darkMode ? "dark" : "light"}`}>

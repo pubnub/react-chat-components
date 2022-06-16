@@ -7,6 +7,7 @@ import { ReactComponent as ChatIcon } from "../assets/chat.svg";
 import { ReactComponent as GroupIcon } from "../assets/user-group.svg";
 import { ReactComponent as ArrowIcon } from "../assets/arrow-turn-up.svg";
 import "emoji-mart/css/emoji-mart.css";
+import {actionCompleted, containsEmoji} from "pubnub-demo-integration";
 
 type ChatViewProps = {
   channelOccupants: { uuid: string }[];
@@ -23,6 +24,18 @@ const ChatView = ({
 }: ChatViewProps): JSX.Element => {
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
+
+  function demoSendMessage(value: any)
+  {
+      if (value.type === "text")
+      {
+        if (containsEmoji({testString: value.text, debug:false}))
+          actionCompleted({action: "Send a Message with an Emoji", blockDuplicateCalls:true, debug:false});
+        else
+          actionCompleted({action: "Send Text Message", blockDuplicateCalls:true, debug:false});
+      }
+      
+  }
 
   return (
     <aside
@@ -46,7 +59,11 @@ const ChatView = ({
         </h4>
         <button
           className={`p-2 ${!chatExpanded && "hidden"}`}
-          onClick={() => setShowMembers(!showMembers)}
+          onClick={() => {
+            setShowMembers(!showMembers);
+            if(!showMembers)
+              actionCompleted({action: "View Channel Participants", blockDuplicateCalls: true, debug: false});
+          }}
         >
           {showMembers ? <ChatIcon /> : <GroupIcon />}
         </button>
@@ -67,6 +84,7 @@ const ChatView = ({
                   <ArrowIcon />
                 </span>
               }
+              onSend={(value) => demoSendMessage(value)}
             />
           </>
         )}
