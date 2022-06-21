@@ -1,7 +1,6 @@
 [
   {
     "name": "Besties",
-    "type": "default",
     "custom": {
       "profileUrl": "https://www.gravatar.com/avatar/bc03548bcb11eb8dcd0242c1303?s=256&d=identicon"
     },
@@ -12,7 +11,6 @@
   },
   {
     "name": "Family",
-    "type": "default",
     "custom": {
       "profileUrl": "https://www.gravatar.com/avatar/5f3547a18f448e567e84ba097db?s=256&d=identicon"
     },
@@ -23,7 +21,6 @@
   },
   {
     "name": "Soccer Practice",
-    "type": "default",
     "custom": {
       "profileUrl": "https://www.gravatar.com/avatar/937989646abaa2bf3ed12dbd0a3?s=256&d=identicon"
     },
