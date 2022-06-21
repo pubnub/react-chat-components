@@ -11284,10 +11284,10 @@ pubnub-react@^3.0.0:
   dependencies:
     ts-invariant "^0.4.4"
 
-pubnub@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-7.0.1.tgz#0e954daabd91037c9beefefd875d1151b8a419c2"
-  integrity sha512-EGT82WMrDq8PDiSWCTlFR1aP2Jh9H/0TbLTBafOm0NddhkWwL6jMj7rr5RHB4zMwLM93AeOYumkl9DJSohzLuA==
+pubnub@^7.1.1:
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/pubnub/-/pubnub-7.1.1.tgz#8e6f47109e9dfbedd8fe21b1f781c7dc866de2cc"
+  integrity sha512-MBnjrU3lyV6iRkUqJIiLIf7Cal16dFguEU97Orbcub0xeLAt71KPhpiwYYLK6ZF/8EqzQSFVGRYfuREqSKF5IA==
   dependencies:
     agentkeepalive "^3.5.2"
     buffer "^6.0.3"

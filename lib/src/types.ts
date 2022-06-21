@@ -42,6 +42,64 @@ export interface CreateUserParameters {
     | undefined;
 }
 
+interface FetchMembershipsParametersBase {
+  filter?: string | undefined;
+  sort?: Record<string, unknown> | undefined;
+  limit?: number | undefined;
+  page?:
+    | {
+        next?: string | undefined;
+        prev?: string | undefined;
+      }
+    | undefined;
+}
+
+export interface FetchMembershipsFromSpaceParameters extends FetchMembershipsParametersBase {
+  spaceId?: string;
+  include?:
+    | {
+        totalCount?: boolean | undefined;
+        customFields?: boolean | undefined;
+        userFields?: boolean | undefined;
+        customUserFields?: boolean | undefined;
+      }
+    | undefined;
+}
+
+export interface FetchMembershipsFromUserParametersUsers extends FetchMembershipsParametersBase {
+  userId?: string;
+  include?:
+    | {
+        totalCount?: boolean | undefined;
+        customFields?: boolean | undefined;
+        spaceFields?: boolean | undefined;
+        customSpaceFields?: boolean | undefined;
+      }
+    | undefined;
+}
+
+export interface PagedObjectsResponse<DataType> {
+  status: number;
+  data: DataType;
+  prev?: string | undefined;
+  next?: string | undefined;
+  totalCount?: number | undefined;
+}
+
+export interface MembershipObject {
+  eTag: string;
+  updated: string;
+  custom: ObjectCustom;
+}
+
+export interface UserMembershipObject extends MembershipObject {
+  user: UserEntity;
+}
+
+export interface SpaceMembershipObject extends MembershipObject {
+  space: ChannelEntity;
+}
+
 export interface VSPPubnub extends Pubnub {
   fetchUser: (options: FetchUserParameters) => Pubnub.GetUUIDMetadataResponse<ObjectCustom>;
   fetchUsers: (
@@ -52,6 +110,9 @@ export interface VSPPubnub extends Pubnub {
   ) => Pubnub.GetAllChannelMetadataResponse<ObjectCustom>;
   createSpace: (options: CreateSpaceParameters) => Pubnub.SetChannelMetadataResponse<ObjectCustom>;
   createUser: (options: CreateUserParameters) => Pubnub.SetUUIDMetadataResponse<ObjectCustom>;
+  fetchMemberships: (
+    options: FetchMembershipsFromSpaceParameters | FetchMembershipsFromUserParametersUsers
+  ) => PagedObjectsResponse<SpaceMembershipObject[] | UserMembershipObject[]>;
 }
 
 interface VSPEntity {

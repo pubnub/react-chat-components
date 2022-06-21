@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@pubnub/react-chat-components": "^0.12.0",
-    "pubnub": "^7.0.1",
+    "pubnub": "^7.1.1",
     "pubnub-react": "^3.0.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"

@@ -17,6 +17,7 @@ import {
   useUser,
   useUserMemberships,
   useUsers,
+  useMemberships,
 } from "@pubnub/react-chat-components";
 import "emoji-mart/css/emoji-mart.css";
 
@@ -65,6 +66,31 @@ export default function ModeratedChat(): JSX.Element {
     channel: currentChannel.id,
     include: { customUUIDFields: true },
   });
+
+  const [joinedChannels2, , refetchJoinedChannels2] = useMemberships({
+    include: { spaceFields: true, customSpaceFields: true },
+  });
+  const [channelMembers2, , refetchChannelMemberships2, totalChannelMembers2] = useMemberships({
+    spaceId: currentChannel.id,
+    include: { customUserFields: true },
+  });
+
+  // useEffect(() => {
+  //   console.log("Channel members: ", channelMembers);
+  // }, [channelMembers]);
+  // useEffect(() => {
+  //   if (joinedChannels.length) console.log("Joined channels old: ", joinedChannels);
+  // }, [joinedChannels]);
+  // useEffect(() => {
+  //   if (joinedChannels2.length) console.log("Joined channels new: ", joinedChannels2);
+  // }, [joinedChannels2]);
+  // useEffect(() => {
+  //   if (channelMembers.length) console.log("Channel members old: ", channelMembers);
+  // }, [channelMembers]);
+  // useEffect(() => {
+  //   if (channelMembers2.length) console.log("Channel members new: ", channelMembers2);
+  // }, [channelMembers2]);
+
   const [presenceData] = usePresence({
     channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
   });
