@@ -4,9 +4,15 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Data Payloads
 
-PubNub Chat Components for React enforce you to use the unified JSON schemas (data models) for such common entity types as [users](#users), [channels](#channels), and [messages](#messages) when transferring data over the PubNub network. These common data payloads allow you to create cross-platform applications and ensure that such applications developed in different technologies (Swift, Kotlin, or JavaScript) communicate with one another properly, avoiding any unexpected errors.
+PubNub Chat Components for React enforce you to use the unified JSON schemas (data models) for such
+common entity types as [users](#users), [channels](#channels), and [messages](#messages) when
+transferring data over the PubNub network. These common data payloads allow you to create
+cross-platform applications and ensure that such applications developed in different technologies
+(Swift, Kotlin, or JavaScript) communicate with one another properly, avoiding any unexpected
+errors.
 
-> **TIP**: To avoid any parsing errors, validate the data payload you prepared for users, channels, and messages in an [online validator](https://www.jsonschemavalidator.net).
+> **TIP**: To avoid any parsing errors, validate the data payload you prepared for users, channels,
+> and messages in an [online validator](https://www.jsonschemavalidator.net).
 
 ## Users
 
@@ -17,8 +23,6 @@ Follow this schema for the user data in your apps:
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "User",
   "description": "User of a chat application",
-  "email": "User's email address",
-  "externalId": "ID of the user in an external system like a database",
   "properties": {
     "id": {
       "description": "Unique identifier for a user",
@@ -26,6 +30,14 @@ Follow this schema for the user data in your apps:
     },
     "name": {
       "description": "Name of the user that you can display in the UI",
+      "type": "string"
+    },
+    "email": {
+      "description": "User's email address",
+      "type": "string"
+    },
+    "externalId": {
+      "description": "Reference to user identifier from another, external system",
       "type": "string"
     },
     "profileUrl": {
@@ -41,6 +53,14 @@ Follow this schema for the user data in your apps:
           "type": "string"
         }
       }
+    },
+    "eTag": {
+      "description": "Identifier used for cache invalidation",
+      "type": "string"
+    },
+    "updated": {
+      "description": "ISO8601 date string of when the user has been last updated",
+      "type": "string"
     }
   },
   "required": ["id"]
@@ -57,7 +77,7 @@ Example:
   "externalId": "some-external-user-id",
   "profileUrl": "https://randomuser.me/api/portraits/men/1.jpg",
   "custom": {
-    "description": "Office Assistant",
+    "description": "Office Assistant"
   },
   "eTag": "AYGyoY3gre71eA",
   "updated": "2020-09-23T09:23:34.598494Z"
@@ -95,6 +115,14 @@ Follow this schema for the channel data in your apps:
           "type": "string"
         }
       }
+    },
+    "eTag": {
+      "description": "Identifier used for cache invalidation",
+      "type": "string"
+    },
+    "updated": {
+      "description": "ISO8601 date string of when the user has been last updated",
+      "type": "string"
     }
   },
   "required": ["id", "type"]
