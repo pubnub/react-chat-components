@@ -111,7 +111,7 @@ describe("Message Input", () => {
       expect.objectContaining({
         id: expect.any(String),
         createdAt: expect.any(String),
-        type: "text",
+        type: "default",
         text: "Initial Value",
       })
     );
