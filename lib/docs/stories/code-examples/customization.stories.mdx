@@ -2,8 +2,8 @@ import { Meta } from "@storybook/addon-docs/blocks";
 import { MessageList, Chat } from "../../../src";
 import { PubNubMock } from "../../../mock/pubnub-mock";
 import { PubNubProvider } from "pubnub-react";
-import users from "../../../../data/users.json";
-import messages from "../../../../data/messages-lorem.json";
+import users from "../../../../data/users/users.json";
+import messages from "../../../../data/messages/lorem.json";
 const pubnub = new PubNubMock({ uuid: "user_a56c20222c484ff8987ec9b69b0c8f5b" });
 import "./customization.css";
 
