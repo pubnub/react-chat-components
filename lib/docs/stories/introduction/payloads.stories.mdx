@@ -17,7 +17,8 @@ Follow this schema for the user data in your apps:
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "User",
   "description": "User of a chat application",
-  "type": "object",
+  "email": "User's email address",
+  "externalId": "ID of the user in an external system like a database",
   "properties": {
     "id": {
       "description": "Unique identifier for a user",
@@ -72,7 +73,6 @@ Follow this schema for the channel data in your apps:
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Channel",
   "description": "Channel in the chat application",
-  "type": "object",
   "properties": {
     "id": {
       "description": "Unique identifier for a channel",
@@ -85,17 +85,6 @@ Follow this schema for the channel data in your apps:
     "description": {
       "description": "Description of the channel that you can display in the UI",
       "type": "string"
-    },
-    "type": {
-      "description": "Type of the channel",
-      "type": "string",
-      "examples": ["default", "group", "direct"],
-      "default": "default"
-    },
-    "status": {
-      "description": "Status of the channel",
-      "type": "string",
-      "examples": ["default", "deleted"]
     },
     "custom": {
       "description": "Any additional payload information",
@@ -119,8 +108,6 @@ Example:
   "id": "some-channel-id",
   "name": "Off-topic",
   "description": "Off-topic channel for random chatter and fun",
-  "type": "default",
-  "status": "default",
   "custom": {
     "profileUrl": "https://www.gravatar.com/avatar/149e60f311749f2a7c6515f7b34?s=256&d=identicon"
   },
@@ -151,7 +138,7 @@ Follow this schema for the message data in your apps:
       "type": "string"
     },
     "contentType": {
-      "description": "If a message contains any extra content, this field describes its type",
+      "description": "If a message contains any extra content, this field describes its type. Currently, PubNub Chat Components support only text messages.",
       "type": "string",
       "examples": ["externalUrl", "imageUrl"]
     },
