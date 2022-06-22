@@ -107,7 +107,14 @@ describe("Message Input", () => {
     userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
-    expect(handleSend).toHaveBeenCalledWith({ type: "text", text: "Initial Value" });
+    expect(handleSend).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: expect.any(String),
+        createdAt: expect.any(String),
+        type: "default",
+        text: "Initial Value",
+      })
+    );
   });
 
   test("attaches sender info in messages", async () => {

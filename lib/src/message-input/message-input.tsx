@@ -9,7 +9,8 @@ import React, {
 } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
-import { StandardMessage, EmojiPickerElementProps } from "../types";
+import { v4 as uuidv4 } from "uuid";
+import { MessagePayload, EmojiPickerElementProps } from "../types";
 import { useOuterClick } from "../helpers";
 import {
   CurrentChannelAtom,
@@ -49,9 +50,9 @@ export interface MessageInputProps {
   /** Callback to handle an event when the text value changes. */
   onChange?: (value: string) => void;
   /** Callback to modify message content before sending it. This only works for text messages, not files. */
-  onBeforeSend?: (value: StandardMessage) => StandardMessage;
+  onBeforeSend?: (value: MessagePayload) => MessagePayload;
   /** Callback for extra actions after sending a message. */
-  onSend?: (value: StandardMessage | File) => void;
+  onSend?: (value: MessagePayload | File) => void;
   /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
 }
@@ -109,24 +110,19 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const sendMessage = async () => {
     try {
       if (!file && !isValidInputText()) return;
-      const senderInfo = props.senderInfo && {
-        sender: users.find((u) => u.id === pubnub.getUUID()),
-      };
+      let message = {
+        id: uuidv4(),
+        text: file ? "" : text,
+        type: file ? "" : "default",
+        ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+        createdAt: new Date().toISOString(),
+      } as MessagePayload;
       setLoader(true);
 
       if (file) {
-        await pubnub.sendFile({
-          channel,
-          file,
-          ...(senderInfo && { message: { ...senderInfo } }),
-        });
+        await pubnub.sendFile({ channel, file, message });
         props.onSend && props.onSend(file);
       } else if (text) {
-        let message = {
-          type: "text",
-          text,
-          ...senderInfo,
-        } as StandardMessage;
         if (props.onBeforeSend) message = props.onBeforeSend(message) || message;
         await pubnub.publish({ channel, message });
         props.onSend && props.onSend(message);

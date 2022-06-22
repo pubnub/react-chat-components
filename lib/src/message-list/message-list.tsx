@@ -1,33 +1,34 @@
 import React, {
   FC,
+  ReactElement,
+  ReactNode,
   UIEvent,
+  useCallback,
+  useEffect,
   useRef,
   useState,
-  useEffect,
-  useCallback,
-  ReactNode,
-  ReactElement,
 } from "react";
-import { FetchMessagesResponse, UUIDMetadataObject, ObjectCustom } from "pubnub";
+import { FetchMessagesResponse } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import { useAtomCallback } from "jotai/utils";
 import {
+  isFilePayload,
+  UserEntity,
   MessageEnvelope,
-  isFileMessage,
-  ImageAttachment,
   LinkAttachment,
-  EmojiPickerElementProps,
+  ImageAttachment,
   FileAttachment,
+  EmojiPickerElementProps,
 } from "../types";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
   CurrentChannelPaginationAtom,
-  UsersMetaAtom,
-  ThemeAtom,
-  RetryFunctionAtom,
   ErrorFunctionAtom,
+  RetryFunctionAtom,
+  ThemeAtom,
+  UsersMetaAtom,
 } from "../state-atoms";
 import { getNameInitials, getPredefinedColor, useOuterClick } from "../helpers";
 import SpinnerIcon from "../icons/spinner.svg";
@@ -41,7 +42,7 @@ export interface MessageRendererProps {
   message: MessageEnvelope;
   time: string;
   editedText: string;
-  user?: UUIDMetadataObject<ObjectCustom>;
+  user?: UserEntity;
 }
 
 export interface MessageListProps {
@@ -237,7 +238,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   };
 
   const fetchFileUrl = (envelope: MessageEnvelope) => {
-    if (!isFileMessage(envelope.message)) return envelope;
+    if (!isFilePayload(envelope.message)) return envelope;
 
     try {
       const url = pubnub.getFileUrl({
@@ -377,7 +378,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const currentUserClass = isOwnMessage(uuid) ? "pn-msg--own" : "";
     const actions = envelope.actions;
     const deleted = !!Object.keys(actions?.deleted || {}).length;
-    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
+    const message = isFilePayload(envelope.message) ? envelope.message.message : envelope.message;
 
     if (deleted) return;
 
@@ -408,10 +409,10 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const uuid = envelope.uuid || envelope.publisher || "";
     const time = getTime(envelope.timetoken as number);
     const isOwn = isOwnMessage(uuid);
-    const message = isFileMessage(envelope.message) ? envelope.message.message : envelope.message;
+    const message = isFilePayload(envelope.message) ? envelope.message.message : envelope.message;
     const user = message?.sender || getUser(uuid);
     const attachments = message?.attachments || [];
-    const file = isFileMessage(envelope.message) && envelope.message.file;
+    const file = isFilePayload(envelope.message) && envelope.message.file;
     const actions = envelope.actions;
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 

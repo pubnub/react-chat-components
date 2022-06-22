@@ -1,15 +1,12 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { UUIDMetadataObject, ObjectCustom } from "pubnub";
-import { MessageEnvelope } from "@pubnub/react-chat-components";
-
-type UserType = UUIDMetadataObject<ObjectCustom>;
+import { MessageEnvelope, UserEntity } from "@pubnub/react-chat-components";
 
 interface ReportUserModalProps {
-  currentUser: UserType;
+  currentUser: UserEntity;
   reportedMessage?: MessageEnvelope;
   hideModal: () => void;
-  users: UserType[];
+  users: UserEntity[];
 }
 
 /**

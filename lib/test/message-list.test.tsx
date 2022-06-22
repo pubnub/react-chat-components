@@ -2,7 +2,7 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { StandardMessage } from "../src/types";
+import { MessagePayload } from "../src/types";
 import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
@@ -32,7 +32,7 @@ describe("Message List", () => {
 
   test("renders with custom welcome messages", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(<MessageList welcomeMessages={message} />);
@@ -43,14 +43,14 @@ describe("Message List", () => {
 
   test("renders messages with custom message renderer", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
       <MessageList
         welcomeMessages={message}
         messageRenderer={(props) => (
-          <div>Custom {(props.message.message as StandardMessage).text}</div>
+          <div>Custom {(props.message.message as MessagePayload).text}</div>
         )}
       />
     );
@@ -61,14 +61,14 @@ describe("Message List", () => {
 
   test("renders messages with custom bubble renderer", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
       <MessageList
         welcomeMessages={message}
         bubbleRenderer={(props) => (
-          <div>Custom {(props.message.message as StandardMessage).text}</div>
+          <div>Custom {(props.message.message as MessagePayload).text}</div>
         )}
       />
     );
@@ -79,7 +79,7 @@ describe("Message List", () => {
 
   test("renders extra actions", async () => {
     const message = {
-      message: { type: "welcome", text: "Welcome" },
+      message: { id: "id-1", type: "welcome", text: "Welcome" },
       timetoken: "16165851271766362",
     };
     render(
@@ -214,7 +214,7 @@ describe("Message List", () => {
 
   test("renders message text edits", async () => {
     const message = {
-      message: { type: "text", text: "Original text" },
+      message: { id: "id-1", type: "text", text: "Original text" },
       timetoken: "16165851271766362",
       actions: {
         updated: {
@@ -231,7 +231,7 @@ describe("Message List", () => {
 
   test("renders message text edits", async () => {
     const message = {
-      message: { type: "text", text: "Original text" },
+      message: { id: "id-1", type: "text", text: "Original text" },
       timetoken: "16165851271766362",
       actions: {
         deleted: {

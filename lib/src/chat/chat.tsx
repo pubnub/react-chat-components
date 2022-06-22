@@ -2,29 +2,27 @@ import React, { FC, Component, useEffect, useCallback, ReactNode } from "react";
 import { useAtom, Provider } from "jotai";
 import {
   BaseObjectsEvent,
+  FileEvent,
   MessageActionEvent,
   PresenceEvent,
   SignalEvent,
-  UUIDMetadataObject,
-  ObjectCustom,
-  FileEvent,
   StatusEvent,
 } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import { Themes, MessageEnvelope, RetryOptions } from "../types";
+import { MessageEnvelope, RetryOptions, Themes, UserEntity } from "../types";
 import cloneDeep from "lodash.clonedeep";
 import setDeep from "lodash.set";
 import {
   CurrentChannelAtom,
+  ErrorFunctionAtom,
   MessagesAtom,
-  SubscribeChannelsAtom,
+  RetryFunctionAtom,
   SubscribeChannelGroupsAtom,
+  SubscribeChannelsAtom,
   ThemeAtom,
   TypingIndicatorAtom,
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
-  RetryFunctionAtom,
-  ErrorFunctionAtom,
 } from "../state-atoms";
 import "./chat.scss";
 
@@ -42,7 +40,7 @@ export interface ChatProps {
   /** Option to disable presence events when set to "false." OccupancyIndicator and MemberList components will only work with memberships in that case. */
   enablePresence?: boolean;
   /** Option to provide an external list of user metadata. It's used to display information about senders on MessageList and TypingIndicator. */
-  users?: UUIDMetadataObject<ObjectCustom>[];
+  users?: UserEntity[];
   /** Option to define a timeout in seconds for typing indicators to hide after the last typed character. */
   typingIndicatorTimeout?: number;
   /** Options for automatic retries on errors. */

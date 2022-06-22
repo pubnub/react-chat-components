@@ -2,7 +2,7 @@
   {
     "name": "Besties",
     "custom": {
-      "thumb": "https://www.gravatar.com/avatar/bc03548bcb11eb8dcd0242c1303?s=256&d=identicon"
+      "profileUrl": "https://www.gravatar.com/avatar/bc03548bcb11eb8dcd0242c1303?s=256&d=identicon"
     },
     "description": "Gossips, gossips",
     "eTag": "AbOx6N+6vu3zoAE",
@@ -12,7 +12,7 @@
   {
     "name": "Family",
     "custom": {
-      "thumb": "https://www.gravatar.com/avatar/5f3547a18f448e567e84ba097db?s=256&d=identicon"
+      "profileUrl": "https://www.gravatar.com/avatar/5f3547a18f448e567e84ba097db?s=256&d=identicon"
     },
     "description": "Everything about the family",
     "eTag": "AbOx6N+6vu3zoAE",
@@ -22,7 +22,7 @@
   {
     "name": "Soccer Practice",
     "custom": {
-      "thumb": "https://www.gravatar.com/avatar/937989646abaa2bf3ed12dbd0a3?s=256&d=identicon"
+      "profileUrl": "https://www.gravatar.com/avatar/937989646abaa2bf3ed12dbd0a3?s=256&d=identicon"
     },
     "description": "Discuss soccer related matters",
     "eTag": "AbOx6N+6vu3zoAE",

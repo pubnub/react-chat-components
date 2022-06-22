@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { ObjectCustom, UUIDMetadataObject, GetAllMetadataParameters } from "pubnub";
+import { GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
+import { UserEntity } from "../types";
 
-type HookReturnValue = [UUIDMetadataObject<ObjectCustom>[], () => Promise<void>, number, Error];
+type HookReturnValue = [UserEntity[], () => Promise<void>, number, Error];
 
 export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
 
-  const [users, setUsers] = useState<UUIDMetadataObject<ObjectCustom>[]>([]);
+  const [users, setUsers] = useState<UserEntity[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();

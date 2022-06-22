@@ -1,22 +1,24 @@
 import React, { useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { MemberList, getNameInitials, getPredefinedColor } from "@pubnub/react-chat-components";
-import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
-
-type UserType = UUIDMetadataObject<ObjectCustom>;
-type ChannelType = ChannelMetadataObject<ObjectCustom>;
+import {
+  getPredefinedColor,
+  getNameInitials,
+  UserEntity,
+  MemberList,
+  ChannelEntity,
+} from "@pubnub/react-chat-components";
 
 interface CreateChatModalProps {
-  users: UserType[];
-  currentUser: UserType;
-  setCurrentChannel: (channel: Pick<ChannelType, "id" | "name" | "description">) => void;
+  users: UserEntity[];
+  currentUser: UserEntity;
+  setCurrentChannel: (channel: Pick<ChannelEntity, "id" | "name" | "description">) => void;
   hideModal: () => void;
 }
 
 interface UserRendererProps {
-  user: UserType;
-  selectedUsers: UserType[];
-  handleCheck: (member: UserType) => void;
+  user: UserEntity;
+  selectedUsers: UserEntity[];
+  handleCheck: (member: UserEntity) => void;
 }
 
 /**
@@ -33,11 +35,11 @@ export const CreateChatModal = ({
   const pubnub = usePubNub();
   const [creatingChannel, setCreatingChannel] = useState(false);
   const [showGroups, setShowGroups] = useState(false);
-  const [selectedUsers, setSelectedUsers] = useState<UserType[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<UserEntity[]>([]);
   const [usersFilter, setUsersFilter] = useState("");
   const [channelName, setChannelName] = useState("");
 
-  const handleCheck = (member: UserType) => {
+  const handleCheck = (member: UserEntity) => {
     setSelectedUsers((users) => {
       return users.find((m) => m.id === member.id)
         ? users.filter((m) => m.id !== member.id)
@@ -45,14 +47,14 @@ export const CreateChatModal = ({
     });
   };
 
-  const createChat = async (user?: UserType) => {
+  const createChat = async (user?: UserEntity) => {
     if (creatingChannel) return;
     setCreatingChannel(true);
     let uuids, channel, localData, remoteData;
     const randomHex = [...Array(27)]
       .map(() => Math.floor(Math.random() * 16).toString(16))
       .join("");
-    const custom = { thumb: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon` };
+    const custom = { profileUrl: `https://www.gravatar.com/avatar/${randomHex}?s=256&d=identicon` };
 
     if (user) {
       /** 1-on-1 chat */
@@ -68,7 +70,7 @@ export const CreateChatModal = ({
       };
       localData = {
         name: user.name,
-        custom: { thumb: user.profileUrl },
+        custom: { profileUrl: user.profileUrl },
       };
     } else {
       /** Group chat */
@@ -161,7 +163,7 @@ export const CreateChatModal = ({
  * It uses most of the same classes as Components to look the same way apart of the icon
  */
 const SelectableUserRenderer = ({ user, selectedUsers, handleCheck }: UserRendererProps) => {
-  const userSelected = selectedUsers.find((m: UserType) => m.id === user.id);
+  const userSelected = selectedUsers.find((m: UserEntity) => m.id === user.id);
   return (
     <div key={user.id} className="pn-member" onClick={() => handleCheck(user)}>
       <div className="pn-member__avatar" style={{ backgroundColor: getPredefinedColor(user.id) }}>

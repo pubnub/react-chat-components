@@ -2,7 +2,7 @@
   {
     "name": "Victoria",
     "custom": {
-      "thumb": "https://randomuser.me/api/portraits/women/4.jpg"
+      "profileUrl": "https://randomuser.me/api/portraits/women/4.jpg"
     },
     "description": "Direct chat with Victoria",
     "eTag": "AbOx6N+6vu3zoAE",
@@ -12,7 +12,7 @@
   {
     "name": "Ellen",
     "custom": {
-      "thumb": "https://randomuser.me/api/portraits/women/8.jpg"
+      "profileUrl": "https://randomuser.me/api/portraits/women/8.jpg"
     },
     "description": "Direct chat with Ellen",
     "eTag": "AbOx6N+6vu3zoAE",

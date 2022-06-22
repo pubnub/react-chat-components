@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Picker } from "emoji-mart";
 import DarkModeToggle from "react-dark-mode-toggle";
-import { ChannelMetadataObject, UUIDMetadataObject, ObjectCustom } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import {
-  ChannelList,
-  Chat,
-  MemberList,
-  MessageEnvelope,
-  MessageInput,
-  MessageList,
-  Themes,
-  TypingIndicator,
   usePresence,
+  UserEntity,
+  TypingIndicator,
+  Themes,
+  MessageList,
+  MessageInput,
+  MessageEnvelope,
+  MemberList,
+  Chat,
+  ChannelList,
+  ChannelEntity,
 } from "@pubnub/react-chat-components";
 
 import "./simple-chat.scss";
@@ -29,9 +30,9 @@ import rawUsers from "../../../data/users/users.json";
 import rawMessages from "../../../data/messages/social.json";
 import socialChannels from "../../../data/channels/social.json";
 import directChannels from "../../../data/channels/direct.json";
-const users: UUIDMetadataObject<ObjectCustom>[] = rawUsers;
-const socialChannelList: ChannelMetadataObject<ObjectCustom>[] = socialChannels;
-const directChannelList: ChannelMetadataObject<ObjectCustom>[] = directChannels;
+const users: UserEntity[] = rawUsers;
+const socialChannelList: ChannelEntity[] = socialChannels;
+const directChannelList: ChannelEntity[] = directChannels;
 const allChannelIds = [...socialChannelList, ...directChannelList].map((c) => c.id);
 
 function SimpleChat(): JSX.Element {
