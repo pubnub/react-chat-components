@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { usePubNub } from "pubnub-react";
+import { actionCompleted } from "pubnub-demo-integration";
 import useClickAway from "react-use/lib/useClickAway";
 import {
   ChannelEntity,
@@ -113,6 +114,8 @@ const ChannelsView = (props: ChannelsViewProps): JSX.Element => {
               onClick={() => {
                 setDarkMode(!darkMode);
                 setShowUserMenu(false);
+                if (darkMode)
+                  actionCompleted({ action: "Switch to Light Mode", blockDuplicateCalls: true });
               }}
             >
               <MoonIcon className="mr-3 w-6" />

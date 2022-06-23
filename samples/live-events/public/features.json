@@ -1,0 +1,10 @@
+{
+  "features": [
+    "Send Text Message",
+    "Send a Message with an Emoji",
+    "Be in a Channel with 2 or More People",
+    "View Channel Participants",
+    "Switch to a Different Channel",
+    "Switch to Light Mode"
+  ]
+}

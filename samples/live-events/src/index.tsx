@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import faker from "@faker-js/faker";
+import { actionCompleted } from "pubnub-demo-integration";
 import { ChannelEntity, Chat, usePresence } from "@pubnub/react-chat-components";
 import useWindowSize from "react-use/lib/useWindowSize";
 import usePrevious from "react-use/lib/usePrevious";
@@ -52,6 +53,24 @@ const LiveEventChat = (): JSX.Element => {
     if (!prevChannelsExpanded) setChatExpanded(false);
     if (!prevChatExpanded) setChannelsExpanded(false);
   }, [width, chatExpanded, prevChatExpanded, channelsExpanded, prevChannelsExpanded]);
+
+  useEffect(() => {
+    if (channelOccupancy && channelOccupancy > 1) {
+      actionCompleted({
+        action: "Be in a Channel with 2 or More People",
+        blockDuplicateCalls: true,
+      });
+    }
+  }, [channelOccupancy]);
+
+  useEffect(() => {
+    if (currentChannel != channels[0]) {
+      actionCompleted({
+        action: "Switch to a Different Channel",
+        blockDuplicateCalls: true,
+      });
+    }
+  }, [currentChannel]);
 
   return (
     <main className={`flex ${darkMode ? "dark" : "light"}`}>

@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { Picker } from "emoji-mart";
-import { MessageList, MessageInput, MemberList } from "@pubnub/react-chat-components";
+import { actionCompleted, containsEmoji } from "pubnub-demo-integration";
+import {
+  MessageList,
+  MessageInput,
+  MemberList,
+  MessagePayload,
+} from "@pubnub/react-chat-components";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as ChatIcon } from "../assets/chat.svg";
@@ -24,6 +30,14 @@ const ChatView = ({
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
 
+  const completeDemoAction = (message: MessagePayload | File) => {
+    if (message.type === "default") {
+      if (containsEmoji({ testString: message.text }))
+        actionCompleted({ action: "Send a Message with an Emoji", blockDuplicateCalls: true });
+      else actionCompleted({ action: "Send Text Message", blockDuplicateCalls: true });
+    }
+  };
+
   return (
     <aside
       className={`chat-view absolute flex flex-col shrink-0
@@ -46,7 +60,11 @@ const ChatView = ({
         </h4>
         <button
           className={`p-2 ${!chatExpanded && "hidden"}`}
-          onClick={() => setShowMembers(!showMembers)}
+          onClick={() => {
+            setShowMembers(!showMembers);
+            if (!showMembers)
+              actionCompleted({ action: "View Channel Participants", blockDuplicateCalls: true });
+          }}
         >
           {showMembers ? <ChatIcon /> : <GroupIcon />}
         </button>
@@ -67,6 +85,7 @@ const ChatView = ({
                   <ArrowIcon />
                 </span>
               }
+              onSend={completeDemoAction}
             />
           </>
         )}
