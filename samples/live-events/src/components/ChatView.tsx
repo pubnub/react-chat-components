@@ -5,7 +5,7 @@ import {
   MessageList,
   MessageInput,
   MemberList,
-  StandardMessage,
+  MessagePayload,
 } from "@pubnub/react-chat-components";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
@@ -30,9 +30,9 @@ const ChatView = ({
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
 
-  const demoSendMessage = (value: StandardMessage) => {
-    if (value.type === "text") {
-      if (containsEmoji({ testString: value.text }))
+  const completeDemoAction = (message: MessagePayload) => {
+    if (message.type === "default") {
+      if (containsEmoji({ testString: message.text }))
         actionCompleted({ action: "Send a Message with an Emoji", blockDuplicateCalls: true });
       else actionCompleted({ action: "Send Text Message", blockDuplicateCalls: true });
     }
@@ -85,7 +85,7 @@ const ChatView = ({
                   <ArrowIcon />
                 </span>
               }
-              onSend={(value) => demoSendMessage(value)}
+              onSend={completeDemoAction}
             />
           </>
         )}
