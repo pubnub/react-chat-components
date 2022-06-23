@@ -14,11 +14,6 @@ changelog:
         text: "Update payload structures to match other platform implementations."
       - type: feature
         text: "Update typings for Users and Channels."
-  - date: 2022-06-22
-    version: v0.11.0
-    changes:
-      - type: feature
-        text: "Update payload structures to match other platform implementations."
   - date: 2022-05-18
     version: v0.10.0
     changes:
