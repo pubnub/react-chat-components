@@ -30,7 +30,7 @@ const ChatView = ({
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
 
-  const completeDemoAction = (message: MessagePayload) => {
+  const completeDemoAction = (message: MessagePayload | File) => {
     if (message.type === "default") {
       if (containsEmoji({ testString: message.text }))
         actionCompleted({ action: "Send a Message with an Emoji", blockDuplicateCalls: true });
