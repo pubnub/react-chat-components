@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { usePubNub } from "pubnub-react";
+import { actionCompleted } from "pubnub-demo-integration";
 import useClickAway from "react-use/lib/useClickAway";
 import {
   ChannelEntity,
@@ -14,8 +15,6 @@ import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as EllipsisIcon } from "../assets/ellipsis-vertical.svg";
 import { ReactComponent as MoonIcon } from "../assets/moon-over-sun.svg";
 import { ReactComponent as QuestionIcon } from "../assets/question-check.svg";
-
-import {actionCompleted} from "pubnub-demo-integration";
 
 type ChannelsViewProps = {
   channels: ChannelEntity[];
@@ -116,7 +115,7 @@ const ChannelsView = (props: ChannelsViewProps): JSX.Element => {
                 setDarkMode(!darkMode);
                 setShowUserMenu(false);
                 if (darkMode)
-                  actionCompleted({action: "Switch to Light Mode", blockDuplicateCalls:true, debug:false});
+                  actionCompleted({ action: "Switch to Light Mode", blockDuplicateCalls: true });
               }}
             >
               <MoonIcon className="mr-3 w-6" />

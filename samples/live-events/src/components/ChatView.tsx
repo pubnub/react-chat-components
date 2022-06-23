@@ -1,13 +1,18 @@
 import React, { useState } from "react";
 import { Picker } from "emoji-mart";
-import { MessageList, MessageInput, MemberList } from "@pubnub/react-chat-components";
+import { actionCompleted, containsEmoji } from "pubnub-demo-integration";
+import {
+  MessageList,
+  MessageInput,
+  MemberList,
+  StandardMessage,
+} from "@pubnub/react-chat-components";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as ChatIcon } from "../assets/chat.svg";
 import { ReactComponent as GroupIcon } from "../assets/user-group.svg";
 import { ReactComponent as ArrowIcon } from "../assets/arrow-turn-up.svg";
 import "emoji-mart/css/emoji-mart.css";
-import {actionCompleted, containsEmoji} from "pubnub-demo-integration";
 
 type ChatViewProps = {
   channelOccupants: { uuid: string }[];
@@ -25,17 +30,13 @@ const ChatView = ({
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
 
-  function demoSendMessage(value: any)
-  {
-      if (value.type === "text")
-      {
-        if (containsEmoji({testString: value.text, debug:false}))
-          actionCompleted({action: "Send a Message with an Emoji", blockDuplicateCalls:true, debug:false});
-        else
-          actionCompleted({action: "Send Text Message", blockDuplicateCalls:true, debug:false});
-      }
-      
-  }
+  const demoSendMessage = (value: StandardMessage) => {
+    if (value.type === "text") {
+      if (containsEmoji({ testString: value.text }))
+        actionCompleted({ action: "Send a Message with an Emoji", blockDuplicateCalls: true });
+      else actionCompleted({ action: "Send Text Message", blockDuplicateCalls: true });
+    }
+  };
 
   return (
     <aside
@@ -61,8 +62,8 @@ const ChatView = ({
           className={`p-2 ${!chatExpanded && "hidden"}`}
           onClick={() => {
             setShowMembers(!showMembers);
-            if(!showMembers)
-              actionCompleted({action: "View Channel Participants", blockDuplicateCalls: true, debug: false});
+            if (!showMembers)
+              actionCompleted({ action: "View Channel Participants", blockDuplicateCalls: true });
           }}
         >
           {showMembers ? <ChatIcon /> : <GroupIcon />}
