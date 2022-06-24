@@ -56,6 +56,7 @@ interface FetchMembershipsParametersBase {
 
 export interface FetchMembershipsFromSpaceParameters extends FetchMembershipsParametersBase {
   spaceId?: string;
+  readonly userId?: undefined;
   include?:
     | {
         totalCount?: boolean | undefined;
@@ -66,8 +67,9 @@ export interface FetchMembershipsFromSpaceParameters extends FetchMembershipsPar
     | undefined;
 }
 
-export interface FetchMembershipsFromUserParametersUsers extends FetchMembershipsParametersBase {
+export interface FetchMembershipsFromUserParameters extends FetchMembershipsParametersBase {
   userId?: string;
+  readonly spaceId?: undefined;
   include?:
     | {
         totalCount?: boolean | undefined;
@@ -111,7 +113,7 @@ export interface VSPPubnub extends Pubnub {
   createSpace: (options: CreateSpaceParameters) => Pubnub.SetChannelMetadataResponse<ObjectCustom>;
   createUser: (options: CreateUserParameters) => Pubnub.SetUUIDMetadataResponse<ObjectCustom>;
   fetchMemberships: (
-    options: FetchMembershipsFromSpaceParameters | FetchMembershipsFromUserParametersUsers
+    options: FetchMembershipsFromSpaceParameters | FetchMembershipsFromUserParameters
   ) => PagedObjectsResponse<SpaceMembershipObject[] | UserMembershipObject[]>;
 }
 

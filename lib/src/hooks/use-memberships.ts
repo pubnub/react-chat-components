@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { GetMembershipsParametersv2 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
@@ -7,12 +6,12 @@ import {
   VSPPubnub,
   ChannelEntity,
   UserEntity,
-  FetchMembershipsFromUserParametersUsers,
+  FetchMembershipsFromUserParameters,
   FetchMembershipsFromSpaceParameters,
 } from "../types";
 
 export const useMemberships = <
-  T extends FetchMembershipsFromUserParametersUsers | FetchMembershipsFromSpaceParameters
+  T extends FetchMembershipsFromUserParameters | FetchMembershipsFromSpaceParameters
 >(
   options: T
 ): [
@@ -37,7 +36,7 @@ export const useMemberships = <
       merge({}, JSON.parse(jsonOptions), {
         page: { next: page },
         include: { totalCount: true },
-      }) as GetMembershipsParametersv2,
+      }) as T,
     [page, jsonOptions]
   );
 
@@ -55,7 +54,6 @@ export const useMemberships = <
     try {
       if (totalCount && entities.length >= totalCount) return;
       const response = await pubnub.fetchMemberships(paginatedOptions);
-      // console.log("response from new hook: ", response);
       setEntities((entities) => [...entities, ...response.data.map((m) => m.user || m.space)]);
       setTotalCount(response.totalCount);
       setPage(response.next);
@@ -68,33 +66,27 @@ export const useMemberships = <
 
   useEffect(() => {
     const listener = {
-      space: (event) => {
-        console.log("Received SPACE event: ", event);
-      },
-      user: (event) => {
-        console.log("Received USER event: ", event);
-      },
-      membership: (event) => {
-        console.log("Received MEMBERSHIP event: ", event);
-      },
       objects: (event) => {
-        console.log("Received OBJECT event: ", event);
-
         const message = event.message;
         if (message.type !== "membership") return;
 
         setEntities((entities) => {
+          let membership;
           const entitiesCopy = cloneDeep(entities);
-          const channel = entitiesCopy.find((u) => u.id === message.data.channel.id);
-          const currentUuid = paginatedOptions.uuid || pubnub.getUUID();
 
-          // Make sure the event is for the same uuid as the hook
-          if (message.data.uuid.id !== currentUuid) return entitiesCopy;
+          if (paginatedOptions.spaceId !== undefined) {
+            membership = entitiesCopy.find((u) => u.id === message.data.uuid.id);
+            if (message.data.channel.id !== paginatedOptions.spaceId) return entitiesCopy;
+          } else {
+            membership = entitiesCopy.find((u) => u.id === message.data.channel.id);
+            const hookUserId = paginatedOptions.userId || pubnub.getUUID();
+            if (message.data.uuid.id !== hookUserId) return entitiesCopy;
+          }
 
           // Set events are not handled since there are no events fired for data updates
           // New memberships are not handled in order to conform to filters and pagination
-          if (channel && message.event === "delete") {
-            entitiesCopy.splice(entitiesCopy.indexOf(channel), 1);
+          if (membership && message.event === "delete") {
+            entitiesCopy.splice(entitiesCopy.indexOf(membership), 1);
           }
 
           return entitiesCopy;
@@ -107,7 +99,7 @@ export const useMemberships = <
     return () => {
       pubnub.removeListener(listener);
     };
-  }, [pubnub, paginatedOptions.uuid]);
+  }, [pubnub, paginatedOptions.userId, paginatedOptions.spaceId]);
 
   useEffect(() => {
     resetHook();
