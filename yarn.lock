@@ -11297,10 +11297,10 @@ public-encrypt@^4.0.0:
     randombytes "^2.0.1"
     safe-buffer "^5.1.2"
 
-pubnub-demo-integration@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/pubnub-demo-integration/-/pubnub-demo-integration-0.1.0.tgz#fec317163c777a133014634612bc17b5a4998b80"
-  integrity sha512-V3Z/wTtpECBQCQA5gHCQsmgLJ4bl4lRMxkXfPbhEwR7AGct7IZjy9duqszlhWbqg1x4YjlI4SkEoIUj20iVEMw==
+pubnub-demo-integration@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/pubnub-demo-integration/-/pubnub-demo-integration-0.1.1.tgz#56faff045cd4e47593216bacb413a2a4f1098aab"
+  integrity sha512-lartCoyoalM+wCg5rGskxfIfiHJdTwwahp7bnoLde4+uhRM5iIai2gh+c/JCFEofAf1DVQeeHDZQ3q0xGoVIFg==
   dependencies:
     node-fetch "^3.2.6"
 
