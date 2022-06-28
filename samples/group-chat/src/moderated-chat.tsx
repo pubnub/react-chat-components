@@ -55,77 +55,82 @@ export default function ModeratedChat(): JSX.Element {
    */
   const pubnub = usePubNub();
   const uuid = pubnub.getUUID();
-  const [currentUser] = useUser({ uuid });
-  const [allUsers] = useUsers({ include: { customFields: true } });
-  const [allChannels] = useChannels({ include: { customFields: true } });
-  const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({
-    include: { channelFields: true, customChannelFields: true },
-  });
-  const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useChannelMembers({
-    channel: currentChannel.id,
-    include: { customUUIDFields: true },
-  });
-  const [presenceData] = usePresence({
-    channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
-  });
+  // const [currentUser] = useUser({ uuid });
+  // const [allUsers] = useUsers({ include: { customFields: true } });
+  const [allChannels, fetchMoreChannels] = useChannels({ include: { customFields: true } });
+
+  useEffect(() => {
+    console.log("All channels: ", allChannels);
+  }, [allChannels]);
+
+  // const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({
+  //   include: { channelFields: true, customChannelFields: true },
+  // });
+  // const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useChannelMembers({
+  //   channel: currentChannel.id,
+  //   include: { customUUIDFields: true },
+  // });
+  // const [presenceData] = usePresence({
+  //   channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
+  // });
 
   /**
    * Some of the data related to current channel, current user and its' joined channels
    * has to be filtered down and mapped from the hooks data
    */
-  const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
-  const groupChannels = joinedChannels.filter(
-    (c) =>
-      c.id?.startsWith("space.") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
-  );
-  const groupChannelsToJoin = allChannels.filter(
-    (c) => c.id.startsWith("space.") && !joinedChannels.some((b) => c.id === b.id)
-  );
-  const directChannels = joinedChannels
-    .filter((c) => c.id?.startsWith("direct.") || c.id?.startsWith("group."))
-    .map((c) => {
-      if (!c.id?.startsWith("direct.")) return c;
-      const interlocutorId = c.id.replace(uuid, "").replace("direct.", "").replace("@", "");
-      const interlocutor = allUsers.find((u) => u.id === interlocutorId);
-      if (interlocutor) {
-        c.custom = { profileUrl: interlocutor.profileUrl || "" };
-        c.name = interlocutor.name;
-      }
-      return c;
-    })
-    .filter((c) => c.name?.toLowerCase().includes(channelsFilter.toLowerCase()));
+  // const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid);
+  // const groupChannels = joinedChannels.filter(
+  //   (c) =>
+  //     c.id?.startsWith("space.") && c.name?.toLowerCase().includes(channelsFilter.toLowerCase())
+  // );
+  // const groupChannelsToJoin = allChannels.filter(
+  //   (c) => c.id.startsWith("space.") && !joinedChannels.some((b) => c.id === b.id)
+  // );
+  // const directChannels = joinedChannels
+  //   .filter((c) => c.id?.startsWith("direct.") || c.id?.startsWith("group."))
+  //   .map((c) => {
+  //     if (!c.id?.startsWith("direct.")) return c;
+  //     const interlocutorId = c.id.replace(uuid, "").replace("direct.", "").replace("@", "");
+  //     const interlocutor = allUsers.find((u) => u.id === interlocutorId);
+  //     if (interlocutor) {
+  //       c.custom = { profileUrl: interlocutor.profileUrl || "" };
+  //       c.name = interlocutor.name;
+  //     }
+  //     return c;
+  //   })
+  //   .filter((c) => c.name?.toLowerCase().includes(channelsFilter.toLowerCase()));
 
-  const isUserBanned = currentUser?.custom?.ban;
-  const isUserMuted = (currentUser?.custom?.mutedChannels as string)
-    ?.split(",")
-    .includes(currentChannel.id);
-  const isUserBlocked = (currentUser?.custom?.blockedChannels as string)
-    ?.split(",")
-    .includes(currentChannel.id);
+  // const isUserBanned = currentUser?.custom?.ban;
+  // const isUserMuted = (currentUser?.custom?.mutedChannels as string)
+  //   ?.split(",")
+  //   .includes(currentChannel.id);
+  // const isUserBlocked = (currentUser?.custom?.blockedChannels as string)
+  //   ?.split(",")
+  //   .includes(currentChannel.id);
 
   /**
    * Creating and removing channel memberships (not subscriptions!)
    */
-  const leaveChannel = async (channel: ChannelType, event: MouseEvent) => {
-    event.stopPropagation();
-    await pubnub.objects.removeMemberships({ channels: [channel.id] });
-    setAnotherCurrentChannel(channel.id);
-  };
+  // const leaveChannel = async (channel: ChannelType, event: MouseEvent) => {
+  //   event.stopPropagation();
+  //   await pubnub.objects.removeMemberships({ channels: [channel.id] });
+  //   setAnotherCurrentChannel(channel.id);
+  // };
 
-  const refreshMemberships = useCallback(
-    (event: BaseObjectsEvent) => {
-      if (event.channel.startsWith("user_")) refetchJoinedChannels();
-      if (event.channel === currentChannel.id) refetchChannelMemberships();
-    },
-    [currentChannel, refetchJoinedChannels, refetchChannelMemberships]
-  );
+  // const refreshMemberships = useCallback(
+  //   (event: BaseObjectsEvent) => {
+  //     if (event.channel.startsWith("user_")) refetchJoinedChannels();
+  //     if (event.channel === currentChannel.id) refetchChannelMemberships();
+  //   },
+  //   [currentChannel, refetchJoinedChannels, refetchChannelMemberships]
+  // );
 
-  const setAnotherCurrentChannel = (channelId: string) => {
-    if (currentChannel.id === channelId) {
-      const newCurrentChannel = joinedChannels?.find((ch) => ch.id !== channelId);
-      if (newCurrentChannel) setCurrentChannel(newCurrentChannel);
-    }
-  };
+  // const setAnotherCurrentChannel = (channelId: string) => {
+  //   if (currentChannel.id === channelId) {
+  //     const newCurrentChannel = joinedChannels?.find((ch) => ch.id !== channelId);
+  //     if (newCurrentChannel) setCurrentChannel(newCurrentChannel);
+  //   }
+  // };
 
   /**
    * Handling publish errors
@@ -141,10 +146,10 @@ export default function ModeratedChat(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    if (currentChannel.id === "default" && joinedChannels.length)
-      setCurrentChannel(joinedChannels[0]);
-  }, [currentChannel, joinedChannels]);
+  // useEffect(() => {
+  //   if (currentChannel.id === "default" && joinedChannels.length)
+  //     setCurrentChannel(joinedChannels[0]);
+  // }, [currentChannel, joinedChannels]);
 
   /**
    * Rendered markup is a mixture of PubNub Chat Components (Chat, ChannelList, MessageList,
@@ -153,10 +158,11 @@ export default function ModeratedChat(): JSX.Element {
    */
   return (
     <div className={`app-moderated app-moderated--${theme}`}>
+      <button onClick={fetchMoreChannels}>Fetch more</button>
       {/* Be sure to wrap Chat component in PubNubProvider from pubnub-react package.
         In this case it's done in the index.tsx file */}
       {/* Current uuid is passed to channels prop to subscribe and listen to User metadata changes */}
-      <Chat
+      {/* <Chat
         theme={theme}
         users={allUsers}
         currentChannel={currentChannel.id}
@@ -207,7 +213,6 @@ export default function ModeratedChat(): JSX.Element {
                   close
                 </button>
               </div>
-
               <div className="theme-switcher">
                 <i className="material-icons-outlined">brightness_4</i>
                 <button
@@ -217,7 +222,6 @@ export default function ModeratedChat(): JSX.Element {
                   <span></span>
                 </button>
               </div>
-
               <div className="filter-input">
                 <input
                   onChange={(e) => setChannelsFilter(e.target.value)}
@@ -227,7 +231,6 @@ export default function ModeratedChat(): JSX.Element {
                 />
                 <i className="material-icons-outlined">search</i>
               </div>
-
               <div className="channel-lists">
                 <h2>
                   Channels{" "}
@@ -269,6 +272,7 @@ export default function ModeratedChat(): JSX.Element {
                     )}
                   />
                 </div>
+                {React.version}
               </div>
             </div>
 
@@ -354,7 +358,7 @@ export default function ModeratedChat(): JSX.Element {
             </div>
           </>
         )}
-      </Chat>
+      </Chat> */}
     </div>
   );
 }

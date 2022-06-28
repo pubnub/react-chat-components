@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import PubNub, { PubnubConfig } from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import users from "../../../data/users/users.json";
@@ -83,7 +83,8 @@ const KeysError = () => {
 };
 
 const renderApp = () => {
-  ReactDOM.render(
+  ReactDOM.createRoot(document.getElementById("root")!).render(
+    // ReactDOM.render(
     <React.StrictMode>
       {pubnubKeys.publishKey?.length && pubnubKeys.subscribeKey?.length ? (
         pamEnabled ? (
@@ -96,9 +97,14 @@ const renderApp = () => {
       ) : (
         <KeysError />
       )}
-    </React.StrictMode>,
-    document.getElementById("root")
+    </React.StrictMode>
   );
 };
+
+// ReactDOM.createRoot(document.getElementById("root")!).render(
+//   <React.StrictMode>
+//     <App />
+//   </React.StrictMode>
+// );
 
 renderApp();
