@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GetMembershipsParametersv2 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 import { ChannelEntity } from "../types";
 
-type HookReturnValue = [ChannelEntity[], () => Promise<void>, () => void, number, Error];
+type HookReturnValue = [ChannelEntity[], () => void, () => void, number, Error];
 
 export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
@@ -16,7 +16,6 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
-  const [fetching, setFetching] = useState(false);
 
   const paginatedOptions = useMemo(
     () =>
@@ -27,6 +26,10 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     [page, jsonOptions]
   );
 
+  const fetchMoreMemberships = () => {
+    setDoFetch(true);
+  };
+
   const resetHook = () => {
     setChannels([]);
     setTotalCount(0);
@@ -35,24 +38,36 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     setDoFetch(true);
   };
 
-  const fetchPage = useCallback(async () => {
-    setDoFetch(false);
-    setFetching(true);
-    try {
-      if (totalCount && channels.length >= totalCount) return;
-      const response = await pubnub.objects.getMemberships(paginatedOptions);
-      setChannels((channels) => [
-        ...channels,
-        ...(response.data.map((m) => m.channel) as ChannelEntity[]),
-      ]);
-      setTotalCount(response.totalCount);
-      setPage(response.next);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setFetching(false);
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
+
+  useEffect(() => {
+    let ignoreRequest = false;
+    if (doFetch) fetchPage();
+
+    async function fetchPage() {
+      try {
+        if (totalCount && channels.length >= totalCount) return;
+        const response = await pubnub.objects.getMemberships(paginatedOptions);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setChannels((channels) => [
+          ...channels,
+          ...(response.data.map((m) => m.channel) as ChannelEntity[]),
+        ]);
+        setTotalCount(response.totalCount);
+        setPage(response.next);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
     }
-  }, [pubnub, paginatedOptions, channels.length, totalCount]);
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [totalCount, pubnub.objects, paginatedOptions, channels.length, doFetch]);
 
   useEffect(() => {
     const listener = {
@@ -86,13 +101,5 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     };
   }, [pubnub, paginatedOptions.uuid]);
 
-  useEffect(() => {
-    resetHook();
-  }, [jsonOptions]);
-
-  useEffect(() => {
-    if (doFetch && !fetching) fetchPage();
-  }, [doFetch, fetching, fetchPage]);
-
-  return [channels, fetchPage, resetHook, totalCount, error];
+  return [channels, fetchMoreMemberships, resetHook, totalCount, error];
 };

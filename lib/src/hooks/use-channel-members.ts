@@ -1,11 +1,11 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GetChannelMembersParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 import { UserEntity } from "../types";
 
-type HookReturnValue = [UserEntity[], () => Promise<void>, () => void, number, Error];
+type HookReturnValue = [UserEntity[], () => void, () => void, number, Error];
 
 export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
@@ -16,7 +16,6 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
-  const [fetching, setFetching] = useState(false);
 
   const paginatedOptions = useMemo(
     () =>
@@ -27,6 +26,10 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     [page, jsonOptions]
   );
 
+  const fetchMoreMembers = () => {
+    setDoFetch(true);
+  };
+
   const resetHook = () => {
     setMembers([]);
     setTotalCount(0);
@@ -35,21 +38,36 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     setDoFetch(true);
   };
 
-  const fetchPage = useCallback(async () => {
-    setDoFetch(false);
-    setFetching(true);
-    try {
-      if (totalCount && members.length >= totalCount) return;
-      const response = await pubnub.objects.getChannelMembers(paginatedOptions);
-      setMembers((members) => [...members, ...(response.data.map((m) => m.uuid) as UserEntity[])]);
-      setTotalCount(response.totalCount);
-      setPage(response.next);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setFetching(false);
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
+
+  useEffect(() => {
+    let ignoreRequest = false;
+    if (doFetch) fetchPage();
+
+    async function fetchPage() {
+      try {
+        if (totalCount && members.length >= totalCount) return;
+        const response = await pubnub.objects.getChannelMembers(paginatedOptions);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setMembers((members) => [
+          ...members,
+          ...(response.data.map((m) => m.uuid) as UserEntity[]),
+        ]);
+        setTotalCount(response.totalCount);
+        setPage(response.next);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
     }
-  }, [pubnub, paginatedOptions, members.length, totalCount]);
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [totalCount, pubnub.objects, paginatedOptions, members.length, doFetch]);
 
   useEffect(() => {
     const listener = {
@@ -82,19 +100,5 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     };
   }, [pubnub, paginatedOptions.channel]);
 
-  useEffect(() => {
-    resetHook();
-  }, [jsonOptions]);
-
-  useEffect(() => {
-    setMembers([]);
-    setTotalCount(0);
-    setPage("");
-  }, [options.channel]);
-
-  useEffect(() => {
-    if (doFetch && !fetching) fetchPage();
-  }, [doFetch, fetching, fetchPage]);
-
-  return [members, fetchPage, resetHook, totalCount, error];
+  return [members, fetchMoreMembers, resetHook, totalCount, error];
 };

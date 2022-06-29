@@ -25,29 +25,6 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     setDoFetch(true);
   };
 
-  // const handleObject = (event) => {
-  //   console.log("received event: ", event);
-  //   const message = event.message;
-  //   if (message.type !== "channel") return;
-
-  //   setChannels((channels) => {
-  //     const channelsCopy = cloneDeep(channels);
-  //     const channel = channelsCopy.find((ch) => ch.id === event.channel);
-
-  //     // Set events are only handled for already fetched channels in order to conform to filters and pagination
-  //     if (channel && message.event === "set") {
-  //       Object.assign(channel, message.data);
-  //     }
-
-  //     if (channel && message.event === "delete") {
-  //       console.log("removing channel: ", event);
-  //       channelsCopy.splice(channelsCopy.indexOf(channel), 1);
-  //     }
-
-  //     return channelsCopy;
-  //   });
-  // };
-
   useEffect(() => {
     let ignoreRequest = false;
     if (doFetch) fetchPage();
@@ -75,7 +52,6 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
   useEffect(() => {
     const listener = {
       objects: (event) => {
-        console.log("received event: ", event);
         const message = event.message;
         if (message.type !== "channel") return;
 
@@ -89,7 +65,6 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
           }
 
           if (channel && message.event === "delete") {
-            console.log("removing channel: ", event);
             channelsCopy.splice(channelsCopy.indexOf(channel), 1);
           }
 
@@ -99,7 +74,6 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     };
 
     pubnub.addListener(listener);
-    console.log("setting up listener");
 
     return () => {
       pubnub.removeListener(listener);

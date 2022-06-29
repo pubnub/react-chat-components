@@ -9,35 +9,53 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
 
   const [user, setUser] = useState(null);
   const [error, setError] = useState<Error>();
-
-  const command = async () => {
-    try {
-      const response = await pubnub.objects.getUUIDMetadata(options);
-      setUser(response.data);
-    } catch (e) {
-      setError(e);
-    }
-  };
-
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "uuid") return;
-
-    setUser((user) => {
-      const userCopy = cloneDeep(user);
-
-      if (message.data.id == user.id) {
-        Object.assign(userCopy, message.data);
-      }
-
-      return userCopy;
-    });
-  };
+  const [doFetch, setDoFetch] = useState(true);
 
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-    command();
-  }, []);
+    let ignoreRequest = false;
+    if (doFetch) fetch();
+
+    async function fetch() {
+      try {
+        const response = await pubnub.objects.getUUIDMetadata(options);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setUser(response.data);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
+    }
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [doFetch, options, pubnub.objects]);
+
+  useEffect(() => {
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "uuid") return;
+
+        setUser((user) => {
+          const userCopy = cloneDeep(user);
+
+          if (message.data.id == user.id) {
+            Object.assign(userCopy, message.data);
+          }
+
+          return userCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub]);
 
   return [user, error];
 };
