@@ -4,16 +4,18 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # `useMemberships`
 
-Depending on the input arguments, the hook returns a list of members in a channel, or a list of
+This hook uses the new [Memberships API](https://www.pubnub.com/docs/sdks/javascript/api-reference/memberships).
+
+Depending on the input arguments, the hook returns a list of members in a channel or a list of
 channels a given user is a member of.
 
 The list will include metadata for memberships that have additional metadata stored in the database.
 Pagination is handled internally. You can adjust the `limit` of returned memberships on a single
 call (max/default 100) and call a function returned by the hook to get another page of results.
 
-This hook also sets up a listener that reacts to removals of already fetched memberships. Updates
+This hook also sets up a listener that reacts to removals of the already-fetched memberships. Updates
 and new memberships are not handled due to technical limitations. However, this behavior requires a
-living subscription to the channel getting updated - this should be handled by the components.
+living subscription for the channel to get updated - this should be handled by the components.
 
 ```js
 const [users, fetchPage, refetchMemberships, total, error] = useMemberships({
@@ -61,6 +63,6 @@ return (
 | :---------- | :---------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `array[0]`  | UserEntity[] or SpaceEntity[] | List of returned memberships.                                                                                   |
 | `array[1] ` | Function                      | Function that can be called to fetch another page of members.                                                   |
-| `array[2]`  | Function                      | Function that can be called to completely reset the hook. This can be used in case of expected members updates. |
+| `array[2]`  | Function                      | Function that can be called to completely reset the hook. This can be used in case of expected updates of members. |
 | `array[3]`  | Number                        | Total number of stored members.                                                                                 |
 | `array[4]`  | Error                         | If there's an error fetching members, it will be available here.                                                |

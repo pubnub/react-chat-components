@@ -44,6 +44,17 @@ Follow this schema for the user data in your apps:
       "description": "URL to a user avatar that you can display in the UI",
       "type": "string"
     },
+    "type": {
+      "description": "Type of the user",
+      "type": "string",
+      "examples": ["default", "admin", "moderator"],
+      "default": "default"
+    },
+    "status": {
+      "description": "Status of the user",
+      "type": "string",
+      "examples": ["default", "deleted"]
+    },
     "custom": {
       "description": "Any additional payload information",
       "type": "object",
@@ -63,7 +74,7 @@ Follow this schema for the user data in your apps:
       "type": "string"
     }
   },
-  "required": ["id"]
+  "required": ["id", "type"]
 }
 ```
 
@@ -76,6 +87,8 @@ Example:
   "email": "jane.doe@example.com",
   "externalId": "some-external-user-id",
   "profileUrl": "https://randomuser.me/api/portraits/men/1.jpg",
+  "type": "default",
+  "status": "default",
   "custom": {
     "description": "Office Assistant"
   },
@@ -93,6 +106,7 @@ Follow this schema for the channel data in your apps:
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Channel",
   "description": "Channel in the chat application",
+  "type": "object",
   "properties": {
     "id": {
       "description": "Unique identifier for a channel",
@@ -105,6 +119,17 @@ Follow this schema for the channel data in your apps:
     "description": {
       "description": "Description of the channel that you can display in the UI",
       "type": "string"
+    },
+    "type": {
+      "description": "Type of the channel",
+      "type": "string",
+      "examples": ["default", "group", "direct"],
+      "default": "default"
+    },
+    "status": {
+      "description": "Status of the channel",
+      "type": "string",
+      "examples": ["default", "deleted"]
     },
     "custom": {
       "description": "Any additional payload information",
@@ -136,6 +161,8 @@ Example:
   "id": "some-channel-id",
   "name": "Off-topic",
   "description": "Off-topic channel for random chatter and fun",
+  "type": "default",
+  "status": "default",
   "custom": {
     "profileUrl": "https://www.gravatar.com/avatar/149e60f311749f2a7c6515f7b34?s=256&d=identicon"
   },
