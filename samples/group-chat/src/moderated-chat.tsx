@@ -28,7 +28,7 @@ import "./moderated-chat.scss";
 type ChannelType = ChannelEntity;
 
 const defaultChannel = {
-  id: "space.149e60f311749f2a7c6515f7b34",
+  id: "default",
   name: "Default Channel",
   description: "This is the default channel",
 } as Pick<ChannelType, "id" | "name" | "description">;
@@ -49,8 +49,6 @@ export default function ModeratedChat(): JSX.Element {
   const [membersFilter, setMembersFilter] = useState("");
   const [reportedMessage, setReportedMessage] = useState<MessageEnvelope>();
 
-  const [limit, setLimit] = useState(1);
-
   /**
    * All data related to Users, Channels and Memberships is stored within PubNub Objects API
    * It can be easily accessed using React Chat Components hooks
@@ -59,34 +57,14 @@ export default function ModeratedChat(): JSX.Element {
   const uuid = pubnub.getUUID();
   const [currentUser] = useUser({ uuid });
   const [allUsers] = useUsers({ include: { customFields: true } });
-  const [allChannels, fetchMoreChannels] = useChannels({ include: { customFields: true } });
-
-  const [joinedChannels, fetchMoreMemberships, refetchJoinedChannels] = useUserMemberships({
-    limit,
+  const [allChannels] = useChannels({ include: { customFields: true } });
+  const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({
     include: { channelFields: true, customChannelFields: true },
   });
   const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useChannelMembers({
     channel: currentChannel.id,
-    limit,
     include: { customUUIDFields: true },
   });
-
-  // useEffect(() => {
-  //   console.log("allUsers: ", allUsers);
-  // }, [allUsers]);
-
-  useEffect(() => {
-    console.log("allChannels: ", allChannels);
-  }, [allChannels]);
-
-  useEffect(() => {
-    console.log("joinedChannels: ", joinedChannels);
-  }, [joinedChannels]);
-
-  useEffect(() => {
-    console.log("currentChannel: ", currentChannel.id);
-  }, [currentChannel]);
-
   const [presenceData] = usePresence({
     channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
   });
@@ -175,23 +153,18 @@ export default function ModeratedChat(): JSX.Element {
    */
   return (
     <div className={`app-moderated app-moderated--${theme}`}>
-      <button onClick={fetchMoreMemberships}>Fetch more</button>
-      <button onClick={refetchJoinedChannels}>Reset hook</button>
-      <button onClick={() => setLimit((l) => l + 1)}>Increment limit</button>
-
       {/* Be sure to wrap Chat component in PubNubProvider from pubnub-react package.
         In this case it's done in the index.tsx file */}
       {/* Current uuid is passed to channels prop to subscribe and listen to User metadata changes */}
       <Chat
         theme={theme}
-        // users={allUsers}
+        users={allUsers}
         currentChannel={currentChannel.id}
-        channels={allChannels.map((c) => c.id)}
-        // channels={[...joinedChannels.map((c) => c.id), uuid]}
+        channels={[...joinedChannels.map((c) => c.id), uuid]}
         onError={handleError}
         onMembership={(e) => refreshMemberships(e)}
       >
-        {/* {showPublicChannelsModal && (
+        {showPublicChannelsModal && (
           <PublicChannelsModal
             {...{
               groupChannelsToJoin,
@@ -234,6 +207,7 @@ export default function ModeratedChat(): JSX.Element {
                   close
                 </button>
               </div>
+
               <div className="theme-switcher">
                 <i className="material-icons-outlined">brightness_4</i>
                 <button
@@ -243,6 +217,7 @@ export default function ModeratedChat(): JSX.Element {
                   <span></span>
                 </button>
               </div>
+
               <div className="filter-input">
                 <input
                   onChange={(e) => setChannelsFilter(e.target.value)}
@@ -252,6 +227,7 @@ export default function ModeratedChat(): JSX.Element {
                 />
                 <i className="material-icons-outlined">search</i>
               </div>
+
               <div className="channel-lists">
                 <h2>
                   Channels{" "}
@@ -293,7 +269,6 @@ export default function ModeratedChat(): JSX.Element {
                     )}
                   />
                 </div>
-                {React.version}
               </div>
             </div>
 
@@ -378,7 +353,7 @@ export default function ModeratedChat(): JSX.Element {
               />
             </div>
           </>
-        )} */}
+        )}
       </Chat>
     </div>
   );
