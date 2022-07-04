@@ -5,11 +5,22 @@ import cloneDeep from "lodash.clonedeep";
 import { UserEntity } from "../types";
 
 export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {
-  const pubnub = usePubNub();
+  const jsonOptions = JSON.stringify(options);
 
+  const pubnub = usePubNub();
   const [user, setUser] = useState(null);
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
+
+  const resetHook = () => {
+    setUser(null);
+    setError(undefined);
+    setDoFetch(true);
+  };
+
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
 
   useEffect(() => {
     let ignoreRequest = false;

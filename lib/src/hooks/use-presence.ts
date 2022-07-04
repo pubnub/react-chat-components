@@ -19,7 +19,7 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
 
   const resetHook = () => {
     setPresence({});
-    setError(null);
+    setError(undefined);
     setDoFetch(true);
   };
 

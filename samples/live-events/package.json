@@ -13,8 +13,8 @@
     "pubnub": "^4.36.0",
     "pubnub-demo-integration": "^0.1.1",
     "pubnub-react": "^2.1.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-use": "^17.3.2"
   },
   "devDependencies": {
