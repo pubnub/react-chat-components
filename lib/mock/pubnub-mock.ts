@@ -1,4 +1,3 @@
-import type PubNub from "pubnub";
 import type {
   ListenerParameters,
   MessageAction,
@@ -8,6 +7,7 @@ import type {
   SignalResponse,
   SendFileResponse,
 } from "pubnub";
+import { VSPPubnub } from "../src/types";
 import users from "../../data/users/users.json";
 import messages from "../../data/messages/lorem.json";
 import channels from "../../data/channels/work.json";
@@ -17,7 +17,7 @@ export interface PubNubMockOptions {
   returnedUuid?: string;
 }
 
-export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & { _config: any } {
+export function PubNubMock(options: PubNubMockOptions = {}): Partial<VSPPubnub> & { _config: any } {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
@@ -207,6 +207,9 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
     addMessageAction,
     addListener,
     fetchMessages,
+    fetchUser: objects.getUUIDMetadata,
+    fetchUsers: objects.getAllUUIDMetadata,
+    fetchSpaces: objects.getAllChannelMetadata,
     getFileUrl,
     getUUID,
     getSubscribedChannels,
