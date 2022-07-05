@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.11.0
+version: v0.12.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2022-07-05
+    version: v0.12.0
+    changes:
+      - type: bug
+        text: "All custom hooks returning double results when used with React 18."
   - date: 2022-06-22
     version: v0.11.0
     changes:
