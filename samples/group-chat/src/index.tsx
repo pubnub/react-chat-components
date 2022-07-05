@@ -84,7 +84,6 @@ const KeysError = () => {
 
 const renderApp = () => {
   ReactDOM.createRoot(document.getElementById("root")!).render(
-    // ReactDOM.render(
     <React.StrictMode>
       {pubnubKeys.publishKey?.length && pubnubKeys.subscribeKey?.length ? (
         pamEnabled ? (
@@ -100,11 +99,5 @@ const renderApp = () => {
     </React.StrictMode>
   );
 };
-
-// ReactDOM.createRoot(document.getElementById("root")!).render(
-//   <React.StrictMode>
-//     <App />
-//   </React.StrictMode>
-// );
 
 renderApp();

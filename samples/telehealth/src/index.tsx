@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import users from "../../../data/users/users.json";
@@ -76,9 +76,8 @@ function AppView(): JSX.Element {
   );
 }
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AppView />
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
