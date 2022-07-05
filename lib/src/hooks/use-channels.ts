@@ -5,7 +5,7 @@ import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 import { ChannelEntity } from "../types";
 
-type HookReturnValue = [ChannelEntity[], () => Promise<void>, number, Error];
+type HookReturnValue = [ChannelEntity[], () => void, number, Error];
 
 export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
@@ -14,49 +14,71 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
   const [page, setPage] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<Error>();
+  const [doFetch, setDoFetch] = useState(true);
 
   const paginatedOptions = merge({}, options, {
     page: { next: page },
     include: { totalCount: true },
   }) as GetAllMetadataParameters;
 
-  const command = async () => {
-    try {
-      if (totalCount && channels.length >= totalCount) return;
-      const response = await pubnub.objects.getAllChannelMetadata(paginatedOptions);
-      setChannels((channels) => [...channels, ...response.data]);
-      setTotalCount(response.totalCount);
-      setPage(response.next);
-    } catch (e) {
-      setError(e);
-    }
-  };
-
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "channel") return;
-
-    setChannels((channels) => {
-      const channelsCopy = cloneDeep(channels);
-      const channel = channelsCopy.find((ch) => ch.id === event.channel);
-
-      // Set events are only handled for already fetched channels in order to conform to filters and pagination
-      if (channel && message.event === "set") {
-        Object.assign(channel, message.data);
-      }
-
-      if (channel && message.event === "delete") {
-        channelsCopy.splice(channelsCopy.indexOf(channel), 1);
-      }
-
-      return channelsCopy;
-    });
+  const fetchMoreChannels = () => {
+    setDoFetch(true);
   };
 
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-    command();
-  }, []);
+    let ignoreRequest = false;
+    if (doFetch) fetchPage();
 
-  return [channels, command, totalCount, error];
+    async function fetchPage() {
+      try {
+        if (totalCount && channels.length >= totalCount) return;
+        const response = await pubnub.objects.getAllChannelMetadata(paginatedOptions);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setChannels((channels) => [...channels, ...response.data]);
+        setTotalCount(response.totalCount);
+        setPage(response.next);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
+    }
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [channels.length, doFetch, paginatedOptions, pubnub.objects, totalCount]);
+
+  useEffect(() => {
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "channel") return;
+
+        setChannels((channels) => {
+          const channelsCopy = cloneDeep(channels);
+          const channel = channelsCopy.find((ch) => ch.id === event.channel);
+
+          // Set events are only handled for already fetched channels in order to conform to filters and pagination
+          if (channel && message.event === "set") {
+            Object.assign(channel, message.data);
+          }
+
+          if (channel && message.event === "delete") {
+            channelsCopy.splice(channelsCopy.indexOf(channel), 1);
+          }
+
+          return channelsCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub]);
+
+  return [channels, fetchMoreChannels, totalCount, error];
 };

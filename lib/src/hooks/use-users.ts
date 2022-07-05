@@ -5,7 +5,7 @@ import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
 import { UserEntity } from "../types";
 
-type HookReturnValue = [UserEntity[], () => Promise<void>, number, Error];
+type HookReturnValue = [UserEntity[], () => void, number, Error];
 
 export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
@@ -14,49 +14,71 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
+  const [doFetch, setDoFetch] = useState(true);
 
   const paginatedOptions = merge({}, options, {
     page: { next: page },
     include: { totalCount: true },
   }) as GetAllMetadataParameters;
 
-  const command = async () => {
-    try {
-      if (totalCount && users.length >= totalCount) return;
-      const response = await pubnub.objects.getAllUUIDMetadata(paginatedOptions);
-      setUsers((users) => [...users, ...response.data]);
-      setTotalCount(response.totalCount);
-      setPage(response.next);
-    } catch (e) {
-      setError(e);
-    }
-  };
-
-  const handleObject = (event) => {
-    const message = event.message;
-    if (message.type !== "uuid") return;
-
-    setUsers((users) => {
-      const usersCopy = cloneDeep(users);
-      const user = usersCopy.find((u) => u.id === message.data.id);
-
-      // Set events are only handled for already fetched users in order to conform to filters and pagination
-      if (user && message.event === "set") {
-        Object.assign(user, message.data);
-      }
-
-      if (user && message.event === "delete") {
-        usersCopy.splice(usersCopy.indexOf(user), 1);
-      }
-
-      return usersCopy;
-    });
+  const fetchMoreUsers = () => {
+    setDoFetch(true);
   };
 
   useEffect(() => {
-    pubnub.addListener({ objects: handleObject });
-    command();
-  }, []);
+    let ignoreRequest = false;
+    if (doFetch) fetchPage();
 
-  return [users, command, totalCount, error];
+    async function fetchPage() {
+      try {
+        if (totalCount && users.length >= totalCount) return;
+        const response = await pubnub.objects.getAllUUIDMetadata(paginatedOptions);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setUsers((users) => [...users, ...response.data]);
+        setTotalCount(response.totalCount);
+        setPage(response.next);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
+    }
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [doFetch, paginatedOptions, pubnub.objects, totalCount, users.length]);
+
+  useEffect(() => {
+    const listener = {
+      objects: (event) => {
+        const message = event.message;
+        if (message.type !== "uuid") return;
+
+        setUsers((users) => {
+          const usersCopy = cloneDeep(users);
+          const user = usersCopy.find((u) => u.id === message.data.id);
+
+          // Set events are only handled for already fetched users in order to conform to filters and pagination
+          if (user && message.event === "set") {
+            Object.assign(user, message.data);
+          }
+
+          if (user && message.event === "delete") {
+            usersCopy.splice(usersCopy.indexOf(user), 1);
+          }
+
+          return usersCopy;
+        });
+      },
+    };
+
+    pubnub.addListener(listener);
+
+    return () => {
+      pubnub.removeListener(listener);
+    };
+  }, [pubnub]);
+
+  return [users, fetchMoreUsers, totalCount, error];
 };

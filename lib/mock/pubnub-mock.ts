@@ -47,6 +47,10 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
     Object.assign(listeners, obj);
   };
 
+  const removeListener = (obj) => {
+    Object.keys(obj).forEach((key) => delete listeners[key]);
+  };
+
   const fetchMessages = async (args) => {
     let messagesCopy = [...messages];
     if (args.start) {
@@ -73,24 +77,18 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
 
   const getSubscribedChannelGroups = () => [];
 
-  const hereNow = (args) => {
+  const hereNow = (options) => {
     return new Promise<HereNowResponse>((resolve) => {
       resolve({
-        totalChannels: args.channels.length,
-        totalOccupancy: 5,
-        channels: {
-          [args.channels[0]]: {
-            name: args.channels[0],
-            occupancy: 5,
-            occupants: [
-              { uuid },
-              { uuid: "user_732277cad5264ed48172c40f0f008104" },
-              { uuid: "user_a673547880824a0687b3041af36a5de4" },
-              { uuid: "user_2ada61d287aa42b59d620c474493474f" },
-              { uuid: "user_5500315bf0a34f9b9dfa0e4fffcf49c2" },
-            ],
-          },
-        },
+        totalChannels: options.channels.length,
+        totalOccupancy: options.channels.length * users.length,
+        channels: options.channels
+          .map((channel) => ({
+            name: channel,
+            occupancy: users.length,
+            occupants: users.map((u) => ({ uuid: u.id })),
+          }))
+          .reduce((obj, item) => ({ ...obj, [item["name"]]: item }), {}),
       });
     });
   };
@@ -155,29 +153,55 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
     });
   };
 
-  // const objects = {
-  // getAllUUIDMetadata: () => ({
-  //   data: users.map((u) => u.uuid),
-  // }),
-  // getAllChannelMetadata: () => ({
-  //   data: channels,
-  // }),
-  // getChannelMembers: () => ({
-  //   data: users,
-  // }),
-  // getMemberships: () => ({
-  //   data: [
-  //     { channel: { id: "space.ac4e67b98b34b44c4a39466e93e" } },
-  //     { channel: { id: "space.c1ee1eda28554d0a34f9b9df5cfe" } },
-  //     { channel: { id: "space.ce466f2e445c38976168ba78e46" } },
-  //     { channel: { id: "space.a204f87d215a40985d35cf84bf5" } },
-  //     { channel: { id: "space.149e60f311749f2a7c6515f7b34" } },
-  //   ],
-  // }),
-  // getUUIDMetadata: (args) => ({
-  //   data: users.find((u) => u.uuid.id === args.uuid).uuid,
-  // }),
-  // };
+  const objects = {
+    getAllUUIDMetadata: (options) => {
+      const limit = options.limit || users.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        data: users.slice(offset, offset + limit),
+        totalCount: users.length,
+        next: page + 1,
+      };
+    },
+    getAllChannelMetadata: (options) => {
+      const limit = options.limit || channels.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        data: channels.slice(offset, offset + limit),
+        totalCount: channels.length,
+        next: page + 1,
+      };
+    },
+    getChannelMembers: (options) => {
+      const limit = options.limit || users.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        data: users.slice(offset, offset + limit),
+        totalCount: users.length,
+        next: page + 1,
+      };
+    },
+    getMemberships: (options) => {
+      const limit = options.limit || channels.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        data: channels.slice(offset, offset + limit),
+        totalCount: channels.length,
+        next: page + 1,
+      };
+    },
+    getUUIDMetadata: (args) => ({
+      data: users.find((u) => u.id === args.uuid),
+    }),
+  };
 
   return {
     addMessageAction,
@@ -189,11 +213,13 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
     getSubscribedChannelGroups,
     hereNow,
     publish,
+    removeListener,
     removeMessageAction,
     signal,
     sendFile,
     stop: () => true,
     subscribe: () => true,
+    objects,
     unsubscribe: () => true,
     _config: {
       _addPnsdkSuffix: () => true,

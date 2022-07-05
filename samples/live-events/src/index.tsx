@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import faker from "@faker-js/faker";
@@ -97,11 +97,10 @@ const LiveEventChat = (): JSX.Element => {
   );
 };
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <PubNubProvider client={pubnub}>
       <LiveEventChat />
     </PubNubProvider>
-  </React.StrictMode>,
-  document.getElementById("root")
+  </React.StrictMode>
 );
