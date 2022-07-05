@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { usePubNub } from "pubnub-react";
 import merge from "lodash.merge";
 import cloneDeep from "lodash.clonedeep";
@@ -16,7 +16,7 @@ export const useMemberships = <
   options: T
 ): [
   T extends FetchMembershipsFromSpaceParameters ? ChannelEntity[] : UserEntity[],
-  () => Promise<void>,
+  () => void,
   () => void,
   number,
   Error
@@ -29,7 +29,6 @@ export const useMemberships = <
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
-  const [fetching, setFetching] = useState(false);
 
   const paginatedOptions = useMemo(
     () =>
@@ -40,6 +39,10 @@ export const useMemberships = <
     [page, jsonOptions]
   );
 
+  const fetchMoreMemberships = () => {
+    setDoFetch(true);
+  };
+
   const resetHook = () => {
     setEntities([]);
     setTotalCount(0);
@@ -48,21 +51,33 @@ export const useMemberships = <
     setDoFetch(true);
   };
 
-  const fetchPage = useCallback(async () => {
-    setDoFetch(false);
-    setFetching(true);
-    try {
-      if (totalCount && entities.length >= totalCount) return;
-      const response = await pubnub.fetchMemberships(paginatedOptions);
-      setEntities((entities) => [...entities, ...response.data.map((m) => m.user || m.space)]);
-      setTotalCount(response.totalCount);
-      setPage(response.next);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setFetching(false);
+  useEffect(() => {
+    resetHook();
+  }, [jsonOptions]);
+
+  useEffect(() => {
+    let ignoreRequest = false;
+    if (doFetch) fetchPage();
+
+    async function fetchPage() {
+      try {
+        if (totalCount && entities.length >= totalCount) return;
+        const response = await pubnub.fetchMemberships(paginatedOptions);
+        if (ignoreRequest) return;
+        setDoFetch(false);
+        setEntities((entities) => [...entities, ...response.data.map((m) => m.user || m.space)]);
+        setTotalCount(response.totalCount);
+        setPage(response.next);
+      } catch (e) {
+        setDoFetch(false);
+        setError(e);
+      }
     }
-  }, [pubnub, paginatedOptions, entities.length, totalCount]);
+
+    return () => {
+      ignoreRequest = true;
+    };
+  }, [doFetch, entities.length, paginatedOptions, pubnub, totalCount]);
 
   useEffect(() => {
     const listener = {
@@ -101,13 +116,5 @@ export const useMemberships = <
     };
   }, [pubnub, paginatedOptions.userId, paginatedOptions.spaceId]);
 
-  useEffect(() => {
-    resetHook();
-  }, [jsonOptions]);
-
-  useEffect(() => {
-    if (doFetch && !fetching) fetchPage();
-  }, [doFetch, fetching, fetchPage]);
-
-  return [entities, fetchPage, resetHook, totalCount, error];
+  return [entities, fetchMoreMemberships, resetHook, totalCount, error];
 };

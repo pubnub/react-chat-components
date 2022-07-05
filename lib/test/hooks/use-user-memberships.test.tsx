@@ -76,7 +76,7 @@ describe("useUserMemberships", () => {
     });
   });
 
-  test("resets the results when reset is called", async () => {
+  test("resets the results when options are changed", async () => {
     const limit = 3;
     const { result, rerender } = renderHook((props) => useUserMemberships(props), {
       wrapper,
