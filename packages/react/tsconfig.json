@@ -12,7 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../common/**/*"],
   "exclude": ["node_modules", "dist", "src/**/*.test.tsx"],
   "baseUrl": "./src"
 }

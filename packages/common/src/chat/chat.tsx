@@ -24,7 +24,6 @@ import {
   TypingIndicatorTimeoutAtom,
   UsersMetaAtom,
 } from "../state-atoms";
-import "./chat.scss";
 
 export interface ChatProps {
   children?: ReactNode;

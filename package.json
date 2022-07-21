@@ -6,7 +6,7 @@
   "main": "index.js",
   "workspaces": [
     "data",
-    "lib",
+    "packages/*",
     "samples/*"
   ],
   "engines": {
@@ -23,7 +23,7 @@
     ]
   },
   "scripts": {
-    "build": "cd lib && npm run build",
+    "build": "cd packages/react && npm run build",
     "eslint:base": "eslint --ignore-path .gitignore",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
@@ -33,13 +33,13 @@
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "prettier:base": "prettier --ignore-path .gitignore",
-    "postinstall": "npm run build -w ./lib",
-    "start": "concurrently \"cd lib && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
-    "storybook": "start-storybook -p 6006 -c lib/docs",
-    "storybook:build": "build-storybook -c lib/docs",
+    "postinstall": "npm run build -w ./packages/react",
+    "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
+    "storybook": "start-storybook -p 6006 -c packages/react/docs",
+    "storybook:build": "build-storybook -c packages/react/docs",
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",
-    "test": "jest --config lib/jest.config.js",
-    "test:watch": "jest --config lib/jest.config.js --watch"
+    "test": "jest --config packages/react/jest.config.js",
+    "test:watch": "jest --config packages/react/jest.config.js --watch"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",

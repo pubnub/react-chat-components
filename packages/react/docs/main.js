@@ -1,4 +1,6 @@
+/* eslint-disable */
 const path = require("path");
+/* eslint-enable */
 
 module.exports = {
   stories: ["./stories/**/*.stories.mdx", "./stories/**/*.stories.@(js|jsx|ts|tsx)"],
