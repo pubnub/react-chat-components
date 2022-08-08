@@ -43,7 +43,7 @@ export const useMemberListCore = (props: CommonMemberListProps) => {
   };
 
   const isPresentMember = (uuid: string) => {
-    return props.presentMembers.includes(uuid);
+    return props.presentMembers?.includes(uuid);
   };
 
   const memberSorter = (a, b) => {

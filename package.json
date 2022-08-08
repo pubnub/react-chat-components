@@ -35,6 +35,7 @@
     "prettier:base": "prettier --ignore-path .gitignore",
     "postinstall": "npm run build -w ./packages/react",
     "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
+    "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/mobile-chat && npm run start\"",
     "storybook": "start-storybook -p 6006 -c packages/react/docs",
     "storybook:build": "build-storybook -c packages/react/docs",
     "storybook:deploy": "npm run storybook:build && gh-pages -d storybook-static -e docs",

@@ -15,3 +15,11 @@ export const getPredefinedColor = (uuid: string): string => {
     .reduce((a, b) => a + b);
   return colors[sum % colors.length];
 };
+
+export const toPascal = (str: string): string => {
+  return str
+    .toLowerCase()
+    .split("-")
+    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+    .join("");
+};

@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState, useEffect, ReactElement } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 import { MessagePayload, EmojiPickerElementProps } from "../types";
 import {
   CurrentChannelAtom,
@@ -77,7 +77,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     try {
       if (!file && !isValidInputText()) return;
       let message = {
-        id: uuidv4(),
+        // TODO: id: uuidv4(),
         text: file ? "" : text,
         type: file ? "" : "default",
         ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
