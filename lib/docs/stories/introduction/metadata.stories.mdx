@@ -8,12 +8,12 @@ Some components require providing lists of channels and users that should be dis
 those work fine with simple lists of `strings`, although look much better when provided with
 metadata about the entities. See the reference below to understand what's expected where and why:
 
-| Component         | Description                                                                                                           | Property                       | Data type (see below)           |
-| :---------------- | :-------------------------------------------------------------------------------------------------------------------- | :----------------------------- | ------------------------------- |
-| `ChannelList`     | Displays channel names with descriptions.                                                                             | `channels`                     | `string[]` or `ChannelEntity[]` |
-| `MemberList`      | Displays full user names, avatars and an additional line of text that can serve as a user's description/title/status. | `members`                      | `string[]` or `UserEntity[]`    |
-| `MessageList`     | Displays full user names and avatars.                                                                                 | `users` of the `Chat` provider | `UserEntity[]`                  |
-| `TypingIndicator` | Displays full user names or avatars, depending on the type of the indicator.                                          | `users` of the `Chat` provider | `UserEntity[]`                  |
+| Component         | Description                                                                                                           | Property                                                                                                                            | Data type (see below)           |
+| :---------------- | :-------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `ChannelList`     | Displays channel names with descriptions.                                                                             | `channels`                                                                                                                          | `string[]` or `ChannelEntity[]` |
+| `MemberList`      | Displays full user names, avatars and an additional line of text that can serve as a user's description/title/status. | `members`                                                                                                                           | `string[]` or `UserEntity[]`    |
+| `MessageList`     | Displays full user names and avatars.                                                                                 | [`users` of the `Chat` provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/code-examples-user-metadata--page) | `UserEntity[]`                  |
+| `TypingIndicator` | Displays full user names or avatars, depending on the type of the indicator.                                          | [`users` of the `Chat` provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/code-examples-user-metadata--page) | `UserEntity[]`                  |
 
 ## Data source
 
