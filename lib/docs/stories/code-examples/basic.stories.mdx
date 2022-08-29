@@ -1,0 +1,82 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Code Examples/Basic" />
+
+# Basic examples
+
+<br />
+<br />
+
+## Ensuring components display user metadata
+
+Chat Components require you to explicitly pass information about the users of your app, in order to
+correctly display their names and avatars. Otherwise, messages will show sender IDs and avatar
+placeholders. The metadata can be provided from numerous different sources, including your own
+database or PubNub Objects storage. You can also attach information about the sender directly to
+each message.
+
+<br />
+
+### Passing in metadata for all users previously stored in PubNub Objects
+
+```jsx
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
+import { Chat, MessageList, MessageInput, useUsers } from "@pubnub/react-chat-components";
+
+const pubnub = new PubNub({
+  publishKey: "demo",
+  subscribeKey: "demo",
+  uuid: "test-user",
+});
+
+export default function PubNubChat() {
+  return (
+    <PubNubProvider client={pubnub}>
+      <ChatConversation />
+    </PubNubProvider>
+  );
+}
+
+export function ChatConversation() {
+  const [users] = useUsers();
+
+  return (
+    <Chat currentChannel="test-channel" users={users}>
+      <MessageList />
+      <MessageInput />
+    </Chat>
+  );
+}
+```
+
+### Attaching sender metadata to each message
+
+```jsx
+import PubNub from "pubnub";
+import { PubNubProvider } from "pubnub-react";
+import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
+
+const myUser = {
+  id: "test-user",
+  name: "Mark Kelley",
+  profileUrl: "https://randomuser.me/api/portraits/men/1.jpg",
+};
+
+const pubnub = new PubNub({
+  publishKey: "demo",
+  subscribeKey: "demo",
+  uuid: myUser.id,
+});
+
+export default function PubNubChat() {
+  return (
+    <PubNubProvider client={pubnub}>
+      <Chat currentChannel="test-channel" users={[myUser]}>
+        <MessageList />
+        <MessageInput senderInfo={true} />
+      </Chat>
+    </PubNubProvider>
+  );
+}
+```
