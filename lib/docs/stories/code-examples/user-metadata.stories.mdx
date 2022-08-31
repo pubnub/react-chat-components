@@ -6,19 +6,19 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 PubNub Chat Components for React require you to explicitly pass information about the users of your
 app to correctly display their names and avatars. Otherwise, messages will show sender IDs and
-avatar placeholders. The metadata can be provided from numerous different sources, including your
-own database or PubNub Objects storage. You can also attach information about the sender directly to
+avatar placeholders. You can provide metadata from numerous different sources, including your own
+database or PubNub Objects storage. You can also attach information about the sender directly to
 each message.
 
 <br />
 
 ## Pass in metadata of all users
 
-This example assumes user information was previously stored into
-[PubNub Objects](https://www.pubnub.com/docs/metadata/users-metadata). In that case you can easily
-fetch it using
+This example assumes user information was previously stored in
+[PubNub Objects](https://www.pubnub.com/docs/metadata/users-metadata). In that case, you can easily
+fetch it using the
 [useUsers](https://pubnub.github.io/react-chat-components/docs/?path=/docs/custom-hooks-useusers--page)
-custom hook and pass all of it directly to the components using `users` option in the `Chat`
+custom hook and pass all of it directly to the components using the `users` option in the `Chat`
 provider:
 
 ```jsx
@@ -54,9 +54,9 @@ export function ChatConversation() {
 
 ## Attach sender data to messages
 
-Alternatively, you can provide the info on just your current user and attach id directly to each
-message using `senderInfo` option in the `MessageInput`. In this case you can still use PubNub to
-store this information, but let's see how would that work with dynamically created data:
+Alternatively, you can just provide the information on your current user and attach its ID directly
+to each message using the `senderInfo` option in the `MessageInput`. In this case, you can still use
+PubNub to store this information, but that's how it would work with dynamically created data:
 
 ```jsx
 import PubNub from "pubnub";
