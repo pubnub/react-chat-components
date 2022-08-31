@@ -6,11 +6,11 @@ import { PubNubProvider } from "pubnub-react";
 import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 
 /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
-  with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
+  with your own keyset. If you wish, modify the default "myFirstUser" value for the chat user. */
 const pubnub = new PubNub({
   publishKey: "myPublishKey",
   subscribeKey: "mySubscribeKey",
-  uuid: "myFirstUser",
+  userId: "myFirstUser",
 });
 const currentChannel = "Default";
 const theme = "light";
