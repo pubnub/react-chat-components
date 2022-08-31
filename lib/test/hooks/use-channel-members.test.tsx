@@ -76,7 +76,7 @@ describe("useChannelMembers", () => {
     });
   });
 
-  test("resets the results when reset is called", async () => {
+  test("resets the results when options are changed", async () => {
     const limit = 10;
     const { result, rerender } = renderHook((props) => useChannelMembers(props), {
       wrapper,

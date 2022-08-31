@@ -1,6 +1,7 @@
 [
   {
     "name": "Mark Kelley",
+    "type": "default",
     "custom": {
       "title": "Office Assistant"
     },
@@ -13,6 +14,7 @@
   },
   {
     "name": "Anna Gordon",
+    "type": "default",
     "custom": {
       "title": "VP Marketing"
     },
@@ -25,6 +27,7 @@
   },
   {
     "name": "Luis Griffin",
+    "type": "default",
     "custom": {
       "title": "Environmental Tech"
     },
@@ -37,6 +40,7 @@
   },
   {
     "name": "Sue Flores",
+    "type": "default",
     "custom": {
       "title": "VP Sales"
     },
@@ -49,6 +53,7 @@
   },
   {
     "name": "Luke Young",
+    "type": "default",
     "custom": {
       "title": "Product Engineer"
     },
@@ -61,6 +66,7 @@
   },
   {
     "name": "Jenny Porter",
+    "type": "default",
     "custom": {
       "title": "Engineer"
     },
@@ -73,6 +79,7 @@
   },
   {
     "name": "Ethan Murray",
+    "type": "default",
     "custom": {
       "title": "Actuary"
     },
@@ -85,6 +92,7 @@
   },
   {
     "name": "Victoria Torres",
+    "type": "default",
     "custom": {
       "title": "Professor"
     },
@@ -97,6 +105,7 @@
   },
   {
     "name": "Caleb Nichols",
+    "type": "default",
     "custom": {
       "title": "Environmental Tech"
     },
@@ -109,6 +118,7 @@
   },
   {
     "name": "Cathy Grant",
+    "type": "default",
     "custom": {
       "title": "Registered Nurse"
     },
@@ -121,6 +131,7 @@
   },
   {
     "name": "Rafael Gardner",
+    "type": "default",
     "custom": {
       "title": "Health Coach"
     },
@@ -133,6 +144,7 @@
   },
   {
     "name": "Heather Mason",
+    "type": "default",
     "custom": {
       "title": "Mechanical Systems Engineer"
     },
@@ -145,6 +157,7 @@
   },
   {
     "name": "Raul Day",
+    "type": "default",
     "custom": {
       "title": "Compensation Analyst"
     },
@@ -157,6 +170,7 @@
   },
   {
     "name": "Ethel Barnett",
+    "type": "default",
     "custom": {
       "title": "Help Desk Technician"
     },
@@ -169,6 +183,7 @@
   },
   {
     "name": "Lucas Boyd",
+    "type": "default",
     "custom": {
       "title": "Social Worker"
     },
@@ -181,6 +196,7 @@
   },
   {
     "name": "Ellen Harvey",
+    "type": "default",
     "custom": {
       "title": "Software Engineer"
     },
@@ -193,6 +209,7 @@
   },
   {
     "name": "Bradley Chapman",
+    "type": "default",
     "custom": {
       "title": "Registered Nurse"
     },
@@ -205,6 +222,7 @@
   },
   {
     "name": "Meghan Franklin",
+    "type": "default",
     "custom": {
       "title": "VP Product Management"
     },
@@ -217,6 +235,7 @@
   },
   {
     "name": "Armando Coleman",
+    "type": "default",
     "custom": {
       "title": "Pharmacist"
     },
@@ -229,6 +248,7 @@
   },
   {
     "name": "Sue Jones",
+    "type": "default",
     "custom": {
       "title": "Desktop Support Technician"
     },
@@ -241,6 +261,7 @@
   },
   {
     "name": "Caleb Tucker",
+    "type": "default",
     "custom": {
       "title": "Sales Representative"
     },
@@ -253,6 +274,7 @@
   },
   {
     "name": "Courtney Miles",
+    "type": "default",
     "custom": {
       "title": "Account Executive"
     },
@@ -265,6 +287,7 @@
   },
   {
     "name": "Patrick Simpson",
+    "type": "default",
     "custom": {
       "title": "Account Executive"
     },
@@ -277,6 +300,7 @@
   },
   {
     "name": "Marie Harper",
+    "type": "default",
     "custom": {
       "title": "Technical Writer"
     },
@@ -289,6 +313,7 @@
   },
   {
     "name": "Tom Martinez",
+    "type": "default",
     "custom": {
       "title": "Product Engineer"
     },
@@ -301,6 +326,7 @@
   },
   {
     "name": "Martha Ward",
+    "type": "default",
     "custom": {
       "title": "Staff Scientist"
     },
@@ -313,6 +339,7 @@
   },
   {
     "name": "Stephen West",
+    "type": "default",
     "custom": {
       "title": "Nurse Practicioner"
     },
@@ -325,6 +352,7 @@
   },
   {
     "name": "Claudia Andrews",
+    "type": "default",
     "custom": {
       "title": "Compensation Analyst"
     },
@@ -337,6 +365,7 @@
   },
   {
     "name": "Jon Warren",
+    "type": "default",
     "custom": {
       "title": "Registered Nurse"
     },
@@ -349,6 +378,7 @@
   },
   {
     "name": "Veronica Barrett",
+    "type": "default",
     "custom": {
       "title": "Programmer"
     },

@@ -6,3 +6,4 @@ export * from "./use-users";
 export * from "./use-channels";
 export * from "./use-channel-members";
 export * from "./use-user-memberships";
+export * from "./use-memberships";

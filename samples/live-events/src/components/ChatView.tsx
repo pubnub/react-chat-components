@@ -75,7 +75,11 @@ const ChatView = ({
           <MemberList members={members} />
         ) : (
           <>
-            <MessageList />
+            <MessageList
+              enableReactions
+              fetchMessages={10}
+              reactionsPicker={<Picker theme={darkMode ? "dark" : "light"} />}
+            />
             <hr className="dark:border-navy-600 border-1" />
             <MessageInput
               senderInfo

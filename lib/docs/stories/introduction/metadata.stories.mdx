@@ -36,6 +36,8 @@ interface ChannelEntity {
   id: string; // used as an unique channel identifier across the components
   name: string; // displayed on the ChannelList (first line)
   description?: string; // displayed on the ChannelList (second line)
+  status?: string; // not used in Chat Components
+  type?: string; // not used in Chat Components
   custom?: {
     // not used in Chat Components by default, but can store additional data
     profileUrl?: string | null, // expects an image URL to display the channel thumbnail
@@ -52,6 +54,8 @@ interface UserEntity {
   name: string;                // displayed on Messages, Typing Indicator, and Member List
   profileUrl?: string | null;  // expects an image URL to display the user avatar
   externalId?: string | null;  // not used in Chat Components
+  status?: string;             // not used in Chat Components
+  type?: string;               // not used in Chat Components
   email?: string | null;       // not used in Chat Components
   eTag: string;                // not used in Chat Components
   created: string;             // not used in Chat Components

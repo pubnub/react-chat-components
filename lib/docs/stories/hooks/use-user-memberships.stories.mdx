@@ -4,15 +4,17 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # `useUserMemberships`
 
-The hook returns a list of channel memberships for a user.
+The hook uses the [Metadata API](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects#get-channel-members) for user memberships.
+
+It returns a list of channel memberships for a given user.
 
 This method doesn't return user's subscriptions. Pagination is handled internally. You can adjust
-the `limit` of returned channes on a single call (max/default `100`) and call a function returned by
+the `limit` of returned channels on a single call (max/default `100`) and call a function returned by
 the hook to get another page of results.
 
-This hook also sets up a listener that reacts to removals of already fetched channels. Updates and
+This hook also sets up a listener that reacts to removals of the already-fetched channels. Updates and
 new memberships are not handled due to technical limitations. However, this behavior requires a
-living subscription to the user getting updated - this should be handled by the components.
+living subscription for the user to get updated - this should be handled by the components.
 
 ```js
 const [channels, fetchPage, refetchMemberships, total, error] = useUserMemberships({

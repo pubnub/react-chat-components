@@ -1,0 +1,68 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Custom Hooks/useMemberships" />
+
+# `useMemberships`
+
+This hook uses the new [Memberships API](https://www.pubnub.com/docs/sdks/javascript/api-reference/memberships).
+
+Depending on the input arguments, the hook returns a list of members in a channel or a list of
+channels a given user is a member of.
+
+The list will include metadata for memberships that have additional metadata stored in the database.
+Pagination is handled internally. You can adjust the `limit` of returned memberships on a single
+call (max/default 100) and call a function returned by the hook to get another page of results.
+
+This hook also sets up a listener that reacts to removals of the already-fetched memberships. Updates
+and new memberships are not handled due to technical limitations. However, this behavior requires a
+living subscription for the channel to get updated - this should be handled by the components.
+
+```js
+const [users, fetchPage, refetchMemberships, total, error] = useMemberships({
+  spaceId: "channel",
+});
+
+return (
+  <Chat {...{ options }}>
+    <MemberList members={users} />
+  </Chat>
+);
+```
+
+```js
+const [channels, fetchPage, refetchMemberships, total, error] = useMemberships({
+  userId: "user",
+});
+
+return (
+  <Chat {...{ options }}>
+    <ChannelList channels={channels} />
+  </Chat>
+);
+```
+
+## Input
+
+| Parameter                  | Type    | Required | Defaults    | Description                                                                                                                                                                                                                                                                                   |
+| :------------------------- | :------ | :------- | :---------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `userId`                   | String  | Optional | n/a         | Unique user identifier. If not supplied, then current user's userId is used.                                                                                                                                                                                                                  |
+| `spaceId`                  | String  | Optional | n/a         | Space ID. If not supplied, then memberships of the current user's userId are fetched.                                                                                                                                                                                                         |
+| `include`                  | Object  | Optional | n/a         | Option to include respective additional fields in the response.                                                                                                                                                                                                                               |
+| →&nbsp;`customFields`      | Boolean | Optional | `false`     | Whether to fetch custom fields or not.                                                                                                                                                                                                                                                        |
+| →&nbsp;`userFields`        | Boolean | Optional | `false`     | Include fields for User metadata (only when `spaceId` was passed).                                                                                                                                                                                                                            |
+| →&nbsp;`customUserFields`  | Boolean | Optional | `false`     | Include custom fields for User metadata (only when `spaceId` was passed).                                                                                                                                                                                                                     |
+| →&nbsp;`spaceFields`       | Boolean | Optional | `false`     | Include fields for Channel metadata (only when `userId` was passed).                                                                                                                                                                                                                          |
+| →&nbsp;`customSpaceFields` | Boolean | Optional | `false`     | Include custom fields for Channel metadata (only when `userId` was passed).                                                                                                                                                                                                                   |
+| `filter`                   | String  | Optional | n/a         | Expression used to filter the results. Only objects whose properties satisfy the given expression are returned. The filter language is [defined here](https://www.pubnub.com/docs/sdks/javascript/api-reference/objects#objects-filtering-language-definition).                               |
+| `sort`                     | Object  | Optional | `ascending` | Key-value pair of a property to sort by and a sort direction. <br/> <br/> Available options are `id`, `name`, and `updated`. <br/> <br/> Use `asc` or `desc` to specify sort direction, or specify `null` to take the default sort direction (ascending). <br/> <br/>Example: {`name: 'asc'}` |
+| `limit`                    | Number  | Optional | `100`       | Number of objects to return in response. <br/> <br/>Default is `100` which is also the maximum value.                                                                                                                                                                                         |
+
+## Output
+
+| Parameter   | Type                          | Description                                                                                                     |
+| :---------- | :---------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `array[0]`  | UserEntity[] or SpaceEntity[] | List of returned memberships.                                                                                   |
+| `array[1] ` | Function                      | Function that can be called to fetch another page of members.                                                   |
+| `array[2]`  | Function                      | Function that can be called to completely reset the hook. This can be used in case of expected updates of members. |
+| `array[3]`  | Number                        | Total number of stored members.                                                                                 |
+| `array[4]`  | Error                         | If there's an error fetching members, it will be available here.                                                |

@@ -1,6 +1,7 @@
 [
   {
     "name": "Victoria",
+    "type": "default",
     "custom": {
       "profileUrl": "https://randomuser.me/api/portraits/women/4.jpg"
     },
@@ -11,6 +12,7 @@
   },
   {
     "name": "Ellen",
+    "type": "default",
     "custom": {
       "profileUrl": "https://randomuser.me/api/portraits/women/8.jpg"
     },

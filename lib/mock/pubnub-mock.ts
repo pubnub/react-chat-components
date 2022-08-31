@@ -1,4 +1,3 @@
-import type PubNub from "pubnub";
 import type {
   ListenerParameters,
   MessageAction,
@@ -8,6 +7,7 @@ import type {
   SignalResponse,
   SendFileResponse,
 } from "pubnub";
+import { VSPPubnub } from "../src/types";
 import users from "../../data/users/users.json";
 import messages from "../../data/messages/lorem.json";
 import channels from "../../data/channels/work.json";
@@ -17,7 +17,7 @@ export interface PubNubMockOptions {
   returnedUuid?: string;
 }
 
-export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & { _config: any } {
+export function PubNubMock(options: PubNubMockOptions = {}): Partial<VSPPubnub> & { _config: any } {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
@@ -160,6 +160,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
       const offset = page * limit;
 
       return {
+        status: 200,
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
         next: page + 1,
@@ -171,6 +172,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
       const offset = page * limit;
 
       return {
+        status: 200,
         data: channels.slice(offset, offset + limit),
         totalCount: channels.length,
         next: page + 1,
@@ -182,7 +184,8 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
       const offset = page * limit;
 
       return {
-        data: users.slice(offset, offset + limit),
+        status: 200,
+        data: users.slice(offset, offset + limit).map((u) => ({ uuid: u })),
         totalCount: users.length,
         next: page + 1,
       };
@@ -193,20 +196,52 @@ export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & {
       const offset = page * limit;
 
       return {
-        data: channels.slice(offset, offset + limit),
+        status: 200,
+        data: channels.slice(offset, offset + limit).map((c) => ({ channel: c })),
         totalCount: channels.length,
         next: page + 1,
       };
     },
     getUUIDMetadata: (args) => ({
+      status: 200,
       data: users.find((u) => u.id === args.uuid),
     }),
+  };
+
+  const fetchMemberships = (options) => {
+    if (options.spaceId) {
+      const limit = options.limit || users.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        status: 200,
+        data: users.slice(offset, offset + limit).map((u) => ({ user: u })),
+        totalCount: users.length,
+        next: page + 1,
+      };
+    } else {
+      const limit = options.limit || channels.length;
+      const page = options.page.next || 0;
+      const offset = page * limit;
+
+      return {
+        status: 200,
+        data: channels.slice(offset, offset + limit).map((c) => ({ space: c })),
+        totalCount: channels.length,
+        next: page + 1,
+      };
+    }
   };
 
   return {
     addMessageAction,
     addListener,
     fetchMessages,
+    fetchUser: objects.getUUIDMetadata,
+    fetchUsers: objects.getAllUUIDMetadata,
+    fetchMemberships,
+    fetchSpaces: objects.getAllChannelMetadata,
     getFileUrl,
     getUUID,
     getSubscribedChannels,

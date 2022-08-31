@@ -11,12 +11,11 @@ import {
   MessageInput,
   MessageList,
   TypingIndicator,
-  useChannelMembers,
   useChannels,
   usePresence,
   useUser,
-  useUserMemberships,
   useUsers,
+  useMemberships,
 } from "@pubnub/react-chat-components";
 import "emoji-mart/css/emoji-mart.css";
 
@@ -55,15 +54,15 @@ export default function ModeratedChat(): JSX.Element {
    */
   const pubnub = usePubNub();
   const uuid = pubnub.getUUID();
-  const [currentUser] = useUser({ uuid });
+  const [currentUser] = useUser({ userId: uuid });
   const [allUsers] = useUsers({ include: { customFields: true } });
   const [allChannels] = useChannels({ include: { customFields: true } });
-  const [joinedChannels, , refetchJoinedChannels] = useUserMemberships({
-    include: { channelFields: true, customChannelFields: true },
+  const [joinedChannels, , refetchJoinedChannels] = useMemberships({
+    include: { spaceFields: true, customSpaceFields: true },
   });
-  const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useChannelMembers({
-    channel: currentChannel.id,
-    include: { customUUIDFields: true },
+  const [channelMembers, , refetchChannelMemberships, totalChannelMembers] = useMemberships({
+    spaceId: currentChannel.id,
+    include: { customUserFields: true },
   });
   const [presenceData] = usePresence({
     channels: joinedChannels.length ? joinedChannels.map((c) => c.id) : [currentChannel.id],
