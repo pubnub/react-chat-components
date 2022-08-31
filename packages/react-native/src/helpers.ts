@@ -1,19 +1,54 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { Animated, Easing } from "react-native";
 import { Themes } from "chat-components-common";
 
-export interface UseStylesProps<T> {
+export interface UseStyleProps<T> {
   theme: Themes | "";
-  createDefaultStyles: (theme: Themes | "") => T;
-  customStyles?: T;
+  createDefaultStyle: (theme: Themes | "") => T;
+  customStyle?: T;
 }
 
-export const useStyles = <T>(props: UseStylesProps<T>): T => {
-  const { theme, createDefaultStyles, customStyles } = props;
-  const [styles, setStyles] = useState(createDefaultStyles(theme));
+export const useStyle = <T>(props: UseStyleProps<T>): T => {
+  const { theme, createDefaultStyle, customStyle } = props;
+  const [style, setStyle] = useState(createDefaultStyle(theme));
 
   useEffect(() => {
-    setStyles(Object.assign({}, createDefaultStyles(theme), customStyles));
-  }, [createDefaultStyles, setStyles, customStyles, theme]);
+    setStyle(Object.assign({}, createDefaultStyle(theme), customStyle));
+  }, [createDefaultStyle, setStyle, customStyle, theme]);
 
-  return styles;
+  return style;
+};
+
+export const useRotation = (shouldRun = true): Animated.AnimatedInterpolation => {
+  const [rotationValue] = useState(new Animated.Value(0));
+  const animation = useMemo(
+    () =>
+      Animated.loop(
+        Animated.timing(rotationValue, {
+          toValue: 1,
+          duration: 650,
+          useNativeDriver: true,
+          easing: Easing.linear,
+        })
+      ),
+    [rotationValue]
+  );
+  const rotation = rotationValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "360deg"],
+  });
+
+  useEffect(() => {
+    if (shouldRun)
+      animation.start(() => {
+        rotationValue.setValue(0);
+      });
+    else animation.reset();
+
+    return () => {
+      animation.reset();
+    };
+  }, [animation, rotationValue, shouldRun]);
+
+  return rotation;
 };

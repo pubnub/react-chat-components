@@ -1,5 +1,9 @@
-import React, { FC, KeyboardEvent, useRef } from "react";
-import { CommonMessageInputProps, useMessageInputCore } from "chat-components-common";
+import React, { FC, KeyboardEvent, useRef, useState, useEffect, ReactElement } from "react";
+import {
+  CommonMessageInputProps,
+  useMessageInputCore,
+  EmojiPickerElementProps,
+} from "chat-components-common";
 import { useOuterClick } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
@@ -9,7 +13,10 @@ import SpinnerIcon from "../icons/spinner.svg";
 import AirplaneIcon from "../icons/airplane.svg";
 import "./message-input.scss";
 
-export type MessageInputProps = CommonMessageInputProps;
+export type MessageInputProps = CommonMessageInputProps & {
+  /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
+  emojiPicker?: ReactElement<EmojiPickerElementProps>;
+};
 
 /**
  * Allows users to compose messages using text and emojis
@@ -18,20 +25,20 @@ export type MessageInputProps = CommonMessageInputProps;
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
   const {
     clearInput,
-    emojiPickerShown,
     file,
     handleFileChange,
     handleInputChange,
     isValidInputText,
     loader,
     onError,
-    picker,
     sendMessage,
-    setEmojiPickerShown,
+    setText,
     text,
     theme,
   } = useMessageInputCore(props);
 
+  const [emojiPickerShown, setEmojiPickerShown] = useState(false);
+  const [picker, setPicker] = useState<ReactElement>();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const pickerRef = useOuterClick(() => {
@@ -68,6 +75,26 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       onError(e);
     }
   };
+
+  const handleEmojiInsertion = (emoji: { native: string }) => {
+    try {
+      if (!("native" in emoji)) return;
+      setText((text) => text + emoji.native);
+      setEmojiPickerShown(false);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
+  /**
+   * Lifecycle
+   */
+
+  useEffect(() => {
+    if (React.isValidElement(props.emojiPicker)) {
+      setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion }));
+    }
+  }, [props.emojiPicker]);
 
   /*
   /* Renderers
@@ -142,7 +169,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           data-testid="message-input"
           disabled={props.disabled || !!file}
           onChange={(e) => {
-            handleInputChange(e);
+            handleInputChange(e.target.value);
             autoSize();
           }}
           onKeyPress={(e) => handleKeyPress(e)}

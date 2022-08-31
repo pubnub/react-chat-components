@@ -17,7 +17,7 @@ const darkColors = {
   memberPresenceColor: "#01bd4c",
 };
 
-export interface MemberListStyles {
+export interface MemberListStyle {
   memberListWrapper?: ViewStyle;
   memberList?: ViewStyle;
   member?: ViewStyle;
@@ -32,10 +32,10 @@ export interface MemberListStyles {
   memberPresence?: ViewStyle;
 }
 
-export default (theme: Themes): MemberListStyles => {
+export default (theme: Themes): MemberListStyle => {
   const colors = ["light", "support", "event"].includes(theme) ? lightColors : darkColors;
 
-  return StyleSheet.create<MemberListStyles>({
+  return StyleSheet.create<MemberListStyle>({
     memberListWrapper: {
       flex: 1,
     },

@@ -4,7 +4,7 @@ import json from "@rollup/plugin-json";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
-import svgr from "@svgr/rollup";
+import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 
 import pkg from "./package.json";
@@ -32,7 +32,7 @@ export default {
     resolve(),
     commonjs(),
     postcss(),
-    svgr(),
+    image(),
     json(),
     typescript(),
   ],

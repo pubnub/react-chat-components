@@ -19,7 +19,7 @@ const darkColors = {
   channelDescriptionColor: "#929292",
 };
 
-export interface ChannelListStyles {
+export interface ChannelListStyle {
   channelListWrapper?: ViewStyle;
   channelList?: ViewStyle;
   channel?: ViewStyle;
@@ -32,10 +32,10 @@ export interface ChannelListStyles {
   channelActions?: ViewStyle;
 }
 
-export default (theme: Themes): ChannelListStyles => {
+export default (theme: Themes): ChannelListStyle => {
   const colors = ["light", "support", "event"].includes(theme) ? lightColors : darkColors;
 
-  return StyleSheet.create<ChannelListStyles>({
+  return StyleSheet.create<ChannelListStyle>({
     channelListWrapper: {
       flex: 1,
     },

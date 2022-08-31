@@ -1,19 +1,14 @@
 import React, { FC } from "react";
 import { Text, View, Image, FlatList, Pressable, ListRenderItem } from "react-native";
-import {
-  ChannelEntity,
-  CommonChannelListProps,
-  useChannelListCore,
-  toPascal,
-} from "chat-components-common";
-import { useStyles } from "../helpers";
-import createDefaultStyles, { ChannelListStyles } from "./channel-list.style";
+import { ChannelEntity, CommonChannelListProps, useChannelListCore } from "chat-components-common";
+import { useStyle } from "../helpers";
+import createDefaultStyle, { ChannelListStyle } from "./channel-list.style";
 
 export type ChannelListProps = CommonChannelListProps & {
   /** Callback run when a user long pressed one of the channels. Can be used for extra actions menu. */
   onChannelLongPressed?: (channel: ChannelEntity) => unknown;
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
-  styles?: ChannelListStyles;
+  style?: ChannelListStyle;
 };
 
 /**
@@ -29,10 +24,10 @@ export type ChannelListProps = CommonChannelListProps & {
 export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   const { channelFromString, channelSorter, isChannelActive, switchChannel, theme } =
     useChannelListCore(props);
-  const style = useStyles<ChannelListStyles>({
+  const style = useStyle<ChannelListStyle>({
     theme,
-    createDefaultStyles,
-    customStyles: props.styles,
+    createDefaultStyle,
+    customStyle: props.style,
   });
 
   const renderChannel: ListRenderItem<ChannelEntity> = ({ item }) => {

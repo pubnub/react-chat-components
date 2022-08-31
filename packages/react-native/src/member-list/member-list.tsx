@@ -7,14 +7,14 @@ import {
   getPredefinedColor,
   useMemberListCore,
 } from "chat-components-common";
-import { useStyles } from "../helpers";
-import createDefaultStyles, { MemberListStyles } from "./member-list.style";
+import { useStyle } from "../helpers";
+import createDefaultStyle, { MemberListStyle } from "./member-list.style";
 
 export type MemberListProps = CommonMemberListProps & {
   /** Callback run when a user long pressed one of the members. Can be used for extra actions menu. */
   onMemberLongPressed?: (member: UserEntity) => unknown;
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
-  styles?: MemberListStyles;
+  style?: MemberListStyle;
 };
 
 /**
@@ -28,10 +28,10 @@ export type MemberListProps = CommonMemberListProps & {
 export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   const { clickMember, isOwnMember, isPresentMember, memberFromString, memberSorter, theme } =
     useMemberListCore(props);
-  const style = useStyles<MemberListStyles>({
+  const style = useStyle<MemberListStyle>({
     theme,
-    createDefaultStyles,
-    customStyles: props.styles,
+    createDefaultStyle,
+    customStyle: props.style,
   });
 
   const renderMember: ListRenderItem<UserEntity> = ({ item }) => {

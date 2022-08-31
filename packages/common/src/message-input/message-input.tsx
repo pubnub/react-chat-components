@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useState, useEffect, ReactElement } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
-// import { v4 as uuidv4 } from "uuid";
-import { MessagePayload, EmojiPickerElementProps } from "../types";
+import uuid from "react-native-uuid";
+import { MessagePayload } from "../types";
 import {
   CurrentChannelAtom,
   ThemeAtom,
@@ -29,8 +29,6 @@ export interface CommonMessageInputProps {
   hideSendButton?: boolean;
   /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
-  /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
-  emojiPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback to handle an event when the text value changes. */
   onChange?: (value: string) => void;
   /** Callback to modify message content before sending it. This only works for text messages, not files. */
@@ -50,11 +48,8 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
 
   const [text, setText] = useState(props.draftMessage || "");
   const [file, setFile] = useState<File>(null);
-  const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
-  const [picker, setPicker] = useState<ReactElement>();
   const [loader, setLoader] = useState(false);
-
   const [users] = useAtom(UsersMetaAtom);
   const [theme] = useAtom(ThemeAtom);
   const [channel] = useAtom(CurrentChannelAtom);
@@ -77,7 +72,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     try {
       if (!file && !isValidInputText()) return;
       let message = {
-        // TODO: id: uuidv4(),
+        id: uuid.v4(),
         text: file ? "" : text,
         type: file ? "" : "default",
         ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
@@ -134,21 +129,8 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   /* Event handlers
   */
 
-  const handleEmojiInsertion = (emoji: { native: string }) => {
+  const handleInputChange = (newText: string) => {
     try {
-      if (!("native" in emoji)) return;
-      setText((text) => text + emoji.native);
-      setEmojiPickerShown(false);
-    } catch (e) {
-      onError(e);
-    }
-  };
-
-  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    try {
-      const textArea = event.target as HTMLTextAreaElement;
-      const newText = textArea.value;
-
       if (props.typingIndicator && newText.length) startTypingIndicator();
       if (props.typingIndicator && !newText.length) stopTypingIndicator();
 
@@ -173,12 +155,6 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   /* Lifecycle
   */
   useEffect(() => {
-    if (React.isValidElement(props.emojiPicker)) {
-      setPicker(React.cloneElement(props.emojiPicker, { onEmojiSelect: handleEmojiInsertion }));
-    }
-  }, [props.emojiPicker]);
-
-  useEffect(() => {
     let timer = null;
 
     if (typingIndicatorSent) {
@@ -188,20 +164,18 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     }
 
     return () => clearTimeout(timer);
-  }, [typingIndicatorSent]);
+  }, [typingIndicatorSent, typingIndicatorTimeout]);
 
   return {
     clearInput,
-    emojiPickerShown,
     file,
     handleFileChange,
     handleInputChange,
     isValidInputText,
     loader,
     onError,
-    picker,
     sendMessage,
-    setEmojiPickerShown,
+    setText,
     text,
     theme,
   };
