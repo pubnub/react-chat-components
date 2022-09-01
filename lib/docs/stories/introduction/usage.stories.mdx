@@ -106,8 +106,7 @@ npm install
 5. Open the app in the code editor, navigate to the `src/getting-started.tsx` file and replace
    `myPublishKey` and `mySubscribeKey` with your own Publish and Subscribe Keys from the keyset on
    the Admin Portal. To associate a sender/current user with the PubNub messages, it's required to
-   configure [UUID](/docs/setup/users-and-devices) (the `userId` parameter) that stands for Universally Unique Identifier and refers to your user ID in the database. If you wish, modify
-   the default value for the chat user.
+   configure the `userId` parameter (also known as [UUID](/docs/setup/users-and-devices)) to define the default value for the chat user.
 
 ```jsx
 publishKey: "myPublishKey",
