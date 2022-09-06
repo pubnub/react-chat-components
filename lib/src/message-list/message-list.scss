@@ -11,7 +11,7 @@
   --msg-list__unread__fontSize: 13px;
   --msg-list__unread__fontWeight: 400;
   --msg-list__unread__padding: 8px 16px;
-  --msg-list__unread__offset: 50px;
+  --msg-list__unread__offset: 20px;
   --msg-list__spinner__color: var(--chat--light__color--2);
   --msg-list__spinner__margin: 10px auto;
 
@@ -123,9 +123,9 @@
     font-weight: var(--msg-list__unread__fontWeight);
     left: 50%;
     padding: var(--msg-list__unread__padding);
-    position: fixed;
+    position: absolute;
     top: var(--msg-list__unread__offset);
-    transform: translateX(50%);
+    transform: translateX(-50%);
     z-index: 5;
 
     svg {

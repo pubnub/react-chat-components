@@ -30,7 +30,7 @@ import {
   ThemeAtom,
   UsersMetaAtom,
 } from "../state-atoms";
-import { getNameInitials, getPredefinedColor, useOuterClick } from "../helpers";
+import { getNameInitials, getPredefinedColor, useOuterClick, usePrevious } from "../helpers";
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
@@ -79,17 +79,19 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const pubnub = usePubNub();
 
   const [channel] = useAtom(CurrentChannelAtom);
+  const prevChannel = usePrevious(channel);
   const [users] = useAtom(UsersMetaAtom);
   const [theme] = useAtom(ThemeAtom);
   const [retryObj] = useAtom(RetryFunctionAtom);
   const [onErrorObj] = useAtom(ErrorFunctionAtom);
   const [messages] = useAtom(CurrentChannelMessagesAtom);
+  const prevMessages = usePrevious<typeof messages>(messages);
+  const lastMessageUniqueReactions = Object.keys(messages.slice(-1)[0]?.actions?.reaction || {});
   const [paginationEnd] = useAtom(CurrentChannelPaginationAtom);
   const retry = retryObj.function;
   const onError = onErrorObj.function;
 
-  const [scrolledBottom, setScrolledBottom] = useState(true);
-  const [prevMessages, setPrevMessages] = useState([]);
+  const [scrolledBottom, setScrolledBottom] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [picker, setPicker] = useState<ReactElement>();
@@ -106,7 +108,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const listSizeObserver = useRef(new ResizeObserver(() => handleListMutations()));
   const listMutObserver = useRef(new MutationObserver(() => handleListMutations()));
   const spinnerIntObserver = useRef(
-    new IntersectionObserver((e) => e[0].isIntersecting === true && fetchMoreHistory())
+    new IntersectionObserver((e) => handleSpinnerIntersection(e[0].isIntersecting))
   );
   const bottomIntObserver = useRef(
     new IntersectionObserver((e) => handleBottomIntersection(e[0].isIntersecting))
@@ -123,11 +125,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return formatter.format(date);
   };
 
-  const scrollToBottom = () => {
-    if (!endRef.current) return;
+  const scrollToBottom = useCallback(() => {
+    if (!listRef.current || !listRef.current.scroll) return;
     setScrolledBottom(true);
-    endRef.current.scrollIntoView({ block: "end" });
-  };
+    listRef.current.scroll({ top: listRef.current.scrollHeight });
+  }, []);
 
   const setupSpinnerObserver = () => {
     if (!spinnerRef.current) return;
@@ -161,8 +163,50 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /*
   /* Commands
   */
+  const fetchFileUrl = useCallback(
+    (envelope: MessageEnvelope) => {
+      if (!isFilePayload(envelope.message)) return envelope;
 
-  const fetchHistory = async () => {
+      try {
+        const url = pubnub.getFileUrl({
+          channel: envelope.channel,
+          id: envelope.message.file.id,
+          name: envelope.message.file.name,
+        });
+
+        envelope.message.file.url = url;
+      } catch (e) {
+        onError(e);
+      } finally {
+        return envelope;
+      }
+    },
+    [pubnub, onError]
+  );
+
+  const handleHistoryFetch = useAtomCallback(
+    useCallback(
+      (get, set, response: FetchMessagesResponse) => {
+        const channel = get(CurrentChannelAtom);
+        const messages = get(CurrentChannelMessagesAtom);
+        const newMessages =
+          ((response?.channels[channel] || []).map((m) =>
+            m.messageType === 4 ? fetchFileUrl(m) : m
+          ) as MessageEnvelope[]) || [];
+        const allMessages = [...messages, ...newMessages].sort(
+          (a, b) => (a.timetoken as number) - (b.timetoken as number)
+        );
+        set(CurrentChannelMessagesAtom, allMessages);
+        set(
+          CurrentChannelPaginationAtom,
+          !allMessages.length || newMessages.length !== props.fetchMessages
+        );
+      },
+      [fetchFileUrl, props.fetchMessages]
+    )
+  );
+
+  const fetchHistory = useCallback(async () => {
     if (!props.fetchMessages) return;
     try {
       setFetchingMessages(true);
@@ -174,60 +218,62 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         })
       );
       handleHistoryFetch(history);
-      scrollToBottom();
-      setupSpinnerObserver();
-      setupBottomObserver();
     } catch (e) {
       onError(e);
     } finally {
       setFetchingMessages(false);
     }
-  };
+  }, [channel, handleHistoryFetch, onError, props.fetchMessages, pubnub, retry]);
 
-  /** useAtomCallback to accesses jotai atoms inside of a Intersection Observer callback */
   const fetchMoreHistory = useAtomCallback(
-    useCallback(async (get) => {
-      const channel = get(CurrentChannelAtom);
-      const retryObj = get(RetryFunctionAtom);
-      const errorObj = get(ErrorFunctionAtom);
-      const messages = get(CurrentChannelMessagesAtom);
-      const retry = retryObj.function;
-      const onError = errorObj.function;
-      const firstMessage = listRef.current?.querySelector(".pn-msg");
+    useCallback(
+      async (get) => {
+        const channel = get(CurrentChannelAtom);
+        const retryObj = get(RetryFunctionAtom);
+        const errorObj = get(ErrorFunctionAtom);
+        const messages = get(CurrentChannelMessagesAtom);
+        const retry = retryObj.function;
+        const onError = errorObj.function;
+        if (!messages.length) return;
+        setFetchingMessages(true);
 
-      if (!messages.length) return;
+        try {
+          const history = await retry(() =>
+            pubnub.fetchMessages({
+              channels: [channel],
+              count: props.fetchMessages,
+              start: (messages?.[0].timetoken as number) || undefined,
+              includeMessageActions: true,
+            })
+          );
+          handleHistoryFetch(history);
+        } catch (e) {
+          onError(e);
+        } finally {
+          setFetchingMessages(false);
+        }
+      },
+      [handleHistoryFetch, props.fetchMessages, pubnub]
+    )
+  );
 
+  const addReaction = useCallback(
+    (reaction: string, messageTimetoken) => {
       try {
-        const history = await retry(() =>
-          pubnub.fetchMessages({
-            channels: [channel],
-            count: props.fetchMessages,
-            start: (messages?.[0].timetoken as number) || undefined,
-            includeMessageActions: true,
-          })
-        );
-        handleHistoryFetch(history);
-        if (firstMessage) firstMessage.scrollIntoView();
+        pubnub.addMessageAction({
+          channel,
+          messageTimetoken,
+          action: {
+            type: "reaction",
+            value: reaction,
+          },
+        });
       } catch (e) {
         onError(e);
       }
-    }, [])
+    },
+    [channel, onError, pubnub]
   );
-
-  const addReaction = (reaction: string, messageTimetoken) => {
-    try {
-      pubnub.addMessageAction({
-        channel,
-        messageTimetoken,
-        action: {
-          type: "reaction",
-          value: reaction,
-        },
-      });
-    } catch (e) {
-      onError(e);
-    }
-  };
 
   const removeReaction = (reaction: string, messageTimetoken, actionTimetoken) => {
     try {
@@ -237,27 +283,17 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   };
 
-  const fetchFileUrl = (envelope: MessageEnvelope) => {
-    if (!isFilePayload(envelope.message)) return envelope;
-
-    try {
-      const url = pubnub.getFileUrl({
-        channel: envelope.channel,
-        id: envelope.message.file.id,
-        name: envelope.message.file.name,
-      });
-
-      envelope.message.file.url = url;
-    } catch (e) {
-      onError(e);
-    } finally {
-      return envelope;
-    }
-  };
-
   /*
   /* Event handlers
   */
+  const handleSpinnerIntersection = async (isIntersecting: boolean) => {
+    if (isIntersecting) {
+      const firstMessage = listRef.current?.querySelector(".pn-msg") as HTMLDivElement;
+      await fetchMoreHistory();
+      if (firstMessage && listRef.current?.scroll)
+        listRef.current?.scroll({ top: firstMessage.offsetTop });
+    }
+  };
 
   const handleEmojiInsertion = useCallback(
     (emoji: { native: string }) => {
@@ -269,7 +305,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         onError(e);
       }
     },
-    [reactingToMessage]
+    [reactingToMessage, addReaction, onError]
   );
 
   const handleBottomIntersection = (isIntersecting: boolean) => {
@@ -291,27 +327,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       onError(e);
     }
   };
-
-  const handleHistoryFetch = useAtomCallback(
-    useCallback((get, set, response: FetchMessagesResponse) => {
-      const channel = get(CurrentChannelAtom);
-      const messages = get(CurrentChannelMessagesAtom);
-      const newMessages =
-        ((response?.channels[channel] || []).map((m) =>
-          m.messageType === 4 ? fetchFileUrl(m) : m
-        ) as MessageEnvelope[]) || [];
-      const allMessages = [...messages, ...newMessages].sort(
-        (a, b) => (a.timetoken as number) - (b.timetoken as number)
-      );
-      setEmojiPickerShown(false);
-      setPrevMessages(allMessages);
-      set(CurrentChannelMessagesAtom, allMessages);
-      set(
-        CurrentChannelPaginationAtom,
-        !allMessages.length || newMessages.length !== props.fetchMessages
-      );
-    }, [])
-  );
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
     try {
@@ -338,29 +353,44 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   useEffect(() => {
     if (!pubnub || !channel) return;
+    if (channel === prevChannel) return;
     if (!messages?.length) fetchHistory();
-    setupSpinnerObserver();
-    setupListObservers();
-  }, [channel]);
+  }, [channel, fetchHistory, messages?.length, prevChannel, pubnub]);
+
+  useEffect(() => {
+    if (!messages?.length || scrolledBottom) return;
+    if (messages.length - prevMessages.length !== 1) return;
+    if (Number(messages.slice(-1)[0]?.timetoken) > Number(prevMessages.slice(-1)[0]?.timetoken))
+      setUnreadMessages((unread) => unread + 1);
+  }, [messages, prevMessages, scrolledBottom]);
+
+  useEffect(() => {
+    if (prevMessages.length !== messages.length) {
+      if (scrolledBottom) scrollToBottom();
+      setupBottomObserver();
+    }
+
+    if (!prevMessages.length && messages.length) {
+      setupSpinnerObserver();
+      setupListObservers();
+    }
+  }, [messages.length, prevMessages.length, scrollToBottom, scrolledBottom]);
+
+  useEffect(() => {
+    if (prevChannel !== channel) {
+      scrollToBottom();
+    }
+  }, [channel, prevChannel, scrollToBottom]);
+
+  useEffect(() => {
+    if (scrolledBottom) scrollToBottom();
+  }, [lastMessageUniqueReactions.length, scrolledBottom, scrollToBottom]);
 
   useEffect(() => {
     if (React.isValidElement(props.reactionsPicker)) {
       setPicker(React.cloneElement(props.reactionsPicker, { onSelect: handleEmojiInsertion }));
     }
   }, [props.reactionsPicker, handleEmojiInsertion]);
-
-  useEffect(() => {
-    if (!messages?.length) return;
-
-    const messagesFromListener = messages.length - prevMessages.length;
-
-    if (scrolledBottom) scrollToBottom();
-    if (!scrolledBottom && messagesFromListener)
-      setUnreadMessages(unreadMessages + messagesFromListener);
-
-    setupBottomObserver();
-    setPrevMessages(messages);
-  }, [messages]);
 
   /*
   /* Renderers
@@ -556,7 +586,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   return (
     <div className={`pn-msg-list pn-msg-list--${theme}`}>
       {unreadMessages > 0 && (
-        <div className="pn-msg-list__unread" onClick={() => scrollToBottom()}>
+        <div className="pn-msg-list__unread" onClick={() => endRef.current.scrollIntoView()}>
           {unreadMessages} new message{unreadMessages > 1 ? "s" : ""} <ArrowDownIcon />
         </div>
       )}
