@@ -128,19 +128,21 @@ describe("Message List", () => {
     ).toBeVisible();
   });
 
-  // TODO: fix this test after update to React 18
-  test.skip("shows a notice on a new message when scrolled out of bottom of the list", async () => {
+  test("shows a notice on a new message when scrolled out of bottom of the list", async () => {
     render(
       <div>
         <MessageList />
-        <MessageInput draftMessage="Test Message" />
+        <MessageInput />
       </div>
     );
+
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Existing Message{enter}");
+    expect(await screen.findByText("Existing Message")).toBeVisible();
 
     const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
     observerCallback([{ isIntersecting: false }]);
 
-    userEvent.type(screen.getByDisplayValue("Test Message"), "{enter}");
+    userEvent.type(screen.getByPlaceholderText("Send message"), "Test Message{enter}");
 
     expect(await screen.findByText("Test Message")).toBeVisible();
     expect(await screen.findByText("1 new message")).toBeVisible();
