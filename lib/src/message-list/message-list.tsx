@@ -61,6 +61,8 @@ export interface MessageListProps {
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Option to provide a custom message bubble renderer if themes and CSS variables aren't enough. */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
+  /** Option to provide a custom file renderer to change how images and other files are shown. */
+  fileRenderer?: (file: FileAttachment) => JSX.Element;
   /** Option to render only selected messages. */
   filter?: (message: MessageEnvelope) => boolean;
   /** Callback run on a list scroll. */
@@ -525,6 +527,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   };
 
   const renderFile = (file: FileAttachment) => {
+    if (props.fileRenderer) return props.fileRenderer(file);
+
     return (
       <div className="pn-msg__file">
         {/\.(svg|gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
