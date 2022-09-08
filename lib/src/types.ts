@@ -3,7 +3,7 @@ import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub"
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
 export interface EmojiPickerElementProps {
-  onSelect?: ({ native: string }) => void;
+  onEmojiSelect?: ({ native: string }) => void;
 }
 
 export type ChannelEntity = ChannelMetadataObject<ObjectCustom>;

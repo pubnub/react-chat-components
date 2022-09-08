@@ -330,16 +330,16 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
     try {
-      let newPickerTopPosition =
-        listRef.current.scrollTop -
-        listRef.current.getBoundingClientRect().top +
-        (event.target as HTMLElement).getBoundingClientRect().y;
-      if (newPickerTopPosition > pickerRef.current.offsetHeight) {
-        newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
-        newPickerTopPosition -= pickerRef.current.offsetHeight;
+      const pickerEl = pickerRef.current;
+      const listEl = listRef.current;
+      const listRect = listEl.getBoundingClientRect();
+      const buttonRect = (event.target as HTMLElement).getBoundingClientRect();
+      let newPickerTopPosition = listEl.scrollTop - listRect.top + buttonRect.y;
+      if (newPickerTopPosition + pickerEl.offsetHeight > listEl.scrollHeight) {
+        newPickerTopPosition += buttonRect.height;
+        newPickerTopPosition -= pickerEl.offsetHeight;
       }
-      pickerRef.current.style.top = `${newPickerTopPosition}px`;
-
+      pickerEl.style.top = `${newPickerTopPosition}px`;
       setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
     } catch (e) {
@@ -388,7 +388,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   useEffect(() => {
     if (React.isValidElement(props.reactionsPicker)) {
-      setPicker(React.cloneElement(props.reactionsPicker, { onSelect: handleEmojiInsertion }));
+      setPicker(React.cloneElement(props.reactionsPicker, { onEmojiSelect: handleEmojiInsertion }));
     }
   }, [props.reactionsPicker, handleEmojiInsertion]);
 

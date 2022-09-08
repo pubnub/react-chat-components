@@ -9,7 +9,6 @@ import {
   getNameInitials,
   getPredefinedColor,
 } from "@pubnub/react-chat-components";
-import "emoji-mart/css/emoji-mart.css";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as EllipsisIcon } from "../assets/ellipsis-vertical.svg";

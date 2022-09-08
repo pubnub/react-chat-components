@@ -3,7 +3,7 @@ import { EmojiPickerElementProps } from "../src/types";
 
 export const Picker = (props: EmojiPickerElementProps): JSX.Element => {
   const handleEmoji = (event) => {
-    if (props.onSelect) props.onSelect({ native: event.target.textContent });
+    if (props.onEmojiSelect) props.onEmojiSelect({ native: event.target.textContent });
   };
 
   return (

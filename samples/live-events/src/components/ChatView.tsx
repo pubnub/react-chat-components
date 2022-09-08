@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Picker } from "emoji-mart";
+import pickerData from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import { actionCompleted, containsEmoji } from "pubnub-demo-integration";
 import {
   MessageList,
@@ -12,7 +13,6 @@ import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as ChatIcon } from "../assets/chat.svg";
 import { ReactComponent as GroupIcon } from "../assets/user-group.svg";
 import { ReactComponent as ArrowIcon } from "../assets/arrow-turn-up.svg";
-import "emoji-mart/css/emoji-mart.css";
 
 type ChatViewProps = {
   channelOccupants: { uuid: string }[];
@@ -79,7 +79,7 @@ const ChatView = ({
             <hr className="dark:border-navy-600 border-1" />
             <MessageInput
               senderInfo
-              emojiPicker={<Picker theme={darkMode ? "dark" : "light"} />}
+              emojiPicker={<Picker data={pickerData} theme={darkMode ? "dark" : "light"} />}
               sendButton={
                 <span className="dark:hover:bg-navy-600 dark:text-gray-200 flex h-9 hover:bg-gray-400 items-center justify-center rounded-full text-ocean-800 w-9">
                   <ArrowIcon />

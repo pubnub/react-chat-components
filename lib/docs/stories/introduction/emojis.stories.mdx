@@ -15,16 +15,16 @@ in your application and provided into `react-chat-components` using render props
 
 ## Interface
 
-To use any emoji picker component of your choosing, it has to expose the `onSelect()` method which
-is called whenever an emoji is picked by the user. In that method, you must provide a single object
-argument which has the `native` property that returns a native emoji image that can be rendered by
-your app's supported browser.
+To use any emoji picker component of your choosing, it has to expose the `onEmojiSelect()` method
+which is called whenever an emoji is picked by the user. In that method, you must provide a single
+object argument which has a `native` property that returns a native emoji image that can be rendered
+by your app's supported browser.
 
 A TypeScript interface that you can import from the components looks like this:
 
 ```tsx
 interface EmojiPickerElementProps {
-  onSelect?: ({ native: string }) => void;
+  onEmojiSelect?: ({ native: string }) => void;
 }
 ```
 
@@ -37,22 +37,22 @@ interface so the usage is plug-and-play.
 1. Start by installing the package.
 
 ```bash
-npm install --save emoji-mart
+npm install --save emoji-mart @emoji-mart/data @emoji-mart/react
 ```
 
 1. Import the component and required styles.
 
 ```tsx
-import { Picker } from "emoji-mart";
-import "emoji-mart/css/emoji-mart.css";
+import emojiData from "@emoji-mart/data";
+import { Picker } from "@emoji-mart/react";
 ```
 
 1. Use it in your chat app.
 
 ```tsx
 <Chat channel="channel">
-  <MessageList enableReactions reactionsPicker={<Picker />} />
-  <MessageInput typingIndicator emojiPicker={<Picker />} />
+  <MessageList enableReactions reactionsPicker={<Picker data={emojiData} />} />
+  <MessageInput typingIndicator emojiPicker={<Picker data={emojiData} />} />
 </Chat>
 ```
 
@@ -79,9 +79,9 @@ import { EmojiPickerElementProps } from "@pubnub/react-chat-components";
 
 ```tsx
 export const PickerAdapter = (props: EmojiPickerElementProps) => {
-  // handling method should call onSelect with an object exposing the "native" property
+  // handling method should call onEmojiSelect with an object exposing the "native" property
   const handleEmoji = (event: React.MouseEvent, emoji: IEmojiData) => {
-    if (props.onSelect) props.onSelect({ native: emoji.emoji });
+    if (props.onEmojiSelect) props.onEmojiSelect({ native: emoji.emoji });
   };
   // onEmojiClick is a method in emoji-picker-react used to handle emoji picking
   return <Picker onEmojiClick={handleEmoji} />;
