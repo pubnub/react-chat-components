@@ -8,8 +8,10 @@
     "setup": "node populate-pn-objects.js"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.0.5",
+    "@emoji-mart/react": "^1.0.1",
     "@pubnub/react-chat-components": "^0.12.0",
-    "emoji-mart": "^3.0.0",
+    "emoji-mart": "^5.2.1",
     "pubnub": "^4.36.0",
     "pubnub-react": "^2.1.1",
     "react": "^18.0.0",
@@ -18,7 +20,6 @@
     "yargs": "^17.1.1"
   },
   "devDependencies": {
-    "@types/emoji-mart": "^3.0.4",
     "@types/pubnub": "^4.29.1",
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.6",

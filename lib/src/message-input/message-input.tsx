@@ -222,7 +222,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   */
   useEffect(() => {
     if (React.isValidElement(props.emojiPicker)) {
-      setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion }));
+      setPicker(React.cloneElement(props.emojiPicker, { onEmojiSelect: handleEmojiInsertion }));
     }
   }, [props.emojiPicker]);
 

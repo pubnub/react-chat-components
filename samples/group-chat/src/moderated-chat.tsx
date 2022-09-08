@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, MouseEvent } from "react";
 import { BaseObjectsEvent } from "pubnub";
-import { Picker } from "emoji-mart";
+import pickerData from "@emoji-mart/data";
+import Picker from "@emoji-mart/react";
 import { usePubNub } from "pubnub-react";
 import {
   ChannelEntity,
@@ -18,7 +19,6 @@ import {
   useUserMemberships,
   useUsers,
 } from "@pubnub/react-chat-components";
-import "emoji-mart/css/emoji-mart.css";
 
 import { CreateChatModal } from "./components/create-chat-modal";
 import { ReportUserModal } from "./components/report-user-modal";
@@ -299,7 +299,9 @@ export default function ModeratedChat(): JSX.Element {
                   <MessageList
                     fetchMessages={20}
                     enableReactions={!isUserMuted}
-                    reactionsPicker={isUserMuted ? undefined : <Picker theme={theme} />}
+                    reactionsPicker={
+                      isUserMuted ? undefined : <Picker data={pickerData} theme={theme} />
+                    }
                     extraActionsRenderer={(message) =>
                       isUserMuted ? (
                         <></>
@@ -322,7 +324,7 @@ export default function ModeratedChat(): JSX.Element {
                     disabled={isUserMuted}
                     typingIndicator
                     fileUpload="image"
-                    emojiPicker={<Picker theme={theme} />}
+                    emojiPicker={<Picker data={pickerData} theme={theme} />}
                     placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
                   />
                 </>
