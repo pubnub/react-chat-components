@@ -10,14 +10,14 @@
     "@emoji-mart/data": "^1.0.5",
     "@emoji-mart/react": "^1.0.1",
     "@faker-js/faker": "^6.0.0-alpha.5",
-    "@pubnub/react-chat-components": "^0.12.0",
+    "@pubnub/react-chat-components": "^0.13.0",
     "emoji-mart": "^5.2.1",
     "pubnub": "^4.36.0",
     "pubnub-demo-integration": "^0.1.1",
     "pubnub-react": "^2.1.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-use": "^17.3.2"
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@types/pubnub": "^4.29.1",
