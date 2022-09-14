@@ -1,4 +1,4 @@
-import React, { FC, useRef } from "react";
+import React, { ReactElement, FC, useRef, useState, useCallback, useEffect } from "react";
 import {
   isFilePayload,
   MessageEnvelope,
@@ -16,14 +16,6 @@ import DownloadIcon from "../icons/download.svg";
 import ArrowDownIcon from "../icons/arrow-down.svg";
 import "./message-list.scss";
 
-// export interface MessageRendererProps {
-//   isOwn: boolean;
-//   message: MessageEnvelope;
-//   time: string;
-//   editedText: string;
-//   user?: UserEntity;
-// }
-
 export type MessageListProps = CommonMessageListProps;
 
 /**
@@ -37,29 +29,31 @@ export type MessageListProps = CommonMessageListProps;
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
     addReaction,
-    emojiPickerShown,
-    // endRef,
+    channel,
+    fetchMoreHistory,
     fetchingMessages,
     getTime,
     getUser,
-    handleOpenReactions,
     isOwnMessage,
-    // listRef,
     messages,
+    onError,
     paginationEnd,
-    picker,
-    // pickerRef,
+    prevChannel,
+    prevMessages,
     pubnub,
     reactingToMessage,
     removeReaction,
-    scrollToBottom,
     scrolledBottom,
-    setEmojiPickerShown,
-    // spinnerRef,
+    setReactingToMessage,
+    setScrolledBottom,
+    setUnreadMessages,
     theme,
     unreadMessages,
     users,
   } = useMessageListCore(props);
+
+  const [picker, setPicker] = useState<ReactElement>();
+  const [emojiPickerShown, setEmojiPickerShown] = useState(false);
 
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
@@ -68,14 +62,134 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     if ((event.target as Element).closest(".pn-msg__reactions-toggle")) return;
     setEmojiPickerShown(false);
   });
-  // const listSizeObserver = useRef(new ResizeObserver(() => handleListMutations()));
-  // const listMutObserver = useRef(new MutationObserver(() => handleListMutations()));
-  // const spinnerIntObserver = useRef(
-  //   new IntersectionObserver((e) => e[0].isIntersecting === true && fetchMoreHistory())
-  // );
-  // const bottomIntObserver = useRef(
-  //   new IntersectionObserver((e) => handleBottomIntersection(e[0].isIntersecting))
-  // );
+
+  const listSizeObserver = useRef(new ResizeObserver(() => handleListMutations()));
+  const listMutObserver = useRef(new MutationObserver(() => handleListMutations()));
+  const spinnerIntObserver = useRef(
+    new IntersectionObserver((e) => handleSpinnerIntersection(e[0].isIntersecting))
+  );
+  const bottomIntObserver = useRef(
+    new IntersectionObserver((e) => handleBottomIntersection(e[0].isIntersecting))
+  );
+
+  /*
+  /* Helper functions
+  */
+  const scrollToBottom = useCallback(() => {
+    if (!endRef.current) return;
+    setScrolledBottom(true);
+    endRef.current.scrollIntoView({ block: "end" });
+  }, [setScrolledBottom]);
+
+  const setupSpinnerObserver = () => {
+    if (!spinnerRef.current) return;
+    spinnerIntObserver.current.observe(spinnerRef.current);
+  };
+
+  const setupBottomObserver = () => {
+    if (!endRef.current) return;
+    bottomIntObserver.current.disconnect();
+    bottomIntObserver.current.observe(endRef.current);
+  };
+
+  const setupListObservers = () => {
+    if (!listRef.current) return;
+    listSizeObserver.current.disconnect();
+    listSizeObserver.current.observe(listRef.current);
+    listMutObserver.current.disconnect();
+    listMutObserver.current.observe(listRef.current, { childList: true });
+  };
+
+  /**
+   * Event handlers
+   */
+  const handleSpinnerIntersection = async (isIntersecting: boolean) => {
+    if (isIntersecting) {
+      const firstMessage = listRef.current?.querySelector(".pn-msg");
+      await fetchMoreHistory();
+      if (firstMessage) firstMessage.scrollIntoView();
+    }
+  };
+
+  const handleBottomIntersection = (isIntersecting: boolean) => {
+    try {
+      if (isIntersecting) setUnreadMessages(0);
+      setScrolledBottom(isIntersecting);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
+  const handleListMutations = () => {
+    try {
+      setScrolledBottom((scrolledBottom) => {
+        if (scrolledBottom) scrollToBottom();
+        return scrolledBottom;
+      });
+    } catch (e) {
+      onError(e);
+    }
+  };
+
+  const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
+    try {
+      let newPickerTopPosition =
+        listRef.current.scrollTop -
+        listRef.current.getBoundingClientRect().top +
+        (event.target as HTMLElement).getBoundingClientRect().y;
+      if (newPickerTopPosition > pickerRef.current.offsetHeight) {
+        newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
+        newPickerTopPosition -= pickerRef.current.offsetHeight;
+      }
+      pickerRef.current.style.top = `${newPickerTopPosition}px`;
+
+      setEmojiPickerShown(true);
+      setReactingToMessage(timetoken);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
+  const handleEmojiInsertion = useCallback(
+    (emoji: { native: string }) => {
+      try {
+        if (!("native" in emoji)) return;
+        addReaction(emoji.native, reactingToMessage);
+        setEmojiPickerShown(false);
+      } catch (e) {
+        onError(e);
+      }
+    },
+    [reactingToMessage, addReaction, onError]
+  );
+
+  /**
+   * Lifecycle
+   */
+
+  useEffect(() => {
+    if (prevMessages.length !== messages.length) {
+      if (scrolledBottom) scrollToBottom();
+      setupBottomObserver();
+    }
+
+    if (!prevMessages.length && messages.length) {
+      setupSpinnerObserver();
+      setupListObservers();
+    }
+  }, [messages.length, prevMessages.length, scrollToBottom, scrolledBottom]);
+
+  useEffect(() => {
+    if (prevChannel !== channel) {
+      scrollToBottom();
+    }
+  }, [channel, prevChannel, scrollToBottom]);
+
+  useEffect(() => {
+    if (React.isValidElement(props.reactionsPicker)) {
+      setPicker(React.cloneElement(props.reactionsPicker, { onSelect: handleEmojiInsertion }));
+    }
+  }, [props.reactionsPicker, handleEmojiInsertion]);
 
   /*
   /* Renderers

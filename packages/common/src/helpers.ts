@@ -1,3 +1,5 @@
+import { useRef, useEffect } from "react";
+
 export const getNameInitials = (name: string): string => {
   if (!name || !name.length) return "";
   const nameSplit = name.split(" ");
@@ -16,10 +18,12 @@ export const getPredefinedColor = (uuid: string): string => {
   return colors[sum % colors.length];
 };
 
-export const toPascal = (str: string): string => {
-  return str
-    .toLowerCase()
-    .split("-")
-    .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
-    .join("");
+export const usePrevious = <T>(value: T): T => {
+  const ref = useRef<T>(value);
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
 };
