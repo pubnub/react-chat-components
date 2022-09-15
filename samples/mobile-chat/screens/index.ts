@@ -1,3 +1,3 @@
-export * from "./current-channels";
-export * from "./channel-members";
-export * from "./chat-main";
+export * from "./channels";
+export * from "./members";
+export * from "./chat";
