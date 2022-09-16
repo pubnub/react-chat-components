@@ -110,8 +110,12 @@
   }
 
   &__spinner {
-    color: var(--msg-list__spinner__color);
-    margin: var(--msg-list__spinner__margin);
+    text-align: center;
+
+    svg {
+      color: var(--msg-list__spinner__color);
+      margin: var(--msg-list__spinner__margin);
+    }
   }
 
   &__unread {
@@ -134,9 +138,15 @@
   }
 
   &__bottom-ref {
-    flex-shrink: 0;
-    height: 1px;
-    width: 100%;
+    position: relative;
+    height: auto;
+
+    & > div {
+      position: absolute;
+      bottom: 0;
+      height: 30px;
+      width: 100%;
+    }
   }
 
   &__spacer {

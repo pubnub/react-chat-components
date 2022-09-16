@@ -1,5 +1,5 @@
 import React from "react";
-import { EmojiPickerElementProps } from "../src/types";
+import { EmojiPickerElementProps } from "chat-components-common";
 
 export const Picker = (props: EmojiPickerElementProps): JSX.Element => {
   const handleEmoji = (event) => {

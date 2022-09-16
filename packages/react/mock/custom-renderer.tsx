@@ -17,7 +17,7 @@ const customRender = (
   options: { providerProps?: ChatProps; pubnubProps?: PubNubMockOptions } = defaultOptions
 ): RenderResult => {
   const { providerProps, pubnubProps, ...renderOptions } = options;
-  const pubnub = PubNubMock(pubnubProps || {}) as PubNub;
+  const pubnub = PubNubMock(pubnubProps || {}) as unknown as PubNub;
 
   return render(
     <PubNubProvider client={pubnub}>

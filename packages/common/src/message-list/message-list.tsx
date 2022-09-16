@@ -1,10 +1,14 @@
 import { ReactElement, ReactNode, UIEvent, useCallback, useEffect, useState } from "react";
 import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
-import { FetchMessagesResponse } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
-import { useAtomCallback } from "jotai/utils";
-import { isFilePayload, UserEntity, MessageEnvelope, EmojiPickerElementProps } from "../types";
+import {
+  isFilePayload,
+  UserEntity,
+  MessageEnvelope,
+  EmojiPickerElementProps,
+  FileAttachment,
+} from "../types";
 import { usePrevious } from "../helpers";
 import {
   CurrentChannelAtom,
@@ -40,6 +44,8 @@ export interface CommonMessageListProps {
   messageRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Option to provide a custom message bubble renderer if themes and CSS variables aren't enough. */
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
+  /** Option to provide a custom file renderer to change how images and other files are shown. */
+  fileRenderer?: (file: FileAttachment) => JSX.Element;
   /** Option to render only selected messages. */
   filter?: (message: MessageEnvelope) => boolean;
   /** Callback run on a list scroll. */
@@ -63,9 +69,9 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   const [theme] = useAtom(ThemeAtom);
   const [retryObj] = useAtom(RetryFunctionAtom);
   const [onErrorObj] = useAtom(ErrorFunctionAtom);
-  const [messages] = useAtom(CurrentChannelMessagesAtom);
+  const [messages, setMessages] = useAtom(CurrentChannelMessagesAtom);
   const prevMessages = usePrevious(messages);
-  const [paginationEnd] = useAtom(CurrentChannelPaginationAtom);
+  const [paginationEnd, setPaginationEnd] = useAtom(CurrentChannelPaginationAtom);
   const retry = retryObj.function;
   const onError = onErrorObj.function;
 
@@ -118,79 +124,43 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     [pubnub, onError]
   );
 
-  const handleHistoryFetch = useAtomCallback(
-    useCallback(
-      (get, set, response: FetchMessagesResponse) => {
-        const channel = get(CurrentChannelAtom);
-        const messages = get(CurrentChannelMessagesAtom);
-        const newMessages =
-          ((response?.channels[channel] || []).map((m) =>
-            m.messageType === 4 ? fetchFileUrl(m) : m
-          ) as MessageEnvelope[]) || [];
-        const allMessages = [...messages, ...newMessages].sort(
-          (a, b) => (a.timetoken as number) - (b.timetoken as number)
-        );
-        set(CurrentChannelMessagesAtom, allMessages);
-        set(
-          CurrentChannelPaginationAtom,
-          !allMessages.length || newMessages.length !== props.fetchMessages
-        );
-      },
-      [fetchFileUrl, props.fetchMessages]
-    )
-  );
-
   const fetchHistory = useCallback(async () => {
-    if (!props.fetchMessages) return;
+    if (!props.fetchMessages || paginationEnd) return;
+    setFetchingMessages(true);
     try {
-      setFetchingMessages(true);
-      const history = await retry(() =>
-        pubnub.fetchMessages({
-          channels: [channel],
-          count: props.fetchMessages,
-          includeMessageActions: true,
-        })
+      const options = {
+        channels: [channel],
+        count: props.fetchMessages,
+        start: (messages?.[0]?.timetoken as number) || undefined,
+        includeMessageActions: true,
+      };
+      const response = await retry(() => pubnub.fetchMessages(options));
+      const newMessages =
+        ((response?.channels[channel] || []).map((m) =>
+          m.messageType === 4 ? fetchFileUrl(m) : m
+        ) as MessageEnvelope[]) || [];
+      const allMessages = [...messages, ...newMessages].sort(
+        (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
-      handleHistoryFetch(history);
+      setMessages(allMessages);
+      setPaginationEnd(!allMessages.length || newMessages.length !== props.fetchMessages);
     } catch (e) {
       onError(e);
     } finally {
       setFetchingMessages(false);
     }
-  }, [channel, handleHistoryFetch, onError, props.fetchMessages, pubnub, retry]);
-
-  /** useAtomCallback to accesses jotai atoms inside of a Intersection Observer callback */
-  const fetchMoreHistory = useAtomCallback(
-    useCallback(
-      async (get) => {
-        const channel = get(CurrentChannelAtom);
-        const retryObj = get(RetryFunctionAtom);
-        const errorObj = get(ErrorFunctionAtom);
-        const messages = get(CurrentChannelMessagesAtom);
-        const retry = retryObj.function;
-        const onError = errorObj.function;
-        if (!messages.length) return;
-        setFetchingMessages(true);
-
-        try {
-          const history = await retry(() =>
-            pubnub.fetchMessages({
-              channels: [channel],
-              count: props.fetchMessages,
-              start: (messages?.[0].timetoken as number) || undefined,
-              includeMessageActions: true,
-            })
-          );
-          handleHistoryFetch(history);
-        } catch (e) {
-          onError(e);
-        } finally {
-          setFetchingMessages(false);
-        }
-      },
-      [handleHistoryFetch, props.fetchMessages, pubnub]
-    )
-  );
+  }, [
+    channel,
+    fetchFileUrl,
+    messages,
+    onError,
+    paginationEnd,
+    props.fetchMessages,
+    pubnub,
+    retry,
+    setMessages,
+    setPaginationEnd,
+  ]);
 
   const addReaction = (reaction: string, messageTimetoken) => {
     try {
@@ -222,14 +192,16 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   }, [channel, fetchHistory, messages?.length, prevChannel, pubnub]);
 
   useEffect(() => {
-    if (!messages?.length) return;
-    if (messages.length - prevMessages.length === 1) setUnreadMessages(unreadMessages + 1);
-  }, [messages.length, prevMessages.length, unreadMessages]);
+    if (!messages?.length || scrolledBottom) return;
+    if (messages.length - prevMessages.length !== 1) return;
+    if (Number(messages.slice(-1)[0]?.timetoken) > Number(prevMessages.slice(-1)[0]?.timetoken))
+      setUnreadMessages((unread) => unread + 1);
+  }, [messages, prevMessages, scrolledBottom]);
 
   return {
     addReaction,
     channel,
-    fetchMoreHistory,
+    fetchHistory,
     fetchingMessages,
     getTime,
     getUser,

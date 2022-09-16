@@ -5,7 +5,7 @@ import { PubNubProvider } from "pubnub-react";
 
 import { useChannels } from "../../src/hooks";
 import { PubNubMock } from "../../mock/pubnub-mock";
-import channels from "../../../data/channels/work.json";
+import channels from "../../../../data/channels/work.json";
 
 const pubnub = PubNubMock({}) as PubNub;
 const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;

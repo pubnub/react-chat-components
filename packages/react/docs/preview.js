@@ -3,7 +3,7 @@ import { PubNubProvider } from "pubnub-react";
 
 import { Chat } from "../src";
 import { PubNubMock } from "../mock/pubnub-mock";
-import users from "../../data/users/users.json";
+import users from "../../../data/users/users.json";
 
 const pubnub = new PubNubMock();
 

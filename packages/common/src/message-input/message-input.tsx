@@ -131,9 +131,9 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
 
   const handleInputChange = (newText: string) => {
     try {
-      if (props.typingIndicator && newText.length) startTypingIndicator();
-      if (props.typingIndicator && !newText.length) stopTypingIndicator();
-
+      if (props.typingIndicator) {
+        newText.length ? startTypingIndicator() : stopTypingIndicator();
+      }
       props.onChange && props.onChange(newText);
       setText(newText);
     } catch (e) {

@@ -1,4 +1,4 @@
-import React, { FC, KeyboardEvent, useRef, useState, useEffect, ReactElement } from "react";
+import React, { FC, KeyboardEvent, ReactElement, useCallback, useRef, useState } from "react";
 import {
   CommonMessageInputProps,
   useMessageInputCore,
@@ -38,7 +38,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   } = useMessageInputCore(props);
 
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
-  const [picker, setPicker] = useState<ReactElement>();
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const pickerRef = useOuterClick(() => {
@@ -69,32 +68,36 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         sendMessage();
-        fileRef.current.value = null;
+        if (fileRef.current) fileRef.current.value = "";
       }
     } catch (e) {
       onError(e);
     }
   };
 
-  const handleEmojiInsertion = (emoji: { native: string }) => {
-    try {
-      if (!("native" in emoji)) return;
-      setText((text) => text + emoji.native);
-      setEmojiPickerShown(false);
-    } catch (e) {
-      onError(e);
-    }
+  const handleSendClick = () => {
+    sendMessage();
+    if (fileRef.current) fileRef.current.value = "";
   };
 
-  /**
-   * Lifecycle
-   */
+  const handleEmojiInsertion = useCallback(
+    (emoji: { native: string }) => {
+      try {
+        if (!("native" in emoji)) return;
+        setText((text) => text + emoji.native);
+        setEmojiPickerShown(false);
+      } catch (e) {
+        onError(e);
+      }
+    },
+    [onError, setText]
+  );
 
-  useEffect(() => {
-    if (React.isValidElement(props.emojiPicker)) {
-      setPicker(React.cloneElement(props.emojiPicker, { onSelect: handleEmojiInsertion }));
-    }
-  }, [props.emojiPicker]);
+  const handleRemoveFile = () => {
+    autoSize();
+    clearInput();
+    if (fileRef.current) fileRef.current.value = "";
+  };
 
   /*
   /* Renderers
@@ -118,14 +121,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           />
         </div>
         {file && (
-          <div
-            title="Remove the file"
-            onClick={() => {
-              clearInput();
-              autoSize();
-              fileRef.current.value = null;
-            }}
-          >
+          <div title="Remove the file" onClick={handleRemoveFile}>
             <XCircleIcon />
           </div>
         )}
@@ -142,7 +138,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
         {emojiPickerShown && (
           <div className="pn-msg-input__emoji-picker" ref={pickerRef}>
-            {picker}
+            {React.cloneElement(props.emojiPicker, { onEmojiSelect: handleEmojiInsertion })}
           </div>
         )}
       </>
@@ -183,10 +179,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           <button
             className={`pn-msg-input__send ${isValidInputText() && "pn-msg-input__send--active"}`}
             disabled={loader || props.disabled}
-            onClick={() => {
-              sendMessage();
-              fileRef.current.value = null;
-            }}
+            onClick={handleSendClick}
             title="Send"
           >
             {loader ? <SpinnerIcon /> : props.sendButton}

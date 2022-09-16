@@ -29,8 +29,8 @@ export function ChatScreen(): JSX.Element {
           // onScroll={(e) => console.log(e)}
         >
           {/* <Text>Hello</Text> */}
+          <TypingIndicator showAsMessage={true} />
         </MessageList>
-        <TypingIndicator showAsMessage={true} />
         <MessageInput
           // sendButton={<Text> Send </Text>}
           // placeholder="Please type here!"

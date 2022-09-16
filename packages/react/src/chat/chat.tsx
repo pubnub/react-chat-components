@@ -1,4 +1,4 @@
-import { Chat } from "chat-components-common";
+import { Chat, ChatProps } from "chat-components-common";
 import "./chat.scss";
 
-export default Chat;
+export { Chat, ChatProps };

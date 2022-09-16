@@ -1,7 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { MemberList, MemberListProps } from "../../../src";
-import users from "../../../../data/users/users.json";
+import users from "../../../../../data/users/users.json";
 
 export default {
   title: "Components/Member List",

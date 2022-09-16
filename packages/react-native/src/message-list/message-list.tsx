@@ -1,5 +1,14 @@
 import React, { FC, useEffect, useRef, useCallback, useState } from "react";
-import { Text, View, FlatList, ListRenderItem, Image, Animated, Platform } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  ListRenderItem,
+  Image,
+  Animated,
+  Platform,
+  Pressable,
+} from "react-native";
 import {
   isFilePayload,
   MessageEnvelope,
@@ -26,12 +35,15 @@ export type MessageListProps = CommonMessageListProps & {
  */
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
-    fetchMoreHistory,
+    fetchHistory,
     getTime,
     getUser,
     isOwnMessage,
     messages,
     paginationEnd,
+    prevMessages,
+    setScrolledBottom,
+    scrolledBottom,
     setUnreadMessages,
     theme,
     unreadMessages,
@@ -54,14 +66,23 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /**
    * Commands
    */
-
   const scrollToBottom = useCallback(() => {
+    setScrolledBottom(true);
     listRef.current.scrollToOffset({ offset: 0 });
-  }, []);
+  }, [setScrolledBottom]);
 
   /**
    * Handlers
    */
+  const handleScroll = useCallback(
+    (event) => {
+      if (props.onScroll) props.onScroll(event);
+      const scrolledBottom = event.nativeEvent.contentOffset.y < 30;
+      if (scrolledBottom) setUnreadMessages(0);
+      setScrolledBottom(scrolledBottom);
+    },
+    [props, setScrolledBottom, setUnreadMessages]
+  );
 
   const onViewableItemsChanged = useCallback(({ viewableItems }) => {
     const spinnerShown = viewableItems.find((el) => el.item.timetoken === "spinner-element");
@@ -69,9 +90,20 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   }, []);
 
   /**
+   * Lifecycle
+   */
+  useEffect(() => {
+    if (!scrolledBottom) return;
+    if (prevMessages.length !== messages.length) scrollToBottom();
+  }, [messages.length, prevMessages.length, scrollToBottom, scrolledBottom]);
+
+  useEffect(() => {
+    setReverseMessages([...messages].reverse());
+  }, [messages]);
+
+  /**
    *  Renderers
    */
-
   const renderSpinner = () => {
     if (!shouldShownSpinner) return;
 
@@ -88,6 +120,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderItem: ListRenderItem<MessageEnvelope> = ({ item }) => {
     const envelope = item;
     if (envelope.timetoken === "spinner-element") return renderSpinner();
+    if (envelope.timetoken === "children-element") return <>{props.children}</>;
     const uuid = envelope.uuid || envelope.publisher || "";
     const actions = envelope.actions;
     const deleted = !!Object.keys(actions?.deleted || {}).length;
@@ -146,33 +179,32 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     );
   };
 
-  useEffect(() => {
-    setReverseMessages([...messages].reverse());
-  }, [messages]);
-
-  useEffect(() => {
-    if (unreadMessages) {
-      scrollToBottom();
-      setUnreadMessages(0);
-    }
-  }, [unreadMessages, scrollToBottom, setUnreadMessages]);
-
   return (
     <>
+      {unreadMessages > 0 && (
+        <Pressable style={style.unread} onPress={scrollToBottom}>
+          <Text style={style.unreadText}>
+            {unreadMessages} new message{unreadMessages > 1 ? "s" : ""}
+          </Text>
+        </Pressable>
+      )}
       <FlatList
         style={[style.messageList, isAndroid && { scaleY: -1 }]}
         contentContainerStyle={style.messageListScroller}
-        data={[...reverseMessages, { timetoken: "spinner-element" }]}
+        data={[
+          { timetoken: "children-element", message: { id: "children-element" } },
+          ...reverseMessages,
+          { timetoken: "spinner-element", message: { id: "spinner-element" } },
+        ]}
         renderItem={renderItem}
         keyExtractor={(envelope) => envelope.timetoken as string}
         ref={listRef}
-        onEndReached={() => fetchMoreHistory()}
-        onScroll={props.onScroll}
+        onEndReached={() => fetchHistory()}
+        onScroll={handleScroll}
         // Workaround for: https://github.com/facebook/react-native/issues/30034
         inverted={!isAndroid}
         onViewableItemsChanged={onViewableItemsChanged}
       />
-      <>{props.children}</>
     </>
   );
 };

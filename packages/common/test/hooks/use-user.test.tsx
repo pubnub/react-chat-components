@@ -5,7 +5,7 @@ import { PubNubProvider } from "pubnub-react";
 
 import { useUser } from "../../src/hooks";
 import { PubNubMock } from "../../mock/pubnub-mock";
-import users from "../../../data/users/users.json";
+import users from "../../../../data/users/users.json";
 
 const pubnub = PubNubMock({}) as PubNub;
 const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;

@@ -8,16 +8,20 @@ import type {
   SignalResponse,
   SendFileResponse,
 } from "pubnub";
-import users from "../../data/users/users.json";
-import messages from "../../data/messages/lorem.json";
-import channels from "../../data/channels/work.json";
+import users from "../../../data/users/users.json";
+import messages from "../../../data/messages/lorem.json";
+import channels from "../../../data/channels/work.json";
 
 export interface PubNubMockOptions {
   uuid?: string;
   returnedUuid?: string;
 }
 
-export function PubNubMock(options: PubNubMockOptions = {}): Partial<PubNub> & { _config: any } {
+type Subset<T> = {
+  [attr in keyof T]?: T[attr] extends object ? Subset<T[attr]> : T[attr];
+};
+
+export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { _config: any } {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];

@@ -4,7 +4,7 @@ import { MessageInput } from "../src/message-input/message-input";
 import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
-import users from "../../data/users/users.json";
+import users from "../../../data/users/users.json";
 
 describe("Message Input", () => {
   /** Basic renderers and properties */
@@ -17,19 +17,19 @@ describe("Message Input", () => {
     expect(screen.queryByTitle("Add an emoji")).not.toBeInTheDocument();
   });
 
-  test("accepts and renders input", () => {
+  test("accepts and renders input", async () => {
     render(<MessageInput />);
 
-    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
+    await userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
 
     expect(screen.getByDisplayValue("Changed Value")).toBeVisible();
   });
 
-  test("calls a callback on value change", () => {
+  test("calls a callback on value change", async () => {
     const handleChange = jest.fn();
     render(<MessageInput onChange={handleChange} />);
 
-    userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
+    await userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
 
     expect(handleChange).toHaveBeenCalledWith("Changed Value");
   });
@@ -69,7 +69,7 @@ describe("Message Input", () => {
   test("sends the message on send button click", async () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
@@ -77,15 +77,15 @@ describe("Message Input", () => {
   test("sends the message on enter", async () => {
     render(<MessageInput draftMessage="Initial Value" />);
 
-    userEvent.type(screen.getByDisplayValue("Initial Value"), "{enter}");
+    await userEvent.type(screen.getByDisplayValue("Initial Value"), "{enter}");
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
   });
 
-  test("nothing happens on trying to send empty message", () => {
+  test("nothing happens on trying to send empty message", async () => {
     render(<MessageInput />);
 
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.click(screen.getByTitle("Send"));
 
     expect(screen.getByDisplayValue("")).toBeVisible();
   });
@@ -94,7 +94,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledTimes(1);
@@ -104,7 +104,7 @@ describe("Message Input", () => {
     const handleSend = jest.fn();
     render(<MessageInput draftMessage="Initial Value" onSend={handleSend} />);
 
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
@@ -126,7 +126,7 @@ describe("Message Input", () => {
       },
     });
 
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.click(screen.getByTitle("Send"));
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
@@ -143,19 +143,19 @@ describe("Message Input", () => {
     expect(screen.getByTitle("Add an emoji")).toBeVisible();
   });
 
-  test("opens emoji picker on button click", () => {
+  test("opens emoji picker on button click", async () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByTitle("Add an emoji"));
+    await userEvent.click(screen.getByTitle("Add an emoji"));
 
     expect(screen.getByText("Emoji Picker")).toBeVisible();
   });
 
-  test("closes emoji picker when clicking outside", () => {
+  test("closes emoji picker when clicking outside", async () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByTitle("Add an emoji"));
-    userEvent.click(screen.getByPlaceholderText("Send message"));
+    await userEvent.click(screen.getByTitle("Add an emoji"));
+    await userEvent.click(screen.getByPlaceholderText("Send message"));
 
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
   });
@@ -163,8 +163,8 @@ describe("Message Input", () => {
   test("emoji picker inserts emojis into the input", async () => {
     render(<MessageInput emojiPicker={<Picker />} />);
 
-    userEvent.click(screen.getByTitle("Add an emoji"));
-    userEvent.click(screen.getByText("🙂"));
+    await userEvent.click(screen.getByTitle("Add an emoji"));
+    await userEvent.click(screen.getByText("🙂"));
 
     expect(screen.getByDisplayValue("🙂")).toBeVisible();
     expect(screen.queryByText("Emoji Picker")).not.toBeInTheDocument();
@@ -179,25 +179,25 @@ describe("Message Input", () => {
 
   test("accepts a file and renders a text preview", async () => {
     render(<MessageInput fileUpload="all" />);
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const file = new File(["hello"], "hello.png", { type: "*" });
     const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
     const input = screen.getByTestId("message-input") as HTMLTextAreaElement;
 
-    userEvent.upload(fileInput, file);
+    await userEvent.upload(fileInput, file);
 
-    expect(fileInput.files[0]).toStrictEqual(file);
+    expect(fileInput.files[0]).toBe(file);
     expect(fileInput.files).toHaveLength(1);
     expect(input).toHaveValue("hello.png");
   });
 
   test("clears the file", async () => {
     render(<MessageInput fileUpload="all" />);
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const file = new File(["hello"], "hello.png", { type: "*" });
     const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
     const input = screen.getByTestId("message-input") as HTMLTextAreaElement;
 
-    userEvent.upload(fileInput, file);
-    userEvent.click(screen.getByTitle("Remove the file"));
+    await userEvent.upload(fileInput, file);
+    await userEvent.click(screen.getByTitle("Remove the file"));
 
     expect(input).toHaveValue("");
   });
@@ -205,13 +205,12 @@ describe("Message Input", () => {
   test("sends the file", async () => {
     const handleSend = jest.fn();
     render(<MessageInput fileUpload="all" onSend={handleSend} />);
-    const file = new File(["hello"], "hello.png", { type: "image/png" });
+    const file = new File(["hello"], "hello.png", { type: "*" });
     const fileInput = screen.getByTestId("file-upload") as HTMLInputElement;
 
-    userEvent.upload(fileInput, file);
-    userEvent.click(screen.getByTitle("Send"));
+    await userEvent.upload(fileInput, file);
+    await userEvent.click(screen.getByTitle("Send"));
 
-    expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(handleSend).toHaveBeenCalledWith(
       expect.objectContaining({
         name: "hello.png",

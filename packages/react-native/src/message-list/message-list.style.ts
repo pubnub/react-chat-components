@@ -4,11 +4,15 @@ import { Themes } from "chat-components-common";
 const lightColors = {
   messageListBackground: "#f0f3f7",
   messageColor: "#585858",
+  unreadBackground: "#999999",
+  unreadColor: "#ffffff",
 };
 
 const darkColors = {
   messageListBackground: "#1c1c28",
   messageColor: "rgba(228, 228, 235, 0.8)",
+  unreadBackground: "#999999",
+  unreadColor: "#2a2a39",
 };
 
 export interface MessageListStyle {
@@ -29,6 +33,8 @@ export interface MessageListStyle {
   messageBubble?: TextStyle;
   spinner?: ImageStyle;
   spinnerWrapper?: ViewStyle;
+  unread?: ViewStyle;
+  unreadText?: TextStyle;
 }
 
 export default (theme: Themes): MessageListStyle => {
@@ -95,6 +101,20 @@ export default (theme: Themes): MessageListStyle => {
       justifyContent: "center",
       paddingTop: 16,
       paddingBottom: 8,
+    },
+    unread: {
+      alignSelf: "center",
+      backgroundColor: colors.unreadBackground,
+      borderRadius: 20,
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      position: "absolute",
+      top: 20,
+      zIndex: 10,
+    },
+    unreadText: {
+      color: colors.unreadColor,
+      fontSize: 13,
     },
   });
 };

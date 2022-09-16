@@ -1,4 +1,4 @@
-import React, { ReactElement, FC, useRef, useState, useCallback, useEffect } from "react";
+import React, { FC, useRef, useState, useCallback, useEffect } from "react";
 import {
   isFilePayload,
   MessageEnvelope,
@@ -8,8 +8,13 @@ import {
   CommonMessageListProps,
   useMessageListCore,
 } from "chat-components-common";
-import { getNameInitials, getPredefinedColor } from "chat-components-common";
-import { useOuterClick } from "../helpers";
+import { getNameInitials, getPredefinedColor, usePrevious } from "chat-components-common";
+import {
+  useOuterClick,
+  useIntersectionObserver,
+  useMutationObserver,
+  useResizeObserver,
+} from "../helpers";
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
@@ -30,7 +35,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
     addReaction,
     channel,
-    fetchMoreHistory,
+    fetchHistory,
     fetchingMessages,
     getTime,
     getUser,
@@ -52,103 +57,57 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     users,
   } = useMessageListCore(props);
 
-  const [picker, setPicker] = useState<ReactElement>();
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
+  const lastMessageUniqueReactions = Object.keys(messages.slice(-1)[0]?.actions?.reaction || {});
+  const prevLastMessageUniqueReactions = usePrevious(lastMessageUniqueReactions);
 
   const endRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
   const spinnerRef = useRef<HTMLDivElement>(null);
-  const pickerRef = useOuterClick((event) => {
-    if ((event.target as Element).closest(".pn-msg__reactions-toggle")) return;
-    setEmojiPickerShown(false);
-  });
+  const pickerRef = useOuterClick(handleCloseReactions);
 
-  const listSizeObserver = useRef(new ResizeObserver(() => handleListMutations()));
-  const listMutObserver = useRef(new MutationObserver(() => handleListMutations()));
-  const spinnerIntObserver = useRef(
-    new IntersectionObserver((e) => handleSpinnerIntersection(e[0].isIntersecting))
-  );
-  const bottomIntObserver = useRef(
-    new IntersectionObserver((e) => handleBottomIntersection(e[0].isIntersecting))
-  );
+  const isSpinnerVisible = useIntersectionObserver(spinnerRef)?.isIntersecting;
+  const wasSpinnerVisible = usePrevious(isSpinnerVisible);
+  const isBottomVisible = useIntersectionObserver(endRef)?.isIntersecting;
+  const mutationEntry = useMutationObserver(listRef, { childList: true });
+  const resizeEntry = useResizeObserver(listRef);
 
   /*
-  /* Helper functions
+  /* Commands
   */
   const scrollToBottom = useCallback(() => {
-    if (!endRef.current) return;
+    if (!listRef.current || !listRef.current.scroll) return;
     setScrolledBottom(true);
-    endRef.current.scrollIntoView({ block: "end" });
+    listRef.current.scroll({ top: listRef.current.scrollHeight });
   }, [setScrolledBottom]);
-
-  const setupSpinnerObserver = () => {
-    if (!spinnerRef.current) return;
-    spinnerIntObserver.current.observe(spinnerRef.current);
-  };
-
-  const setupBottomObserver = () => {
-    if (!endRef.current) return;
-    bottomIntObserver.current.disconnect();
-    bottomIntObserver.current.observe(endRef.current);
-  };
-
-  const setupListObservers = () => {
-    if (!listRef.current) return;
-    listSizeObserver.current.disconnect();
-    listSizeObserver.current.observe(listRef.current);
-    listMutObserver.current.disconnect();
-    listMutObserver.current.observe(listRef.current, { childList: true });
-  };
 
   /**
    * Event handlers
    */
-  const handleSpinnerIntersection = async (isIntersecting: boolean) => {
-    if (isIntersecting) {
-      const firstMessage = listRef.current?.querySelector(".pn-msg");
-      await fetchMoreHistory();
-      if (firstMessage) firstMessage.scrollIntoView();
-    }
-  };
-
-  const handleBottomIntersection = (isIntersecting: boolean) => {
+  function handleOpenReactions(event: React.MouseEvent, timetoken) {
     try {
-      if (isIntersecting) setUnreadMessages(0);
-      setScrolledBottom(isIntersecting);
-    } catch (e) {
-      onError(e);
-    }
-  };
-
-  const handleListMutations = () => {
-    try {
-      setScrolledBottom((scrolledBottom) => {
-        if (scrolledBottom) scrollToBottom();
-        return scrolledBottom;
-      });
-    } catch (e) {
-      onError(e);
-    }
-  };
-
-  const handleOpenReactions = (event: React.MouseEvent, timetoken) => {
-    try {
-      let newPickerTopPosition =
-        listRef.current.scrollTop -
-        listRef.current.getBoundingClientRect().top +
-        (event.target as HTMLElement).getBoundingClientRect().y;
-      if (newPickerTopPosition > pickerRef.current.offsetHeight) {
-        newPickerTopPosition += (event.target as HTMLElement).getBoundingClientRect().height;
-        newPickerTopPosition -= pickerRef.current.offsetHeight;
+      const pickerEl = pickerRef.current;
+      const listEl = listRef.current;
+      const listRect = listEl.getBoundingClientRect();
+      const buttonRect = (event.target as HTMLElement).getBoundingClientRect();
+      let newPickerTopPosition = listEl.scrollTop - listRect.top + buttonRect.y;
+      if (newPickerTopPosition + pickerEl.offsetHeight > listEl.scrollHeight) {
+        newPickerTopPosition += buttonRect.height;
+        newPickerTopPosition -= pickerEl.offsetHeight;
       }
-      pickerRef.current.style.top = `${newPickerTopPosition}px`;
-
+      pickerEl.style.top = `${newPickerTopPosition}px`;
       setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
     } catch (e) {
       onError(e);
     }
-  };
+  }
+
+  function handleCloseReactions(event) {
+    if ((event.target as Element).closest(".pn-msg__reactions-toggle")) return;
+    if (pickerRef.current) pickerRef.current.style.top = "0px";
+    setEmojiPickerShown(false);
+  }
 
   const handleEmojiInsertion = useCallback(
     (emoji: { native: string }) => {
@@ -166,30 +125,54 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /**
    * Lifecycle
    */
+  useEffect(() => {
+    if (!isSpinnerVisible || wasSpinnerVisible || !messages.length || fetchingMessages) return;
+    fetchMoreHistory();
+
+    async function fetchMoreHistory() {
+      const firstMessage = listRef.current?.querySelector(".pn-msg") as HTMLDivElement;
+      await fetchHistory();
+      if (firstMessage && listRef.current?.scroll)
+        listRef.current?.scroll({ top: firstMessage.offsetTop });
+    }
+  }, [
+    fetchHistory,
+    fetchingMessages,
+    isSpinnerVisible,
+    messages,
+    paginationEnd,
+    wasSpinnerVisible,
+  ]);
 
   useEffect(() => {
-    if (prevMessages.length !== messages.length) {
-      if (scrolledBottom) scrollToBottom();
-      setupBottomObserver();
-    }
-
-    if (!prevMessages.length && messages.length) {
-      setupSpinnerObserver();
-      setupListObservers();
-    }
-  }, [messages.length, prevMessages.length, scrollToBottom, scrolledBottom]);
+    if (isBottomVisible) setUnreadMessages(0);
+    setScrolledBottom(isBottomVisible);
+  }, [isBottomVisible, setScrolledBottom, setUnreadMessages]);
 
   useEffect(() => {
-    if (prevChannel !== channel) {
+    if (scrolledBottom && mutationEntry?.addedNodes?.length) scrollToBottom();
+  }, [mutationEntry, scrollToBottom, scrolledBottom]);
+
+  useEffect(() => {
+    if (scrolledBottom && resizeEntry) scrollToBottom();
+  }, [resizeEntry, scrollToBottom, scrolledBottom]);
+
+  useEffect(() => {
+    if (!scrolledBottom) return;
+    if (prevMessages.length !== messages.length) scrollToBottom();
+    if (prevChannel !== channel) scrollToBottom();
+    if (lastMessageUniqueReactions.length !== prevLastMessageUniqueReactions.length)
       scrollToBottom();
-    }
-  }, [channel, prevChannel, scrollToBottom]);
-
-  useEffect(() => {
-    if (React.isValidElement(props.reactionsPicker)) {
-      setPicker(React.cloneElement(props.reactionsPicker, { onSelect: handleEmojiInsertion }));
-    }
-  }, [props.reactionsPicker, handleEmojiInsertion]);
+  }, [
+    channel,
+    lastMessageUniqueReactions.length,
+    messages.length,
+    prevChannel,
+    prevLastMessageUniqueReactions.length,
+    prevMessages.length,
+    scrollToBottom,
+    scrolledBottom,
+  ]);
 
   /*
   /* Renderers
@@ -324,6 +307,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   };
 
   const renderFile = (file: FileAttachment) => {
+    if (props.fileRenderer) return props.fileRenderer(file);
+
     return (
       <div className="pn-msg__file">
         {/\.(svg|gif|jpe?g|tiff?|png|webp|bmp)$/i.test(file.name) ? (
@@ -391,21 +376,22 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       )}
 
       <div className="pn-msg-list-scroller" onScroll={props.onScroll} ref={listRef}>
-        {!!props.fetchMessages && !paginationEnd && (
-          <span ref={spinnerRef} className="pn-msg-list__spinner">
-            <SpinnerIcon />
-          </span>
-        )}
+        <span ref={spinnerRef} className="pn-msg-list__spinner">
+          {!!props.fetchMessages && !paginationEnd && <SpinnerIcon />}
+        </span>
 
         <div className="pn-msg-list__spacer" />
 
         {(!props.fetchMessages || (!fetchingMessages && !messages.length)) &&
           renderWelcomeMessages()}
+
         {messages && messages.map((m) => renderItem(m))}
 
         {props.children}
 
-        <div className="pn-msg-list__bottom-ref" ref={endRef}></div>
+        <div className="pn-msg-list__bottom-ref">
+          <div ref={endRef}></div>
+        </div>
 
         {props.reactionsPicker && (
           <div
@@ -414,7 +400,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             }`}
             ref={pickerRef}
           >
-            {picker}
+            {React.cloneElement(props.reactionsPicker, { onEmojiSelect: handleEmojiInsertion })}
           </div>
         )}
       </div>

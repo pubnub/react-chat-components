@@ -1,7 +1,7 @@
 import React from "react";
 
 import { ChannelList } from "../src/channel-list/channel-list";
-import channels from "../../data/channels/work.json";
+import channels from "../../../data/channels/work.json";
 import { render, screen } from "../mock/custom-renderer";
 import userEvent from "@testing-library/user-event";
 
@@ -60,18 +60,18 @@ describe("Channel List", () => {
     expect(screen.getByText("Introductions Extra Action")).toBeVisible();
   });
 
-  test("emits events on channel clicks", () => {
+  test("emits events on channel clicks", async () => {
     const handleClick = jest.fn();
     render(<ChannelList channels={channels} onChannelSwitched={handleClick} />);
-    userEvent.click(screen.getByText("Introductions"));
+    await userEvent.click(screen.getByText("Introductions"));
 
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  test("emits nothing on channel clicks when no callback", () => {
+  test("emits nothing on channel clicks when no callback", async () => {
     const handleClick = jest.fn();
     render(<ChannelList channels={channels} />);
-    userEvent.click(screen.getByText("Introductions"));
+    await userEvent.click(screen.getByText("Introductions"));
 
     expect(handleClick).not.toHaveBeenCalled();
   });

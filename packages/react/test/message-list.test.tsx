@@ -2,18 +2,16 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { MessagePayload } from "../src/types";
-import { render, screen } from "../mock/custom-renderer";
+import { MessagePayload } from "chat-components-common";
+import { render, screen, act } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 
 describe("Message List", () => {
-  let scrollIntoViewMock;
   let intersectionObserverMock;
   let resizeObserverMock;
 
   beforeEach(() => {
-    scrollIntoViewMock = jest.fn();
     intersectionObserverMock = jest.fn().mockReturnValue({
       observe: jest.fn(),
       unobserve: jest.fn(),
@@ -25,7 +23,6 @@ describe("Message List", () => {
       disconnect: jest.fn(),
     });
 
-    window.HTMLElement.prototype.scrollIntoView = scrollIntoViewMock;
     window.IntersectionObserver = intersectionObserverMock;
     window.ResizeObserver = resizeObserverMock;
   });
@@ -96,7 +93,7 @@ describe("Message List", () => {
         <MessageInput draftMessage="New Message" />
       </div>
     );
-    userEvent.type(screen.getByDisplayValue("New Message"), "{enter}");
+    await userEvent.type(screen.getByDisplayValue("New Message"), "{enter}");
 
     expect(await screen.findByDisplayValue("")).toBeVisible();
     expect(await screen.findByText("New Message")).toBeVisible();
@@ -120,8 +117,12 @@ describe("Message List", () => {
       screen.queryByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
     ).not.toBeInTheDocument();
 
-    const observerCallback = intersectionObserverMock.mock.calls[0][0]; // spinnerObserver
-    observerCallback([{ isIntersecting: true }]);
+    await act(async () => {
+      for (const call of intersectionObserverMock.mock.calls) {
+        const callback = call[0];
+        callback([{ isIntersecting: true }]);
+      }
+    });
 
     expect(
       await screen.findByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
@@ -136,13 +137,15 @@ describe("Message List", () => {
       </div>
     );
 
-    userEvent.type(screen.getByPlaceholderText("Send message"), "Existing Message{enter}");
+    await userEvent.type(screen.getByPlaceholderText("Send message"), "Existing Message{enter}");
     expect(await screen.findByText("Existing Message")).toBeVisible();
 
-    const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
-    observerCallback([{ isIntersecting: false }]);
+    await act(() => {
+      const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
+      observerCallback([{ isIntersecting: false }]);
+    });
 
-    userEvent.type(screen.getByPlaceholderText("Send message"), "Test Message{enter}");
+    await userEvent.type(screen.getByPlaceholderText("Send message"), "Test Message{enter}");
 
     expect(await screen.findByText("Test Message")).toBeVisible();
     expect(await screen.findByText("1 new message")).toBeVisible();
@@ -167,38 +170,33 @@ describe("Message List", () => {
     expect(await screen.findByText("🙂 1")).toBeVisible();
   });
 
-  // TODO toBeVisible doesnt work with visibility: hidden on the dom tree
+  // TODO: toBeVisible doesnt work with visibility: hidden on the dom tree
   // https://github.com/testing-library/jest-dom/issues/209
-  // test("closes the reactions panel on outside click", async () => {
-  //   render(<MessageList fetchMessages={10} enableReactions />);
+  test.skip("closes the reactions panel on outside click", async () => {
+    render(<MessageList fetchMessages={10} enableReactions />);
 
-  //   const triggers = await screen.findAllByText("☺");
-  //   userEvent.click(triggers[0]);
-  //   userEvent.click(screen.getByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit."));
-
-  //   await waitFor(() => expect(screen.getByText("Frequently Used")).not.toBeVisible());
-  // });
-
-  test("adds new reactions", async () => {
-    render(
-      <MessageList
-        welcomeMessages={false}
-        fetchMessages={10}
-        enableReactions
-        reactionsPicker={<Picker />}
-      />
+    const triggers = await screen.findAllByText("☺");
+    await userEvent.click(triggers[0]);
+    await userEvent.click(
+      screen.getByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
     );
 
+    expect(screen.getByText("Frequently Used")).not.toBeVisible();
+  });
+
+  test("adds new reactions", async () => {
+    render(<MessageList fetchMessages={10} enableReactions reactionsPicker={<Picker />} />);
+
     const triggers = await screen.findAllByTitle("Add a reaction");
-    userEvent.click(triggers[0]);
-    userEvent.click(screen.getByText("😄"));
+    await userEvent.click(triggers[0]);
+    await userEvent.click(screen.getByText("😄"));
 
     expect(await screen.findByText("😄 1")).toBeVisible();
   });
 
   test("adds to existing reactions", async () => {
     render(<MessageList fetchMessages={10} enableReactions />);
-    userEvent.click(await screen.findByText("🙂 1"));
+    await userEvent.click(await screen.findByText("🙂 1"));
 
     expect(await screen.findByText("🙂 2")).toBeVisible();
     expect(screen.queryByText("🙂 1")).not.toBeInTheDocument();
@@ -206,8 +204,8 @@ describe("Message List", () => {
 
   test("removes from existing reactions", async () => {
     render(<MessageList fetchMessages={10} enableReactions />);
-    userEvent.click(await screen.findByText("🙂 1"));
-    userEvent.click(await screen.findByText("🙂 2"));
+    await userEvent.click(await screen.findByText("🙂 1"));
+    await userEvent.click(await screen.findByText("🙂 2"));
 
     expect(await screen.findByText("🙂 1")).toBeVisible();
     expect(screen.queryByText("🙂 2")).not.toBeInTheDocument();
