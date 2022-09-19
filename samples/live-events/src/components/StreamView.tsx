@@ -1,5 +1,5 @@
 import React from "react";
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import { ChannelEntity } from "@pubnub/react-chat-components";
 
 import { ReactComponent as GroupIcon } from "../assets/user-group.svg";

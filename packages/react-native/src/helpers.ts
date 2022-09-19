@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Animated, Easing } from "react-native";
-import { Themes } from "chat-components-common";
+import { Themes } from "@pubnub/common-chat-components";
 
 export interface UseStyleProps<T> {
   theme: Themes | "";

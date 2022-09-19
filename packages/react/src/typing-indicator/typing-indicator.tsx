@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { CommonTypingIndicatorProps, useTypingIndicatorCore } from "chat-components-common";
+import { CommonTypingIndicatorProps, useTypingIndicatorCore } from "@pubnub/common-chat-components";
 import "./typing-indicator.scss";
 
 export type TypingIndicatorProps = CommonTypingIndicatorProps;

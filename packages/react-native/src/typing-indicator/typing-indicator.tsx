@@ -5,7 +5,7 @@ import {
   useTypingIndicatorCore,
   getNameInitials,
   getPredefinedColor,
-} from "chat-components-common";
+} from "@pubnub/common-chat-components";
 import createDefaultStyle, { TypingIndicatorStyle } from "./typing-indicator.style";
 import createMLDefaultStyle, { MessageListStyle } from "../message-list/message-list.style";
 import { useStyle } from "../helpers";

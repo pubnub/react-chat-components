@@ -1,5 +1,5 @@
 import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
-import { Themes } from "chat-components-common";
+import { Themes } from "@pubnub/common-chat-components";
 
 const lightColors = {
   channelListBackground: "#ffffff",

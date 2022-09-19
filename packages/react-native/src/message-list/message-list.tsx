@@ -1,26 +1,30 @@
 import React, { FC, useEffect, useRef, useCallback, useState } from "react";
+import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
 import {
-  Text,
-  View,
-  FlatList,
-  ListRenderItem,
-  Image,
   Animated,
+  FlatList,
+  Image,
+  ListRenderItem,
   Platform,
   Pressable,
+  Text,
+  View,
 } from "react-native";
 import {
-  isFilePayload,
-  MessageEnvelope,
   CommonMessageListProps,
+  MessageEnvelope,
+  getNameInitials,
+  getPredefinedColor,
+  isFilePayload,
   useMessageListCore,
-} from "chat-components-common";
-import { getNameInitials, getPredefinedColor } from "chat-components-common";
+} from "@pubnub/common-chat-components";
 import createDefaultStyle, { MessageListStyle } from "./message-list.style";
 import { useStyle, useRotation } from "../helpers";
 import SpinnerIcon from "../icons/spinner.png";
 
 export type MessageListProps = CommonMessageListProps & {
+  /** Callback run on a list scroll. */
+  onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
   style?: MessageListStyle;
 };

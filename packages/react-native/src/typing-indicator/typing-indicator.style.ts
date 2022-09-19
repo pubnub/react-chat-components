@@ -1,5 +1,5 @@
 import { StyleSheet, TextStyle } from "react-native";
-import { Themes } from "chat-components-common";
+import { Themes } from "@pubnub/common-chat-components";
 
 const lightColors = {
   textBackground: "#f0f3f7",

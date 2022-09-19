@@ -1,4 +1,4 @@
-import React, { FC, useRef, useState, useCallback, useEffect } from "react";
+import React, { FC, useRef, useState, useCallback, useEffect, UIEvent } from "react";
 import {
   isFilePayload,
   MessageEnvelope,
@@ -7,8 +7,10 @@ import {
   FileAttachment,
   CommonMessageListProps,
   useMessageListCore,
-} from "chat-components-common";
-import { getNameInitials, getPredefinedColor, usePrevious } from "chat-components-common";
+  getNameInitials,
+  getPredefinedColor,
+  usePrevious,
+} from "@pubnub/common-chat-components";
 import {
   useOuterClick,
   useIntersectionObserver,
@@ -21,7 +23,10 @@ import DownloadIcon from "../icons/download.svg";
 import ArrowDownIcon from "../icons/arrow-down.svg";
 import "./message-list.scss";
 
-export type MessageListProps = CommonMessageListProps;
+export type MessageListProps = CommonMessageListProps & {
+  /** Callback run on a list scroll. */
+  onScroll?: (event: UIEvent<HTMLDivElement>) => void;
+};
 
 /**
  * Fetches historical messages using the scrolling pagination pattern and subscribes to the current

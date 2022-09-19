@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
-import faker from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import { actionCompleted } from "pubnub-demo-integration";
 import { ChannelEntity, Chat, usePresence } from "@pubnub/react-chat-components";
 import useWindowSize from "react-use/lib/useWindowSize";

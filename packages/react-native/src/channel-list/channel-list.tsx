@@ -1,6 +1,10 @@
 import React, { FC } from "react";
 import { Text, View, Image, FlatList, Pressable, ListRenderItem } from "react-native";
-import { ChannelEntity, CommonChannelListProps, useChannelListCore } from "chat-components-common";
+import {
+  ChannelEntity,
+  CommonChannelListProps,
+  useChannelListCore,
+} from "@pubnub/common-chat-components";
 import { useStyle } from "../helpers";
 import createDefaultStyle, { ChannelListStyle } from "./channel-list.style";
 

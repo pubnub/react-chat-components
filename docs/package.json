@@ -1,0 +1,34 @@
+{
+  "name": "@pubnub/chat-components-docs",
+  "version": "0.13.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "build-storybook",
+    "build-storybook": "build-storybook",
+    "deploy": "npm run build && gh-pages -d storybook-static -e docs",
+    "start": "start-storybook -p 6006",
+    "storybook": "start-storybook -p 6006"
+  },
+  "author": "PubNub <support@pubnub.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.19.1",
+    "@pubnub/react-chat-components": "*",
+    "@storybook/addon-actions": "^6.5.12",
+    "@storybook/addon-essentials": "^6.5.12",
+    "@storybook/addon-interactions": "^6.5.12",
+    "@storybook/addon-links": "^6.5.12",
+    "@storybook/builder-webpack5": "^6.5.12",
+    "@storybook/manager-webpack5": "^6.5.12",
+    "@storybook/preset-scss": "^1.0.3",
+    "@storybook/react": "^6.5.12",
+    "@storybook/theming": "^6.5.12",
+    "@svgr/webpack": "^6.3.1",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "gh-pages": "4.0.0",
+    "sass-loader": "^13.0.2",
+    "style-loader": "^3.3.1"
+  },
+  "dependencies": {}
+}

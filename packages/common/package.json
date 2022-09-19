@@ -1,5 +1,9 @@
 {
-  "name": "chat-components-common",
+  "name": "@pubnub/common-chat-components",
   "version": "0.13.0",
-  "main": "src/index.ts"
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  }
 }

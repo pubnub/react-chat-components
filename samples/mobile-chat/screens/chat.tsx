@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, KeyboardAvoidingView, Button, useColorScheme } from "react-native";
+import { Text, View, KeyboardAvoidingView, Button, useColorScheme, Platform } from "react-native";
 import { MessageInput, MessageList, TypingIndicator } from "@pubnub/react-native-chat-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 

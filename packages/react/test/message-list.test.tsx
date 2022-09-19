@@ -2,7 +2,7 @@ import React from "react";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
-import { MessagePayload } from "chat-components-common";
+import { MessagePayload } from "@pubnub/common-chat-components";
 import { render, screen, act } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";

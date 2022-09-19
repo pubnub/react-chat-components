@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
-import { CommonMessageInputProps, useMessageInputCore } from "chat-components-common";
+import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
 import { useStyle, useRotation } from "../helpers";
 import createDefaultStyle, { MessageInputStyle } from "./message-input.style";
 import AirplaneIcon from "../icons/airplane.png";

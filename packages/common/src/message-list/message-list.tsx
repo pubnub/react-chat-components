@@ -1,5 +1,4 @@
-import { ReactElement, ReactNode, UIEvent, useCallback, useEffect, useState } from "react";
-import { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import { ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
 import {
@@ -48,8 +47,6 @@ export interface CommonMessageListProps {
   fileRenderer?: (file: FileAttachment) => JSX.Element;
   /** Option to render only selected messages. */
   filter?: (message: MessageEnvelope) => boolean;
-  /** Callback run on a list scroll. */
-  onScroll?: (event: UIEvent<HTMLElement> | NativeSyntheticEvent<NativeScrollEvent>) => unknown;
 }
 
 /**

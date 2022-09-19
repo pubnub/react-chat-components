@@ -6,7 +6,7 @@ import {
   getNameInitials,
   getPredefinedColor,
   useMemberListCore,
-} from "chat-components-common";
+} from "@pubnub/common-chat-components";
 import { useStyle } from "../helpers";
 import createDefaultStyle, { MemberListStyle } from "./member-list.style";
 

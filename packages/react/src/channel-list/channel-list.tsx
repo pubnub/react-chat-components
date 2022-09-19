@@ -1,5 +1,9 @@
 import React, { FC } from "react";
-import { ChannelEntity, CommonChannelListProps, useChannelListCore } from "chat-components-common";
+import {
+  ChannelEntity,
+  CommonChannelListProps,
+  useChannelListCore,
+} from "@pubnub/common-chat-components";
 import "./channel-list.scss";
 
 export type ChannelListProps = CommonChannelListProps;

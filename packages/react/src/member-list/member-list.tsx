@@ -5,7 +5,7 @@ import {
   getNameInitials,
   getPredefinedColor,
   useMemberListCore,
-} from "chat-components-common";
+} from "@pubnub/common-chat-components";
 import "./member-list.scss";
 
 export type MemberListProps = CommonMemberListProps;

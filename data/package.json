@@ -1,5 +1,5 @@
 {
-  "name": "@pubnub/react-chat-data",
+  "name": "@pubnub/sample-chat-data",
   "version": "1.0.0",
   "private": true,
   "description": "Repository of dummy chat data to be used accross sample apps, tests and documentation",

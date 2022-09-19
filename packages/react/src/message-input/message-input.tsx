@@ -3,7 +3,7 @@ import {
   CommonMessageInputProps,
   useMessageInputCore,
   EmojiPickerElementProps,
-} from "chat-components-common";
+} from "@pubnub/common-chat-components";
 import { useOuterClick } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
