@@ -71,8 +71,9 @@ export const MemberList: FC<MemberListProps> = (props: MemberListProps) => {
   };
 
   return (
-    <View style={style.memberListWrapper}>
+    <View style={style.memberListWrapper} testID="member-list-wrapper">
       <FlatList
+        testID="member-list"
         style={style.memberList}
         data={(props.members as string[]).map(memberFromString).sort(memberSorter)}
         renderItem={renderMember}

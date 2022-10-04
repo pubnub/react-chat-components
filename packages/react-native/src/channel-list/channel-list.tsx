@@ -66,8 +66,9 @@ export const ChannelList: FC<ChannelListProps> = (props: ChannelListProps) => {
   };
 
   return (
-    <View style={style.channelListWrapper}>
+    <View style={style.channelListWrapper} testID="channel-list-wrapper">
       <FlatList
+        testID="channel-list"
         style={style.channelList}
         data={(props.channels as string[]).map(channelFromString).sort(channelSorter)}
         renderItem={renderChannel}

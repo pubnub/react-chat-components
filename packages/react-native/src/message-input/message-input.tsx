@@ -32,7 +32,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const renderSendButton = () => {
     return (
-      <TouchableOpacity onPress={sendMessage}>
+      <TouchableOpacity onPress={sendMessage} testID="message-input-send">
         {props.sendButton ? (
           props.sendButton
         ) : isValidInputText() ? (
@@ -50,14 +50,15 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         <View style={style.extraActions}>{props.extraActionsRenderer()}</View>
       )}
       <TextInput
+        testID="message-input"
         autoComplete="off"
-        defaultValue={text}
         multiline={true}
         onChangeText={handleInputChange}
         placeholder={props.placeholder}
         style={style.messageInput}
         placeholderTextColor={style.messageInputPlaceholder.color}
         editable={!props.disabled}
+        value={text}
       />
       {!props.disabled && (
         <View style={style.sendButton}>

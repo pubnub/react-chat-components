@@ -6,8 +6,7 @@ import { render, waitFor, screen } from "../mock/custom-renderer";
 import userEvent from "@testing-library/user-event";
 
 describe("Typing Indicator", () => {
-  // TODO: outdated test, uses the same uuid for message input and typing indicator
-  test.skip("shows up when typing and then disappears when clearing the input", async () => {
+  test("shows up when typing and then disappears when clearing the input", async () => {
     render(
       <div>
         <MessageInput typingIndicator />
@@ -28,8 +27,7 @@ describe("Typing Indicator", () => {
     await waitFor(() => expect(indicator).not.toBeVisible());
   });
 
-  // TODO: outdated test, uses the same uuid for message input and typing indicator
-  test.skip("shows up when typing and then disappears when sending the message", async () => {
+  test("shows up when typing and then disappears when sending the message", async () => {
     render(
       <div>
         <MessageInput typingIndicator />

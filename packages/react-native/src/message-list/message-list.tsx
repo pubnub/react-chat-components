@@ -193,6 +193,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         </Pressable>
       )}
       <FlatList
+        testID="message-list"
         style={[style.messageList, isAndroid && { scaleY: -1 }]}
         contentContainerStyle={style.messageListScroller}
         data={[
