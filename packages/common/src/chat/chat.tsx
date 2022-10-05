@@ -437,7 +437,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   useEffect(() => {
     if (!pubnub) return;
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    (pubnub as any)._config._addPnsdkSuffix("chat-components", "RCC/__VERSION__");
+    (pubnub as any)._config._addPnsdkSuffix("chat-components", "__PLATFORM__/__VERSION__");
   }, [pubnub]);
 
   return <>{childrenProp}</>;
