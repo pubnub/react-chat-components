@@ -124,7 +124,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderItem: ListRenderItem<MessageEnvelope> = ({ item }) => {
     const envelope = item;
     if (envelope.timetoken === "spinner-element") return renderSpinner();
-    if (envelope.timetoken === "children-element") return <>{props.children}</>;
+    if (envelope.timetoken === "children-element")
+      return <View style={isAndroid && { scaleY: -1 }}>{props.children}</View>;
     const uuid = envelope.uuid || envelope.publisher || "";
     const actions = envelope.actions;
     const deleted = !!Object.keys(actions?.deleted || {}).length;
