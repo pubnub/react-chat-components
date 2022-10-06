@@ -4,7 +4,7 @@ const { SingleBar, Presets } = require("cli-progress");
 const prompts = require("prompts");
 const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
-const sampleSize = require("lodash.sampleSize");
+const sampleSize = require("lodash/sampleSize");
 
 const users = require("../../data/users/users.json");
 const channels = require("../../data/channels/work.json");
@@ -185,6 +185,7 @@ const main = async () => {
 
   const pubnub = new PubNub({
     ...keys,
+    userId: "population-script",
   });
 
   const membershipsPerUser = 4;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { HereNowParameters, HereNowResponse } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import cloneDeep from "lodash.clonedeep";
+import { cloneDeep } from "lodash";
 
 type ChannelsOccupancy = HereNowResponse["channels"];
 type HookReturnValue = [ChannelsOccupancy, () => void, number, Error];

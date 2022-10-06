@@ -2,10 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { FetchMessagesParameters, MessageActionEvent, MessageEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { MessageEnvelope } from "../types";
-import merge from "lodash.merge";
-import mergeWith from "lodash.mergewith";
-import cloneDeep from "lodash.clonedeep";
-import setDeep from "lodash.set";
+import { merge, mergeWith, cloneDeep, set as setDeep } from "lodash";
 
 interface MessagesByChannel {
   [channel: string]: MessageEnvelope[];

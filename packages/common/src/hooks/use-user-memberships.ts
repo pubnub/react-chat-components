@@ -1,8 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { GetMembershipsParametersv2 } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import merge from "lodash.merge";
-import cloneDeep from "lodash.clonedeep";
+import { merge, cloneDeep } from "lodash";
 import { ChannelEntity } from "../types";
 
 type HookReturnValue = [ChannelEntity[], () => void, () => void, number, Error];

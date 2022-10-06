@@ -7,6 +7,7 @@ import postcss from "rollup-plugin-postcss";
 import svgr from "@svgr/rollup";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
+import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
 export default {
   input: "./src/index.ts",
@@ -35,5 +36,6 @@ export default {
     svgr(),
     json(),
     ts(),
+    optimizeLodashImports(),
   ],
 };

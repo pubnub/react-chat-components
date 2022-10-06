@@ -10,8 +10,7 @@ import {
 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { MessageEnvelope, RetryOptions, Themes, UserEntity } from "../types";
-import cloneDeep from "lodash.clonedeep";
-import setDeep from "lodash.set";
+import { cloneDeep, set as setDeep } from "lodash";
 import {
   CurrentChannelAtom,
   ErrorFunctionAtom,

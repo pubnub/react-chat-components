@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { GetUUIDMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import cloneDeep from "lodash.clonedeep";
+import { cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
 export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {

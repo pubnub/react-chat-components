@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { GetAllMetadataParameters } from "pubnub";
 import { usePubNub } from "pubnub-react";
-import merge from "lodash.merge";
-import cloneDeep from "lodash.clonedeep";
+import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
 type HookReturnValue = [UserEntity[], () => void, number, Error];

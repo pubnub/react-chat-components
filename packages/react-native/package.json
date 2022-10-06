@@ -29,6 +29,7 @@
     "test:watch": "jest --watch"
   },
   "devDependencies": {
+    "@optimize-lodash/rollup-plugin": "3.1.0",
     "@pubnub/common-chat-components": "*",
     "@rollup/plugin-commonjs": "22.0.2",
     "@rollup/plugin-image": "2.1.1",
@@ -59,11 +60,7 @@
   },
   "dependencies": {
     "jotai": "^1.8.3",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.isequal": "^4.5.0",
-    "lodash.merge": "^4.6.2",
-    "lodash.mergewith": "^4.6.2",
-    "lodash.set": "^4.3.2",
+    "lodash": "^4.17.0",
     "react-native-uuid": "^2.0.1"
   }
 }
