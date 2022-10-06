@@ -64,7 +64,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         <View style={style.sendButton}>
           {loader ? (
             <Animated.Image
-              style={{ ...style.icon, ...{ transform: [{ rotate }] } }}
+              style={[style.icon, { transform: [{ rotate }] }]}
               source={{ uri: SpinnerIcon }}
             />
           ) : (

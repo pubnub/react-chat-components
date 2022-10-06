@@ -8,9 +8,11 @@ import type {
   SignalResponse,
   SendFileResponse,
 } from "pubnub";
-import users from "../../../data/users/users.json";
-import messages from "../../../data/messages/lorem.json";
-import channels from "../../../data/channels/work.json";
+import {
+  users,
+  loremMessages as messages,
+  workChannels as channels,
+} from "@pubnub/sample-chat-data";
 
 export interface PubNubMockOptions {
   uuid?: string;

@@ -94,6 +94,7 @@ describe("Message List", () => {
     );
 
     const scrollEventData = {
+      persist: () => null,
       nativeEvent: {
         contentOffset: { y: 500 },
         contentSize: { height: 500, width: 100 },

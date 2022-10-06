@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { throttle } from "lodash";
 import {
   CommonMessageListProps,
   MessageEnvelope,
@@ -78,14 +79,20 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /**
    * Handlers
    */
+
+  const handleScrollBottom = throttle((event) => {
+    const scrolledBottom = event.nativeEvent.contentOffset.y < 30;
+    if (scrolledBottom) setUnreadMessages(0);
+    setScrolledBottom(scrolledBottom);
+  }, 500);
+
   const handleScroll = useCallback(
     (event) => {
       if (props.onScroll) props.onScroll(event);
-      const scrolledBottom = event.nativeEvent.contentOffset.y < 30;
-      if (scrolledBottom) setUnreadMessages(0);
-      setScrolledBottom(scrolledBottom);
+      event.persist();
+      handleScrollBottom(event);
     },
-    [props, setScrolledBottom, setUnreadMessages]
+    [props, handleScrollBottom]
   );
 
   const onViewableItemsChanged = useCallback(({ viewableItems }) => {
@@ -114,7 +121,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     return (
       <View style={style.spinnerWrapper}>
         <Animated.Image
-          style={{ ...style.spinner, ...{ transform: [{ rotate }] } }}
+          style={[style.spinner, { transform: [{ rotate }] }]}
           source={{ uri: SpinnerIcon }}
         />
       </View>

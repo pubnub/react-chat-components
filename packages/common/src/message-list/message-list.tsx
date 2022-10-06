@@ -132,10 +132,9 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
         includeMessageActions: true,
       };
       const response = await retry(() => pubnub.fetchMessages(options));
-      const newMessages =
-        ((response?.channels[channel] || []).map((m) =>
-          m.messageType === 4 ? fetchFileUrl(m) : m
-        ) as MessageEnvelope[]) || [];
+      const newMessages = (response?.channels[channel] || []).map((m) =>
+        m.messageType === 4 ? fetchFileUrl(m) : m
+      ) as MessageEnvelope[];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
