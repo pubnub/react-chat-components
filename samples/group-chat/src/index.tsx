@@ -48,7 +48,7 @@ const PamError = () => {
         You can either disable PAM in the{" "}
         <a href="https://dashboard.pubnub.com/">PubNub Admin Portal</a> or add custom code to grant
         all necessary permissions by yourself. Please referer to the{" "}
-        <a href="https://pubnub.github.io/react-chat-components/docs/?path=/story/introduction-pam--page">
+        <a href="https://www.pubnub.com/docs/chat/components/react/access-manager">
           Chat Component docs
         </a>{" "}
         for more information.
