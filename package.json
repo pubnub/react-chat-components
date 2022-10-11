@@ -7,7 +7,6 @@
   "license": "MIT",
   "workspaces": [
     "data",
-    "docs",
     "packages/*",
     "samples/*"
   ],
@@ -26,7 +25,6 @@
   },
   "scripts": {
     "build": "lerna run build",
-    "docs": "lerna run start --scope '@pubnub/chat-components-docs'",
     "eslint:base": "eslint --ignore-path .gitignore",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",

@@ -1,6 +1,0 @@
-.example1 .pn-msg--own {
-  --msg__avatar__margin: 2px 0 0 18px;
-  --msg__content__alignItems: flex-end;
-  --msg__flexDirection: row-reverse;
-  --msg__title__flexDirection: row-reverse;
-}
