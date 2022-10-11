@@ -57,8 +57,9 @@ Follow the steps to run the app locally.
 
 The `live-events` app showcases these PubNub Chat Components for React:
 
-- [Chat Provider](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
-- [Channel List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-channel-list--default)
-- [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
-- [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default)
-- [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
+- [Chat Provider](https://www.pubnub.com/docs/chat/components/react/chat-provider)
+- [Message List](https://www.pubnub.com/docs/chat/components/react/ui-components/message-list)
+- [Message Input](https://www.pubnub.com/docs/chat/components/react/ui-components/message-input)
+- [Channel List](https://www.pubnub.com/docs/chat/components/react/ui-components/channel-list)
+- [Member List](https://www.pubnub.com/docs/chat/components/react/ui-components/member-list)
+- [Typing Indicator](https://www.pubnub.com/docs/chat/components/react/ui-components/typing-indicator)

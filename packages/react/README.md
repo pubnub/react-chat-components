@@ -29,12 +29,12 @@ architecture of realtime networks.
 
 ## Available components
 
-- [Chat (obligatory state provider)](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-chat-provider--default)
-- [Message List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-list--default)
-- [Message Input](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-message-input--default)
-- [Channel List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-channel-list--default)
-- [Member List](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-member-list--default)
-- [Typing Indicator](https://pubnub.github.io/react-chat-components/docs/?path=/docs/components-typing-indicator--default)
+- [Chat (obligatory state provider)](https://www.pubnub.com/docs/chat/components/react/chat-provider)
+- [Message List](https://www.pubnub.com/docs/chat/components/react/ui-components/message-list)
+- [Message Input](https://www.pubnub.com/docs/chat/components/react/ui-components/message-input)
+- [Channel List](https://www.pubnub.com/docs/chat/components/react/ui-components/channel-list)
+- [Member List](https://www.pubnub.com/docs/chat/components/react/ui-components/member-list)
+- [Typing Indicator](https://www.pubnub.com/docs/chat/components/react/ui-components/typing-indicator)
 
 ## Prerequisites
 
@@ -46,16 +46,16 @@ architecture of realtime networks.
 
 Start by exploring our demo apps that were built using chat components:
 
-| Source code                                                                                              | Demo / Tutorial                                                                                                | Description                        |
-| :------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------- | :--------------------------------- |
-| [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/getting-started) | [Tutorial](https://pubnub.github.io/react-chat-components/docs/?path=/docs/introduction-getting-started--page) | Sample 1:1 chat app to get started |
-| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat)           | [Demo](https://react-components-chat.pubnub.com/)                                                              | Complex moderated group chat app   |
-| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/live-events)         | [Demo](https://rcc-live-event.surge.sh/)                                                                       | Live events app with a chat panel  |
-| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/telehealth)           | [Demo](https://rcc-telehealth.surge.sh/)                                                                       | Simple patient-doctor chat app     |
+| Source code                                                                                              | Demo / Tutorial                                               | Description                        |
+| :------------------------------------------------------------------------------------------------------- | :------------------------------------------------------------ | :--------------------------------- |
+| [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/getting-started) | [Tutorial](https://www.pubnub.com/docs/chat/components/react) | Sample 1:1 chat app to get started |
+| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/group-chat)           | [Demo](https://react-components-chat.pubnub.com/)             | Complex moderated group chat app   |
+| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/live-events)         | [Demo](https://rcc-live-event.surge.sh/)                      | Live events app with a chat panel  |
+| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/telehealth)           | [Demo](https://rcc-telehealth.surge.sh/)                      | Simple patient-doctor chat app     |
 
 ## Related documentation
 
-- [PubNub Chat Components for React Documentation](https://pubnub.github.io/react-chat-components/docs/) -
+- [PubNub Chat Components for React Documentation](https://www.pubnub.com/docs/chat/components/react) -
   documentation explaining how to work with PubNub Chat Components for React
 - [PubNub chat use-case](https://www.pubnub.com/docs/chat/overview) - documentation for the chat
   use-case
