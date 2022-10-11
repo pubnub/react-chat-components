@@ -1,2 +1,0 @@
-import _slicedToArray from"@babel/runtime/helpers/slicedToArray";import{fromEntries}from"./fromEntries";export var omit=function omit(obj,keys){return fromEntries(Object.entries(obj).filter(function(_ref){var _ref2=_slicedToArray(_ref,1),key=_ref2[0];return!keys.includes(key)}))};
-//# sourceMappingURL=omit.js.map

@@ -1,2 +1,0 @@
-"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports,"__esModule",{value:true});exports.omit=void 0;var _slicedToArray2=_interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));var _fromEntries=require("./fromEntries");var omit=function omit(obj,keys){return(0,_fromEntries.fromEntries)(Object.entries(obj).filter(function(_ref){var _ref2=(0,_slicedToArray2["default"])(_ref,1),key=_ref2[0];return!keys.includes(key)}))};exports.omit=omit;
-//# sourceMappingURL=omit.js.map

@@ -1,2 +1,0 @@
-import*as React from"react";export var createInstanceIfDefined=function createInstanceIfDefined(node,Component){return node?React.createElement(Component,null,node):undefined};
-//# sourceMappingURL=createInstanceIfDefined.js.map

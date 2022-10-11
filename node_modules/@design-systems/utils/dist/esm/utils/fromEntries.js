@@ -1,2 +1,0 @@
-import _defineProperty from"@babel/runtime/helpers/defineProperty";import _slicedToArray from"@babel/runtime/helpers/slicedToArray";import _toConsumableArray from"@babel/runtime/helpers/toConsumableArray";export var fromEntries=function fromEntries(entries){return Object.assign.apply(Object,[{}].concat(_toConsumableArray(entries.map(function(_ref){var _ref2=_slicedToArray(_ref,2),name=_ref2[0],value=_ref2[1];return _defineProperty({},name,value)}))))};
-//# sourceMappingURL=fromEntries.js.map

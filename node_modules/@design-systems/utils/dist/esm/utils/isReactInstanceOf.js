@@ -1,2 +1,0 @@
-export function isReactInstanceOf(element,component){var isComponent=element&&element.type&&typeof element.type!=="string";if(element&&element.type===component){return true}var renderFn="render"in component?component.render:component;return isComponent&&element.type.prototype&&renderFn.prototype&&element.type.prototype instanceof renderFn}
-//# sourceMappingURL=isReactInstanceOf.js.map

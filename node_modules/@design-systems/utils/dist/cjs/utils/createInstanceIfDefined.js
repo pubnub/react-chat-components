@@ -1,2 +1,0 @@
-"use strict";var _interopRequireWildcard=require("@babel/runtime/helpers/interopRequireWildcard");Object.defineProperty(exports,"__esModule",{value:true});exports.createInstanceIfDefined=void 0;var React=_interopRequireWildcard(require("react"));var createInstanceIfDefined=function createInstanceIfDefined(node,Component){return node?React.createElement(Component,null,node):undefined};exports.createInstanceIfDefined=createInstanceIfDefined;
-//# sourceMappingURL=createInstanceIfDefined.js.map

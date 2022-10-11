@@ -1,2 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.displayName=void 0;var displayName=function displayName(comp,name){var newComp=comp;newComp.displayName=name;return newComp};exports.displayName=displayName;
-//# sourceMappingURL=displayName.js.map

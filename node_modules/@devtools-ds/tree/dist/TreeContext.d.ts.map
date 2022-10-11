@@ -1,1 +1,0 @@
-{"version":3,"file":"TreeContext.d.ts","sourceRoot":"","sources":["../src/TreeContext.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,MAAM,OAAO,CAAC;AAE1B,UAAU,WAAW;IACnB,qDAAqD;IACrD,OAAO,EAAE,OAAO,CAAC;IACjB,4BAA4B;IAC5B,KAAK,EAAE,MAAM,CAAC;IACd,mCAAmC;IACnC,QAAQ,EAAE,OAAO,CAAC;CACnB;AAED,QAAA,MAAM,WAAW,4BAIf,CAAC;AAEH,eAAe,WAAW,CAAC"}

@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.ts"],"names":[],"mappings":"qMAAA","sourcesContent":["export { ObjectInspector } from \"./ObjectInspector\";\n"]}
