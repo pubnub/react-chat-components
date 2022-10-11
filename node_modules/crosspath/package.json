@@ -1,0 +1,109 @@
+{
+	"name": "crosspath",
+	"version": "2.0.0",
+	"description": "A wrapper around the path module that always normalizes to POSIX (including converting backslashes to forward slashes)",
+	"scripts": {
+		"generate:sandhog": "sandhog all --yes",
+		"generate:changelog": "standard-changelog --first-release",
+		"generate:all": "pnpm run generate:sandhog && pnpm run generate:changelog",
+		"clean": "rimraf dist",
+		"lint": "tsc --noEmit && eslint \"src/**/*.ts\" --color",
+		"prettier": "prettier --write '{src,test,documentation}/**/*.{js,ts,json,html,xml,css,md}'",
+		"test": "ava",
+		"prebuild": "pnpm run clean",
+		"build": "pnpm run prebuild && pnpm run tsc",
+		"prewatch": "pnpm run clean",
+		"watch": "pnpm run prewatch && pnpm run tsc -- --watch",
+		"tsc:cjs": "tsc -p tsconfig.build.json --module nodenext --outDir dist/cjs && dotcjs dist/cjs",
+		"tsc:esm": "tsc -p tsconfig.build.json --module esnext --outDir dist/esm",
+		"tsc": "pnpm run tsc:cjs && pnpm run tsc:esm",
+		"preversion": "pnpm run lint && pnpm run build",
+		"version": "pnpm run preversion && pnpm run generate:all && git add .",
+		"release": "np --no-cleanup --no-yarn",
+		"update:check": "pnpx npm-check-updates --dep dev,prod",
+		"update:commit": "pnpx npm-check-updates -u --dep dev,prod && pnpm update && pnpm install"
+	},
+	"keywords": [
+		"typescript",
+		"posix",
+		"path",
+		"slash",
+		"normalize"
+	],
+	"files": [
+		"dist/**/*.*"
+	],
+	"contributors": [
+		{
+			"name": "Frederik Wessberg",
+			"email": "frederikwessberg@hotmail.com",
+			"url": "https://github.com/wessberg",
+			"imageUrl": "https://avatars2.githubusercontent.com/u/20454213?s=460&v=4",
+			"role": "Lead Developer",
+			"twitter": "FredWessberg",
+			"github": "wessberg"
+		}
+	],
+	"license": "MIT",
+	"dependencies": {
+		"@types/node": "^17.0.36"
+	},
+	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.26.0",
+		"@typescript-eslint/parser": "^5.26.0",
+		"@wessberg/ts-config": "^2.0.2",
+		"@wessberg/prettier-config": "^1.0.0",
+		"sandhog": "^2.0.1",
+		"dotcjs": "1.0.0",
+		"ava": "^4.2.0",
+		"eslint": "^8.16.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-import": "^2.26.0",
+		"eslint-plugin-jsdoc": "^39.3.2",
+		"husky": "^8.0.1",
+		"np": "7.6.1",
+		"pnpm": "^7.1.7",
+		"prettier": "^2.6.2",
+		"pretty-quick": "^3.1.3",
+		"rimraf": "^3.0.2",
+		"standard-changelog": "^2.0.27",
+		"ts-node": "^10.8.0",
+		"typescript": "^4.7.2",
+		"npm-check-updates": "^13.0.3"
+	},
+	"exports": {
+		"import": "./dist/esm/index.js",
+		"require": "./dist/cjs/index.cjs"
+	},
+	"type": "module",
+	"types": "./dist/esm/index.d.ts",
+	"main": "./dist/cjs/index.cjs",
+	"module": "./dist/esm/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wessberg/crosspath.git"
+	},
+	"bugs": {
+		"url": "https://github.com/wessberg/crosspath/issues"
+	},
+	"engines": {
+		"node": ">=14.9.0"
+	},
+	"prettier": "@wessberg/prettier-config",
+	"ava": {
+		"files": [
+			"test/**.test.ts"
+		],
+		"verbose": true,
+		"timeout": "400s",
+		"extensions": {
+			"ts": "module"
+		},
+		"nodeArguments": [
+			"--loader=ts-node/esm"
+		],
+		"environmentVariables": {
+			"FORCE_COLOR": "3"
+		}
+	}
+}

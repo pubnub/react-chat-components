@@ -1,0 +1,1 @@
+window.exclude=[],window.watch=!1,window.environment="release",window.useXstateInspect=!1,window.appConfig={showDebugger:!1,showExperimentalFeatures:!1,projectGraphs:[{id:"local",label:"local",url:"assets/graphs/nx-examples.json"}],defaultProjectGraph:"local"};

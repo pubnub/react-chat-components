@@ -1,0 +1,1 @@
+{"version":3,"sources":["../src/index.ts"],"names":["commands","clean"],"mappings":";;;;;;;AAAA;;;;AAEO,MAAMA,QAAQ,GAAG;AAACC,EAAAA,KAAK,EAALA;AAAD,CAAjB","sourcesContent":["import {default as clean} from './clean';\n\nexport const commands = {clean};\n"]}

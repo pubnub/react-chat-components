@@ -1,0 +1,1 @@
+{"version":3,"file":"loader.cjs.js","sourceRoot":"","sources":["../../../src/plugins/NativeAssetsPlugin/loader.cjs.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;AAAA,mDAAuC;AAEvC,MAAM,CAAC,OAAO,GAAG,gBAAM,CAAC;AACxB,MAAM,CAAC,OAAO,CAAC,GAAG,GAAG,YAAG,CAAC","sourcesContent":["import loader, { raw } from './loader';\n\nmodule.exports = loader;\nmodule.exports.raw = raw;\n"]}

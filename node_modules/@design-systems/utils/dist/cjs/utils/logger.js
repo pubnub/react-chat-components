@@ -1,0 +1,2 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.logger=void 0;var noop=function noop(message){};var noopLogger={debug:noop,error:noop,info:noop,log:noop,warn:noop};var consoleLogger={debug:console.debug,error:console.error,info:console.info,log:console.log,warn:console.warn};var logger=process.env.NODE_ENV==="development"?consoleLogger:noopLogger;exports.logger=logger;
+//# sourceMappingURL=logger.js.map

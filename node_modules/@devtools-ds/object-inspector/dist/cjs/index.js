@@ -1,0 +1,2 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});Object.defineProperty(exports,"ObjectInspector",{enumerable:true,get:function get(){return _ObjectInspector.ObjectInspector}});var _ObjectInspector=require("./ObjectInspector");
+//# sourceMappingURL=index.js.map

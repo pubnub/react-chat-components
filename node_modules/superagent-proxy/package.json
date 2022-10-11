@@ -1,0 +1,39 @@
+{
+  "name": "superagent-proxy",
+  "version": "3.0.0",
+  "description": "`Request#proxy(uri)` superagent extension",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TooTallNate/superagent-proxy.git"
+  },
+  "keywords": [
+    "superagent",
+    "http",
+    "https",
+    "proxy",
+    "socks"
+  ],
+  "author": "Nathan Rajlich <nathan@tootallnate.net> (http://n8.io/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TooTallNate/superagent-proxy/issues"
+  },
+  "dependencies": {
+    "debug": "^4.3.2",
+    "proxy-agent": "^5.0.0"
+  },
+  "peerDependencies": {
+    "superagent": ">= 0.15.4 || 1 || 2 || 3"
+  },
+  "devDependencies": {
+    "mocha": "2",
+    "superagent": ">= 0.15.4 || 1 || 2 || 3"
+  }
+}

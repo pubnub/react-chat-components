@@ -1,0 +1,2 @@
+var noop=function noop(message){};var noopLogger={debug:noop,error:noop,info:noop,log:noop,warn:noop};var consoleLogger={debug:console.debug,error:console.error,info:console.info,log:console.log,warn:console.warn};export var logger=process.env.NODE_ENV==="development"?consoleLogger:noopLogger;
+//# sourceMappingURL=logger.js.map

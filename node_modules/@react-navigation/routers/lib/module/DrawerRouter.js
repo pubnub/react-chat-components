@@ -1,0 +1,175 @@
+import { nanoid } from 'nanoid/non-secure';
+import TabRouter, { TabActions } from './TabRouter';
+export const DrawerActions = { ...TabActions,
+
+  openDrawer() {
+    return {
+      type: 'OPEN_DRAWER'
+    };
+  },
+
+  closeDrawer() {
+    return {
+      type: 'CLOSE_DRAWER'
+    };
+  },
+
+  toggleDrawer() {
+    return {
+      type: 'TOGGLE_DRAWER'
+    };
+  }
+
+};
+export default function DrawerRouter(_ref) {
+  let {
+    defaultStatus = 'closed',
+    ...rest
+  } = _ref;
+  const router = TabRouter(rest);
+
+  const isDrawerInHistory = state => {
+    var _state$history;
+
+    return Boolean((_state$history = state.history) === null || _state$history === void 0 ? void 0 : _state$history.some(it => it.type === 'drawer'));
+  };
+
+  const addDrawerToHistory = state => {
+    if (isDrawerInHistory(state)) {
+      return state;
+    }
+
+    return { ...state,
+      history: [...state.history, {
+        type: 'drawer',
+        status: defaultStatus === 'open' ? 'closed' : 'open'
+      }]
+    };
+  };
+
+  const removeDrawerFromHistory = state => {
+    if (!isDrawerInHistory(state)) {
+      return state;
+    }
+
+    return { ...state,
+      history: state.history.filter(it => it.type !== 'drawer')
+    };
+  };
+
+  const openDrawer = state => {
+    if (defaultStatus === 'open') {
+      return removeDrawerFromHistory(state);
+    }
+
+    return addDrawerToHistory(state);
+  };
+
+  const closeDrawer = state => {
+    if (defaultStatus === 'open') {
+      return addDrawerToHistory(state);
+    }
+
+    return removeDrawerFromHistory(state);
+  };
+
+  return { ...router,
+    type: 'drawer',
+
+    getInitialState(_ref2) {
+      let {
+        routeNames,
+        routeParamList,
+        routeGetIdList
+      } = _ref2;
+      const state = router.getInitialState({
+        routeNames,
+        routeParamList,
+        routeGetIdList
+      });
+      return { ...state,
+        default: defaultStatus,
+        stale: false,
+        type: 'drawer',
+        key: `drawer-${nanoid()}`
+      };
+    },
+
+    getRehydratedState(partialState, _ref3) {
+      let {
+        routeNames,
+        routeParamList,
+        routeGetIdList
+      } = _ref3;
+
+      if (partialState.stale === false) {
+        return partialState;
+      }
+
+      let state = router.getRehydratedState(partialState, {
+        routeNames,
+        routeParamList,
+        routeGetIdList
+      });
+
+      if (isDrawerInHistory(partialState)) {
+        // Re-sync the drawer entry in history to correct it if it was wrong
+        state = removeDrawerFromHistory(state);
+        state = addDrawerToHistory(state);
+      }
+
+      return { ...state,
+        default: defaultStatus,
+        type: 'drawer',
+        key: `drawer-${nanoid()}`
+      };
+    },
+
+    getStateForRouteFocus(state, key) {
+      const result = router.getStateForRouteFocus(state, key);
+      return closeDrawer(result);
+    },
+
+    getStateForAction(state, action, options) {
+      switch (action.type) {
+        case 'OPEN_DRAWER':
+          return openDrawer(state);
+
+        case 'CLOSE_DRAWER':
+          return closeDrawer(state);
+
+        case 'TOGGLE_DRAWER':
+          if (isDrawerInHistory(state)) {
+            return removeDrawerFromHistory(state);
+          }
+
+          return addDrawerToHistory(state);
+
+        case 'JUMP_TO':
+        case 'NAVIGATE':
+          {
+            const result = router.getStateForAction(state, action, options);
+
+            if (result != null && result.index !== state.index) {
+              return closeDrawer(result);
+            }
+
+            return result;
+          }
+
+        case 'GO_BACK':
+          if (isDrawerInHistory(state)) {
+            return removeDrawerFromHistory(state);
+          }
+
+          return router.getStateForAction(state, action, options);
+
+        default:
+          return router.getStateForAction(state, action, options);
+      }
+    },
+
+    actionCreators: DrawerActions
+  };
+}
+//# sourceMappingURL=DrawerRouter.js.map

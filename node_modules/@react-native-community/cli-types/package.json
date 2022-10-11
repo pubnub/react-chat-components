@@ -1,0 +1,24 @@
+{
+  "name": "@react-native-community/cli-types",
+  "version": "8.0.0",
+  "main": "build",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "build",
+    "!*.map"
+  ],
+  "dependencies": {
+    "joi": "^17.2.1"
+  },
+  "types": "build/index.d.ts",
+  "license": "MIT",
+  "homepage": "https://github.com/react-native-community/cli/tree/master/packages/cli-types",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/react-native-community/cli.git",
+    "directory": "packages/cli-types"
+  },
+  "gitHead": "810b6a04821e493b39b078e56ae57c704fcc724d"
+}

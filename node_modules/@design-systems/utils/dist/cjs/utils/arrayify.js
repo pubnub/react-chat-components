@@ -1,0 +1,2 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.arrayify=void 0;var arrayify=function arrayify(value){return Array.isArray(value)?value:[value]};exports.arrayify=arrayify;
+//# sourceMappingURL=arrayify.js.map

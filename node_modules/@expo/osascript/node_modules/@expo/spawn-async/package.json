@@ -1,0 +1,53 @@
+{
+  "name": "@expo/spawn-async",
+  "version": "1.7.0",
+  "description": "A Promise-based interface into processes created by child_process.spawn",
+  "main": "./build/spawnAsync.js",
+  "types": "./build/spawnAsync.d.ts",
+  "files": [
+    "build"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf build",
+    "prepare": "yarn clean && yarn build",
+    "start": "tsc --watch",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/expo/spawn-async.git"
+  },
+  "keywords": [
+    "spawn",
+    "child_process",
+    "async",
+    "promise",
+    "process"
+  ],
+  "author": "Expo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/expo/spawn-async/issues"
+  },
+  "homepage": "https://github.com/expo/spawn-async#readme",
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "rootDir": "src"
+  },
+  "dependencies": {
+    "cross-spawn": "^7.0.3"
+  },
+  "devDependencies": {
+    "@types/cross-spawn": "^6.0.2",
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.6.1",
+    "jest": "^28.1.3",
+    "ts-jest": "^28.0.7",
+    "typescript": "^4.7.4"
+  }
+}

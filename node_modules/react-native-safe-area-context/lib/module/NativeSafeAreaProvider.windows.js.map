@@ -1,0 +1,1 @@
+{"version":3,"names":["CompatNativeSafeAreaProvider","NativeSafeAreaProvider"],"sources":["NativeSafeAreaProvider.windows.tsx"],"sourcesContent":["export { CompatNativeSafeAreaProvider as NativeSafeAreaProvider } from './CompatNativeSafeAreaProvider';\n"],"mappings":"AAAA,SAASA,4BAA4B,IAAIC,sBAAzC,QAAuE,gCAAvE"}

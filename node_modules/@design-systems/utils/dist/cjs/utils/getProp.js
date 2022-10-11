@@ -1,0 +1,2 @@
+"use strict";var _interopRequireDefault=require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports,"__esModule",{value:true});exports.getProp=void 0;var _typeof2=_interopRequireDefault(require("@babel/runtime/helpers/typeof"));var getProp=function getProp(el,prop){return el&&(0,_typeof2["default"])(el)==="object"&&"props"in el&&el.props[prop]};exports.getProp=getProp;
+//# sourceMappingURL=getProp.js.map

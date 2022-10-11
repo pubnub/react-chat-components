@@ -1,0 +1,35 @@
+{
+  "name": "lil-uuid",
+  "description": "UUID v4 generator and validator (RFC4122 compliant)",
+  "version": "0.1.0",
+  "license": "MIT",
+  "repository": "lil-js/uuid",
+  "author": "Tomas Aparicio",
+  "main": "./uuid.js",
+  "keywords": [
+    "lil",
+    "tiny",
+    "micro",
+    "uuid",
+    "generator",
+    "v4",
+    "validator",
+    "unique",
+    "identifier",
+    "user"
+  ],
+  "ignore": [
+    "**/.*",
+    ".*",
+    "*.md",
+    "*.sh",
+    "test",
+    "Makefile",
+    ".editorconfig",
+    ".gitignore",
+    ".travis.yml",
+    ".npmignore",
+    "package.json",
+    "component.json"
+  ]
+}

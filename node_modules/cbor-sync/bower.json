@@ -1,0 +1,21 @@
+{
+  "name": "cbor-sync",
+  "version": "1.0.0",
+  "homepage": "https://github.com/ARMmbed/cbor-sync",
+  "authors": [
+    "Geraint Luff <luffgd@gmail.com>"
+  ],
+  "description": "Customisable encode/decode for CBOR data (synchronous, semantic encode/decode)",
+  "main": "main.js",
+  "keywords": [
+    "cbor"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
