@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import PubNub, { PubnubConfig } from "pubnub";
 import { PubNubProvider } from "pubnub-react";
-import users from "../../../data/users/users.json";
+import users from "../../../../data/users/users.json";
 
 import ModeratedChat from "./moderated-chat";
 import "./index.css";

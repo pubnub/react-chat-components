@@ -1,13 +1,7 @@
 {
-  ".pubnub.yml": [
-    { "pattern": "^version: (.+)$", "cleared": false }
-  ],
-  "lib/docs/preview-body.html": [
-    { "pattern": ".*>(.+)</div>$", "cleared": false }
-  ],
-  "lib/package.json": [
-    { "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }
-  ],
+  ".pubnub.yml": [{ "pattern": "^version: (.+)$", "cleared": false }],
+  "lib/docs/preview-body.html": [{ "pattern": ".*>(.+)</div>$", "cleared": false }],
+  "lib/package.json": [{ "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }],
   "samples/package.json": [
     { "pattern": "\\s{2,}\"@pubnub/react-chat-components\": \"\\^(.+)\",$", "cleared": true }
   ]

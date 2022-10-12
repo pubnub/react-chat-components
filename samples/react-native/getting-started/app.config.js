@@ -1,6 +1,6 @@
 export default {
-  name: "getting-started-react-native",
-  slug: "getting-started-react-native",
+  name: "getting-started",
+  slug: "getting-started",
   version: "1.0.0",
   orientation: "portrait",
   icon: "./assets/icon.png",

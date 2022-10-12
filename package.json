@@ -8,7 +8,7 @@
   "workspaces": [
     "data",
     "packages/*",
-    "samples/*"
+    "samples/*/*"
   ],
   "engines": {
     "npm": ">= 8.5.0",

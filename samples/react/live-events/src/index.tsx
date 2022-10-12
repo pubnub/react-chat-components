@@ -8,7 +8,7 @@ import { ChannelEntity, Chat, usePresence } from "@pubnub/react-chat-components"
 import useWindowSize from "react-use/lib/useWindowSize";
 import usePrevious from "react-use/lib/usePrevious";
 
-import eventChannels from "../../../data/channels/event.json";
+import eventChannels from "../../../../data/channels/event.json";
 import StreamView from "./components/StreamView";
 import ChannelsView from "./components/ChannelsView";
 import ChatView from "./components/ChatView";
