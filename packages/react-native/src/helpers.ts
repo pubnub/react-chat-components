@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Animated, Easing } from "react-native";
 import { Themes } from "@pubnub/common-chat-components";
-import merge from "lodash/merge";
+import { merge } from "lodash";
 
 export interface UseStyleProps<T> {
   theme: Themes | "";
