@@ -1,7 +1,3 @@
-import * as dotenv from "dotenv";
-
-dotenv.config({ path: "../.env" });
-
 export default {
   name: "getting-started-react-native",
   slug: "getting-started-react-native",

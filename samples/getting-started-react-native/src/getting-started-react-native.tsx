@@ -4,13 +4,12 @@ import React from "react";
 import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { Chat, MessageList, MessageInput } from "@pubnub/react-native-chat-components";
-import Constants from "expo-constants";
 
 /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
   with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
 const pubnub = new PubNub({
-  publishKey: (Constants.manifest?.extra?.REACT_APP_PUB_KEY as string) || "",
-  subscribeKey: (Constants.manifest?.extra?.REACT_APP_SUB_KEY as string) || "",
+  publishKey: "myPublishKey",
+  subscribeKey: "mySubscribeKey",
   uuid: "myFirstUser",
 });
 const currentChannel = "Default";
