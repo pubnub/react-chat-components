@@ -25,7 +25,8 @@
     "build": "rollup -c",
     "build:watch": "rollup -c --watch",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "tsc:check": "tsc -b"
   },
   "devDependencies": {
     "@optimize-lodash/rollup-plugin": "3.1.0",
