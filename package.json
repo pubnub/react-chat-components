@@ -17,7 +17,8 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "npm run eslint:base -- --fix",
-      "npm run prettier:base -- --write"
+      "npm run prettier:base -- --write",
+      "npm run tsc:check"
     ],
     "*.{json,md,mdx}": [
       "npm run prettier:base -- --write"
@@ -25,6 +26,7 @@
   },
   "scripts": {
     "build": "lerna run build",
+    "tsc:check": "lerna run tsc:check && echo",
     "eslint:base": "eslint --ignore-path .gitignore",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
@@ -44,7 +46,7 @@
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
     "concurrently": "7.4.0",
-    "eslint": "8.23.1",
+    "eslint": "8.22.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prettier": "4.2.1",
     "eslint-plugin-react": "7.31.8",

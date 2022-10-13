@@ -7,7 +7,8 @@
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "setup": "node populate-pn-objects.js"
+    "setup": "node populate-pn-objects.js",
+    "tsc:check": "tsc -b"
   },
   "dependencies": {
     "@emoji-mart/data": "1.0.6",

@@ -1,7 +1,7 @@
 import React from "react";
 import { useColorScheme, TouchableOpacity, Text } from "react-native";
 import { useAtom } from "jotai";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { Octicons } from "@expo/vector-icons";
 import { ChannelList, useChannels } from "@pubnub/react-native-chat-components";
 import { CurrentChannelAtom } from "../state-atoms";
@@ -9,7 +9,7 @@ import { CurrentChannelAtom } from "../state-atoms";
 export function CurrentChannelsScreen(): JSX.Element {
   const [allChannels] = useChannels({ include: { customFields: true } });
   const [, setCurrentChannel] = useAtom(CurrentChannelAtom);
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<{ Chat: undefined }>>();
   const groupChannels = allChannels.filter((c) => c.id?.startsWith("space."));
   const theme = useColorScheme();
   const isDark = theme === "dark";
@@ -18,6 +18,8 @@ export function CurrentChannelsScreen(): JSX.Element {
     <ChannelList
       channels={groupChannels}
       onChannelSwitched={(ch) => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         setCurrentChannel(ch);
         navigation.navigate("Chat");
       }}
