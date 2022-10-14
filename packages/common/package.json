@@ -4,6 +4,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "tsc:check": "tsc -b"
   }
 }

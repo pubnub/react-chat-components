@@ -14,10 +14,16 @@ import { CurrentChannelsScreen, ChannelMembersScreen, ChatScreen } from "./scree
 import { CurrentChannelAtom } from "./state-atoms";
 import users from "../../data/users/users.json";
 
-const Stack = createNativeStackNavigator();
+type RootStackParamList = {
+  Channels: undefined;
+  Chat: undefined;
+  Members: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const pubnub = new PubNub({
-  publishKey: (Constants.manifest.extra.REACT_APP_PUB_KEY as string) || "",
-  subscribeKey: (Constants.manifest.extra.REACT_APP_SUB_KEY as string) || "",
+  publishKey: (Constants.manifest?.extra?.REACT_APP_PUB_KEY as string) || "",
+  subscribeKey: (Constants.manifest?.extra?.REACT_APP_SUB_KEY as string) || "",
   uuid: users[Math.floor(Math.random() * users.length)].id,
 });
 
