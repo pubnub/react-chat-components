@@ -44,16 +44,26 @@ jobs:
           ref: v1
           token: ${{ secrets.GH_TOKEN }}
           path: .github/.release/actions
-      - name: Publish to NPM
+      - name: Publish React to NPM
         uses: ./.github/.release/actions/actions/services/npm
         with:
           token: ${{ secrets.GH_TOKEN }}
           npm-token: ${{ secrets.NPM_TOKEN }}
-          package-path: lib/package.json
+          package-path: packages/react/package.json
           actions: "build,publish"
           build-command: npm run build
-          build-path: lib/dist
-          artifacts-filter: "index.js,index.es.js"
+          build-path: packages/react/dist
+          artifacts-filter: true
+      - name: Publish React Native to NPM
+        uses: ./.github/.release/actions/actions/services/npm
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
+          package-path: packages/react-native/package.json
+          actions: "build,publish"
+          build-command: npm run build
+          build-path: packages/react-native/dist
+          artifacts-filter: true
       - name: Create Release
         uses: ./.github/.release/actions/actions/services/github-release
         with:

@@ -4,5 +4,14 @@
   "lib/package.json": [{ "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }],
   "samples/package.json": [
     { "pattern": "\\s{2,}\"@pubnub/react-chat-components\": \"\\^(.+)\",$", "cleared": true }
+  ],
+  "packages/common/package.json": [
+    { "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }
+  ],
+  "packages/react/package.json": [
+    { "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }
+  ],
+  "packages/react-native/package.json": [
+    { "pattern": "^\\s{2,}\"version\": \"(.+)\",$", "cleared": true }
   ]
 }
