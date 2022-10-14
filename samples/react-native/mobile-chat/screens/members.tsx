@@ -7,11 +7,11 @@ import { CurrentChannelAtom } from "../state-atoms";
 export function ChannelMembersScreen(): JSX.Element {
   const [currentChannel] = useAtom(CurrentChannelAtom);
   const [channelMembers] = useChannelMembers({
-    channel: currentChannel?.id,
+    channel: currentChannel.id,
     include: { customUUIDFields: true },
   });
-  const [presenceData] = usePresence({ channels: [currentChannel?.id] });
-  const presentUUIDs = presenceData[currentChannel?.id]?.occupants?.map((o) => o.uuid) || [];
+  const [presenceData] = usePresence({ channels: [currentChannel.id] });
+  const presentUUIDs = presenceData[currentChannel.id]?.occupants?.map((o) => o.uuid) || [];
   const pubnub = usePubNub();
 
   return (

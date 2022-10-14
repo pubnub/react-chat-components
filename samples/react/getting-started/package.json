@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tsc:check": "tsc -b --clean"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@pubnub/react-chat-components": "*",

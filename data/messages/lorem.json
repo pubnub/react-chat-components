@@ -83,8 +83,10 @@
   },
   {
     "message": {
-      "text": "Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.",
-      "type": "text",
+      "message": {
+        "text": "Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.",
+        "type": "text"
+      },
       "file": { "name": "pubnub-logo-docs.svg", "id": "random-file-uuid" }
     },
     "messageType": 4,

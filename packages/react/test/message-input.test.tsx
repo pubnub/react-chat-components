@@ -1,5 +1,4 @@
 import React from "react";
-
 import { MessageInput } from "../src/message-input/message-input";
 import { render, screen } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";

@@ -11,10 +11,11 @@ describe("Message List", () => {
 
   test("fetches and renders message history", async () => {
     render(<MessageList fetchMessages={10} />);
+
     expect(
-      await screen.findByText("Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+      await screen.findByText("Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.")
     ).not.toBeNull();
-  });
+  }, 10000);
 
   test("renders messages with custom message renderer", async () => {
     render(
@@ -128,7 +129,7 @@ describe("Message List", () => {
   test("renders message soft removals", async () => {
     render(<MessageList fetchMessages={10} />);
     expect(
-      await screen.findByText("Curabitur id quam ac mauris aliquet imperdiet quis eget nisl.")
+      await screen.findByText("Pellentesque sed massa vitae enim iaculis tincidunt a ut magna.")
     ).not.toBeNull();
     expect(screen.queryByText("Duis aute irure dolor in reprehenderit.")).toBeNull();
   });

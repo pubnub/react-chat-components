@@ -7,7 +7,7 @@
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "tsc:check": "tsc -b"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@emoji-mart/data": "1.0.6",

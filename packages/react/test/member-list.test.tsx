@@ -1,5 +1,4 @@
 import React from "react";
-
 import { MemberList } from "../src/member-list/member-list";
 import members from "../../../data/users/users.json";
 import { render, screen } from "../mock/custom-renderer";

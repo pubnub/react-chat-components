@@ -15,6 +15,7 @@ keys.json
 # GitHub Actions #
 ##################
 .github/.release
+.turbo
 
 # misc
 TODO.md

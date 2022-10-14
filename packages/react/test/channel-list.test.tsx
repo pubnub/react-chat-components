@@ -1,5 +1,4 @@
 import React from "react";
-
 import { ChannelList } from "../src/channel-list/channel-list";
 import channels from "../../../data/channels/work.json";
 import { render, screen } from "../mock/custom-renderer";

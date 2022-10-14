@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAtom } from "jotai";
 import { StatusBar } from "expo-status-bar";
 import { Octicons } from "@expo/vector-icons";
-import { Chat, useUsers } from "@pubnub/react-native-chat-components";
+import { Chat, Themes, useUsers } from "@pubnub/react-native-chat-components";
 
 import { CurrentChannelsScreen, ChannelMembersScreen, ChatScreen } from "./screens";
 import { CurrentChannelAtom } from "./state-atoms";
@@ -38,7 +38,7 @@ export default function App(): JSX.Element {
 export function ChatWrapper(): JSX.Element {
   const [currentChannel] = useAtom(CurrentChannelAtom);
   const [users] = useUsers({ include: { customFields: true } });
-  const theme = useColorScheme();
+  const theme = useColorScheme() as Themes;
   const isDark = theme === "dark";
 
   return (

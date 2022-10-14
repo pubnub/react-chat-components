@@ -18,15 +18,15 @@
     "*.{js,ts,tsx}": [
       "npm run eslint:base -- --fix",
       "npm run prettier:base -- --write",
-      "npm run tsc:check"
+      "npm run tsc"
     ],
     "*.{json,md,mdx}": [
       "npm run prettier:base -- --write"
     ]
   },
   "scripts": {
-    "build": "lerna run build",
-    "tsc:check": "lerna run tsc:check && echo",
+    "build": "turbo run build",
+    "tsc": "turbo run tsc && echo",
     "eslint:base": "eslint --ignore-path .gitignore",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
@@ -38,7 +38,7 @@
     "prettier:base": "prettier --ignore-path .gitignore",
     "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
     "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/mobile-chat && npm run start\"",
-    "test": "lerna run test --parallel --stream"
+    "test": "turbo run test"
   },
   "devDependencies": {
     "@commitlint/cli": "17.1.2",
@@ -52,9 +52,9 @@
     "eslint-plugin-react": "7.31.8",
     "eslint-plugin-react-hooks": "4.6.0",
     "husky": "8.0.1",
-    "lerna": "5.5.1",
     "lint-staged": "13.0.3",
-    "prettier": "2.7.1"
+    "prettier": "2.7.1",
+    "turbo": "^1.5.6"
   },
   "resolutions": {
     "@types/react": "18.0.20",

@@ -1,5 +1,4 @@
 import React from "react";
-import PubNub from "pubnub";
 import { renderHook, waitFor } from "@testing-library/react";
 import { PubNubProvider } from "pubnub-react";
 
@@ -7,7 +6,7 @@ import { usePresence } from "../src/hooks";
 import { PubNubMock } from "../mock/pubnub-mock";
 import users from "../../../data/users/users.json";
 
-const pubnub = PubNubMock({}) as unknown as PubNub;
+const pubnub = new PubNubMock({});
 const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;
 
 describe("usePresence", () => {

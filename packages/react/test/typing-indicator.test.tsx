@@ -1,5 +1,4 @@
 import React from "react";
-
 import { MessageInput } from "../src/message-input/message-input";
 import { TypingIndicator } from "../src/typing-indicator/typing-indicator";
 import { render, waitFor, screen } from "../mock/custom-renderer";
