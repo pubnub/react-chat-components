@@ -139,6 +139,8 @@ export default function ModeratedChat(): JSX.Element {
         "Your message was blocked. Perhaps you tried to use offensive language or send an image that contains nudity?"
       );
     }
+
+    console.warn(e);
   };
 
   useEffect(() => {

@@ -1,1 +1,1 @@
-lib/README.md
+packages/react/README.md

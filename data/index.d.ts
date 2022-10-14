@@ -1,1 +1,1 @@
-declare module "@pubnub/react-chat-data";
+declare module "@pubnub/sample-chat-data";

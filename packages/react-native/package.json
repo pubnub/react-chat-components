@@ -1,0 +1,66 @@
+{
+  "name": "@pubnub/react-native-chat-components",
+  "version": "0.13.0",
+  "description": "PubNub Chat Components is a development kit of React Native components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
+  "author": "PubNub <support@pubnub.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pubnub/react-chat-components.git"
+  },
+  "keywords": [
+    "pubnub",
+    "react",
+    "native",
+    "chat",
+    "components"
+  ],
+  "homepage": "https://www.pubnub.com/docs/chat/components/overview",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c --watch",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@optimize-lodash/rollup-plugin": "3.1.0",
+    "@pubnub/common-chat-components": "*",
+    "@rollup/plugin-commonjs": "22.0.2",
+    "@rollup/plugin-image": "2.1.1",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "14.1.0",
+    "@rollup/plugin-replace": "4.0.0",
+    "@testing-library/jest-native": "4.0.12",
+    "@testing-library/react-native": "11.1.0",
+    "@types/pubnub": "7.2.0",
+    "@types/react": "18.0.20",
+    "@types/react-dom": "18.0.6",
+    "pubnub": "7.2.0",
+    "pubnub-react": "3.0.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-test-renderer": "18.2.0",
+    "rollup": "2.79.0",
+    "rollup-plugin-peer-deps-external": "2.2.4",
+    "rollup-plugin-ts": "3.0.2",
+    "ts-jest": "29.0.1",
+    "typescript": "4.8.3"
+  },
+  "peerDependencies": {
+    "pubnub": ">=4.29.9",
+    "pubnub-react": ">=2.1.0",
+    "react": ">=16.8.0",
+    "react-native": ">=0.69.0"
+  },
+  "dependencies": {
+    "jotai": "^1.8.3",
+    "lodash": "^4.17.0",
+    "react-native-uuid": "^2.0.1"
+  }
+}

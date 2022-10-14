@@ -1,0 +1,72 @@
+{
+  "name": "@pubnub/react-chat-components",
+  "version": "0.13.0",
+  "description": "PubNub Chat Components is a development kit of React components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
+  "author": "PubNub <support@pubnub.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:pubnub/react-chat-components.git"
+  },
+  "keywords": [
+    "pubnub",
+    "react",
+    "chat",
+    "components"
+  ],
+  "homepage": "https://www.pubnub.com/docs/chat/components/overview",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "build:watch": "rollup -c --watch",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@optimize-lodash/rollup-plugin": "3.1.0",
+    "@pubnub/common-chat-components": "*",
+    "@rollup/plugin-commonjs": "22.0.2",
+    "@rollup/plugin-json": "4.1.0",
+    "@rollup/plugin-node-resolve": "14.1.0",
+    "@rollup/plugin-replace": "4.0.0",
+    "@svgr/rollup": "6.3.1",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "13.4.0",
+    "@testing-library/user-event": "14.4.3",
+    "@types/jest": "29.0.3",
+    "@types/pubnub": "7.2.0",
+    "@types/react": "18.0.20",
+    "@types/react-dom": "18.0.6",
+    "jest": "29.0.3",
+    "jest-environment-jsdom": "29.0.3",
+    "jest-scss-transform": "1.0.3",
+    "postcss": "8.4.16",
+    "pubnub": "7.2.0",
+    "pubnub-react": "3.0.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "rollup": "2.79.0",
+    "rollup-plugin-peer-deps-external": "2.2.4",
+    "rollup-plugin-postcss": "4.0.2",
+    "rollup-plugin-ts": "3.0.2",
+    "sass": "1.54.9",
+    "ts-jest": "29.0.1",
+    "typescript": "4.8.3"
+  },
+  "peerDependencies": {
+    "pubnub": ">=4.29.9",
+    "pubnub-react": ">=2.1.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "dependencies": {
+    "jotai": "^1.8.3",
+    "lodash": "^4.17.0",
+    "react-native-uuid": "^2.0.1"
+  }
+}

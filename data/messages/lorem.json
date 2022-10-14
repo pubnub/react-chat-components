@@ -31,13 +31,36 @@
   },
   {
     "message": {
-      "text": "Integer sollicitudin eros nec libero vulputate, nec faucibus erat tristique.",
+      "text": "Duis aute irure dolor in reprehenderit.",
+      "type": "text"
+    },
+    "timetoken": "16069258815804892",
+    "uuid": "user_732277cad5264ed48172c40f0f008104",
+    "channel": "any",
+    "actions": {
+      "deleted": {
+        ".": [{ "actionTimetoken": "16069259815804892", "uuid": "any" }]
+      }
+    }
+  },
+  {
+    "message": {
+      "text": "Integer eros libero, nec erat tristique.",
       "type": "text"
     },
     "timetoken": "16069261926915892",
     "uuid": "user_a56c20222c484ff8987ec9b69b0c8f5b",
     "channel": "any",
-    "actions": {}
+    "actions": {
+      "updated": {
+        "Integer sollicitudin eros nec libero vulputate, nec faucibus erat tristique.": [
+          {
+            "actionTimetoken": "16069262926915892",
+            "uuid": "user_a56c20222c484ff8987ec9b69b0c8f5b"
+          }
+        ]
+      }
+    }
   },
   {
     "message": {
