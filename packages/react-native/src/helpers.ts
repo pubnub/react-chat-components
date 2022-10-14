@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { Animated, Easing } from "react-native";
 import { Themes } from "@pubnub/common-chat-components";
+import { merge } from "lodash";
 
 export interface UseStyleProps<T> {
   theme: Themes | "";
@@ -13,7 +14,7 @@ export const useStyle = <T>(props: UseStyleProps<T>): T => {
   const [style, setStyle] = useState(createDefaultStyle(theme));
 
   useEffect(() => {
-    setStyle(Object.assign({}, createDefaultStyle(theme), customStyle));
+    setStyle(merge({}, createDefaultStyle(theme), customStyle));
   }, [createDefaultStyle, setStyle, customStyle, theme]);
 
   return style;

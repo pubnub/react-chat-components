@@ -12,7 +12,7 @@ import { Chat, useUsers } from "@pubnub/react-native-chat-components";
 
 import { CurrentChannelsScreen, ChannelMembersScreen, ChatScreen } from "./screens";
 import { CurrentChannelAtom } from "./state-atoms";
-import users from "../../data/users/users.json";
+import users from "../../../data/users/users.json";
 
 type RootStackParamList = {
   Channels: undefined;
