@@ -18,7 +18,7 @@ To use the app, you need:
 
 - [npm](https://docs.npmjs.com/cli/v6/commands/npm-install) or
   [yarn](https://yarnpkg.com/getting-started/install)
-- [Node.js Latest LTS Version: 16.18.0 ](https://nodejs.org/en/download/)
+- [Node.js Latest LTS Version: 16.18.0](https://nodejs.org/en/download/)
 - Code editor (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
 - PubNub [account](https://www.pubnub.com/docs/setup/account-setup) on the
   [Admin Portal](https://admin.pubnub.com/) with
