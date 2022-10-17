@@ -18,7 +18,7 @@ To use the app, you need:
 
 - [npm](https://docs.npmjs.com/cli/v6/commands/npm-install) or
   [yarn](https://yarnpkg.com/getting-started/install)
-- [Node.js](https://nodejs.org/en/download/)
+- [Node.js Latest LTS Version: 16.18.0 ](https://nodejs.org/en/download/)
 - Code editor (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
 - PubNub [account](https://www.pubnub.com/docs/setup/account-setup) on the
   [Admin Portal](https://admin.pubnub.com/) with
@@ -34,7 +34,7 @@ locally.
 
 ## Components
 
-The `getting-started` app showcases these PubNub Chat Components for React:
+The `getting-started` app showcases these PubNub Chat Components for React Native:
 
 - [Chat Provider](https://www.pubnub.com/docs/chat/components/react-native/chat-provider)
 - [Message List](https://www.pubnub.com/docs/chat/components/react-native/ui-components/message-list)
