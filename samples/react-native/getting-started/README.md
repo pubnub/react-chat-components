@@ -5,7 +5,7 @@ through the PubNub Network. It features a simple chat window with a message inpu
 starting the app, you can send sample messages as a default `myFirstUser` by typing them in an input
 field and messages will pile up on the screen as you send them.
 
-![Getting Started app for React](screenshot.png)
+![Getting Started app for React Native](screenshot.png)
 
 ## Prerequisites
 
