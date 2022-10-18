@@ -36,8 +36,8 @@
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "prettier:base": "prettier --ignore-path .gitignore",
-    "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/group-chat && npm run start\"",
-    "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/mobile-chat && npm run start\"",
+    "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/react/group-chat && npm run start\"",
+    "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/react-native/mobile-chat && npm run start\"",
     "test": "turbo run test"
   },
   "devDependencies": {
