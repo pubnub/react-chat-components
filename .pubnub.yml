@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.13.0
+version: v0.14.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2022-10-18
+    version: v0.14.0
+    changes:
+      - type: feature
+        text: "Initial release for React Native components package."
   - date: 2022-09-08
     version: v0.13.0
     changes:
