@@ -21,7 +21,7 @@ const pubnubKeys = {
 };
 const pubnub = new PubNub({
   ...pubnubKeys,
-  uuid: uuid || users[Math.floor(Math.random() * users.length)].id,
+  userId: uuid || users[Math.floor(Math.random() * users.length)].id,
   fileUploadPublishRetryLimit: 0,
 } as PubnubConfig);
 
