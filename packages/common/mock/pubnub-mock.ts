@@ -1,4 +1,3 @@
-import type PubNub from "pubnub";
 import type {
   ListenerParameters,
   MessageAction,
@@ -19,16 +18,12 @@ export interface PubNubMockOptions {
   returnedUuid?: string;
 }
 
-type Subset<T> = {
-  [attr in keyof T]?: T[attr] extends object ? Subset<T[attr]> : T[attr];
-};
-
-export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { _config: any } {
+export function PubNubMock(options: PubNubMockOptions = {}): void {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
   const actions = [];
 
-  const addMessageAction = (obj) => {
+  this.addMessageAction = (obj) => {
     const action = {
       channel: obj.channel,
       data: {
@@ -49,15 +44,15 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const addListener = (obj) => {
+  this.addListener = (obj) => {
     Object.assign(listeners, obj);
   };
 
-  const removeListener = (obj) => {
+  this.removeListener = (obj) => {
     Object.keys(obj).forEach((key) => delete listeners[key]);
   };
 
-  const fetchMessages = async (args) => {
+  this.fetchMessages = async (args) => {
     let messagesCopy = [...messages];
     if (args.start) {
       messagesCopy = messagesCopy.filter((m) => parseInt(m.timetoken) < parseInt(args.start));
@@ -73,17 +68,17 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const getFileUrl = ({ channel, id, name }) => {
+  this.getFileUrl = ({ channel, id, name }) => {
     return `https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg`;
   };
 
-  const getUUID = () => options.returnedUuid || uuid;
+  this.getUUID = () => options.returnedUuid || uuid;
 
-  const getSubscribedChannels = () => ["space.ce466f2e445c38976168ba78e46"];
+  this.getSubscribedChannels = () => ["space.ce466f2e445c38976168ba78e46"];
 
-  const getSubscribedChannelGroups = () => [];
+  this.getSubscribedChannelGroups = () => [];
 
-  const hereNow = (options) => {
+  this.hereNow = (options) => {
     return new Promise<HereNowResponse>((resolve) => {
       resolve({
         totalChannels: options.channels.length,
@@ -99,7 +94,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const publish = (obj) => {
+  this.publish = (obj) => {
     const message = {
       channel: obj.channel,
       actualChannel: obj.channel,
@@ -120,7 +115,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const removeMessageAction = (obj) => {
+  this.removeMessageAction = (obj) => {
     const action = actions.find((a) => a.data.actionTimetoken === obj.actionTimetoken);
     const index = actions.indexOf(action);
     actions.splice(index, 1);
@@ -131,7 +126,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const signal = (args) => {
+  this.signal = (args) => {
     listeners.signal({
       channel: args.channel,
       subscription: null,
@@ -147,7 +142,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const sendFile = (args) => {
+  this.sendFile = (args) => {
     // TODO: generate file message
 
     return new Promise<SendFileResponse>((resolve) => {
@@ -159,7 +154,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     });
   };
 
-  const objects = {
+  this.objects = {
     getAllUUIDMetadata: (options) => {
       const limit = options.limit || users.length;
       const page = options.page.next || 0;
@@ -209,26 +204,10 @@ export function PubNubMock(options: PubNubMockOptions = {}): Subset<PubNub> & { 
     }),
   };
 
-  return {
-    addMessageAction,
-    addListener,
-    fetchMessages,
-    getFileUrl,
-    getUUID,
-    getSubscribedChannels,
-    getSubscribedChannelGroups,
-    hereNow,
-    publish,
-    removeListener,
-    removeMessageAction,
-    signal,
-    sendFile,
-    stop: () => true,
-    subscribe: () => true,
-    objects,
-    unsubscribe: () => true,
-    _config: {
-      _addPnsdkSuffix: () => true,
-    },
+  this.stop = () => true;
+  this.subscribe = () => true;
+  this.unsubscribe = () => true;
+  this._config = {
+    _addPnsdkSuffix: () => true,
   };
 }

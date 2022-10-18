@@ -13,7 +13,7 @@ export function ChatScreen(): JSX.Element {
       <KeyboardAvoidingView
         style={{ flex: 1, marginBottom: Platform.OS === "ios" ? 20 : 0 }}
         keyboardVerticalOffset={headerHeight}
-        behavior={Platform.OS === "ios" ? "padding" : null}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <MessageList
           fetchMessages={20}

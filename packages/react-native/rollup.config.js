@@ -3,7 +3,6 @@ import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
-import postcss from "rollup-plugin-postcss";
 import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
@@ -30,7 +29,6 @@ export default {
     peerDepsExternal(),
     resolve(),
     commonjs(),
-    postcss(),
     image(),
     json(),
     ts(),

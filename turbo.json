@@ -1,0 +1,17 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "test": {
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"],
+      "outputs": []
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "tsc": {
+      "dependsOn": ["build"],
+      "outputs": []
+    }
+  }
+}

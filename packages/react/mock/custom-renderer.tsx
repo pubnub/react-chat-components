@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import PubNub from "pubnub";
 import { PubNubProvider } from "pubnub-react";
 import { render, RenderResult } from "@testing-library/react";
 import { Chat, ChatProps } from "../src/chat";
@@ -17,7 +16,7 @@ const customRender = (
   options: { providerProps?: ChatProps; pubnubProps?: PubNubMockOptions } = defaultOptions
 ): RenderResult => {
   const { providerProps, pubnubProps, ...renderOptions } = options;
-  const pubnub = PubNubMock(pubnubProps || {}) as unknown as PubNub;
+  const pubnub = new PubNubMock(pubnubProps || {});
 
   return render(
     <PubNubProvider client={pubnub}>

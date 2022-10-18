@@ -1,5 +1,4 @@
 import React from "react";
-
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
 import { MessagePayload } from "@pubnub/common-chat-components";
@@ -35,7 +34,7 @@ describe("Message List", () => {
     render(<MessageList welcomeMessages={message} />);
 
     expect(screen.getByText("Welcome")).toBeVisible();
-    expect(screen.getByText("12:25 PM")).toBeVisible();
+    expect(screen.getByText("11:25 AM")).toBeVisible();
   });
 
   test("renders messages with custom message renderer", async () => {
@@ -53,7 +52,7 @@ describe("Message List", () => {
     );
 
     expect(screen.getByText("Custom Welcome")).toBeVisible();
-    expect(screen.queryByText("12:25 PM")).not.toBeInTheDocument();
+    expect(screen.queryByText("11:25 AM")).not.toBeInTheDocument();
   });
 
   test("renders messages with custom bubble renderer", async () => {
@@ -71,7 +70,7 @@ describe("Message List", () => {
     );
 
     expect(screen.getByText("Custom Welcome")).toBeVisible();
-    expect(screen.getByText("12:25 PM")).toBeVisible();
+    expect(screen.getByText("11:25 AM")).toBeVisible();
   });
 
   test("renders extra actions", async () => {

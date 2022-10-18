@@ -10,7 +10,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "tsc:check": "tsc -b"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@expo/webpack-config": "^0.17.0",
