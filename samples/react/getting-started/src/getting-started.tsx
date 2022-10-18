@@ -10,7 +10,7 @@ import { Chat, MessageList, MessageInput } from "@pubnub/react-chat-components";
 const pubnub = new PubNub({
   publishKey: "myPublishKey",
   subscribeKey: "mySubscribeKey",
-  uuid: "myFirstUser",
+  userId: "myFirstUser",
 });
 const currentChannel = "Default";
 const theme = "light";

@@ -24,7 +24,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 const pubnub = new PubNub({
   publishKey: (Constants.manifest?.extra?.REACT_APP_PUB_KEY as string) || "",
   subscribeKey: (Constants.manifest?.extra?.REACT_APP_SUB_KEY as string) || "",
-  uuid: users[Math.floor(Math.random() * users.length)].id,
+  userId: users[Math.floor(Math.random() * users.length)].id,
 });
 
 export default function App(): JSX.Element {

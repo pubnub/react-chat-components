@@ -20,7 +20,7 @@ const lgBreakpoint = 1024;
 const pubnub = new PubNub({
   publishKey: (import.meta.env?.REACT_APP_PUB_KEY as string) || "",
   subscribeKey: (import.meta.env?.REACT_APP_SUB_KEY as string) || "",
-  uuid: faker.internet.userName(),
+  userId: faker.internet.userName(),
 });
 
 const channels: ChannelEntity[] = eventChannels;

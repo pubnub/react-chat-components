@@ -22,13 +22,13 @@ randomDoctor.profileUrl = `/doctor-${~~(Math.random() * 21) + 1}.png`;
 const patientClient = new PubNub({
   publishKey: import.meta.env.REACT_APP_PUB_KEY as string,
   subscribeKey: import.meta.env.REACT_APP_SUB_KEY as string,
-  uuid: randomPatient.id,
+  userId: randomPatient.id,
 });
 
 const doctorClient = new PubNub({
   publishKey: import.meta.env.REACT_APP_PUB_KEY as string,
   subscribeKey: import.meta.env.REACT_APP_SUB_KEY as string,
-  uuid: randomDoctor.id,
+  userId: randomDoctor.id,
 });
 
 function AppView(): JSX.Element {
