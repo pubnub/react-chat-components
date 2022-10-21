@@ -26,7 +26,6 @@
   },
   "scripts": {
     "build": "turbo run build",
-    "tsc": "turbo run tsc && echo",
     "eslint:base": "eslint --ignore-path .gitignore",
     "format": "npm run format:eslint && npm run format:prettier",
     "format:eslint": "npm run eslint:base -- --fix \"**/*.{js,ts,tsx}\"",
@@ -34,11 +33,13 @@
     "lint": "npm run lint:eslint",
     "lint:eslint": "npm run eslint:base -- --max-warnings 0 \"**/*.{js,ts,tsx,mdx}\"",
     "lint:eslint-config-prettier": "eslint --print-config .eslintrc | eslint-config-prettier-check",
+    "postinstall": "turbo run build",
     "prepare": "node -e \"try { require('husky').install() } catch (e) {if (e.code !== 'MODULE_NOT_FOUND') throw e}\"",
     "prettier:base": "prettier --ignore-path .gitignore",
     "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/react/group-chat && npm run start\"",
     "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/react-native/mobile-chat && npm run start\"",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "tsc": "turbo run tsc && echo"
   },
   "devDependencies": {
     "@commitlint/cli": "17.1.2",
