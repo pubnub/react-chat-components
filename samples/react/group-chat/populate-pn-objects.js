@@ -6,10 +6,10 @@ const yargs = require("yargs/yargs");
 const { hideBin } = require("yargs/helpers");
 const sampleSize = require("lodash/sampleSize");
 
-const users = require("../../data/users/users.json");
-const channels = require("../../data/channels/work.json");
+const users = require("../../../data/users/users.json");
+const channels = require("../../../data/channels/work.json");
 
-require("dotenv").config({ path: "../.env" });
+require("dotenv").config({ path: "../../.env" });
 /* eslint-enable */
 
 /**
