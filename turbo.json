@@ -10,8 +10,9 @@
       "outputs": ["dist/**"]
     },
     "tsc": {
-      "dependsOn": ["build"],
-      "outputs": []
+      "dependsOn": [],
+      "outputs": [],
+      "cache": false
     }
   }
 }
