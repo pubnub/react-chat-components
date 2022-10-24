@@ -6,12 +6,20 @@ import type {
   PublishResponse,
   SignalResponse,
   SendFileResponse,
+  MessageActionEvent,
+  AddMessageActionParameters,
+  FetchMessagesParameters,
+  HereNowParameters,
+  PublishParameters,
+  SignalParameters,
+  GetAllMetadataParameters,
 } from "pubnub";
 import {
   users,
   loremMessages as messages,
   workChannels as channels,
 } from "@pubnub/sample-chat-data";
+import { GetUUIDMetadataParameters, RemoveMessageActionParameters, SendFileParameters } from "pubnub";
 
 export interface PubNubMockOptions {
   uuid?: string;
@@ -21,9 +29,9 @@ export interface PubNubMockOptions {
 export function PubNubMock(options: PubNubMockOptions = {}): void {
   const uuid = options.uuid || "user_63ea15931d8541a3bd35e5b1f09087dc";
   const listeners: ListenerParameters = {};
-  const actions = [];
+  const actions: MessageActionEvent[] = [];
 
-  this.addMessageAction = (obj) => {
+  this.addMessageAction = (obj: AddMessageActionParameters) => {
     const action = {
       channel: obj.channel,
       data: {
@@ -38,26 +46,28 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
       timetoken: Date.now() + "0000",
     };
     actions.push(action);
-    listeners.messageAction(action);
+    listeners.messageAction && listeners.messageAction(action);
     return new Promise<{ data: MessageAction }>((resolve) => {
       resolve({ data: action.data });
     });
   };
 
-  this.addListener = (obj) => {
+  this.addListener = (obj: ListenerParameters) => {
     Object.assign(listeners, obj);
   };
 
-  this.removeListener = (obj) => {
-    Object.keys(obj).forEach((key) => delete listeners[key]);
+  this.removeListener = (obj: ListenerParameters) => {
+    Object.keys(obj).forEach((key) => delete listeners[key as keyof ListenerParameters]);
   };
 
-  this.fetchMessages = async (args) => {
+  this.fetchMessages = async (args: FetchMessagesParameters) => {
     let messagesCopy = [...messages];
     if (args.start) {
-      messagesCopy = messagesCopy.filter((m) => parseInt(m.timetoken) < parseInt(args.start));
+      messagesCopy = messagesCopy.filter(
+        (m) => parseInt(m.timetoken) < parseInt(args.start as string)
+      );
     }
-    messagesCopy = messagesCopy.slice(Math.max(messagesCopy.length - args.count, 0));
+    messagesCopy = messagesCopy.slice(Math.max(messagesCopy.length - (args.count as number), 0));
 
     return new Promise<FetchMessagesResponse>((resolve) => {
       resolve({
@@ -78,12 +88,14 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
 
   this.getSubscribedChannelGroups = () => [];
 
-  this.hereNow = (options) => {
+  this.hereNow = (options: HereNowParameters) => {
     return new Promise<HereNowResponse>((resolve) => {
+      const channels = options.channels || [];
+
       resolve({
-        totalChannels: options.channels.length,
-        totalOccupancy: options.channels.length * users.length,
-        channels: options.channels
+        totalChannels: channels.length,
+        totalOccupancy: channels.length * users.length,
+        channels: channels
           .map((channel) => ({
             name: channel,
             occupancy: users.length,
@@ -94,7 +106,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
     });
   };
 
-  this.publish = (obj) => {
+  this.publish = (obj: PublishParameters) => {
     const message = {
       channel: obj.channel,
       actualChannel: obj.channel,
@@ -102,12 +114,12 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
       message: obj.message,
       timetoken: Date.now() + "0000",
       publisher: uuid,
-      subscription: null,
+      subscription: "",
       uuid,
       actions: {},
     };
     messages.push(message);
-    listeners.message(message);
+    listeners.message && listeners.message(message);
     return new Promise<PublishResponse>((resolve) => {
       resolve({
         timetoken: parseInt(Date.now() + "0000"),
@@ -115,25 +127,29 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
     });
   };
 
-  this.removeMessageAction = (obj) => {
+  this.removeMessageAction = (obj: RemoveMessageActionParameters) => {
     const action = actions.find((a) => a.data.actionTimetoken === obj.actionTimetoken);
+    if (!action) {
+      return;
+    }
     const index = actions.indexOf(action);
     actions.splice(index, 1);
     action.event = "removed";
-    listeners.messageAction(action);
+    listeners.messageAction && listeners.messageAction(action);
     return new Promise<{ data: unknown }>((resolve) => {
       resolve({ data: {} });
     });
   };
 
-  this.signal = (args) => {
-    listeners.signal({
-      channel: args.channel,
-      subscription: null,
-      timetoken: Date.now() + "0000",
-      message: args.message,
-      publisher: uuid,
-    });
+  this.signal = (args: SignalParameters) => {
+    listeners.signal &&
+      listeners.signal({
+        channel: args.channel,
+        subscription: "",
+        timetoken: Date.now() + "0000",
+        message: args.message,
+        publisher: uuid,
+      });
 
     return new Promise<SignalResponse>((resolve) => {
       resolve({
@@ -142,7 +158,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
     });
   };
 
-  this.sendFile = (args) => {
+  this.sendFile = (args: SendFileParameters) => {
     // TODO: generate file message
 
     return new Promise<SendFileResponse>((resolve) => {
@@ -155,51 +171,51 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
   };
 
   this.objects = {
-    getAllUUIDMetadata: (options) => {
+    getAllUUIDMetadata: (options: GetAllMetadataParameters) => {
       const limit = options.limit || users.length;
-      const page = options.page.next || 0;
-      const offset = page * limit;
+      const page = options.page?.next || 0;
+      const offset = Number(page) * limit;
 
       return {
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
-        next: page + 1,
+        next: (Number(page)) + 1,
       };
     },
-    getAllChannelMetadata: (options) => {
+    getAllChannelMetadata: (options: GetAllMetadataParameters) => {
       const limit = options.limit || channels.length;
-      const page = options.page.next || 0;
-      const offset = page * limit;
+      const page = options.page?.next || 0;
+      const offset = Number(page) * limit;
 
       return {
         data: channels.slice(offset, offset + limit),
         totalCount: channels.length,
-        next: page + 1,
+        next: Number(page) + 1,
       };
     },
-    getChannelMembers: (options) => {
+    getChannelMembers: (options: GetAllMetadataParameters) => {
       const limit = options.limit || users.length;
-      const page = options.page.next || 0;
-      const offset = page * limit;
+      const page = options.page?.next || 0;
+      const offset = Number(page) * limit;
 
       return {
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
-        next: page + 1,
+        next: Number(page) + 1,
       };
     },
-    getMemberships: (options) => {
+    getMemberships: (options: GetAllMetadataParameters) => {
       const limit = options.limit || channels.length;
-      const page = options.page.next || 0;
-      const offset = page * limit;
+      const page = options.page?.next || 0;
+      const offset = Number(page) * limit;
 
       return {
         data: channels.slice(offset, offset + limit),
         totalCount: channels.length,
-        next: page + 1,
+        next: Number(page) + 1,
       };
     },
-    getUUIDMetadata: (args) => ({
+    getUUIDMetadata: (args: GetUUIDMetadataParameters) => ({
       data: users.find((u) => u.id === args.uuid),
     }),
   };
