@@ -9,14 +9,14 @@ field and messages will pile up on the screen as you send them.
 
 ## Prerequisites
 
-This application uses [React v16.8+](https://www.npmjs.com/package/react/v/16.8.0),
-[ReactDOM v16.8+](https://www.npmjs.com/package/react-dom),
-[PubNub JavaScript SDK v4.29+](https://www.pubnub.com/docs/sdks/javascript/), and
-[PubNub React SDK v2.1.0+](https://www.pubnub.com/docs/chat/react/setup).
+This application uses [React v18.0.0](https://www.npmjs.com/package/react/v/18.0.0),
+[ReactDOM v18.0.0](https://www.npmjs.com/package/react-dom),
+[PubNub JavaScript SDK v7.2.0](https://www.pubnub.com/docs/sdks/javascript/), and
+[PubNub React SDK v3.0.1](https://www.pubnub.com/docs/chat/react/setup).
 
 To use the app, you need:
 
-- [npm](https://docs.npmjs.com/cli/v6/commands/npm-install)
+- [yarn](https://classic.yarnpkg.com/en/docs/install)
 - [Node.js](https://nodejs.org/en/download/)
 - Code editor (e.g. [Visual Studio Code](https://code.visualstudio.com/download))
 - PubNub [account](https://www.pubnub.com/docs/setup/account-setup) on the
