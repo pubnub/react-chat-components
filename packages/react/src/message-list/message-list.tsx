@@ -223,6 +223,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   };
 
   const renderMessage = (envelope: MessageEnvelope) => {
+    if (props.filter ? !props.filter(envelope) : false) return;
+
     const uuid = envelope.uuid || envelope.publisher || "";
     const time = getTime(envelope.timetoken as number);
     const isOwn = isOwnMessage(uuid);
@@ -233,7 +235,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const actions = envelope.actions;
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
-    if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
+    if (props.messageRenderer)
       return props.messageRenderer({ message: envelope, user, time, isOwn, editedText });
 
     return (
@@ -252,7 +254,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               <span className="pn-msg__time">{time}</span>
             </div>
             {message?.text &&
-              (props.bubbleRenderer && (props.filter ? props.filter(envelope) : true) ? (
+              (props.bubbleRenderer ? (
                 props.bubbleRenderer({ message: envelope, user, time, isOwn, editedText })
               ) : (
                 <div className="pn-msg__bubble">{editedText || message?.text}</div>
