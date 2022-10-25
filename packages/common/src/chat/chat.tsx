@@ -410,7 +410,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     try {
       pubnub.addListener(listener);
     } catch (e) {
-      onErrorProp && onErrorProp(e as Error);
+      onErrorProp(e as Error);
     }
 
     return () => {
