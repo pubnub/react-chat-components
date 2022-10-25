@@ -39,7 +39,7 @@
     "start": "concurrently \"cd packages/react && npm run build:watch\" \"cd samples/react/group-chat && npm run start\"",
     "start:rn": "concurrently \"cd packages/react-native && npm run build:watch\" \"cd samples/react-native/mobile-chat && npm run start\"",
     "test": "turbo run test",
-    "tsc": "turbo run tsc"
+    "tsc": "turbo run tsc && echo"
   },
   "devDependencies": {
     "@commitlint/cli": "17.1.2",

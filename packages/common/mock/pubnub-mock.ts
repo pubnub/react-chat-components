@@ -13,13 +13,15 @@ import type {
   PublishParameters,
   SignalParameters,
   GetAllMetadataParameters,
+  GetUUIDMetadataParameters,
+  RemoveMessageActionParameters,
+  SendFileParameters,
 } from "pubnub";
 import {
   users,
   loremMessages as messages,
   workChannels as channels,
 } from "@pubnub/sample-chat-data";
-import { GetUUIDMetadataParameters, RemoveMessageActionParameters, SendFileParameters } from "pubnub";
 
 export interface PubNubMockOptions {
   uuid?: string;
@@ -78,6 +80,8 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
     });
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/ban-ts-comment
+  // @ts-ignore
   this.getFileUrl = ({ channel, id, name }) => {
     return `https://images.ctfassets.net/3prze68gbwl1/76L8lpo46Hu4WvNr9kJvkE/15bade65538769e12a12d95bff1df776/pubnub-logo-docs.svg`;
   };
@@ -99,7 +103,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
           .map((channel) => ({
             name: channel,
             occupancy: users.length,
-            occupants: users.map((u) => ({ uuid: u.id })),
+            occupants: users.map((u: { id: string }) => ({ uuid: u.id })),
           }))
           .reduce((obj, item) => ({ ...obj, [item["name"]]: item }), {}),
       });
@@ -179,7 +183,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
       return {
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
-        next: (Number(page)) + 1,
+        next: Number(page) + 1,
       };
     },
     getAllChannelMetadata: (options: GetAllMetadataParameters) => {
@@ -216,7 +220,7 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
       };
     },
     getUUIDMetadata: (args: GetUUIDMetadataParameters) => ({
-      data: users.find((u) => u.id === args.uuid),
+      data: users.find((u: { id: string | undefined }) => u.id === args.uuid),
     }),
   };
 
