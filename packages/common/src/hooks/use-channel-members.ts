@@ -1,18 +1,18 @@
 import { useState, useEffect, useMemo } from "react";
-import { GetChannelMembersParameters } from "pubnub";
+import { GetChannelMembersParameters, ObjectsEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
-type HookReturnValue = [UserEntity[], () => void, () => void, number, Error];
+type HookReturnValue = [UserEntity[], () => void, () => void, number | undefined, Error];
 
 export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
 
   const pubnub = usePubNub();
   const [members, setMembers] = useState<UserEntity[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
-  const [page, setPage] = useState("");
+  const [totalCount, setTotalCount] = useState<number | undefined>(0);
+  const [page, setPage] = useState<string | undefined>("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
 
@@ -59,7 +59,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
         setPage(response.next);
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -70,7 +70,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
 
   useEffect(() => {
     const listener = {
-      objects: (event) => {
+      objects: (event: ObjectsEvent) => {
         const message = event.message;
         if (message.type !== "membership") return;
 
@@ -99,5 +99,5 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     };
   }, [pubnub, paginatedOptions.channel]);
 
-  return [members, fetchMoreMembers, resetHook, totalCount, error];
+  return [members, fetchMoreMembers, resetHook, totalCount, error as Error];
 };

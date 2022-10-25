@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "noEmit": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
     "noImplicitThis": false
   }
 }

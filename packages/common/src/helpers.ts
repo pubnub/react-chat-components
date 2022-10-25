@@ -8,7 +8,7 @@ export const getNameInitials = (name: string): string => {
   return initials.toUpperCase();
 };
 
-export const getPredefinedColor = (uuid: string): string => {
+export const getPredefinedColor = (uuid: string): string | undefined => {
   if (!uuid || !uuid.length) return;
   const colors = ["#80deea", "#9fa7df", "#aed581", "#ce93d8", "#ef9a9a", "#ffab91", "#ffe082"];
   const sum = uuid
