@@ -32,6 +32,7 @@ export const CreateChatModal = ({
   setCurrentChannel,
   hideModal,
 }: CreateChatModalProps): JSX.Element => {
+  console.log('currentUser', currentUser)
   const pubnub = usePubNub();
   const [creatingChannel, setCreatingChannel] = useState(false);
   const [showGroups, setShowGroups] = useState(false);

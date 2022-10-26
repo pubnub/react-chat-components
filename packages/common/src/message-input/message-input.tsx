@@ -47,7 +47,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   const pubnub = usePubNub();
 
   const [text, setText] = useState(props.draftMessage || "");
-  const [file, setFile] = useState<File>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
   const [loader, setLoader] = useState(false);
   const [users] = useAtom(UsersMetaAtom);
@@ -92,7 +92,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       if (props.typingIndicator) stopTypingIndicator();
       clearInput();
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     } finally {
       setLoader(false);
     }
@@ -105,7 +105,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       const message = { message: { type: "typing_on" }, channel };
       pubnub.signal(message);
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 
@@ -116,7 +116,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       const message = { message: { type: "typing_off" }, channel };
       pubnub.signal(message);
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 
@@ -137,17 +137,19 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       props.onChange && props.onChange(newText);
       setText(newText);
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const file = event.target.files[0];
       setFile(file);
       setText(file.name);
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 
@@ -155,7 +157,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   /* Lifecycle
   */
   useEffect(() => {
-    let timer = null;
+    let timer: ReturnType<typeof setTimeout> | null = null;
 
     if (typingIndicatorSent) {
       timer = setTimeout(() => {
@@ -163,7 +165,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       }, (typingIndicatorTimeout - 1) * 1000);
     }
 
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timer as ReturnType<typeof setTimeout>);
   }, [typingIndicatorSent, typingIndicatorTimeout]);
 
   return {

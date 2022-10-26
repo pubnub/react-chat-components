@@ -106,14 +106,14 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
 
       try {
         const url = pubnub.getFileUrl({
-          channel: envelope.channel,
+          channel: envelope.channel as string,
           id: envelope.message.file.id,
           name: envelope.message.file.name,
         });
 
         envelope.message.file.url = url;
       } catch (e) {
-        onError(e);
+        onError(e as Error);
       } finally {
         return envelope;
       }
@@ -141,7 +141,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
       setMessages(allMessages);
       setPaginationEnd(!allMessages.length || newMessages.length !== props.fetchMessages);
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     } finally {
       setFetchingMessages(false);
     }
@@ -158,7 +158,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     setPaginationEnd,
   ]);
 
-  const addReaction = (reaction: string, messageTimetoken) => {
+  const addReaction = (reaction: string, messageTimetoken: string) => {
     try {
       pubnub.addMessageAction({
         channel,
@@ -169,15 +169,15 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
         },
       });
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 
-  const removeReaction = (reaction: string, messageTimetoken, actionTimetoken) => {
+  const removeReaction = (reaction: string, messageTimetoken: string, actionTimetoken: string) => {
     try {
       pubnub.removeMessageAction({ channel, messageTimetoken, actionTimetoken });
     } catch (e) {
-      onError(e);
+      onError(e as Error);
     }
   };
 

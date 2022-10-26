@@ -4,15 +4,15 @@ import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
-type HookReturnValue = [UserEntity[], () => void, () => void, number | undefined, Error];
+type HookReturnValue = [UserEntity[], () => void, () => void, number, Error];
 
 export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
 
   const pubnub = usePubNub();
   const [members, setMembers] = useState<UserEntity[]>([]);
-  const [totalCount, setTotalCount] = useState<number | undefined>(0);
-  const [page, setPage] = useState<string | undefined>("");
+  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
 
@@ -55,8 +55,8 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
           ...members,
           ...(response.data.map((m) => m.uuid) as UserEntity[]),
         ]);
-        setTotalCount(response.totalCount);
-        setPage(response.next);
+        setTotalCount(response.totalCount || 0);
+        setPage(response.next || "");
       } catch (e) {
         setDoFetch(false);
         setError(e as Error);

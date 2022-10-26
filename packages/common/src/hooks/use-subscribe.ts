@@ -17,10 +17,14 @@ export const useSubscribe = (options: SubscribeParameters = {}): (() => void) =>
     const currentGroups = pubnub.getSubscribedChannelGroups() || [];
 
     const subscribeChannels = options.channels.filter((c) => !currentSubscriptions.includes(c));
-    const unsubscribeChannels = currentSubscriptions.filter((c) => !options.channels.includes(c));
+    const unsubscribeChannels = currentSubscriptions.filter(
+      (c) => !(options.channels as string[]).includes(c)
+    );
 
     const subscribeGroups = options.channelGroups.filter((c) => !currentGroups.includes(c));
-    const unsubscribeGroups = currentGroups.filter((c) => !options.channelGroups.includes(c));
+    const unsubscribeGroups = currentGroups.filter(
+      (c) => !(options.channelGroups as string[]).includes(c)
+    );
 
     if (subscribeChannels.length || subscribeGroups.length) {
       pubnub.subscribe({

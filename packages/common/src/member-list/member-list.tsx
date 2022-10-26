@@ -46,7 +46,7 @@ export const useMemberListCore = (props: CommonMemberListProps) => {
     return props.presentMembers?.includes(uuid);
   };
 
-  const memberSorter = (a, b) => {
+  const memberSorter = (a: UserEntity, b: UserEntity) => {
     if (props.sort) return props.sort(a, b);
 
     if (isOwnMember(a.id)) return -1;
@@ -55,7 +55,7 @@ export const useMemberListCore = (props: CommonMemberListProps) => {
     if (isPresentMember(a.id) && !isPresentMember(b.id)) return -1;
     if (isPresentMember(b.id) && !isPresentMember(a.id)) return 1;
 
-    return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
+    return a.name?.localeCompare(b.name as string, "en", { sensitivity: "base" });
   };
 
   const memberFromString = (member: UserEntity | string) => {

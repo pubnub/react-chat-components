@@ -298,8 +298,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
               data-tooltip={tooltipContent}
               onClick={() => {
                 userReaction
-                  ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
-                  : addReaction(reaction, envelope.timetoken);
+                  ? removeReaction(
+                      reaction,
+                      envelope.timetoken as string,
+                      userReaction.actionTimetoken as string
+                    )
+                  : addReaction(reaction, envelope.timetoken as string);
               }}
             >
               {reaction} {instancesLimited.length}

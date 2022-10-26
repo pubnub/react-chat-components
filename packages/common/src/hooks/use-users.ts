@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GetAllMetadataParameters } from "pubnub";
+import { GetAllMetadataParameters, ObjectsEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
@@ -35,11 +35,11 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
         if (ignoreRequest) return;
         setDoFetch(false);
         setUsers((users) => [...users, ...response.data]);
-        setTotalCount(response.totalCount);
-        setPage(response.next);
+        setTotalCount(response.totalCount || 0);
+        setPage(response.next || "");
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -50,7 +50,7 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
 
   useEffect(() => {
     const listener = {
-      objects: (event) => {
+      objects: (event: ObjectsEvent) => {
         const message = event.message;
         if (message.type !== "uuid") return;
 
@@ -79,5 +79,5 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
     };
   }, [pubnub]);
 
-  return [users, fetchMoreUsers, totalCount, error];
+  return [users, fetchMoreUsers, totalCount, error as Error];
 };

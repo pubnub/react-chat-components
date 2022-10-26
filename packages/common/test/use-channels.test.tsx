@@ -6,8 +6,11 @@ import { useChannels } from "../src/hooks";
 import { PubNubMock } from "../mock/pubnub-mock";
 import channels from "../../../data/channels/work.json";
 
-const pubnub = new PubNubMock({});
-const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pubnub = new (PubNubMock as any)({});
+const wrapper = ({ children }: { children: React.ReactNode | React.ReactNode[] | null }) => (
+  <PubNubProvider client={pubnub}>{children}</PubNubProvider>
+);
 
 describe("useChannels", () => {
   test("fetches and returns the full list of channels", async () => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { HereNowParameters, HereNowResponse } from "pubnub";
+import { HereNowParameters, HereNowResponse, PresenceEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { cloneDeep } from "lodash";
 
@@ -39,7 +39,7 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
         setPresence(response.channels);
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -50,7 +50,7 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
 
   useEffect(() => {
     const listener = {
-      presence: (event) => {
+      presence: (event: PresenceEvent) => {
         setPresence((presence) => {
           const presenceClone = cloneDeep(presence);
           if (!presenceClone[event.channel])
@@ -97,5 +97,5 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
     };
   }, [pubnub, options.includeUUIDs]);
 
-  return [presence, resetHook, total, error];
+  return [presence, resetHook, total, error as Error];
 };

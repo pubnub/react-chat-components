@@ -8,11 +8,13 @@ export const SubscribeChannelGroupsAtom = atom<string[]>([]);
 export const UsersMetaAtom = atom<UserEntity[]>([]);
 export const MessagesAtom = atom<{ [channel: string]: MessageEnvelope[] }>({});
 export const PaginationAtom = atom<{ [channel: string]: boolean }>({});
-export const TypingIndicatorAtom = atom({});
+export const TypingIndicatorAtom = atom<{ [key: string]: string }>({});
 export const TypingIndicatorTimeoutAtom = atom<number>(10);
 
-export const RetryFunctionAtom = atom<{ function: <T>(fn: () => Promise<T>) => Promise<T> }>({
-  function: () => null,
+export const RetryFunctionAtom = atom<{
+  function: <T>(fn: () => Promise<T | undefined>) => Promise<T | undefined>;
+}>({
+  function: () => Promise.resolve(null) as never,
 });
 
 export const ErrorFunctionAtom = atom<{ function: (error: Error) => unknown }>({
@@ -34,7 +36,7 @@ export const CurrentChannelPaginationAtom = atom(
     )
 );
 
-export const CurrentChannelTypingIndicatorAtom = atom(
+export const CurrentChannelTypingIndicatorAtom = atom<{ [key: string]: string }, unknown>(
   (get) => get(TypingIndicatorAtom)[get(CurrentChannelAtom)] || {},
   (get, set, value) =>
     set(
