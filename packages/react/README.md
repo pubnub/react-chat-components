@@ -1,17 +1,17 @@
 # PubNub Chat Components for React
 
-PubNub Chat Components for React are the fastest way to add chat features like direct and group messaging, typing indicators, reactions, without going through the complexity of low-level architecture of realtime networks.
+PubNub Chat Components for React are the fastest way to add chat features like direct and group messaging, typing indicators, or reactions, without going through the complexity of the low-level architecture of real-time networks.
 
-- **Reduced Implementation Time**: Develop proof-of-concept and production ready apps faster using predefined components.
-- **Fast and Simple Extensibility**: Add rich features like typing indicators, read receipts, reactions etc. without writing complex code.
+- **Reduced Implementation Time**: Develop proof-of-concept and production-ready apps faster using predefined components.
+- **Fast and Simple Extensibility**: Add rich features, like typing indicators, read receipts, or reactions, without writing complex code.
 - **Flexible and Customizable Components**: Customize component design and add custom components to extend functionality.
 - **High Scalability**: Let PubNub take care of scaling and reliability as you grow your app.
 - **Easy Theming**: Use the built-in light and dark themes or create custom ones for various use cases: group, support, and event chats.
 - **Strong Typing**: Utilize the power of TypeScript to develop your application.
 
-> You can also check out our [PubNub Chat Components for React Native](https://www.npmjs.com/package/@pubnub/react-native-chat-components)
-
 ![PubNub Chat Components](screenshot-desktop.png)
+
+> Apart from PubNub Chat Components for React, we provide a separate npm package for React Native. Check out our [PubNub Chat Components for React Native](https://www.npmjs.com/package/@pubnub/react-native-chat-components) for more details.
 
 ## Features
 
@@ -44,9 +44,9 @@ Start by exploring our demo apps that were built using chat components:
 | Source code | Link | Description |
 | :-- | :-- | :-- |
 | [`getting-started`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/getting-started) | [Tutorial](https://www.pubnub.com/docs/chat/components/react) | Sample 1:1 chat app to get started |
-| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/group-chat) | [Demo](https://react-components-chat.pubnub.com/) | Complex moderated group chat app |
-| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/live-events) | [Demo](https://rcc-live-event.surge.sh/) | Live events app with a chat panel |
-| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/telehealth) | [Demo](https://rcc-telehealth.surge.sh/) | Simple patient-doctor chat app |
+| [`group-chat`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/group-chat) | [Demo](https://react-components-chat.pubnub.com/) / [Tutorial](https://www.pubnub.com/tutorials/group-chat-tutorial-react/) | Complex moderated group chat app |
+| [`live-events`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/live-events) | [Demo](https://rcc-live-event.surge.sh/) / [Tutorial](https://www.pubnub.com/tutorials/virtual-events-tutorial-react/) | Live events app with a chat panel |
+| [`telehealth`](https://github.com/pubnub/react-chat-components/tree/master/samples/react/telehealth) | [Demo](https://rcc-telehealth.surge.sh/) / [Tutorial](https://www.pubnub.com/tutorials/cross-platform-chat-application-telehealth-react/) | Simple patient-doctor chat app |
 
 ## Related documentation
 

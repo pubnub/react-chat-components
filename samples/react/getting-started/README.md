@@ -1,6 +1,6 @@
 # Getting Started
 
-`getting-started` is a simple app that allows you to get a 1:1 chat app quickly up and running through the PubNub Network. It features a simple chat window with a message input field. After starting the app, you can send sample messages as a default `myFirstUser` by typing them in an input field and messages will pile up on the screen as you send them.
+`getting-started` is a simple app that allows you to get a 1:1 chat app quickly up and running through the PubNub Network. It features a simple chat window with a message input field. After starting the app, you can send sample messages as the default `myFirstUser` by typing them in an input field, and messages will pile up on the screen as you send them.
 
 ![Getting Started app for React](screenshot.png)
 

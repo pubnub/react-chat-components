@@ -17,6 +17,8 @@ To use the app, you need:
 
 ## Usage
 
+Read the [tutorial](https://www.pubnub.com/tutorials/group-chat-tutorial-react/) to learn how to use the app and better understand the logic behind it.
+
 Follow the steps to run the app locally.
 
 1. Clone the repository.

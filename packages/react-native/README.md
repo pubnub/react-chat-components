@@ -1,17 +1,17 @@
 # PubNub Chat Components for React Native
 
-PubNub Chat Components for React Native are the fastest way to add chat features like direct and group messaging, typing indicators, reactions, without going through the complexity of low-level architecture of realtime networks.
+PubNub Chat Components for React Native are the fastest way to add chat features like direct and group messaging or typing indicators, without going through the complexity of the low-level architecture of real-time networks.
 
-- **Reduced Implementation Time**: Develop proof-of-concept and production ready apps faster using predefined components.
-- **Fast and Simple Extensibility**: Add rich features like typing indicators, read receipts, reactions etc. without writing complex code.
+- **Reduced Implementation Time**: Develop proof-of-concept and production-ready apps faster using predefined components.
+- **Fast and Simple Extensibility**: Add rich features, like typing indicators or read receipts, without writing complex code.
 - **Flexible and Customizable Components**: Customize component design and add custom components to extend functionality.
 - **High Scalability**: Let PubNub take care of scaling and reliability as you grow your app.
 - **Easy Theming**: Use the built-in light and dark themes or create custom ones for various use cases: group, support, and event chats.
 - **Strong Typing**: Utilize the power of TypeScript to develop your application.
 
-> You can also check out our [PubNub Chat Components for React](https://www.npmjs.com/package/@pubnub/react-chat-components)
-
 ![PubNub Chat Components](screenshot-mobile.png)
+
+> Apart from PubNub Chat Components for React Native, we provide a separate npm package for React. Check out our [PubNub Chat Components for React](https://www.npmjs.com/package/@pubnub/react-chat-components) for more details.
 
 ## Features
 
@@ -20,7 +20,6 @@ PubNub Chat Components for React Native are the fastest way to add chat features
 - **Messages**: Publish and display new and historical text messages
 - **Presence**: Get currently active users, observe their state, and notify about changes
 - **Typing Indicators**: Display notifications that users are typing
-- **Message Reactions**: Publish and add emojis to messages
 
 ## Available components
 
