@@ -18,7 +18,7 @@ PubNub Chat Components for React Native are the fastest way to add chat features
 - **User and Channel Metadata**: Add additional information about the users, channels, and their memberships from PubNub Objects storage using custom hooks
 - **Subscriptions**: Subscribe to user channels automatically
 - **Messages**: Publish and display new and historical text messages
-- **Presence**: Get currently active users, observe their state, and notify about changes
+- **Presence**: Get currently active users, observe their state, and notify them about changes
 - **Typing Indicators**: Display notifications that users are typing
 
 ## Available components
