@@ -3,6 +3,8 @@ import { Text, View, KeyboardAvoidingView, Button, useColorScheme, Platform } fr
 import { MessageInput, MessageList, TypingIndicator } from "@pubnub/react-native-chat-components";
 import { useHeaderHeight } from "@react-navigation/elements";
 
+const appConfig = (window as any).appConfig;
+
 export function ChatScreen(): JSX.Element {
   const headerHeight = useHeaderHeight();
   const theme = useColorScheme();
@@ -42,6 +44,7 @@ export function ChatScreen(): JSX.Element {
           // disabled={true}
           senderInfo={true}
           typingIndicator={true}
+          {...appConfig?.MessageInput}
         />
       </KeyboardAvoidingView>
     </View>

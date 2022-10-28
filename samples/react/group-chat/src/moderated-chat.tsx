@@ -33,15 +33,17 @@ const defaultChannel = {
   description: "This is the default channel",
 } as Pick<ChannelType, "id" | "name" | "description">;
 
+const appConfig = (window as any).appConfig;
+
 export default function ModeratedChat(): JSX.Element {
   /**
    * Component state related hooks
    * Those mostly store the current channel, modals and side panels being shown
    */
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">(appConfig?.State.theme ?? "light");
   const [currentChannel, setCurrentChannel] = useState(defaultChannel);
   const [showMembers, setShowMembers] = useState(false);
-  const [showChannels, setShowChannels] = useState(true);
+  const [showChannels, setShowChannels] = useState(false);
   const [showPublicChannelsModal, setShowPublicChannelsModal] = useState(false);
   const [showCreateChatModal, setShowCreateChatModal] = useState(false);
   const [showReportUserModal, setShowReportUserModal] = useState(false);
@@ -165,6 +167,7 @@ export default function ModeratedChat(): JSX.Element {
         channels={[...joinedChannels.map((c) => c.id), uuid]}
         onError={handleError}
         onMembership={(e) => refreshMemberships(e)}
+        {...appConfig?.Chat}
       >
         {showPublicChannelsModal && (
           <PublicChannelsModal
@@ -319,6 +322,7 @@ export default function ModeratedChat(): JSX.Element {
                         </div>
                       )
                     }
+                    {...appConfig?.MessageList}
                   />
                   <TypingIndicator />
                   <hr />
@@ -328,6 +332,7 @@ export default function ModeratedChat(): JSX.Element {
                     fileUpload="image"
                     emojiPicker={<Picker data={pickerData} theme={theme} />}
                     placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
+                    {...appConfig?.MessageInput}
                   />
                 </>
               )}

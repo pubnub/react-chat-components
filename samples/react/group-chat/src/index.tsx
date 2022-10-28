@@ -11,9 +11,7 @@ import "./index.css";
  * Prepare a PubNub instance and inject it into PubNubProvider
  * You should generate your own keyset on pubnub.com and paste it into .env
  */
-
-const hash = document.location.hash.split("?")[1];
-const params = new URLSearchParams(hash);
+const params = new URLSearchParams(window.location.search);
 const uuid = params.get("uuid");
 const pubnubKeys = {
   publishKey: params.get("pubkey") || (import.meta.env.REACT_APP_PUB_KEY as string),
