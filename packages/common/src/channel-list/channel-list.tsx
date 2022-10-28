@@ -40,7 +40,7 @@ export const useChannelListCore = (props: CommonChannelListProps) => {
 
   const channelSorter = (a: ChannelEntity, b: ChannelEntity) => {
     if (props.sort) return props.sort(a, b);
-    return a?.name?.localeCompare(b.name, "en", { sensitivity: "base" });
+    return a?.name?.localeCompare(b.name as string, "en", { sensitivity: "base" });
   };
 
   const channelFromString = (channel: ChannelEntity | string) => {

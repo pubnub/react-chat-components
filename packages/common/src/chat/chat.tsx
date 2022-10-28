@@ -91,7 +91,7 @@ export class Chat extends Component<ChatProps> {
       timeout: 0,
       exponentialFactor: 1,
     },
-    onError: (): void => null,
+    onError: (): void => void 0,
   };
 
   static getDerivedStateFromError(error: Error): { error: Error } {
@@ -135,13 +135,13 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
   const {
     children: childrenProp,
-    theme: themeProp,
+    theme: themeProp = "light",
     currentChannel: currentChannelProp,
-    channels: channelsProp,
-    channelGroups: channelGroupsProp,
+    channels: channelsProp = [],
+    channelGroups: channelGroupsProp = [],
     enablePresence: enablePresenceProp,
-    users: usersProp,
-    typingIndicatorTimeout: typingIndicatorTimeoutProp,
+    users: usersProp = [],
+    typingIndicatorTimeout: typingIndicatorTimeoutProp = 10,
     retryOptions: retryOptionsProp,
     onMessage: onMessageProp,
     onSignal: onSignalProp,
@@ -152,7 +152,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     onMembership: onMembershipProp,
     onFile: onFileProp,
     onStatus: onStatusProp,
-    onError: onErrorProp,
+    onError: onErrorProp = () => null,
   } = props;
 
   /**
@@ -160,8 +160,8 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    */
 
   const retryOnError = useCallback(
-    async <T,>(fn: () => Promise<T>): Promise<T> => {
-      const { maxRetries, timeout, exponentialFactor } = retryOptionsProp;
+    async <T,>(fn: () => Promise<T>): Promise<T | undefined> => {
+      const { maxRetries, timeout, exponentialFactor } = retryOptionsProp as RetryOptions;
       for (let i = 0; i < maxRetries; i++) {
         try {
           return await fn();
@@ -179,7 +179,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    */
 
   const handleMessage = useCallback(
-    (message: MessageEnvelope) => {
+    (message: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken">>) => {
       try {
         setMessages((messages) => {
           const messagesClone = cloneDeep(messages) || {};
@@ -190,7 +190,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
         if (onMessageProp) onMessageProp(message);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onMessageProp, onErrorProp, setMessages]
@@ -210,7 +210,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
         if (onSignalProp) onSignalProp(signal);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onSignalProp, onErrorProp, setTypingIndicator]
@@ -221,7 +221,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
       try {
         if (onPresenceProp) onPresenceProp(event);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onPresenceProp, onErrorProp]
@@ -234,7 +234,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         if (event.message.type === "channel" && onChannelProp) onChannelProp(event);
         if (event.message.type === "uuid" && onUserProp) onUserProp(event);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onMembershipProp, onChannelProp, onUserProp, onErrorProp]
@@ -244,7 +244,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     (action: MessageActionEvent) => {
       try {
         setMessages((messages) => {
-          if (!messages || !messages[action.channel]) return;
+          if (!messages || !messages[action.channel]) return messages;
 
           const { channel, event } = action;
           const { type, value, actionTimetoken, messageTimetoken, uuid } = action.data;
@@ -261,7 +261,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
             const newActions = actions.filter((a) => a.actionTimetoken !== actionTimetoken);
             newActions.length
               ? setDeep(message, ["actions", type, value], newActions)
-              : delete message.actions[type][value];
+              : delete message.actions?.[type]?.[value];
           }
 
           return messagesClone;
@@ -269,7 +269,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
         if (onMessageActionProp) onMessageActionProp(action);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onMessageActionProp, onErrorProp, setMessages]
@@ -289,7 +289,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
 
         if (onFileProp) onFileProp(event);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onFileProp, onErrorProp, setMessages]
@@ -300,7 +300,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
       try {
         if (onStatusProp) onStatusProp(event);
       } catch (e) {
-        onErrorProp(e);
+        onErrorProp(e as Error);
       }
     },
     [onStatusProp, onErrorProp]
@@ -343,7 +343,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [retryOnError, setRetryFunction]);
 
   /**
-   * Lifecycle: use currentChannel for subscriptions when neither channels or channelGroups is passed
+   * Lifecycle: use currentChannel for subscriptions when neither channels nor channelGroups is passed
    */
 
   useEffect(() => {
@@ -385,7 +385,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         });
       }
     } catch (e) {
-      onErrorProp(e);
+      onErrorProp(e as Error);
     }
   }, [channels, channelGroups, enablePresenceProp, onErrorProp, pubnub]);
 
@@ -397,19 +397,20 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (!pubnub) return;
 
     const listener = {
-      message: (m) => handleMessage(m),
-      messageAction: (m) => handleAction(m),
-      presence: (e) => handlePresenceEvent(e),
-      objects: (e) => handleObjectsEvent(e),
-      signal: (e) => handleSignalEvent(e),
-      file: (e) => handleFileEvent(e),
-      status: (e) => handleStatusEvent(e),
+      message: (m: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken">>) =>
+        handleMessage(m),
+      messageAction: (m: MessageActionEvent) => handleAction(m),
+      presence: (e: PresenceEvent) => handlePresenceEvent(e),
+      objects: (e: BaseObjectsEvent) => handleObjectsEvent(e),
+      signal: (e: SignalEvent) => handleSignalEvent(e),
+      file: (e: FileEvent) => handleFileEvent(e),
+      status: (e: StatusEvent) => handleStatusEvent(e),
     };
 
     try {
       pubnub.addListener(listener);
     } catch (e) {
-      onErrorProp(e);
+      onErrorProp(e as Error);
     }
 
     return () => {
