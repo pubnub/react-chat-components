@@ -1,0 +1,13 @@
+{
+  "packages/react-native/src/**/*": {
+    "users": [
+      "techwritermat",
+      "are"
+    ]
+  },
+  "packages/react/src/**/*.ts": {
+    "users": [
+      "parfeon"
+    ]
+  }
+}

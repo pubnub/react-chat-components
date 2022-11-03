@@ -11,7 +11,7 @@ import "./member-list.scss";
 export type MemberListProps = CommonMemberListProps;
 
 /**
- * Renders a list of members.
+ * Renders a list of members .
  *
  * It can represent all users of the application, only members of
  * the current channel, users currently subscribed/present on the channel, or whatever else is passed
