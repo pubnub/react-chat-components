@@ -9,7 +9,7 @@ import ts from "rollup-plugin-ts";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
 export default {
-  input: "./src/index.ts",
+  input: "./src/index.ts" ,
   output: [
     {
       file: main,
