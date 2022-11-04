@@ -12,12 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          # This should be the same as the one specified for on.pull_request.branches
-          ref: master
+        uses: actions/checkout@v3
       - name: Checkout actions
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: pubnub/client-engineering-deployment-tools
           ref: v1
