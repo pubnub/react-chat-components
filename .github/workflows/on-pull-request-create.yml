@@ -3,7 +3,7 @@ name: Pull request handler
 on:
   pull_request:
     branches: [ master ]
-    types: [ created ]
+    types: [ opened ]
 
 
 jobs:
