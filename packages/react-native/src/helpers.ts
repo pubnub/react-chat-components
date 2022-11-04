@@ -4,7 +4,7 @@ import { Themes } from "@pubnub/common-chat-components";
 import { merge } from "lodash";
 
 export interface UseStyleProps<T> {
-  theme: Themes | "";
+  theme: Themes | "" ;
   createDefaultStyle: (theme: Themes | "") => T;
   customStyle?: T;
 }
