@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, MutableRefObject, MouseEvent } from "react";
 
 export const useOuterClick = (
-  callback: (e: MouseEvent) => unknown
+  callback: (e: MouseEvent) =>  unknown
 ): MutableRefObject<HTMLDivElement> => {
   const callbackRef = useRef<(e: MouseEvent) => unknown>();
   const innerRef = useRef<HTMLDivElement>();
