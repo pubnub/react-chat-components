@@ -46,7 +46,7 @@ export interface CommonMessageListProps {
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Option to provide a custom file renderer to change how images and other files are shown. */
   fileRenderer?: (file: FileAttachment) => JSX.Element;
-  /** Option to render only selected messages. */
+  /** This option only works when you use either `messageRenderer` or `bubbleRenderer`. It allows you to apply one of the custom renderers only to the messages selected by the filter. */
   filter?: (message: MessageEnvelope) => boolean;
 }
 
