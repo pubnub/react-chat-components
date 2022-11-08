@@ -177,46 +177,46 @@ export function PubNubMock(options: PubNubMockOptions = {}): void {
   this.objects = {
     getAllUUIDMetadata: (options: GetAllMetadataParameters) => {
       const limit = options.limit || users.length;
-      const page = options.page?.next || 0;
-      const offset = Number(page) * limit;
+      const page = Number(options.page?.next) || 0;
+      const offset = page * limit;
 
       return {
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
-        next: Number(page) + 1,
+        next: page + 1,
       };
     },
     getAllChannelMetadata: (options: GetAllMetadataParameters) => {
       const limit = options.limit || channels.length;
-      const page = options.page?.next || 0;
-      const offset = Number(page) * limit;
+      const page = Number(options.page?.next) || 0;
+      const offset = page * limit;
 
       return {
         data: channels.slice(offset, offset + limit),
         totalCount: channels.length,
-        next: Number(page) + 1,
+        next: page + 1,
       };
     },
     getChannelMembers: (options: GetAllMetadataParameters) => {
       const limit = options.limit || users.length;
-      const page = options.page?.next || 0;
-      const offset = Number(page) * limit;
+      const page = Number(options.page?.next) || 0;
+      const offset = page * limit;
 
       return {
         data: users.slice(offset, offset + limit),
         totalCount: users.length,
-        next: Number(page) + 1,
+        next: page + 1,
       };
     },
     getMemberships: (options: GetAllMetadataParameters) => {
       const limit = options.limit || channels.length;
-      const page = options.page?.next || 0;
-      const offset = Number(page) * limit;
+      const page = Number(options.page?.next) || 0;
+      const offset = page * limit;
 
       return {
         data: channels.slice(offset, offset + limit),
         totalCount: channels.length,
-        next: Number(page) + 1,
+        next: page + 1,
       };
     },
     getUUIDMetadata: (args: GetUUIDMetadataParameters) => ({

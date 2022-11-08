@@ -1,0 +1,27 @@
+name: Pull request handler
+
+on:
+  pull_request:
+    branches: [ master ]
+    types: [ opened ]
+
+
+jobs:
+  process-new-pr:
+    name: Handle new pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Checkout actions
+        uses: actions/checkout@v3
+        with:
+          repository: pubnub/client-engineering-deployment-tools
+          ref: v1
+          token: ${{ secrets.GH_TOKEN }}
+          path: .github/.release/actions
+      - name: Assign pull request reviewers
+        uses: ./.github/.release/actions/actions/utils/assign-reviewers
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
