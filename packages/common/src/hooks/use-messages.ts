@@ -1,3 +1,6 @@
+// This file is unused so there is no need to keep it ts-checked
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { useState, useEffect, useRef } from "react";
 import { FetchMessagesParameters, MessageActionEvent, MessageEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";

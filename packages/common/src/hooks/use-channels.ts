@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GetAllMetadataParameters } from "pubnub";
+import { GetAllMetadataParameters, ObjectsEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { ChannelEntity } from "../types";
@@ -10,7 +10,7 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
   const pubnub = usePubNub();
 
   const [channels, setChannels] = useState<ChannelEntity[]>([]);
-  const [page, setPage] = useState("");
+  const [page, setPage] = useState<string | undefined>("");
   const [totalCount, setTotalCount] = useState(0);
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
@@ -35,11 +35,11 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
         if (ignoreRequest) return;
         setDoFetch(false);
         setChannels((channels) => [...channels, ...response.data]);
-        setTotalCount(response.totalCount);
+        setTotalCount(response.totalCount || 0);
         setPage(response.next);
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -50,7 +50,7 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
 
   useEffect(() => {
     const listener = {
-      objects: (event) => {
+      objects: (event: ObjectsEvent) => {
         const message = event.message;
         if (message.type !== "channel") return;
 
@@ -79,5 +79,5 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     };
   }, [pubnub]);
 
-  return [channels, fetchMoreChannels, totalCount, error];
+  return [channels, fetchMoreChannels, totalCount, error as Error];
 };

@@ -6,8 +6,11 @@ import { useUser } from "../src/hooks";
 import { PubNubMock } from "../mock/pubnub-mock";
 import users from "../../../data/users/users.json";
 
-const pubnub = new PubNubMock({});
-const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const pubnub = new (PubNubMock as any)({});
+const wrapper = ({ children }: { children: React.ReactNode | React.ReactNode[] | null }) => (
+  <PubNubProvider client={pubnub}>{children}</PubNubProvider>
+);
 
 describe("useUser", () => {
   test("fetches and returns given user", async () => {

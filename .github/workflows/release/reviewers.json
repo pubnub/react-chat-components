@@ -1,13 +1,8 @@
 {
   "packages/react-native/src/**/*": {
-    "users": [
-      "techwritermat",
-      "are"
-    ]
+    "users": ["techwritermat", "are"]
   },
   "packages/react/src/**/*.ts": {
-    "users": [
-      "parfeon"
-    ]
+    "users": ["parfeon"]
   }
 }

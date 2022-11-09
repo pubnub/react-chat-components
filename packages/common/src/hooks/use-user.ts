@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import { GetUUIDMetadataParameters } from "pubnub";
+import { GetUUIDMetadataParameters, ObjectsEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
-export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {
+export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity | null, Error] => {
   const jsonOptions = JSON.stringify(options);
 
   const pubnub = usePubNub();
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<UserEntity | null>(null);
   const [error, setError] = useState<Error>();
   const [doFetch, setDoFetch] = useState(true);
 
@@ -34,7 +34,7 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
         setUser(response.data);
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -45,14 +45,14 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
 
   useEffect(() => {
     const listener = {
-      objects: (event) => {
+      objects: (event: ObjectsEvent) => {
         const message = event.message;
         if (message.type !== "uuid") return;
 
         setUser((user) => {
           const userCopy = cloneDeep(user);
 
-          if (message.data.id == user.id) {
+          if (message.data.id == userCopy?.id) {
             Object.assign(userCopy, message.data);
           }
 
@@ -68,5 +68,5 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
     };
   }, [pubnub]);
 
-  return [user, error];
+  return [user, error as Error];
 };

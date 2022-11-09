@@ -10,7 +10,7 @@ import {
 
 interface CreateChatModalProps {
   users: UserEntity[];
-  currentUser: UserEntity;
+  currentUser: UserEntity | null;
   setCurrentChannel: (channel: Pick<ChannelEntity, "id" | "name" | "description">) => void;
   hideModal: () => void;
 }
@@ -59,11 +59,11 @@ export const CreateChatModal = ({
     if (user) {
       /** 1-on-1 chat */
       const users = [currentUser, user];
-      uuids = users.map((m) => m.id).sort();
+      uuids = users.map((m) => m?.id).sort();
       channel = `direct.${uuids.join("@")}`;
       remoteData = {
         name: users
-          .map((m) => m.name)
+          .map((m) => m?.name)
           .sort()
           .join(" and "),
         custom,
@@ -75,12 +75,12 @@ export const CreateChatModal = ({
     } else {
       /** Group chat */
       const users = [currentUser, ...selectedUsers];
-      uuids = users.map((m) => m.id).sort();
+      uuids = users.map((m) => m?.id).sort();
       channel = `group.${randomHex}`;
       const name =
         channelName ||
         users
-          .map((m) => m.name?.split(" ")[0])
+          .map((m) => m?.name?.split(" ")[0])
           .sort()
           .join(", ");
       remoteData = { name, custom };
@@ -88,6 +88,8 @@ export const CreateChatModal = ({
     }
 
     await pubnub.objects.setChannelMetadata({ channel, data: remoteData });
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     await pubnub.objects.setChannelMembers({ channel, uuids });
     setCurrentChannel({ id: channel, ...localData });
     setCreatingChannel(false);

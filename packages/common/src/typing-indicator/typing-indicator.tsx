@@ -27,7 +27,7 @@ export const useTypingIndicatorCore = (props: CommonTypingIndicatorProps) => {
   const [users] = useAtom(UsersMetaAtom);
   const [typingIndicators] = useAtom(CurrentChannelTypingIndicatorAtom);
   const [typingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
-  const [activeUUIDs, setActiveUUIDs] = useState([]);
+  const [activeUUIDs, setActiveUUIDs] = useState<string[]>([]);
   const typingIndicatorsRef = useRef(typingIndicators);
 
   if (!isEqual(typingIndicatorsRef.current, typingIndicators)) {

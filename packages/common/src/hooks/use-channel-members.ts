@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { GetChannelMembersParameters } from "pubnub";
+import { GetChannelMembersParameters, ObjectsEvent } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
@@ -55,11 +55,11 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
           ...members,
           ...(response.data.map((m) => m.uuid) as UserEntity[]),
         ]);
-        setTotalCount(response.totalCount);
-        setPage(response.next);
+        setTotalCount(response.totalCount || 0);
+        setPage(response.next || "");
       } catch (e) {
         setDoFetch(false);
-        setError(e);
+        setError(e as Error);
       }
     }
 
@@ -70,7 +70,7 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
 
   useEffect(() => {
     const listener = {
-      objects: (event) => {
+      objects: (event: ObjectsEvent) => {
         const message = event.message;
         if (message.type !== "membership") return;
 
@@ -99,5 +99,5 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     };
   }, [pubnub, paginatedOptions.channel]);
 
-  return [members, fetchMoreMembers, resetHook, totalCount, error];
+  return [members, fetchMoreMembers, resetHook, totalCount, error as Error];
 };
