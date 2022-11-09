@@ -1,4 +1,9 @@
-import { UUIDMetadataObject, ChannelMetadataObject, ObjectCustom } from "pubnub";
+import {
+  UUIDMetadataObject,
+  ChannelMetadataObject,
+  ObjectCustom,
+  FetchMessagesResponse,
+} from "pubnub";
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
@@ -82,4 +87,15 @@ export interface RetryOptions {
   maxRetries: number;
   timeout: number;
   exponentialFactor: number;
+}
+
+export interface ProperFetchMessagesResponse extends FetchMessagesResponse {
+  error: boolean;
+  error_message: string;
+  status: number;
+  more?: {
+    max: number;
+    start: string;
+    url: string;
+  };
 }
