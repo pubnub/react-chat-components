@@ -299,7 +299,7 @@ export default function ModeratedChat(): JSX.Element {
               ) : (
                 <>
                   <MessageList
-                    fetchMessages={20}
+                    fetchMessages={25}
                     enableReactions={!isUserMuted}
                     reactionsPicker={
                       isUserMuted ? undefined : <Picker data={pickerData} theme={theme} />

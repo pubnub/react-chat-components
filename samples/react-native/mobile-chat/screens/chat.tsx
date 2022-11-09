@@ -16,7 +16,7 @@ export function ChatScreen(): JSX.Element {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
         <MessageList
-          fetchMessages={20}
+          fetchMessages={25}
           // extraActionsRenderer={(msg) => <Button title="EA" onPress={() => console.log(msg)} />}
           // filter={(msg) => msg.message.text === "3"}
           // messageRenderer={(env) => <Text>{env.message.message.text}</Text>}
