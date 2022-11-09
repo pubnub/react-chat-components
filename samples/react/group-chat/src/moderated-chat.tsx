@@ -15,6 +15,7 @@ import {
   useChannelMembers,
   useChannels,
   usePresence,
+  UserEntity,
   useUser,
   useUserMemberships,
   useUsers,
@@ -188,7 +189,7 @@ export default function ModeratedChat(): JSX.Element {
         {showReportUserModal && (
           <ReportUserModal
             {...{
-              currentUser,
+              currentUser: currentUser as UserEntity,
               reportedMessage,
               hideModal: () => setShowReportUserModal(false),
               users: allUsers,

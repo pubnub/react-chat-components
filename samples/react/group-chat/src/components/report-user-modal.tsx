@@ -3,7 +3,7 @@ import { usePubNub } from "pubnub-react";
 import { MessageEnvelope, UserEntity } from "@pubnub/react-chat-components";
 
 interface ReportUserModalProps {
-  currentUser: UserEntity | null;
+  currentUser: UserEntity;
   reportedMessage?: MessageEnvelope;
   hideModal: () => void;
   users: UserEntity[];
@@ -73,7 +73,7 @@ export const ReportUserModal = ({
           ...existingMetadata,
           flag: true,
           flaggedAt: Date.now(),
-          flaggedBy: `${currentUser?.name} (${currentUser?.id})`,
+          flaggedBy: `${currentUser.name} (${currentUser.id})`,
           reason,
         },
       },
