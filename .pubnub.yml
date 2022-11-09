@@ -11,7 +11,7 @@ changelog:
     version: v0.15.0
     changes:
       - type: bug
-        text: "…t is set above 25 Story: https://pubnub.atlassian.net/browse/UI-1537."
+        text: "MessageList - infinite scrolling breaks if history limit is set over 25."
   - date: 2022-10-18
     version: v0.14.0
     changes:
@@ -42,12 +42,9 @@ changelog:
     version: v0.10.0
     changes:
       - type: fix
-        text:
-          "MessageInput - user metadata not attached to File messages with senderInfo option
-          enabled."
+        text: "MessageInput - user metadata not attached to File messages with senderInfo option enabled."
       - type: fix
-        text:
-          "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
+        text: "Channel/MemberList - disable default flex shrinking of some UI elements (e.g. avatars)."
   - changes:
       - text: Channel/MemberList - added option for custom sorting
         type: feature
