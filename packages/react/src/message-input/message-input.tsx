@@ -1,4 +1,13 @@
-import React, { FC, KeyboardEvent, ReactElement, useCallback, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   CommonMessageInputProps,
   useMessageInputCore,
@@ -26,7 +35,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const {
     clearInput,
     file,
-    handleFileChange,
+    setFile,
     handleInputChange,
     isValidInputText,
     loader,
@@ -75,6 +84,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = event.target.files[0];
+      setFile(file);
+      setText(file.name);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
   const handleSendClick = () => {
     sendMessage();
     if (fileRef.current) fileRef.current.value = "";
@@ -98,6 +117,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     clearInput();
     if (fileRef.current) fileRef.current.value = "";
   };
+
+  useEffect(() => {
+    if (text === "") {
+      autoSize();
+    }
+  }, [text]);
+
+  useEffect(() => {
+    autoSize();
+  }, [file]);
 
   /*
   /* Renderers
