@@ -1,6 +1,6 @@
 # Telehealth Chat
 
-`telehealth` is a simple app that allows you to get a 1:1 chat app quickly up and running through the PubNub Network. It features two chat windows with message input fields that allow you to simulate a conversation between a patient and a doctor. After starting the app, you can switch between windows to mock a patient-doctor chat. You can also switch the app modes as the app comes with the light and dark themes.
+`telehealth` is a simple cross-platform app that allows you to get a 1:1 chat app quickly up and running through the PubNub Network. It features a login screen, and two separate chat screens, depending on the type of the selected user. After starting the app, you can open it in two different windows or devices to mock a patient-doctor chat. You can also switch the app modes as the app comes with the light and dark themes.
 
 ![Telehealth app for React](screenshot.png)
 
@@ -54,3 +54,16 @@ The `telehealth` app showcases these PubNub Chat Components for React:
 - [Chat Provider](https://www.pubnub.com/docs/chat/components/react/chat-provider)
 - [Message List](https://www.pubnub.com/docs/chat/components/react/ui-components/message-list)
 - [Message Input](https://www.pubnub.com/docs/chat/components/react/ui-components/message-input)
+
+## Usernames
+
+You can log into the app either as a doctor or as one of the patients. Type in one of the available usernames and tap Log in. You don't need a password to log in.
+
+### Patients
+
+- lukeyoung
+- saraflores
+
+### Doctors
+
+- suejones

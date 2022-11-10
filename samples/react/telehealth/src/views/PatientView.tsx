@@ -3,24 +3,38 @@ import { UserEntity, MessageList, MessageInput, Chat } from "@pubnub/react-chat-
 
 import { ReactComponent as ArrowUpIcon } from "../assets/arrow-turn-up.svg";
 import { ReactComponent as UnderlineIcon } from "../assets/underline.svg";
+import memberships from "../data/memberships.json";
+import jsonUsers from "../data/users.json";
+const users = jsonUsers as Array<UserEntity & { type: string }>;
 
 type PatientViewProps = {
-  patient: UserEntity;
-  doctor: UserEntity;
-  channel: string;
+  patient: UserEntity & { type: string };
 };
 
 function PatientView(props: PatientViewProps): JSX.Element {
-  const { patient, doctor, channel } = props;
+  const { patient } = props;
+  const membership = memberships.find((m) => m.members.includes(patient.id));
+  const channel = membership?.channelId;
+  const doctorId = membership?.members.find((id) => id !== patient.id);
+  const doctor = users.find((u) => u.id === doctorId);
   const [widgetOpen, setWidgetOpen] = useState(true);
   const [unread, setUnread] = useState(0);
   const onMessage = () => setUnread((c) => c + 1);
 
+  if (!channel || !doctor) return <></>;
+
   return (
-    <div className="patient-view flex flex-col items-end justify-end grow overflow-hidden p-5">
+    <div className="patient-view flex flex-col items-end justify-end overflow-hidden p-5 h-[750px] w-[440px]">
+      <header className="pb-2 mb-8 border-b border-solid border-gray-300 w-full">
+        <h1 className="text-gray-400 font-bold">Patient&apos;s Interface</h1>
+        <h2 className="text-gray-400">
+          Logged in as: <strong>{patient.name}</strong>
+        </h2>
+      </header>
+
       <section
         className={`flex flex-col w-full rounded-xl shadow-xl overflow-hidden grow ${
-          !widgetOpen && "hidden"
+          !widgetOpen && "invisible"
         }`}
       >
         <header className="px-4 h-[70px] bg-cyan-700 dark:bg-slate-700 text-white flex items-center shrink-0">
@@ -34,7 +48,7 @@ function PatientView(props: PatientViewProps): JSX.Element {
 
           <div className="grow">
             <p className="font-bold leading-5">{doctor.name}</p>
-            <p className="leading-5">General Practitioner</p>
+            <p className="leading-5">{doctor.custom?.title}</p>
           </div>
 
           <button
@@ -47,13 +61,12 @@ function PatientView(props: PatientViewProps): JSX.Element {
         </header>
 
         <main className="flex flex-col overflow-hidden grow">
-          <Chat currentChannel={channel} users={[patient, doctor]} onMessage={onMessage}>
+          <Chat currentChannel={channel} users={users} onMessage={onMessage}>
             <MessageList />
             <MessageInput sendButton={<ArrowUpIcon />} />
           </Chat>
         </main>
       </section>
-
       <button
         onClick={() => {
           setWidgetOpen(!widgetOpen);
