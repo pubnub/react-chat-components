@@ -13,7 +13,7 @@ import {
   useMessageInputCore,
   EmojiPickerElementProps,
 } from "@pubnub/common-chat-components";
-import { useOuterClick } from "../helpers";
+import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
 import ImageIcon from "../icons/image.svg";
@@ -49,6 +49,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const resizeTextAreaEntry = useResizeObserver(inputRef);
+  const textAreaWidth = resizeTextAreaEntry?.contentRect.width;
   const pickerRef = useOuterClick(() => {
     if ((event.target as Element).closest(".pn-msg-input__emoji-toggle")) return;
     setEmojiPickerShown(false);
@@ -119,14 +121,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   useEffect(() => {
-    if (text === "") {
-      autoSize();
-    }
-  }, [text]);
-
-  useEffect(() => {
     autoSize();
-  }, [file]);
+  }, [file, textAreaWidth, text]);
 
   /*
   /* Renderers
@@ -195,7 +191,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           disabled={props.disabled || !!file}
           onChange={(e) => {
             handleInputChange(e.target.value);
-            autoSize();
           }}
           onKeyPress={(e) => handleKeyPress(e)}
           placeholder={props.placeholder}
