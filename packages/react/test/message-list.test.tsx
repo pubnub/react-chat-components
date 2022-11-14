@@ -7,25 +7,6 @@ import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
 
 describe("Message List", () => {
-  let intersectionObserverMock;
-  let resizeObserverMock;
-
-  beforeEach(() => {
-    intersectionObserverMock = jest.fn().mockReturnValue({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn(),
-    });
-    resizeObserverMock = jest.fn().mockReturnValue({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-      disconnect: jest.fn(),
-    });
-
-    window.IntersectionObserver = intersectionObserverMock;
-    window.ResizeObserver = resizeObserverMock;
-  });
-
   test("renders with custom welcome messages", async () => {
     const message = {
       message: { id: "id-1", type: "welcome", text: "Welcome" },
@@ -117,7 +98,7 @@ describe("Message List", () => {
     ).not.toBeInTheDocument();
 
     await act(async () => {
-      for (const call of intersectionObserverMock.mock.calls) {
+      for (const call of window.IntersectionObserver["mock"].calls) {
         const callback = call[0];
         callback([{ isIntersecting: true }]);
       }
@@ -140,7 +121,7 @@ describe("Message List", () => {
     expect(await screen.findByText("Existing Message")).toBeVisible();
 
     await act(() => {
-      const observerCallback = intersectionObserverMock.mock.calls[1][0]; // bottomObserver
+      const observerCallback = window.IntersectionObserver["mock"].calls[1][0]; // bottomObserver
       observerCallback([{ isIntersecting: false }]);
     });
 

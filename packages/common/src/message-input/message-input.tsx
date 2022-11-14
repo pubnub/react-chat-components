@@ -142,16 +142,6 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     }
   };
 
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
-    try {
-      const file = event.target.files[0];
-      setFile(file);
-      setText(file.name);
-    } catch (e) {
-      onError(e);
-    }
-  };
-
   /*
   /* Lifecycle
   */
@@ -170,7 +160,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   return {
     clearInput,
     file,
-    handleFileChange,
+    setFile,
     handleInputChange,
     isValidInputText,
     loader,
