@@ -1,12 +1,19 @@
 ---
 name: pubnub-react-chat-components
-version: v0.15.0
+version: v0.16.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2022-11-14
+    version: v0.16.0
+    changes:
+      - type: bug
+        text: "MessageInput - Same message can be sent twice if Enter key is pressed repeatedly."
+      - type: bug
+        text: "MessageInput - Auto-sizing of MessageInput does not always work."
   - date: 2022-11-09
     version: v0.15.0
     changes:
