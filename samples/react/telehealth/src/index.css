@@ -17,16 +17,19 @@ body {
 }
 
 #root {
-  --member--hover__background: theme(colors.cyan.300);
-  --member__avatar__size: 46px;
-  --member__background: theme(colors.white);
-  --member__cursor: pointer;
-  --member__name__color: theme(colors.black);
-  --member__name__fontSize: 16px;
-  --member__padding: 12px 16px;
-  --member__title__color: theme(colors.gray.500);
-  --member__title__fontSize: 14px;
-  --member__title__padding: 0;
+  --channel--hover__background: theme(colors.cyan.300);
+  --channel--active__background: theme(colors.white);
+  --channel-list__background: theme(colors.gray.100);
+  --channel__avatar__size: 46px;
+  --channel__cursor: pointer;
+  --channel__description__padding: 0;
+  --channel__description__fontSize: 13px;
+  --channel__name__color: theme(colors.black);
+  --channel__name__color: theme(colors.gray.500);
+  --channel__name__fontSize: 14px;
+  --channel__name__fontSize: 16px;
+  --channel__name__padding: 0;
+  --channel__padding: 12px 16px;
   --msg--hover__background: transparent;
   --msg-input__background: theme(colors.gray.200);
   --msg-input__padding: 9px 18px 9px 0;
@@ -61,13 +64,18 @@ body {
 }
 
 #root .dark {
-  --member--hover__background: theme(colors.slate.700);
-  --member__background: theme(colors.gray.500);
-  --member__name__color: theme(colors.white);
-  --member__title__color: theme(colors.gray.400);
+  --channel--active__background: theme(colors.gray.500);
+  --channel--active__description__color: theme(colors.gray.400);
+  --channel--active__name__color: theme(colors.white);
+  --channel--hover__background: theme(colors.slate.700);
+  --channel--hover__description__color: theme(colors.gray.400);
+  --channel--hover__name__color: theme(colors.white);
+  --channel-list__background: theme(colors.gray.700);
+  --channel__description__color: theme(colors.gray.400);
+  --channel__name__color: theme(colors.white);
   --msg-input__background: theme(colors.gray.800);
-  --msg-input__send__color: theme(colors.white);
   --msg-input__send--active__color: theme(colors.white);
+  --msg-input__send__color: theme(colors.white);
   --msg-input__textarea__background: theme(colors.gray.500);
   --msg-input__textarea__color: theme(colors.white);
   --msg-list__background: theme(colors.gray.500);
