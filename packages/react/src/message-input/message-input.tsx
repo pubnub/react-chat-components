@@ -1,10 +1,19 @@
-import React, { FC, KeyboardEvent, ReactElement, useCallback, useRef, useState } from "react";
+import React, {
+  ChangeEvent,
+  FC,
+  KeyboardEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   CommonMessageInputProps,
   useMessageInputCore,
   EmojiPickerElementProps,
 } from "@pubnub/common-chat-components";
-import { useOuterClick } from "../helpers";
+import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
 import ImageIcon from "../icons/image.svg";
@@ -26,7 +35,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const {
     clearInput,
     file,
-    handleFileChange,
+    setFile,
     handleInputChange,
     isValidInputText,
     loader,
@@ -40,6 +49,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const resizeTextAreaEntry = useResizeObserver(inputRef);
+  const textAreaWidth = resizeTextAreaEntry?.contentRect.width;
   const pickerRef = useOuterClick(() => {
     if ((event.target as Element).closest(".pn-msg-input__emoji-toggle")) return;
     setEmojiPickerShown(false);
@@ -75,6 +86,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     }
   };
 
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    try {
+      const file = event.target.files[0];
+      setFile(file);
+      setText(file.name);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
   const handleSendClick = () => {
     sendMessage();
     if (fileRef.current) fileRef.current.value = "";
@@ -98,6 +119,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     clearInput();
     if (fileRef.current) fileRef.current.value = "";
   };
+
+  useEffect(() => {
+    autoSize();
+  }, [file, textAreaWidth, text]);
 
   /*
   /* Renderers
@@ -166,7 +191,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           disabled={props.disabled || !!file}
           onChange={(e) => {
             handleInputChange(e.target.value);
-            autoSize();
           }}
           onKeyPress={(e) => handleKeyPress(e)}
           placeholder={props.placeholder}
