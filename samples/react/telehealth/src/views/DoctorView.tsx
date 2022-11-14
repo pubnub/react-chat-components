@@ -20,21 +20,24 @@ type DoctorViewProps = {
 function DoctorView(props: DoctorViewProps): JSX.Element {
   const { doctor } = props;
   const doctorMemberships = memberships.filter((m) => m.members.includes(doctor.id));
-  const channels = doctorMemberships.map((m) => {
+  const channels = doctorMemberships.reduce((acc: ChannelEntity[], m) => {
     const patientId = m.members.find((id) => id !== doctor.id);
     const patient = users.find((u) => u.id === patientId);
-    if (!patient) return;
-    return {
-      id: m.channelId,
-      name: patient.name,
-      description: `Patient ID: ${patient.id}`,
-      custom: {
-        profileUrl: patient?.profileUrl,
+    if (!patient) return acc;
+    return [
+      ...acc,
+      {
+        id: m.channelId,
+        name: patient.name,
+        description: `Patient ID: ${patient.id}`,
+        custom: {
+          profileUrl: patient?.profileUrl,
+        },
+        updated: "",
+        eTag: "",
       },
-      updated: "",
-      eTag: "",
-    };
-  }) as ChannelEntity[];
+    ];
+  }, []);
   const [currentChannel, setCurrentChannel] = useState(channels[1] || { id: "default" });
 
   return (

@@ -21,7 +21,7 @@ type LoginViewProps = {
 
 export default function LoginView(props: LoginViewProps): JSX.Element {
   const { setUser, darkMode } = props;
-  const [userInput, setUserInput] = useState("");
+  const [userInput, setUserInput] = useState(users[0].custom?.username as string);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
