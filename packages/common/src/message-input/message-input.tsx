@@ -69,6 +69,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   */
 
   const sendMessage = async () => {
+    if (loader) return;
     try {
       if (!file && !isValidInputText()) return;
       let message = {
