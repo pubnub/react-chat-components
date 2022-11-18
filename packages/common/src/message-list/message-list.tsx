@@ -131,6 +131,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
         count: props.fetchMessages,
         start: (messages?.[0]?.timetoken as number) || undefined,
         includeMessageActions: true,
+        includeMeta: true,
       };
       const response = (await retry(() =>
         pubnub.fetchMessages(options)
