@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.16.0
+version: v0.17.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2022-11-21
+    version: v0.17.0
+    changes:
+      - type: bug
+        text: "MessageList - Include meta data for historic messages."
   - date: 2022-11-14
     version: v0.16.0
     changes:
