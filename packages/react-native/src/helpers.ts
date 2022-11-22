@@ -20,7 +20,7 @@ export const useStyle = <T>(props: UseStyleProps<T>): T => {
   return style;
 };
 
-export const useRotation = (shouldRun = true): Animated.AnimatedInterpolation => {
+export const useRotation = (shouldRun = true): Animated.AnimatedInterpolation<number> => {
   const [rotationValue] = useState(new Animated.Value(0));
   const animation = useMemo(
     () =>
