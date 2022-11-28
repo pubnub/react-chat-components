@@ -12561,6 +12561,13 @@ pubnub-demo-integration@0.1.1:
   dependencies:
     node-fetch "^3.2.6"
 
+pubnub-demo-integration@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/pubnub-demo-integration/-/pubnub-demo-integration-1.0.0.tgz#b043a7cf73fc4fdb7a5c551aa02506c8c0591fcc"
+  integrity sha512-xJnSpeKnHiJfBBAgCPvA3HCZaQ1TpAQ0QXw2pAJeXzeNJ4lDKHV6qZOL7tep14XoThBv0dPUKxM4/Ro4hcxV6Q==
+  dependencies:
+    node-fetch "^3.2.6"
+
 pubnub-react@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/pubnub-react/-/pubnub-react-3.0.1.tgz#17cfb46ebcb2b2971121005028cf5f353aeb79ef"
