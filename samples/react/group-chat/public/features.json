@@ -1,0 +1,13 @@
+{
+  "features": [
+    "Send a Chat Message",
+    "Send a Message with an Emoji",
+    "Change the Theme",
+    "Leave a Channel",
+    "Select '+' to Add a New Channel",
+    "Switch to a New Channel",
+    "Scroll to & Select '+' to Add a 1:1 Chat",
+    "Switch to a new 1:1 or Group Chat",
+    "Leave a 1:1 or Group Chat"
+  ]
+}
