@@ -19,7 +19,7 @@ import {
   useUserMemberships,
   useUsers,
 } from "@pubnub/react-chat-components";
-import { actionCompleted, containsEmoji } from "pubnub-demo-integration"
+import { actionCompleted, containsEmoji } from "pubnub-demo-integration";
 
 import { CreateChatModal } from "./components/create-chat-modal";
 import { ReportUserModal } from "./components/report-user-modal";
@@ -215,7 +215,10 @@ export default function ModeratedChat(): JSX.Element {
                 <i className="material-icons-outlined">brightness_4</i>
                 <button
                   className={theme}
-                  onClick={() => {setTheme(theme === "light" ? "dark" : "light"); actionCompleted({action:"Change the Theme"});}}
+                  onClick={() => {
+                    setTheme(theme === "light" ? "dark" : "light");
+                    actionCompleted({ action: "Change the Theme" });
+                  }}
                 >
                   <span></span>
                 </button>
@@ -236,7 +239,10 @@ export default function ModeratedChat(): JSX.Element {
                   Channels{" "}
                   <button
                     className="material-icons-outlined"
-                    onClick={() => {setShowPublicChannelsModal(true); actionCompleted({action:"Select '+' to Add a New Channel"});}}
+                    onClick={() => {
+                      setShowPublicChannelsModal(true);
+                      actionCompleted({ action: "Select '+' to Add a New Channel" });
+                    }}
                   >
                     add_circle_outline
                   </button>
@@ -244,9 +250,18 @@ export default function ModeratedChat(): JSX.Element {
                 <div>
                   <ChannelList
                     channels={groupChannels}
-                    onChannelSwitched={(channel) => {setCurrentChannel(channel); actionCompleted({action:"Switch to a New Channel"});}}
+                    onChannelSwitched={(channel) => {
+                      setCurrentChannel(channel);
+                      actionCompleted({ action: "Switch to a New Channel" });
+                    }}
                     extraActionsRenderer={(c) => (
-                      <div onClick={(e) => {leaveChannel(c, e); actionCompleted({action:"Leave a Channel"});}} title="Leave channel">
+                      <div
+                        onClick={(e) => {
+                          leaveChannel(c, e);
+                          actionCompleted({ action: "Leave a Channel" });
+                        }}
+                        title="Leave channel"
+                      >
                         <i className="material-icons-outlined small">logout</i>
                       </div>
                     )}
@@ -256,7 +271,10 @@ export default function ModeratedChat(): JSX.Element {
                   1:1 / Group chats{" "}
                   <button
                     className="material-icons-outlined"
-                    onClick={() => {setShowCreateChatModal(true); actionCompleted({action:"Scroll to & Select '+' to Add a 1:1 Chat"});}}
+                    onClick={() => {
+                      setShowCreateChatModal(true);
+                      actionCompleted({ action: "Scroll to & Select '+' to Add a 1:1 Chat" });
+                    }}
                   >
                     add_circle_outline
                   </button>
@@ -264,9 +282,18 @@ export default function ModeratedChat(): JSX.Element {
                 <div>
                   <ChannelList
                     channels={directChannels}
-                    onChannelSwitched={(channel) => {setCurrentChannel(channel);actionCompleted({action:"Switch to a new 1:1 or Group Chat"});}}
+                    onChannelSwitched={(channel) => {
+                      setCurrentChannel(channel);
+                      actionCompleted({ action: "Switch to a new 1:1 or Group Chat" });
+                    }}
                     extraActionsRenderer={(c) => (
-                      <div onClick={(e) => {leaveChannel(c, e); actionCompleted({action:"Leave a 1:1 or Group Chat"});}} title="Leave channel">
+                      <div
+                        onClick={(e) => {
+                          leaveChannel(c, e);
+                          actionCompleted({ action: "Leave a 1:1 or Group Chat" });
+                        }}
+                        title="Leave channel"
+                      >
                         <i className="material-icons-outlined small">logout</i>
                       </div>
                     )}
@@ -329,12 +356,12 @@ export default function ModeratedChat(): JSX.Element {
                     fileUpload="image"
                     emojiPicker={<Picker data={pickerData} theme={theme} />}
                     placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
-                    onSend={message => {
-                      if (containsEmoji({ testString: message.text }))
-                        actionCompleted({
-                          action: 'Send a Message with an Emoji'
-                        })
-                      else actionCompleted({ action: 'Send a Chat Message' })
+                    onSend={(message) => {
+                      actionCompleted({
+                        action: containsEmoji({ testString: message.text })
+                          ? "Send a Message with an Emoji"
+                          : "Send a Chat Message",
+                      });
                     }}
                   />
                 </>
