@@ -1,0 +1,9 @@
+{
+    "features": [
+      "Log in as a Patient",
+      "Log in as a Doctor (in a new tab)",
+      "Send a Message as a Patient",
+      "Send a Message as a Doctor",
+      "Change the Application Theme"
+    ]
+  }
