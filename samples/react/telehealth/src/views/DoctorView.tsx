@@ -91,7 +91,7 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
               <MessageList 
                 welcomeMessages = {{
                 message: { id: "id-welcome-d", type: "welcome", text: "Please open another window or tab to chat" },
-                  timetoken: (new Date().getTime() * 10000) + "",
+                  timetoken: (new Date().getTime() * 10000).toString(),
                 }}
               />
               <MessageInput 

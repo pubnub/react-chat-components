@@ -75,7 +75,7 @@ function PatientView(props: PatientViewProps): JSX.Element {
             <MessageList 
               welcomeMessages = {{
                 message: { id: "id-welcome-p", type: "welcome", text: "Please open another window or tab to chat" },
-                timetoken: (new Date().getTime() * 10000) + "",
+                timetoken: (new Date().getTime() * 10000).toString(),
               }}
             />
             <MessageInput 
