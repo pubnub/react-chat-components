@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { UserEntity } from "@pubnub/react-chat-components";
+import { actionCompleted } from "pubnub-demo-integration";
 
 import { ReactComponent as Logo } from "../assets/logo.svg";
 import { ReactComponent as LogoDark } from "../assets/logo-dark.svg";
@@ -31,7 +32,13 @@ export default function LoginView(props: LoginViewProps): JSX.Element {
     await timeout(500);
     setLoading(false);
     const user = users.find((u) => u?.custom?.username === userInput);
-    user ? setUser(user) : setError(true);
+    if (user) {
+      setUser(user);
+      actionCompleted({
+        action:
+          user.type === "patient" ? "Log in as a Patient" : "Log in as a Doctor (in a new tab)",
+      });
+    } else setError(true);
   };
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {

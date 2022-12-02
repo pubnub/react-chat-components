@@ -7,6 +7,7 @@ import {
   Chat,
   ChannelEntity,
 } from "@pubnub/react-chat-components";
+import { actionCompleted } from "pubnub-demo-integration";
 
 import { ReactComponent as MedicalIcon } from "../assets/clipboard-medical.svg";
 import { ReactComponent as ArrowUp } from "../assets/arrow-turn-up.svg";
@@ -41,7 +42,11 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
   const [currentChannel, setCurrentChannel] = useState(channels[1] || { id: "default" });
 
   return (
-    <div className="p-5 overflow-hidden h-[750px] w-[740px] flex flex-col">
+    <div
+      className={`p-5 overflow-hidden w-[740px] flex flex-col ${
+        window.innerHeight < 750 ? "h-[650px]" : "h-[750px]"
+      }`}
+    >
       <header className="pb-2 mb-8 border-b border-solid border-gray-300">
         <h1 className="text-gray-400 font-bold">Doctor&apos;s Interface</h1>
         <h2 className="text-gray-400">
@@ -79,8 +84,22 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
             </header>
 
             <article className="flex flex-col grow overflow-hidden">
-              <MessageList />
-              <MessageInput sendButton={<ArrowUp />} />
+              <MessageList
+                welcomeMessages={{
+                  message: {
+                    id: "id-welcome-d",
+                    type: "welcome",
+                    text: "Please open another window or tab to chat",
+                  },
+                  timetoken: (new Date().getTime() * 10000).toString(),
+                }}
+              />
+              <MessageInput
+                sendButton={<ArrowUp />}
+                onSend={() => {
+                  actionCompleted({ action: "Send a Message as a Doctor" });
+                }}
+              />
             </article>
           </section>
         </Chat>

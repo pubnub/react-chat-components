@@ -13,6 +13,7 @@
     "@pubnub/react-chat-components": "*",
     "pubnub": "7.2.0",
     "pubnub-react": "3.0.1",
+    "pubnub-demo-integration": "1.0.0",
     "react": "18.0.0",
     "react-dom": "18.0.0"
   },

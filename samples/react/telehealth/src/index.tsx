@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 
 import { ReactComponent as MoonIcon } from "./assets/moon.svg";
 import { ReactComponent as SunIcon } from "./assets/sun.svg";
+import { actionCompleted } from "pubnub-demo-integration";
 import SwitchView from "./views/SwitchView";
 import "./index.css";
 
@@ -20,9 +21,12 @@ function App(): JSX.Element {
       } `}
     >
       <button
-        onClick={() => setDarkMode(!darkMode)}
-        className="absolute top-0 left-0 p-4 m-8 text-xs underline ease-in-out duration-300
-        text-cyan-700 hover:text-slate-700"
+        onClick={() => {
+          setDarkMode(!darkMode);
+          actionCompleted({ action: "Change the Application Theme" });
+        }}
+        className="absolute top-0 right-0 p-4 m-8 mt-2 text-xs underline ease-in-out duration-300
+        text-slate-700 hover:text-slate-700"
       >
         {darkMode ? <SunIcon className="inline" /> : <MoonIcon className="inline" />}
         <span className="ml-2">Switch to {darkMode ? "Light" : "Dark"} Theme</span>

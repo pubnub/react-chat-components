@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { UserEntity, MessageList, MessageInput, Chat } from "@pubnub/react-chat-components";
+import { actionCompleted } from "pubnub-demo-integration";
 
 import { ReactComponent as ArrowUpIcon } from "../assets/arrow-turn-up.svg";
 import { ReactComponent as UnderlineIcon } from "../assets/underline.svg";
@@ -20,11 +21,14 @@ function PatientView(props: PatientViewProps): JSX.Element {
   const [widgetOpen, setWidgetOpen] = useState(true);
   const [unread, setUnread] = useState(0);
   const onMessage = () => setUnread((c) => c + 1);
-
   if (!channel || !doctor) return <></>;
 
   return (
-    <div className="patient-view flex flex-col items-end justify-end overflow-hidden p-5 h-[750px] w-[440px]">
+    <div
+      className={`patient-view flex flex-col items-end justify-end overflow-hidden p-5 w-[440px] ${
+        window.innerHeight < 750 ? "h-[680px]" : "h-[750px]"
+      }`}
+    >
       <header className="pb-2 mb-8 border-b border-solid border-gray-300 w-full">
         <h1 className="text-gray-400 font-bold">Patient&apos;s Interface</h1>
         <h2 className="text-gray-400">
@@ -62,8 +66,22 @@ function PatientView(props: PatientViewProps): JSX.Element {
 
         <main className="flex flex-col overflow-hidden grow">
           <Chat currentChannel={channel} users={users} onMessage={onMessage}>
-            <MessageList />
-            <MessageInput sendButton={<ArrowUpIcon />} />
+            <MessageList
+              welcomeMessages={{
+                message: {
+                  id: "id-welcome-p",
+                  type: "welcome",
+                  text: "Please open another window or tab to chat",
+                },
+                timetoken: (new Date().getTime() * 10000).toString(),
+              }}
+            />
+            <MessageInput
+              sendButton={<ArrowUpIcon />}
+              onSend={() => {
+                actionCompleted({ action: "Send a Message as a Patient" });
+              }}
+            />
           </Chat>
         </main>
       </section>

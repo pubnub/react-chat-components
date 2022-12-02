@@ -34,8 +34,8 @@ export default function SwitchView(props: { darkMode: boolean }): JSX.Element {
     <PubNubProvider client={pubnub}>
       <button
         onClick={() => setUser(undefined)}
-        className="absolute top-10 left-0 p-4 m-8 text-xs underline ease-in-out duration-300
-        text-cyan-700 hover:text-slate-700"
+        className="absolute top-10 right-0 p-4 m-4 mr-8 text-xs underline ease-in-out duration-300
+        text-slate-700 hover:text-slate-700"
       >
         <UnlockIcon className="inline" />
         <span className="ml-2">Log out</span>
