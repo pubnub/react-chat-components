@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   UserEntity,
   MessageList,
@@ -21,15 +21,7 @@ type DoctorViewProps = {
 function DoctorView(props: DoctorViewProps): JSX.Element {
   const { doctor } = props;
   const doctorMemberships = memberships.filter((m) => m.members.includes(doctor.id));
-  useEffect(() => {
-    if (window.innerHeight < 750)
-      setClasses("p-5 overflow-hidden h-[650px] w-[740px] flex flex-col")
-    else
-      setClasses("p-5 overflow-hidden h-[750px] w-[740px] flex flex-col")
-
-  }, []);
-    const [ classes, setClasses ] = useState("")
-    const channels = doctorMemberships.reduce((acc: ChannelEntity[], m) => {
+  const channels = doctorMemberships.reduce((acc: ChannelEntity[], m) => {
     const patientId = m.members.find((id) => id !== doctor.id);
     const patient = users.find((u) => u.id === patientId);
     if (!patient) return acc;
@@ -50,7 +42,11 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
   const [currentChannel, setCurrentChannel] = useState(channels[1] || { id: "default" });
 
   return (
-    <div className={classes}>
+    <div
+      className={`p-5 overflow-hidden w-[740px] flex flex-col ${
+        window.innerHeight < 750 ? "h-[650px]" : "h-[750px]"
+      }`}
+    >
       <header className="pb-2 mb-8 border-b border-solid border-gray-300">
         <h1 className="text-gray-400 font-bold">Doctor&apos;s Interface</h1>
         <h2 className="text-gray-400">
@@ -88,16 +84,20 @@ function DoctorView(props: DoctorViewProps): JSX.Element {
             </header>
 
             <article className="flex flex-col grow overflow-hidden">
-              <MessageList 
-                welcomeMessages = {{
-                message: { id: "id-welcome-d", type: "welcome", text: "Please open another window or tab to chat" },
+              <MessageList
+                welcomeMessages={{
+                  message: {
+                    id: "id-welcome-d",
+                    type: "welcome",
+                    text: "Please open another window or tab to chat",
+                  },
                   timetoken: (new Date().getTime() * 10000).toString(),
                 }}
               />
-              <MessageInput 
-                sendButton={<ArrowUp />} 
-                onSend={(message) => {
-                  actionCompleted({ action: "Send a Message as a Doctor"});
+              <MessageInput
+                sendButton={<ArrowUp />}
+                onSend={() => {
+                  actionCompleted({ action: "Send a Message as a Doctor" });
                 }}
               />
             </article>

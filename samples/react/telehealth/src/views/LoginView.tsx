@@ -32,11 +32,13 @@ export default function LoginView(props: LoginViewProps): JSX.Element {
     await timeout(500);
     setLoading(false);
     const user = users.find((u) => u?.custom?.username === userInput);
-    user ? setUser(user) : setError(true);
-    if (user && user.type == "patient" )
-      actionCompleted({ action: "Log in as a Patient"});
-    else if (user && user.type == "doctor")
-      actionCompleted({ action: "Log in as a Doctor (in a new tab)"});
+    if (user) {
+      setUser(user);
+      actionCompleted({
+        action:
+          user.type === "patient" ? "Log in as a Patient" : "Log in as a Doctor (in a new tab)",
+      });
+    } else setError(true);
   };
 
   const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {

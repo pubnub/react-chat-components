@@ -23,7 +23,7 @@ function App(): JSX.Element {
       <button
         onClick={() => {
           setDarkMode(!darkMode);
-          actionCompleted({ action: "Change the Application Theme"});
+          actionCompleted({ action: "Change the Application Theme" });
         }}
         className="absolute top-0 right-0 p-4 m-8 mt-2 text-xs underline ease-in-out duration-300
         text-slate-700 hover:text-slate-700"
