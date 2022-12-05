@@ -18,12 +18,12 @@
     "pubnub": "7.2.0",
     "pubnub-react": "3.0.1",
     "pubnub-demo-integration": "1.0.0",
-    "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react": "18.1.0",
+    "react-dom": "18.1.0"
   },
   "devDependencies": {
     "@types/pubnub": "7.2.0",
-    "@types/react": "18.0.20",
+    "@types/react": "18.0.24",
     "@types/react-dom": "18.0.6",
     "@vitejs/plugin-react": "2.1.0",
     "cli-progress": "3.11.2",
