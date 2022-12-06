@@ -16,6 +16,7 @@ keys.json
 ##################
 .github/.release
 .turbo
+.parcel-cache
 
 # misc
 TODO.md

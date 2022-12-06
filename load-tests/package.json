@@ -1,0 +1,33 @@
+{
+  "name": "load-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "source": "src/index.html",
+  "private": true,
+  "scripts": {
+    "start": "concurrently parcel tomato 'open http://localhost:1234'"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@ngneat/falso": "^6.2.0",
+    "@pubnub/react-chat-components": "*",
+    "@pubnub/tomato": "^1.6.0",
+    "@tanstack/react-router": "^0.0.1-beta.30",
+    "find-my-way": "^7.3.1",
+    "pubnub": "7.2.0",
+    "pubnub-react": "3.0.1",
+    "react": "18.1.0",
+    "react-dom": "18.1.0"
+  },
+  "devDependencies": {
+    "@types/pubnub": "7.2.0",
+    "@types/react": "18.0.24",
+    "@types/react-dom": "18.0.6",
+    "buffer": "^5.5.0",
+    "concurrently": "^7.6.0",
+    "parcel": "latest",
+    "typescript": "4.8.3"
+  }
+}
