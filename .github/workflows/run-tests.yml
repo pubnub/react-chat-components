@@ -70,7 +70,7 @@ jobs:
       - name: Install React Chat Component dependencies
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
-          yarn install
+          yarn install --frozen-lockfile
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
