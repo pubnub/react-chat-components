@@ -20,5 +20,5 @@ jobs:
       - name: Run types validation
         shell: bash
         run: |
-          yarn install --frozen-lockfile
+          yarn install --prefer-offline --frozen-lockfile
           yarn run tsc
