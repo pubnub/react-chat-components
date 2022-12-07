@@ -26,9 +26,9 @@ jobs:
         with:
           key: ${{ runner.os }}-react-chat-components-${{ hashFiles('yarn.lock') }}
           restore-keys: ${{ runner.os }}-react-chat-components-
-          path:
-            - "$(yarn cache dir)"
-            - node_modules
+          path: |
+            "$(yarn cache dir)"
+            node_modules
       - name: Run types validation
         run: |
           yarn install --frozen-lockfile
@@ -69,9 +69,9 @@ jobs:
         with:
           key: ${{ runner.os }}-react-chat-components-${{ hashFiles('react/testing_apps/react-chat-components/yarn.lock') }}
           restore-keys: ${{ runner.os }}-react-chat-components-
-          path:
-            - "$(yarn cache dir)"
-            - react/testing_apps/react-chat-components/node_modules
+          path: |
+            "$(yarn cache dir)"
+            react/testing_apps/react-chat-components/node_modules
       - name: Install React Chat Component dependencies
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
