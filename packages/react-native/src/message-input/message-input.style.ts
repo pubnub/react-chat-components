@@ -19,6 +19,7 @@ export interface MessageInputStyle {
   messageInputWrapper?: ViewStyle;
   messageInput?: ViewStyle;
   messageInputPlaceholder?: TextStyle;
+  messageInputFileLabel?: ViewStyle;
   sendButton?: ViewStyle;
   sendButtonActive?: ViewStyle;
   icon?: ImageStyle;
@@ -35,6 +36,11 @@ export default (theme: Themes): MessageInputStyle => {
       paddingVertical: 10,
       flexDirection: "row",
       alignItems: "center",
+    },
+    messageInputFileLabel: {
+      width: 20,
+      height: 20,
+      marginRight: 18,
     },
     messageInput: {
       backgroundColor: colors.inputBackground,

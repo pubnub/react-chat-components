@@ -15,5 +15,6 @@
     "skipLibCheck": true,
     "strict": false,
     "noImplicitThis": false
-  }
+  },
+  "include": ["./custom.d.ts"]
 }

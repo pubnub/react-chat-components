@@ -33,3 +33,5 @@ yarn-error.log*
 *.tsbuildinfo
 
 .idea
+
+ios/

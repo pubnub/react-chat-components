@@ -5,11 +5,15 @@
   "description": "This monorepository uses yarn workspaces to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "license": "MIT",
-  "workspaces": [
-    "data",
-    "packages/*",
-    "samples/*/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "data",
+      "packages/*",
+      "samples/react/*",
+      "samples/react-native/mobile-chat"
+    ],
+    "nohoist": ["**/react-native-svg", "**/react-native-svg/**", "**/expo-document-picker", "**/expo-document-picker/**"]
+  },
   "engines": {
     "npm": ">= 8.5.0",
     "yarn": ">= 1.22.0"

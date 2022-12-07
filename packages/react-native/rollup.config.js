@@ -7,6 +7,7 @@ import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
+import svg from "rollup-plugin-svg";
 
 export default {
   input: "./src/index.ts",
@@ -27,9 +28,10 @@ export default {
       __VERSION__: version,
     }),
     peerDepsExternal(),
-    resolve(),
+    resolve({ extensions: [".native.js", ".mjs", ".js", ".json", ".node"] }),
     commonjs(),
-    image(),
+    svg(),
+    image({ exclude: [/^.*\.(svg)$/] }),
     json(),
     ts(),
     optimizeLodashImports(),

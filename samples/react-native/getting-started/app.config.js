@@ -16,6 +16,7 @@ export default {
   assetBundlePatterns: ["**/*"],
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.pubnub.gettingstarted",
   },
   android: {
     adaptiveIcon: {

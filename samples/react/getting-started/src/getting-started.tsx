@@ -24,7 +24,7 @@ function App(): JSX.Element {
         {/* Chat is an obligatory state provider. It allows you to configure some common component
           options, like the current channel and the general theme for the app. */}
         <MessageList />
-        <MessageInput />
+        <MessageInput fileUpload="image" />
       </Chat>
     </PubNubProvider>
   );
