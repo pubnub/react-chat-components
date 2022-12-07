@@ -1,0 +1,24 @@
+name: Validate code
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  typescript:
+    name: TypeScript type checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup NodeJS 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: yarn
+      - name: Run types validation
+        shell: bash
+        run: |
+          yarn install --frozen-lockfile
+          yarn run tsc
