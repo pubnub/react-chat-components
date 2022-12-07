@@ -63,7 +63,6 @@ jobs:
         with:
           path: react/testing_apps/react-chat-components
       - name: Cache React Chat Component dependencies
-        id: playwright-browsers-cache
         uses: actions/cache@v3
         with:
           key: ${{ runner.os }}-react-chat-components-${{ hashFiles('react/testing_apps/react-chat-components/yarn.lock') }}
