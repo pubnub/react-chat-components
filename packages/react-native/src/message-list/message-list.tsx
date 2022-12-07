@@ -22,6 +22,10 @@ import {
 import createDefaultStyle, { MessageListStyle } from "./message-list.style";
 import { useStyle, useRotation } from "../helpers";
 import SpinnerIcon from "../icons/spinner.png";
+import ViewReactNativeStyleAttributes from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+
+// Workaround for workaround for: https://github.com/facebook/react-native/issues/30034
+ViewReactNativeStyleAttributes.scaleY = true;
 
 export type MessageListProps = CommonMessageListProps & {
   /** Callback run on a list scroll. */

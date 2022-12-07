@@ -7,6 +7,7 @@ import {
   MessageEnvelope,
   EmojiPickerElementProps,
   FileAttachment,
+  ProperFetchMessagesResponse,
 } from "../types";
 import { usePrevious } from "../helpers";
 import {
@@ -29,7 +30,7 @@ export interface MessageRendererProps {
 
 export interface CommonMessageListProps {
   children?: ReactNode;
-  /** Option to fetch past messages from storage and display them on a channel. Set a number from "0" to "100". Defaults to "0" to fetch no messages from storage. */
+  /** Set this option to a non-zero value to enable fetching messages from the History API. This feature uses the infinite scrolling pattern and takes a maximum value of 25. */
   fetchMessages?: number;
   /** Option to enable rendering reactions that were added to messages. Make sure to also set up reactionsPicker when this option is enabled. */
   enableReactions?: boolean;
@@ -45,7 +46,7 @@ export interface CommonMessageListProps {
   bubbleRenderer?: (props: MessageRendererProps) => JSX.Element;
   /** Option to provide a custom file renderer to change how images and other files are shown. */
   fileRenderer?: (file: FileAttachment) => JSX.Element;
-  /** Option to render only selected messages. */
+  /** This option only works when you use either `messageRenderer` or `bubbleRenderer`. It allows you to apply one of the custom renderers only to the messages selected by the filter. */
   filter?: (message: MessageEnvelope) => boolean;
 }
 
@@ -130,8 +131,11 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
         count: props.fetchMessages,
         start: (messages?.[0]?.timetoken as number) || undefined,
         includeMessageActions: true,
+        includeMeta: true,
       };
-      const response = await retry(() => pubnub.fetchMessages(options));
+      const response = (await retry(() =>
+        pubnub.fetchMessages(options)
+      )) as ProperFetchMessagesResponse;
       const newMessages = (response?.channels[channel] || []).map((m) =>
         m.messageType === 4 ? fetchFileUrl(m) : m
       ) as MessageEnvelope[];
@@ -139,7 +143,9 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
       setMessages(allMessages);
-      setPaginationEnd(!allMessages.length || newMessages.length !== props.fetchMessages);
+      setPaginationEnd(
+        !response.more && (!allMessages.length || newMessages.length !== props.fetchMessages)
+      );
     } catch (e) {
       onError(e);
     } finally {
