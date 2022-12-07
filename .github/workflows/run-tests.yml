@@ -21,17 +21,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "YARN_CACHE_DIR=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Cache React Chat Component dependencies
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-react-chat-components-${{ hashFiles('yarn.lock') }}
-          restore-keys: ${{ runner.os }}-react-chat-components-
-          path: |
-            "$(yarn cache dir)"
-            node_modules
+          key: ${{ runner.os }}-yarn-rcc-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-rcc-
+          path: ${{ steps.yarn-cache-dir-path.outputs.YARN_CACHE_DIR }}
       - name: Run types validation
         run: |
-          yarn install --frozen-lockfile
+          yarn install --prefer-offline --frozen-lockfile
           yarn run test
   e2e-tests:
     name: Run e2e tests
@@ -64,18 +65,19 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: react/testing_apps/react-chat-components
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "YARN_CACHE_DIR=$(yarn cache dir)" >> $GITHUB_OUTPUT
       - name: Cache React Chat Component dependencies
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-react-chat-components-${{ hashFiles('react/testing_apps/react-chat-components/yarn.lock') }}
-          restore-keys: ${{ runner.os }}-react-chat-components-
-          path: |
-            "$(yarn cache dir)"
-            react/testing_apps/react-chat-components/node_modules
+          key: ${{ runner.os }}-yarn-rcc-${{ hashFiles('react/testing_apps/react-chat-components/yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-rcc-
+          path: ${{ steps.yarn-cache-dir-path.outputs.YARN_CACHE_DIR }}
       - name: Install React Chat Component dependencies
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
-          yarn install --frozen-lockfile
+          yarn install --prefer-offline --frozen-lockfile
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
