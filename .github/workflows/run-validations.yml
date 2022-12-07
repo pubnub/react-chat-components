@@ -11,11 +11,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Setup NodeJS 16.x
-        uses: actions/setup-node@v3
+      - name: Cache React Chat Component dependencies
+        uses: actions/cache@v3
         with:
-          node-version: 16
-          cache: yarn
+          key: ${{ runner.os }}-yarn-rcc-${{ hashFiles('yarn.lock') }}
+          restore-keys: ${{ runner.os }}-yarn-rcc-
+          path: '**/node_modules'
       - name: Run types validation
         shell: bash
         run: |
