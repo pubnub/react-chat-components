@@ -20,6 +20,7 @@ export interface MessageInputStyle {
   messageInput?: ViewStyle;
   messageInputPlaceholder?: TextStyle;
   messageInputFileLabel?: ViewStyle;
+  messageInputRemoveFileLabel?: ViewStyle;
   sendButton?: ViewStyle;
   sendButtonActive?: ViewStyle;
   icon?: ImageStyle;
@@ -38,6 +39,11 @@ export default (theme: Themes): MessageInputStyle => {
       alignItems: "center",
     },
     messageInputFileLabel: {
+      width: 20,
+      height: 20,
+      marginRight: 18,
+    },
+    messageInputRemoveFileLabel: {
       width: 20,
       height: 20,
       marginRight: 18,

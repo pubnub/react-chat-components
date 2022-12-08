@@ -1,5 +1,11 @@
-import React, { FC } from "react";
-import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
+import React, { FC, useState } from "react";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Animated,
+} from "react-native";
 import {
   CommonMessageInputProps,
   useMessageInputCore,
@@ -13,6 +19,7 @@ import AirplaneActiveIcon from "../icons/airplaneActive.png";
 import SpinnerIcon from "../icons/spinnerActive.png";
 import { SvgXml } from "react-native-svg";
 import * as ImagePicker from "expo-image-picker";
+import { FilePlacePickerModal } from "./file-place-picker-modal";
 
 export type MessageInputProps = CommonMessageInputProps & {
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
@@ -24,24 +31,38 @@ export type MessageInputProps = CommonMessageInputProps & {
  * and automatically publish them on PubNub channels upon sending.
  */
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
-  const { handleInputChange, isValidInputText, loader, sendMessage, text, theme, setFile } =
-    useMessageInputCore(props);
+  const {
+    handleInputChange,
+    isValidInputText,
+    loader,
+    sendMessage,
+    text,
+    theme,
+    setFile,
+    file,
+    setText,
+  } = useMessageInputCore(props);
   const style = useStyle<MessageInputStyle>({
     theme,
     createDefaultStyle,
     customStyle: props.style,
   });
   const rotate = useRotation(loader);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const pickPhoto = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: false,
       aspect: [4, 3],
       quality: 1,
     });
 
-    console.log("photo result", result);
+    const asset = result.assets[0];
+
+    setModalVisible(false);
+    setFile({ mimeType: "image/*", name: asset.fileName, uri: asset.uri });
+    setText(asset.fileName);
   };
 
   const pickDocument = async () => {
@@ -53,27 +74,16 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       if (result.type === "cancel") {
         return;
       }
-      console.log("result", result);
+      setModalVisible(false);
       setFile({ mimeType: result.mimeType, name: result.name, uri: result.uri });
+      setText(result.name);
     } catch (e) {
       console.log("error", e);
     }
-    //   .then((response) => {
-    //   if (response.type == "success") {
-    //     const { name, size, uri } = response;
-    //     const nameParts = name.split(".");
-    //     const fileType = nameParts[nameParts.length - 1];
-    //     const fileToUpload = {
-    //       name: name,
-    //       size: size,
-    //       uri: uri,
-    //       type: "application/" + fileType,
-    //     };
-    //     console.log(fileToUpload, "...............file");
-    //     setDoc(fileToUpload);
-    //   }
-    // });
-    // console.log(result);
+  };
+
+  const handleRemoveFile = () => {
+    setFile(null);
   };
 
   /*
@@ -104,23 +114,32 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
                 <SvgXml xml={Icons.ImageIcon} width="100%" height="100%" />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity style={style.messageInputFileLabel} onPress={pickDocument}>
+              <TouchableOpacity
+                style={style.messageInputFileLabel}
+                onPress={() => setModalVisible(true)}
+              >
                 <SvgXml xml={Icons.FileIcon} width="100%" height="100%" />
               </TouchableOpacity>
             )}
           </>
         </View>
-        {/*{file && (*/}
-        {/*  <div title="Remove the file" onClick={handleRemoveFile}>*/}
-        {/*    <XCircleIcon />*/}
-        {/*  </div>*/}
-        {/*)}*/}
+        {file && (
+          <TouchableOpacity style={style.messageInputRemoveFileLabel} onPress={handleRemoveFile}>
+            <SvgXml xml={Icons.XCircleIcon} width="100%" height="100%" />
+          </TouchableOpacity>
+        )}
       </>
     );
   };
 
   return (
     <View style={style.messageInputWrapper}>
+      <FilePlacePickerModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        pickPhoto={pickPhoto}
+        pickDocument={pickDocument}
+      />
       {!props.disabled && props.fileUpload && renderFileUpload()}
       {props.extraActionsRenderer && (
         <View style={style.extraActions}>{props.extraActionsRenderer()}</View>
