@@ -118,7 +118,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       </>
     );
   };
-  console.log("Icons.ImageIcon!!! :))", Icons);
 
   return (
     <View style={style.messageInputWrapper}>

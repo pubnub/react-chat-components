@@ -8,6 +8,7 @@ import {
   MemberList,
   MessagePayload,
 } from "@pubnub/react-chat-components";
+import type { UriFileInput } from "pubnub";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as ChatIcon } from "../assets/chat.svg";
@@ -85,6 +86,8 @@ const ChatView = ({
                   <ArrowIcon />
                 </span>
               }
+              //eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
               onSend={completeDemoAction}
             />
           </>

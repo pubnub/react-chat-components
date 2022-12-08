@@ -9,10 +9,8 @@
     "packages": [
       "data",
       "packages/*",
-      "samples/react/*",
-      "samples/react-native/mobile-chat"
-    ],
-    "nohoist": ["**/react-native-svg", "**/react-native-svg/**", "**/expo-document-picker", "**/expo-document-picker/**", "**/expo-image-picker", "**/expo-image-picker/**"]
+      "samples/*/*"
+    ]
   },
   "engines": {
     "npm": ">= 8.5.0",
