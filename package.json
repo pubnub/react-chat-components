@@ -12,7 +12,7 @@
       "samples/react/*",
       "samples/react-native/mobile-chat"
     ],
-    "nohoist": ["**/react-native-svg", "**/react-native-svg/**", "**/expo-document-picker", "**/expo-document-picker/**"]
+    "nohoist": ["**/react-native-svg", "**/react-native-svg/**", "**/expo-document-picker", "**/expo-document-picker/**", "**/expo-image-picker", "**/expo-image-picker/**"]
   },
   "engines": {
     "npm": ">= 8.5.0",

@@ -12,6 +12,7 @@ import AirplaneIcon from "../icons/airplane.png";
 import AirplaneActiveIcon from "../icons/airplaneActive.png";
 import SpinnerIcon from "../icons/spinnerActive.png";
 import { SvgXml } from "react-native-svg";
+import * as ImagePicker from "expo-image-picker";
 
 export type MessageInputProps = CommonMessageInputProps & {
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
@@ -31,6 +32,17 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     customStyle: props.style,
   });
   const rotate = useRotation(loader);
+
+  const pickPhoto = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log("photo result", result);
+  };
 
   const pickDocument = async () => {
     try {
@@ -86,13 +98,17 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     return (
       <>
         <View>
-          <TouchableOpacity style={style.messageInputFileLabel} onPress={pickDocument}>
+          <>
             {props.fileUpload === "image" ? (
-              <SvgXml xml={Icons.ImageIcon} width="100%" height="100%" />
+              <TouchableOpacity style={style.messageInputFileLabel} onPress={pickPhoto}>
+                <SvgXml xml={Icons.ImageIcon} width="100%" height="100%" />
+              </TouchableOpacity>
             ) : (
-              <SvgXml xml={Icons.FileIcon} width="100%" height="100%" />
+              <TouchableOpacity style={style.messageInputFileLabel} onPress={pickDocument}>
+                <SvgXml xml={Icons.FileIcon} width="100%" height="100%" />
+              </TouchableOpacity>
             )}
-          </TouchableOpacity>
+          </>
         </View>
         {/*{file && (*/}
         {/*  <div title="Remove the file" onClick={handleRemoveFile}>*/}
