@@ -9,6 +9,21 @@ import ts from "rollup-plugin-ts";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 import svg from "rollup-plugin-svg";
 
+function loadBrowserCryptoModule() {
+  return {
+    name: "browser-crypto-module-resolver",
+    resolveId(source) {
+      if (source === "./lib/rng") {
+        return "../../node_modules/uuid/lib/rng-browser.js";
+      }
+      return null;
+    },
+    load() {
+      return null;
+    },
+  };
+}
+
 export default {
   input: "./src/index.ts",
   output: [
@@ -28,8 +43,12 @@ export default {
       __VERSION__: version,
     }),
     peerDepsExternal(),
-    resolve({ extensions: [".native.js", ".mjs", ".js", ".json", ".node"] }),
+    loadBrowserCryptoModule(),
     commonjs(),
+    resolve({
+      extensions: [".native.js", ".mjs", ".js", ".json", ".node"],
+      browser: true,
+    }),
     svg(),
     image({ exclude: [/^.*\.(svg)$/] }),
     json(),

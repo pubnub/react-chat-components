@@ -1,16 +1,11 @@
 import React, { FC, useState } from "react";
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  TextInput,
-  Animated,
-} from "react-native";
+import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
 import {
   CommonMessageInputProps,
   useMessageInputCore,
   Icons,
 } from "@pubnub/common-chat-components";
+import * as FileSystem from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
 import { useStyle, useRotation } from "../helpers";
 import createDefaultStyle, { MessageInputStyle } from "./message-input.style";
@@ -41,6 +36,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     setFile,
     file,
     setText,
+    onError,
   } = useMessageInputCore(props);
   const style = useStyle<MessageInputStyle>({
     theme,
@@ -51,18 +47,37 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const [modalVisible, setModalVisible] = useState(false);
 
   const pickPhoto = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: false,
-      aspect: [4, 3],
-      quality: 1,
-    });
+    try {
+      const permissionStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
-    const asset = result.assets[0];
+      if (!permissionStatus.granted) {
+        onError({
+          message: "MediaLibraryPermission is not granted",
+          name: "MediaLibraryPermission",
+        });
+        return;
+      }
 
-    setModalVisible(false);
-    setFile({ mimeType: "image/*", name: asset.fileName, uri: asset.uri });
-    setText(asset.fileName);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      const asset = result.assets[0];
+      const fileInfo = await FileSystem.getInfoAsync(asset.uri);
+      if (fileInfo.size > 1024 * 1024 * 5) {
+        onError({ message: "File size exceeded 5MBs", name: "FileSizeExceeded" });
+        return;
+      }
+
+      setModalVisible(false);
+      setFile({ mimeType: "image/*", name: asset.fileName || asset.assetId, uri: asset.uri });
+      setText(asset.fileName || asset.assetId);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   const pickDocument = async () => {
@@ -75,15 +90,21 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         return;
       }
       setModalVisible(false);
+      const fileInfo = await FileSystem.getInfoAsync(result.uri);
+      if (fileInfo.size > 1024 * 1024 * 5) {
+        onError({ message: "File size exceeded 5MBs", name: "FileSizeExceeded" });
+        return;
+      }
       setFile({ mimeType: result.mimeType, name: result.name, uri: result.uri });
       setText(result.name);
     } catch (e) {
-      console.log("error", e);
+      onError(e);
     }
   };
 
   const handleRemoveFile = () => {
     setFile(null);
+    setText("");
   };
 
   /*

@@ -1736,7 +1736,7 @@
   resolved "https://registry.yarnpkg.com/@gar/promisify/-/promisify-1.1.3.tgz#555193ab2e3bb3b6adc3d551c9c030d9e860daf6"
   integrity sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==
 
-"@graphql-typed-document-node/core@^3.1.0", "@graphql-typed-document-node/core@^3.1.1":
+"@graphql-typed-document-node/core@^3.1.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@graphql-typed-document-node/core/-/core-3.1.1.tgz#076d78ce99822258cf813ecc1e7fa460fa74d052"
   integrity sha512-NQ17ii0rK1b34VZonlmT2QMJFI70m0TRwbknO/ihlbatXyaktDhN/98vBiUU6kNBPljqGqyIrl2T4nY2RpFANg==
@@ -2933,9 +2933,9 @@
   integrity sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==
 
 "@types/node@*":
-  version "18.11.11"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.11.tgz#1d455ac0211549a8409d3cdb371cd55cc971e8dc"
-  integrity sha512-KJ021B1nlQUBLopzZmPBVuGU9un7WJd/W4ya7Ih02B4Uwky5Nja0yGYav2EfYIk0RR2Q9oVhf60S2XR1BCWJ2g==
+  version "18.11.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.12.tgz#89e7f8aa8c88abf432f9bd594888144d7dba10aa"
+  integrity sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg==
 
 "@types/node@^14.0.0":
   version "14.18.34"
@@ -3205,12 +3205,11 @@
     wonka "^4.0.14"
 
 "@urql/core@>=2.3.1":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@urql/core/-/core-3.0.5.tgz#a26c326dd788d6d6abb839493bce86147f5a45c9"
-  integrity sha512-6/1HG+WEAcPs+hXSFnxWBTWkNUwa8dj2cHysWokMaFIbAioGtUaSdxp2q9FDMtWAIGdc640NFSt2B8itGLdoAA==
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-3.1.0.tgz#b77c6e444da35507b234645caed383cbb04d8ac9"
+  integrity sha512-6pYB4/WGZmuCxCc+h8AX9h+g1o75cPgMrcan+G/pYEDGAd6+PXoEuDumhEXpwu4vnkqCvVnFELEYcqkaM8ddPg==
   dependencies:
-    "@graphql-typed-document-node/core" "^3.1.1"
-    wonka "^6.0.0"
+    wonka "^6.1.2"
 
 "@urql/exchange-retry@0.3.0":
   version "0.3.0"
@@ -4624,9 +4623,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001317, caniuse-lite@^1.0.30001328, caniuse-lite@^1.0.30001399, caniuse-lite@^1.0.30001400:
-  version "1.0.30001436"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001436.tgz#22d7cbdbbbb60cdc4ca1030ccd6dea9f5de4848b"
-  integrity sha512-ZmWkKsnC2ifEPoWUvSAIGyOYwT+keAaaWPHiQ9DfMqS1t6tfuyFYoWR78TeZtznkEQ64+vGXH9cZrElwR2Mrxg==
+  version "1.0.30001439"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001439.tgz#ab7371faeb4adff4b74dad1718a6fd122e45d9cb"
+  integrity sha512-1MgUzEkoMO6gKfXflStpYgZDlFM7M/ck/bgfVCACO5vnAf0fXoNVHdWtqGU+MYca+4bL9Z5bpOVmR33cWW9G2A==
 
 cbor-js@^0.1.0:
   version "0.1.0"
@@ -6844,7 +6843,7 @@ expo-constants@~14.0.0, expo-constants@~14.0.2:
     "@expo/config" "~7.0.2"
     uuid "^3.3.2"
 
-expo-document-picker@~11.0.1:
+expo-document-picker@11.0.1:
   version "11.0.1"
   resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-11.0.1.tgz#1655e1cfacc20fe70ba81e310365048804bcf803"
   integrity sha512-mLpk5a6yP/wK8DfGMQj9YoPlxiK87Vhxo6S+NnQgKCove8z+cJdkjEcXCpSsH6LXe1HJBDFt5LkwjhSff7bhMg==
@@ -6856,7 +6855,7 @@ expo-error-recovery@~4.0.1:
   resolved "https://registry.yarnpkg.com/expo-error-recovery/-/expo-error-recovery-4.0.1.tgz#3e3333e134c992c234539d3773fe78915c883755"
   integrity sha512-wceptnRX+N3qCSVTNbIchUFu3GmY30onRH5L66OF8HMLpAIQfrZMLxJfz7SAMJTcr3jxsJ11vSa2l2RaPKgHsQ==
 
-expo-file-system@~15.1.0, expo-file-system@~15.1.1:
+expo-file-system@15.1.1, expo-file-system@~15.1.0, expo-file-system@~15.1.1:
   version "15.1.1"
   resolved "https://registry.yarnpkg.com/expo-file-system/-/expo-file-system-15.1.1.tgz#724090f83ff1e6378cadc0a64b83552f769eb16b"
   integrity sha512-MYYDKxjLo9VOkvGHqym5EOAUS+ero9O66X5zI+EXJzqNznKvnfScdXeeAaQzShmWtmLkdVDCoYFGOaTvTA1wTQ==
@@ -6875,7 +6874,7 @@ expo-image-loader@~4.0.0:
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-4.0.0.tgz#a17e5f95a4c1671791168dd5dfc221bf2f88480c"
   integrity sha512-hVMhXagsO1cSng5s70IEjuJAuHy2hX/inu5MM3T0ecJMf7L/7detKf22molQBRymerbk6Tzu+20h11eU0n/3jQ==
 
-expo-image-picker@~14.0.2:
+expo-image-picker@14.0.2:
   version "14.0.2"
   resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-14.0.2.tgz#a611a43142be4c6f763ee39efd80e55f5a414ed7"
   integrity sha512-dC0efykReusbjOtcvXYagABrVuwuOFwTfEx87VNjCZejig5aIPPj14UsViSV7xEQ+wkHvVnxyirox5xIbD196w==
@@ -6899,7 +6898,7 @@ expo-modules-autolinking@1.0.0:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@1.0.3, expo-modules-core@^1.0.3:
+expo-modules-core@1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.0.3.tgz#3d94da3524e7e7d81ae1e7e632a5e0e24db0f3f1"
   integrity sha512-XqyA5c+zsK+cHDNVBVYu62HLBHyGMG0iWpXVP0bBQJWz0eyg5rcuEqLsnRTmoEz0YnH6QBf/cwRl+FfgnnH5Og==
@@ -7296,9 +7295,9 @@ flatted@^3.1.0:
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
 flow-parser@0.*:
-  version "0.194.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.194.0.tgz#3d226aca8473593ad90167ae1e14dbb3cbcb6a8b"
-  integrity sha512-3dipGWKnXmE4LEE5yCPHJrSlMYOPAYU7wMBecfKiWPQSZp1CvkpJ59dfuuUIeM2TSttKGSatep77vGG9cjkeqg==
+  version "0.195.0"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.195.0.tgz#524d63a75d49a962457525a4b0ae3dec80ab921f"
+  integrity sha512-vO9b3GJQHHsRgwe2wB7lkKLhB+2Nw3QcpVKt/yYpoGVTJo51HS7GAvLE47XJ1u/5ILNQ41A+q+SZdyq+uRvkKQ==
 
 flow-parser@^0.121.0:
   version "0.121.0"
@@ -15281,9 +15280,9 @@ vm-browserify@^1.0.1:
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
 
 vm2@^3.9.8:
-  version "3.9.12"
-  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.12.tgz#9bfa6d913a8b467861524e5a11c3b038cc967ec4"
-  integrity sha512-OMmRsKh1gmdosFzuqmj6O43hqIStqXA24YbwjtUTO0TkOBP8yLNHLplbr4odnAzEcMnm9lt2r3R8kTivn8urMg==
+  version "3.9.13"
+  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.13.tgz#774a1a3d73b9b90b1aa45bcc5f25e349f2eef649"
+  integrity sha512-0rvxpB8P8Shm4wX2EKOiMp7H2zq+HUE/UwodY0pCZXs9IffIKZq6vUti5OgkVCTakKo9e/fgO4X1fkwfjWxE3Q==
   dependencies:
     acorn "^8.7.0"
     acorn-walk "^8.2.0"
@@ -15570,7 +15569,7 @@ wonka@^4.0.14:
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-4.0.15.tgz#9aa42046efa424565ab8f8f451fcca955bf80b89"
   integrity sha512-U0IUQHKXXn6PFo9nqsHphVCE5m3IntqZNB9Jjn7EB1lrR7YTDY3YWgFvEvwniTzXSvOH/XMzAZaIfJF/LvHYXg==
 
-wonka@^6.0.0:
+wonka@^6.1.2:
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/wonka/-/wonka-6.1.2.tgz#2c66fa5b26a12f002a03619b988258313d0b5352"
   integrity sha512-zNrXPMccg/7OEp9tSfFkMgTvhhowqasiSHdJ3eCZolXxVTV/aT6HUTofoZk9gwRbGoFey/Nss3JaZKUMKMbofg==

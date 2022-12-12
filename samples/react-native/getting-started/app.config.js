@@ -19,6 +19,7 @@ export default {
     bundleIdentifier: "com.pubnub.gettingstarted",
   },
   android: {
+    package: "com.pubnub.gettingstarted",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#FFFFFF",
@@ -31,4 +32,12 @@ export default {
     REACT_APP_PUB_KEY: process.env.REACT_APP_PUB_KEY,
     REACT_APP_SUB_KEY: process.env.REACT_APP_SUB_KEY,
   },
+  plugins: [
+    [
+      "expo-image-picker",
+      {
+        photosPermission: "The app accesses your photos to let you share them with your friends.",
+      },
+    ],
+  ],
 };

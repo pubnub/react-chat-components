@@ -136,7 +136,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
       const response = (await retry(() =>
         pubnub.fetchMessages(options)
       )) as ProperFetchMessagesResponse;
-      console.log("response", response);
+
       const newMessages = (response?.channels[channel] || []).map((m) =>
         m.messageType === 4 ? fetchFileUrl(m) : m
       ) as MessageEnvelope[];
