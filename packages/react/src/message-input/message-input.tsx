@@ -8,11 +8,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  CommonMessageInputProps,
-  useMessageInputCore,
-  EmojiPickerElementProps,
-} from "@pubnub/common-chat-components";
+import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
+import { EmojiPickerElementProps } from "../types";
 import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";

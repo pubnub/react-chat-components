@@ -5,4 +5,5 @@ export * from "./helpers";
 export * from "./member-list";
 export * from "./message-input";
 export * from "./message-list";
+export * from "./types";
 export * from "./typing-indicator";

@@ -1,4 +1,12 @@
-import React, { FC, useRef, useState, useCallback, useEffect, UIEvent } from "react";
+import React, {
+  FC,
+  ReactElement,
+  UIEvent,
+  cloneElement,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import {
   isFilePayload,
   MessageEnvelope,
@@ -17,6 +25,7 @@ import {
   useMutationObserver,
   useResizeObserver,
 } from "../helpers";
+import { EmojiPickerElementProps } from "../types";
 import SpinnerIcon from "../icons/spinner.svg";
 import EmojiIcon from "../icons/emoji.svg";
 import DownloadIcon from "../icons/download.svg";
@@ -24,6 +33,8 @@ import ArrowDownIcon from "../icons/arrow-down.svg";
 import "./message-list.scss";
 
 export type MessageListProps = CommonMessageListProps & {
+  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
+  reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback run on a list scroll. */
   onScroll?: (event: UIEvent<HTMLDivElement>) => void;
 };
@@ -40,6 +51,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
     addReaction,
     channel,
+    emojiPickerShown,
     fetchHistory,
     fetchingMessages,
     getTime,
@@ -54,6 +66,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     reactingToMessage,
     removeReaction,
     scrolledBottom,
+    setEmojiPickerShown,
     setReactingToMessage,
     setScrolledBottom,
     setUnreadMessages,
@@ -62,7 +75,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     users,
   } = useMessageListCore(props);
 
-  const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const lastMessageUniqueReactions = Object.keys(messages.slice(-1)[0]?.actions?.reaction || {});
   const prevLastMessageUniqueReactions = usePrevious(lastMessageUniqueReactions);
 
@@ -101,8 +113,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         newPickerTopPosition -= pickerEl.offsetHeight;
       }
       pickerEl.style.top = `${newPickerTopPosition}px`;
-      setEmojiPickerShown(true);
       setReactingToMessage(timetoken);
+      setEmojiPickerShown(true);
     } catch (e) {
       onError(e);
     }
@@ -114,18 +126,15 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     setEmojiPickerShown(false);
   }
 
-  const handleEmojiInsertion = useCallback(
-    (emoji: { native: string }) => {
-      try {
-        if (!("native" in emoji)) return;
-        addReaction(emoji.native, reactingToMessage);
-        setEmojiPickerShown(false);
-      } catch (e) {
-        onError(e);
-      }
-    },
-    [reactingToMessage, addReaction, onError]
-  );
+  function handleEmojiInsertion(emoji: { native: string }) {
+    try {
+      if (!("native" in emoji)) return;
+      addReaction(emoji.native, reactingToMessage);
+      setEmojiPickerShown(false);
+    } catch (e) {
+      onError(e);
+    }
+  }
 
   /**
    * Lifecycle
@@ -274,39 +283,40 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
     return (
       <div className="pn-msg__reactions">
-        {Object.keys(reactions).map((reaction) => {
-          const instances = reactions[reaction];
-          const instancesLimit = 99;
-          const instancesLimited = instances.slice(0, instancesLimit);
-          const instancesOverLimit = instances.length - instancesLimited.length;
-          const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
-          const userNames = instancesLimited.map((i) => {
-            const user = users.find((u) => u.id === i.uuid);
-            return user ? user.name : i.uuid;
-          });
-          const tooltipContent = `
-            ${userNames.join(", ")}
-            ${instancesOverLimit ? `and ${instancesOverLimit} more` : ``}
-          `;
+        {Object.entries(reactions)
+          .sort(([, a], [, b]) => b.length - a.length)
+          .map(([reaction, instances]) => {
+            const instancesLimit = 99;
+            const instancesLimited = instances.slice(0, instancesLimit);
+            const instancesOverLimit = instances.length - instancesLimited.length;
+            const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
+            const userNames = instancesLimited.map((i) => {
+              const user = users.find((u) => u.id === i.uuid);
+              return user ? user.name : i.uuid;
+            });
+            const tooltipContent = `
+              ${userNames.join(", ")}
+              ${instancesOverLimit ? `and ${instancesOverLimit} more` : ``}
+            `;
 
-          return (
-            <div
-              className={`pn-tooltip pn-msg__reaction ${
-                userReaction ? "pn-msg__reaction--active" : ""
-              }`}
-              key={reaction}
-              data-tooltip={tooltipContent}
-              onClick={() => {
-                userReaction
-                  ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
-                  : addReaction(reaction, envelope.timetoken);
-              }}
-            >
-              {reaction} {instancesLimited.length}
-              {instancesOverLimit ? "+" : ""}
-            </div>
-          );
-        })}
+            return (
+              <div
+                className={`pn-tooltip pn-msg__reaction ${
+                  userReaction ? "pn-msg__reaction--active" : ""
+                }`}
+                key={reaction}
+                data-tooltip={tooltipContent}
+                onClick={() => {
+                  userReaction
+                    ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
+                    : addReaction(reaction, envelope.timetoken);
+                }}
+              >
+                {reaction} {instancesLimited.length}
+                {instancesOverLimit ? "+" : ""}
+              </div>
+            );
+          })}
       </div>
     );
   };
@@ -405,7 +415,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             }`}
             ref={pickerRef}
           >
-            {React.cloneElement(props.reactionsPicker, { onEmojiSelect: handleEmojiInsertion })}
+            {cloneElement(props.reactionsPicker, { onEmojiSelect: handleEmojiInsertion })}
           </div>
         )}
       </div>

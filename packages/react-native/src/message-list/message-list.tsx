@@ -1,10 +1,20 @@
-import React, { FC, useEffect, useRef, useCallback, useState } from "react";
-import type { NativeSyntheticEvent, NativeScrollEvent } from "react-native";
+import React, {
+  cloneElement,
+  FC,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
+  Alert,
   Animated,
   FlatList,
   Image,
   ListRenderItem,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
   Platform,
   Pressable,
   Text,
@@ -20,6 +30,7 @@ import {
   useMessageListCore,
 } from "@pubnub/common-chat-components";
 import createDefaultStyle, { MessageListStyle } from "./message-list.style";
+import { EmojiPickerElementProps } from "../types";
 import { useStyle, useRotation } from "../helpers";
 import SpinnerIcon from "../icons/spinner.png";
 import ViewReactNativeStyleAttributes from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
@@ -28,6 +39,8 @@ import ViewReactNativeStyleAttributes from "react-native/Libraries/Components/Vi
 ViewReactNativeStyleAttributes.scaleY = true;
 
 export type MessageListProps = CommonMessageListProps & {
+  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
+  reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback run on a list scroll. */
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
@@ -44,18 +57,27 @@ export type MessageListProps = CommonMessageListProps & {
  */
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
+    addReaction,
+    emojiPickerShown,
     fetchHistory,
     getTime,
     getUser,
     isOwnMessage,
     messages,
+    onError,
     paginationEnd,
     prevMessages,
-    setScrolledBottom,
+    pubnub,
+    reactingToMessage,
+    removeReaction,
     scrolledBottom,
+    setEmojiPickerShown,
+    setReactingToMessage,
+    setScrolledBottom,
     setUnreadMessages,
     theme,
     unreadMessages,
+    users,
   } = useMessageListCore(props);
 
   const style = useStyle<MessageListStyle>({
@@ -83,6 +105,24 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /**
    * Handlers
    */
+  function handleOpenReactions(timetoken) {
+    try {
+      setReactingToMessage(timetoken);
+      setEmojiPickerShown(true);
+    } catch (e) {
+      onError(e);
+    }
+  }
+
+  function handleEmojiInsertion(emoji: { emoji: string }) {
+    try {
+      if (!("emoji" in emoji)) return;
+      addReaction(emoji.emoji, reactingToMessage);
+      setEmojiPickerShown(false);
+    } catch (e) {
+      onError(e);
+    }
+  }
 
   const handleScrollBottom = throttle((event) => {
     const scrolledBottom = event.nativeEvent.contentOffset.y < 30;
@@ -145,10 +185,18 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     if (deleted) return;
 
     return (
-      <View style={[style.message, isOwn && style.messageOwn, isAndroid && { scaleY: -1 }]}>
+      <Pressable
+        style={({ pressed }) => [
+          style.message,
+          props.enableReactions && pressed && style.messagePressed,
+          isOwn && style.messageOwn,
+          isAndroid && { scaleY: -1 },
+        ]}
+        onLongPress={() => handleOpenReactions(envelope.timetoken)}
+      >
         {renderMessage(envelope)}
         {props.extraActionsRenderer && props.extraActionsRenderer(envelope)}
-      </View>
+      </Pressable>
     );
   };
 
@@ -190,8 +238,58 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             ) : (
               <Text style={style.messageBubble}>{editedText || message?.text}</Text>
             ))}
+          <View>{props.enableReactions && renderReactions(envelope)}</View>
         </View>
       </>
+    );
+  };
+
+  const renderReactions = (envelope: MessageEnvelope) => {
+    const reactions = envelope.actions?.reaction;
+    if (!reactions) return;
+
+    return (
+      <View style={style.reactionWrapper}>
+        {Object.entries(reactions)
+          .sort(([, a], [, b]) => b.length - a.length)
+          .map(([reaction, instances]) => {
+            const instancesLimit = 99;
+            const instancesLimited = instances.slice(0, instancesLimit);
+            const instancesOverLimit = instances.length - instancesLimited.length;
+            const userReaction = instances?.find((i) => i.uuid === pubnub.getUUID());
+            const userNames = instancesLimited.map((i) => {
+              const user = users.find((u) => u.id === i.uuid);
+              return user ? user.name : i.uuid;
+            });
+            const tooltipContent = `${userNames.join(", ")} ${
+              instancesOverLimit ? `and ${instancesOverLimit} more` : ``
+            }`;
+
+            return (
+              <Pressable
+                key={reaction}
+                style={[style.reaction, userReaction && style.reactionActive]}
+                onPress={() => {
+                  userReaction
+                    ? removeReaction(reaction, envelope.timetoken, userReaction.actionTimetoken)
+                    : addReaction(reaction, envelope.timetoken);
+                }}
+                onLongPress={() => {
+                  Alert.alert(`Reacted with ${reaction}`, tooltipContent, null, {
+                    userInterfaceStyle: ["light", "support", "event"].includes(theme)
+                      ? "light"
+                      : "dark",
+                  });
+                }}
+              >
+                <Text style={style.reactionText}>
+                  {reaction} {instancesLimited.length}
+                  {instancesOverLimit ? "+" : ""}
+                </Text>
+              </Pressable>
+            );
+          })}
+      </View>
     );
   };
 
@@ -222,6 +320,12 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         inverted={!isAndroid}
         onViewableItemsChanged={onViewableItemsChanged}
       />
+      {props.reactionsPicker &&
+        cloneElement(props.reactionsPicker, {
+          onEmojiSelected: handleEmojiInsertion,
+          open: emojiPickerShown,
+          onClose: () => setEmojiPickerShown(false),
+        })}
     </>
   );
 };

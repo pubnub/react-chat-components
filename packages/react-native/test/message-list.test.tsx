@@ -5,6 +5,7 @@ import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
 import { MessagePayload } from "@pubnub/common-chat-components";
 import { render, screen, act, fireEvent } from "../mock/custom-renderer";
+import { Picker } from "../mock/emoji-picker-mock";
 
 describe("Message List", () => {
   jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
@@ -114,7 +115,40 @@ describe("Message List", () => {
     expect(await screen.findByText("1 new message")).not.toBeNull();
   });
 
-  // /** Message modifications/removals */
+  /** Reactions */
+
+  test("renders reactions", async () => {
+    render(<MessageList fetchMessages={10} enableReactions />);
+    expect(await screen.findByText("🙂 1")).not.toBeNull();
+  });
+
+  test("adds new reactions", async () => {
+    render(<MessageList fetchMessages={10} enableReactions reactionsPicker={<Picker />} />);
+    const message = await screen.findByText(
+      "Pellentesque sed massa vitae enim iaculis tincidunt a ut magna."
+    );
+    fireEvent(message, "onLongPress");
+    expect(await screen.findByText("Emoji Picker")).not.toBeNull();
+    fireEvent.press(await screen.findByText("😄"));
+    expect(await screen.findByText("😄 1")).not.toBeNull();
+  });
+
+  test("adds to existing reactions", async () => {
+    render(<MessageList fetchMessages={10} enableReactions />);
+    fireEvent.press(await screen.findByText("🙂 1"));
+    expect(await screen.findByText("🙂 2")).not.toBeNull();
+    expect(screen.queryByText("🙂 1")).toBeNull();
+  });
+
+  test("removes from existing reactions", async () => {
+    render(<MessageList fetchMessages={10} enableReactions />);
+    fireEvent.press(await screen.findByText("🙂 1"));
+    fireEvent.press(await screen.findByText("🙂 2"));
+    expect(await screen.findByText("🙂 1")).not.toBeNull();
+    expect(screen.queryByText("🙂 2")).toBeNull();
+  });
+
+  /** Message modifications/removals */
 
   test("renders message text edits", async () => {
     render(<MessageList fetchMessages={10} />);
