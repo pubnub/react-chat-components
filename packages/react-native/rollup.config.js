@@ -7,7 +7,6 @@ import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
-import svg from "rollup-plugin-svg";
 
 function loadBrowserCryptoModule() {
   return {
@@ -49,8 +48,7 @@ export default {
       extensions: [".native.js", ".mjs", ".js", ".json", ".node"],
       browser: true,
     }),
-    svg(),
-    image({ exclude: [/^.*\.(svg)$/] }),
+    image(),
     json(),
     ts(),
     optimizeLodashImports(),

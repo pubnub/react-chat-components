@@ -24,7 +24,7 @@ export function GettingStartedReactNative(): JSX.Element {
         {/* Chat is an obligatory state provider. It allows you to configure some common component
           options, like the current channel and the general theme for the app. */}
         <MessageList fetchMessages={20} />
-        <MessageInput fileUpload="all" />
+        <MessageInput fileUpload="image" />
       </Chat>
     </PubNubProvider>
   );

@@ -1,10 +1,6 @@
 import React, { FC, useState } from "react";
 import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
-import {
-  CommonMessageInputProps,
-  useMessageInputCore,
-  Icons,
-} from "@pubnub/common-chat-components";
+import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
 import * as FileSystem from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
 import { useStyle, useRotation } from "../helpers";
@@ -12,7 +8,9 @@ import createDefaultStyle, { MessageInputStyle } from "./message-input.style";
 import AirplaneIcon from "../icons/airplane.png";
 import AirplaneActiveIcon from "../icons/airplaneActive.png";
 import SpinnerIcon from "../icons/spinnerActive.png";
-import { SvgXml } from "react-native-svg";
+import FileIcon from "../icons/file.png";
+import ImageIcon from "../icons/image.png";
+import XCircleIcon from "../icons/x-circle.png";
 import * as ImagePicker from "expo-image-picker";
 import { FilePlacePickerModal } from "./file-place-picker-modal";
 
@@ -132,21 +130,21 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           <>
             {props.fileUpload === "image" ? (
               <TouchableOpacity style={style.messageInputFileLabel} onPress={pickPhoto}>
-                <SvgXml xml={Icons.ImageIcon} width="100%" height="100%" />
+                <Image source={{ uri: ImageIcon }} style={style.icon} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={style.messageInputFileLabel}
                 onPress={() => setModalVisible(true)}
               >
-                <SvgXml xml={Icons.FileIcon} width="100%" height="100%" />
+                <Image source={{ uri: FileIcon }} style={style.icon} />
               </TouchableOpacity>
             )}
           </>
         </View>
         {file && (
           <TouchableOpacity style={style.messageInputRemoveFileLabel} onPress={handleRemoveFile}>
-            <SvgXml xml={Icons.XCircleIcon} width="100%" height="100%" />
+            <Image source={{ uri: XCircleIcon }} style={style.icon} />
           </TouchableOpacity>
         )}
       </>
@@ -173,7 +171,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         placeholder={props.placeholder}
         style={style.messageInput}
         placeholderTextColor={style.messageInputPlaceholder.color}
-        editable={!props.disabled}
+        editable={!props.disabled || !!!file}
         value={text}
       />
       {!props.disabled && (

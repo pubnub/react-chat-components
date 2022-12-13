@@ -12,12 +12,14 @@ import {
   CommonMessageInputProps,
   useMessageInputCore,
   EmojiPickerElementProps,
-  Icons,
 } from "@pubnub/common-chat-components";
 import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import SpinnerIcon from "../icons/spinner.svg";
 import AirplaneIcon from "../icons/airplane.svg";
+import FileIcon from "../icons/file.svg";
+import XCircleIcon from "../icons/x-circle.svg";
+import ImageIcon from "../icons/image.svg";
 import "./message-input.scss";
 
 export type MessageInputProps = CommonMessageInputProps & {
@@ -131,7 +133,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       <>
         <div>
           <label htmlFor="file-upload" className="pn-msg-input__fileLabel" title="Add a file">
-            {props.fileUpload === "image" ? <Icons.ImageIcon /> : <Icons.FileIcon />}
+            {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
           </label>
           <input
             accept={props.fileUpload === "image" ? "image/*" : "*"}
@@ -145,7 +147,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         </div>
         {file && (
           <div title="Remove the file" onClick={handleRemoveFile}>
-            <Icons.XCircleIcon />
+            <XCircleIcon />
           </div>
         )}
       </>

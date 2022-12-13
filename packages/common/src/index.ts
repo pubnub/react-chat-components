@@ -8,4 +8,3 @@ export * from "./message-list";
 export * from "./state-atoms";
 export * from "./types";
 export * from "./typing-indicator";
-export * from "./icons";
