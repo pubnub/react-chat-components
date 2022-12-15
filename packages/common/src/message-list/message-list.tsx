@@ -139,9 +139,9 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
       const newMessages = (response?.channels[channel] || []).map((m) =>
         m.messageType === 4 ? fetchFileUrl(m) : m
       ) as MessageEnvelope[];
-      const allMessages = [...messages, ...newMessages].sort(
-        (a, b) => (a.timetoken as number) - (b.timetoken as number)
-      );
+      const allMessages = [...messages, ...newMessages]
+        .sort((a, b) => (a.timetoken as number) - (b.timetoken as number))
+        .filter((v, i, a) => a.findIndex((v2) => v2.uuid === v.uuid) === i);
       setMessages(allMessages);
       setPaginationEnd(
         !response.more && (!allMessages.length || newMessages.length !== props.fetchMessages)
