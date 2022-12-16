@@ -8,8 +8,8 @@ import { Chat, MessageList, MessageInput } from "@pubnub/react-native-chat-compo
 /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
   with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
 const pubnub = new PubNub({
-  publishKey: "pub-c-0457cb83-0786-43df-bc70-723b16a6e816",
-  subscribeKey: "sub-c-e654122d-85b5-49a6-a3dd-8ebc93c882de",
+  publishKey: "myPublishKey",
+  subscribeKey: "mySubscribeKey",
   userId: "myFirstUser",
 });
 const currentChannel = "Default";
