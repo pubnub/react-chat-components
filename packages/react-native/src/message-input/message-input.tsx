@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react";
 import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
 import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
-import * as FileSystem from "expo-file-system";
 import { getDocumentAsync } from "expo-document-picker";
 import { useStyle, useRotation } from "../helpers";
 import createDefaultStyle, { MessageInputStyle } from "./message-input.style";
@@ -68,11 +67,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       }
 
       const asset = result.assets[0];
-      const fileInfo = await FileSystem.getInfoAsync(asset.uri);
-      // if (fileInfo.size > 1024 * 1024 * 5) {
-      //   onError({ message: "File size exceeded 5MBs", name: "FileSizeExceeded" });
-      //   return;
-      // }
 
       setModalVisible(false);
       setFile({ mimeType: "image/*", name: asset.fileName || asset.assetId, uri: asset.uri });
@@ -92,11 +86,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         return;
       }
       setModalVisible(false);
-      const fileInfo = await FileSystem.getInfoAsync(result.uri);
-      // if (fileInfo.size > 1024 * 1024 * 5) {
-      //   onError({ message: "File size exceeded 5MBs", name: "FileSizeExceeded" });
-      //   return;
-      // }
       setFile({ mimeType: result.mimeType, name: result.name, uri: result.uri });
       setText(result.name);
     } catch (e) {
