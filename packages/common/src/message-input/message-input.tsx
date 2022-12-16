@@ -1,4 +1,4 @@
-import { ChangeEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
 import uuid from "react-native-uuid";
@@ -25,8 +25,6 @@ export interface CommonMessageInputProps {
   fileUpload?: "image" | "all";
   /** Option to disable the input from composing and sending messages. */
   disabled?: boolean;
-  /** Option to hide the Send button. */
-  hideSendButton?: boolean;
   /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
   /** Callback to handle an event when the text value changes. */

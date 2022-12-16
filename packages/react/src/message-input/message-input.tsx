@@ -20,6 +20,8 @@ import AirplaneIcon from "../icons/airplane.svg";
 import "./message-input.scss";
 
 export type MessageInputProps = CommonMessageInputProps & {
+  /** Option to hide the Send button. */
+  hideSendButton?: boolean;
   /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
   emojiPicker?: ReactElement<EmojiPickerElementProps>;
 };

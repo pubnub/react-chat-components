@@ -64,9 +64,11 @@ export default (theme: Themes): MessageListStyle => {
       paddingHorizontal: 16,
       paddingVertical: 8,
     },
+    messageOwn: {},
     messagePressed: {
       backgroundColor: colors.messagePressedBackground,
     },
+    messageOwnAvatar: {},
     messageAvatar: {
       alignItems: "center",
       borderRadius: 50,
@@ -88,11 +90,13 @@ export default (theme: Themes): MessageListStyle => {
     messageMain: {
       flex: 1,
     },
+    messageOwnMain: {},
     messageTitle: {
       alignItems: "baseline",
       flexDirection: "row",
       marginBottom: 6,
     },
+    messageOwnTitle: {},
     messageAuthor: {
       color: colors.messageColor,
       fontSize: 16,
