@@ -39,7 +39,7 @@ import ViewReactNativeStyleAttributes from "react-native/Libraries/Components/Vi
 ViewReactNativeStyleAttributes.scaleY = true;
 
 export type MessageListProps = CommonMessageListProps & {
-  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
+  /** Option to pass in a component that will be used for picking message reactions. For more details, refer to the Message Reactions section in the docs. */
   reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Callback run on a list scroll. */
   onScroll?: (event: NativeSyntheticEvent<NativeScrollEvent>) => void;
