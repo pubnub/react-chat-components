@@ -7,10 +7,6 @@ import {
 
 export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "event-dark";
 
-export interface EmojiPickerElementProps {
-  onEmojiSelect?: ({ native }: { native: string }) => void;
-}
-
 export type ChannelEntity = ChannelMetadataObject<ObjectCustom>;
 
 export type UserEntity = UUIDMetadataObject<ObjectCustom>;

@@ -8,11 +8,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  CommonMessageInputProps,
-  useMessageInputCore,
-  EmojiPickerElementProps,
-} from "@pubnub/common-chat-components";
+import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
+import { EmojiPickerElementProps } from "../types";
 import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
 import FileIcon from "../icons/file.svg";
@@ -23,6 +20,8 @@ import AirplaneIcon from "../icons/airplane.svg";
 import "./message-input.scss";
 
 export type MessageInputProps = CommonMessageInputProps & {
+  /** Option to hide the Send button. */
+  hideSendButton?: boolean;
   /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
   emojiPicker?: ReactElement<EmojiPickerElementProps>;
 };

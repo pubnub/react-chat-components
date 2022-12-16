@@ -79,7 +79,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 MessageInput.defaultProps = {
   disabled: false,
   fileUpload: undefined,
-  hideSendButton: false,
   placeholder: "Send message",
   senderInfo: false,
   typingIndicator: false,
