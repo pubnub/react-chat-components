@@ -1,87 +1,136 @@
-import React from "react";
-import { Alert, Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  Modal,
+  Pressable,
+  Text,
+  View,
+  Animated,
+  Image,
+  TouchableOpacity,
+  Easing,
+  LayoutChangeEvent,
+} from "react-native";
+import CloseIcon from "../icons/close-icon.png";
+import FileIcon from "../icons/file.png";
+import ImageIcon from "../icons/image.png";
+import { MessageInputStyle } from "./message-input.style";
 
 type FilePlacePickerModalProps = {
   modalVisible: boolean;
   setModalVisible: (isVisible: boolean) => void;
   pickPhoto: () => void;
   pickDocument: () => void;
+  style?: MessageInputStyle;
 };
+
+const OPACITY_ANIMATION_IN_TIME = 225;
+const OPACITY_ANIMATION_OUT_TIME = 195;
+const EASING_OUT = Easing.bezier(0.25, 0.46, 0.45, 0.94);
+const EASING_IN = Easing.out(EASING_OUT);
 
 export const FilePlacePickerModal = ({
   modalVisible,
   setModalVisible,
   pickPhoto,
   pickDocument,
+  style,
 }: FilePlacePickerModalProps) => {
+  const [modalShown, setModalShown] = useState(false);
+  const [sheetOpacity] = useState(new Animated.Value(0));
+  const [actionSheetHeight, setActionSheetHeight] = useState(360);
+
+  const _setActionSheetHeight = ({ nativeEvent }: LayoutChangeEvent) => {
+    setActionSheetHeight(nativeEvent.layout.height);
+  };
+
+  useEffect(() => {
+    if (modalVisible) {
+      setModalShown(true);
+      sheetOpacity.setValue(0);
+
+      Animated.timing(sheetOpacity, {
+        toValue: 1,
+        easing: EASING_OUT,
+        duration: OPACITY_ANIMATION_IN_TIME,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(sheetOpacity, {
+        toValue: 0,
+        easing: EASING_IN,
+        duration: OPACITY_ANIMATION_OUT_TIME,
+        useNativeDriver: true,
+      }).start((result) => {
+        if (result.finished) {
+          setModalShown(false);
+        }
+      });
+    }
+  }, [modalVisible, sheetOpacity]);
+
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
+      animationType="none"
+      transparent
+      visible={modalShown}
       onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
         setModalVisible(!modalVisible);
       }}
     >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello World!</Text>
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
-          <Pressable style={[styles.button, styles.buttonClose]} onPress={pickPhoto}>
-            <Text style={styles.textStyle}>Pick photo</Text>
-          </Pressable>
-          <Pressable style={[styles.button, styles.buttonClose]} onPress={pickDocument}>
-            <Text style={styles.textStyle}>Pick document</Text>
-          </Pressable>
-        </View>
-      </View>
+      <Pressable
+        onPress={() => {
+          setModalVisible(false);
+        }}
+        style={style.fileUploadModalContent}
+      >
+        <Animated.View
+          style={[
+            style.fileUploadModalSheetContainer,
+            {
+              opacity: sheetOpacity,
+              transform: [
+                {
+                  translateY: sheetOpacity.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [actionSheetHeight, -90],
+                  }),
+                },
+              ],
+            },
+          ]}
+        >
+          <View onLayout={_setActionSheetHeight} style={style.fileUploadModalSheetContent}>
+            <View style={style.fileUploadModalSheetContentHeaderContainer}>
+              <Text style={style.fileUploadModalSheetContentHeaderText}>Add attachment</Text>
+              <TouchableOpacity
+                style={style.fileUploadModalSheetContentCloseIconContainer}
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              >
+                <Image
+                  source={{ uri: CloseIcon }}
+                  style={style.fileUploadModalSheetContentCloseIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            <Pressable style={style.fileUploadModalSheetContentButton} onPress={pickPhoto}>
+              <Image
+                source={{ uri: ImageIcon }}
+                style={style.fileUploadModalSheetContentButtonIcon}
+              />
+              <Text style={style.fileUploadModalSheetContentTextStyle}>Photos</Text>
+            </Pressable>
+            <Pressable style={style.fileUploadModalSheetContentButton} onPress={pickDocument}>
+              <Image
+                source={{ uri: FileIcon }}
+                style={style.fileUploadModalSheetContentButtonIcon}
+              />
+              <Text style={style.fileUploadModalSheetContentTextStyle}>Documents</Text>
+            </Pressable>
+          </View>
+        </Animated.View>
+      </Pressable>
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-  },
-});

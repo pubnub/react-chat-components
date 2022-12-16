@@ -10,7 +10,7 @@ import {
   UsersMetaAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
-import { UriFileInput } from "pubnub";
+import { UriFileInput, SendFileParameters } from "pubnub";
 
 export interface CommonMessageInputProps {
   /** Option to set a placeholder message to display in the text window. */

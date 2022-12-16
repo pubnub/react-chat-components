@@ -6,6 +6,9 @@ const lightColors = {
   inputBackground: "#e4e9f0",
   inputColor: "#585858",
   inputPlaceholder: "#999999",
+  actionsSheetBackground: "#FFFFFF",
+  actionsSheetButtonIconTint: "#1F2937",
+  actionsSheetLabelColor: "#1F2937",
 };
 
 const darkColors = {
@@ -13,6 +16,9 @@ const darkColors = {
   inputBackground: "#2a2a39",
   inputColor: "rgba(228, 228, 235, 0.8)",
   inputPlaceholder: "#555770",
+  actionsSheetBackground: "#000000",
+  actionsSheetButtonIconTint: "#e4e5e5",
+  actionsSheetLabelColor: "#e7eaec",
 };
 
 export interface MessageInputStyle {
@@ -25,6 +31,16 @@ export interface MessageInputStyle {
   sendButtonActive?: ViewStyle;
   icon?: ImageStyle;
   extraActions?: ViewStyle;
+  fileUploadModalContent?: ViewStyle;
+  fileUploadModalSheetContainer?: ViewStyle;
+  fileUploadModalSheetContent?: ViewStyle;
+  fileUploadModalSheetContentHeaderContainer?: ViewStyle;
+  fileUploadModalSheetContentHeaderText?: ViewStyle;
+  fileUploadModalSheetContentCloseIconContainer?: ViewStyle;
+  fileUploadModalSheetContentCloseIcon?: ImageStyle;
+  fileUploadModalSheetContentButton?: ViewStyle;
+  fileUploadModalSheetContentButtonIcon?: ImageStyle;
+  fileUploadModalSheetContentTextStyle?: ViewStyle;
 }
 
 export default (theme: Themes): MessageInputStyle => {
@@ -71,6 +87,55 @@ export default (theme: Themes): MessageInputStyle => {
     },
     extraActions: {
       marginRight: 16,
+    },
+    fileUploadModalContent: {
+      flex: 1,
+    },
+    fileUploadModalSheetContainer: {
+      position: "absolute",
+      left: 4,
+      right: 4,
+      bottom: 4,
+      top: 0,
+      backgroundColor: "transparent",
+      flexDirection: "row",
+      alignItems: "flex-end",
+    },
+    fileUploadModalSheetContent: {
+      backgroundColor: colors.actionsSheetBackground,
+      borderRadius: 16,
+      flex: 1,
+      padding: 16,
+    },
+    fileUploadModalSheetContentHeaderContainer: {
+      paddingBottom: 24,
+    },
+    fileUploadModalSheetContentHeaderText: {
+      fontSize: 15,
+    },
+    fileUploadModalSheetContentCloseIconContainer: {
+      position: "absolute",
+      top: 0,
+      right: 0,
+    },
+    fileUploadModalSheetContentCloseIcon: {
+      width: 20,
+      height: 20,
+    },
+    fileUploadModalSheetContentButton: {
+      height: 44,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    fileUploadModalSheetContentButtonIcon: {
+      marginRight: 8,
+      tintColor: colors.actionsSheetButtonIconTint,
+      width: 24,
+      height: 24,
+    },
+    fileUploadModalSheetContentTextStyle: {
+      color: colors.actionsSheetLabelColor,
+      fontSize: 16,
     },
   });
 };
