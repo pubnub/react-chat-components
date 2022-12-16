@@ -32,7 +32,7 @@ const OPACITY_ANIMATION_OUT_TIME = 195;
 const EASING_OUT = Easing.bezier(0.25, 0.46, 0.45, 0.94);
 const EASING_IN = Easing.out(EASING_OUT);
 
-export const FilePlacePickerModal = ({
+export const FileModal = ({
   modalVisible,
   setModalVisible,
   pickPhoto,

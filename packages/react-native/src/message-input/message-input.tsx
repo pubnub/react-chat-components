@@ -11,11 +11,20 @@ import FileIcon from "../icons/file.png";
 import ImageIcon from "../icons/image.png";
 import XCircleIcon from "../icons/x-circle.png";
 import * as ImagePicker from "expo-image-picker";
-import { FilePlacePickerModal } from "./file-place-picker-modal";
+import { FileModal } from "./file-modal";
 
 export type MessageInputProps = CommonMessageInputProps & {
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
   style?: MessageInputStyle;
+  fileModalRenderer?: ({
+    pickPhoto,
+    pickDocument,
+  }: {
+    pickPhoto: () => Promise<void>;
+    pickDocument: () => Promise<void>;
+    modalVisible: boolean;
+    setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  }) => JSX.Element;
 };
 
 /**
@@ -144,15 +153,25 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     );
   };
 
-  return (
-    <View style={style.messageInputWrapper}>
-      <FilePlacePickerModal
+  const renderFileModal = () => {
+    if (props.fileModalRenderer) {
+      return props.fileModalRenderer({ pickDocument, pickPhoto, modalVisible, setModalVisible });
+    }
+
+    return (
+      <FileModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         pickPhoto={pickPhoto}
         pickDocument={pickDocument}
         style={style}
       />
+    );
+  };
+
+  return (
+    <View style={style.messageInputWrapper}>
+      {renderFileModal()}
       {!props.disabled && props.fileUpload && renderFileUpload()}
       {props.extraActionsRenderer && (
         <View style={style.extraActions}>{props.extraActionsRenderer()}</View>
