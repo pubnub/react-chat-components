@@ -9,11 +9,15 @@ import {
   TouchableOpacity,
   Easing,
   LayoutChangeEvent,
+  SafeAreaView,
+  Platform,
 } from "react-native";
 import CloseIcon from "../icons/close-icon.png";
 import FileIcon from "../icons/file.png";
 import ImageIcon from "../icons/image.png";
 import { MessageInputStyle } from "./message-input.style";
+
+const AnimatedSafeAreaView = Animated.createAnimatedComponent(SafeAreaView);
 
 type FilePlacePickerModalProps = {
   modalVisible: boolean;
@@ -83,7 +87,7 @@ export const FilePlacePickerModal = ({
         }}
         style={style.fileUploadModalContent}
       >
-        <Animated.View
+        <AnimatedSafeAreaView
           style={[
             style.fileUploadModalSheetContainer,
             {
@@ -92,7 +96,7 @@ export const FilePlacePickerModal = ({
                 {
                   translateY: sheetOpacity.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [actionSheetHeight, -90],
+                    outputRange: [actionSheetHeight, Platform.OS === "ios" ? -84 : -54],
                   }),
                 },
               ],
@@ -129,7 +133,7 @@ export const FilePlacePickerModal = ({
               <Text style={style.fileUploadModalSheetContentTextStyle}>Documents</Text>
             </Pressable>
           </View>
-        </Animated.View>
+        </AnimatedSafeAreaView>
       </Pressable>
     </Modal>
   );
