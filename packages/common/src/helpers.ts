@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { FilePayload, MessagePayload } from "./types";
 
 export const getNameInitials = (name: string): string => {
   if (!name || !name.length) return "";
@@ -27,3 +28,7 @@ export const usePrevious = <T>(value: T): T => {
 
   return ref.current;
 };
+
+export function isFilePayload(message: MessagePayload | FilePayload): message is FilePayload {
+  return (message as FilePayload).file !== undefined;
+}

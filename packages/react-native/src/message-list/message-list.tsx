@@ -159,6 +159,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const message = isFilePayload(envelope.message) ? envelope.message.message : envelope.message;
     const user = message?.sender || getUser(uuid);
     const actions = envelope.actions;
+    const file = isFilePayload(envelope.message) && envelope.message.file;
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
     if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
