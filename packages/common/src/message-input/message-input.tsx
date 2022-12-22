@@ -10,7 +10,7 @@ import {
   UsersMetaAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
-import { UriFileInput, SendFileParameters } from "pubnub";
+import { UriFileInput } from "pubnub";
 
 export interface CommonMessageInputProps {
   /** Option to set a placeholder message to display in the text window. */
@@ -26,8 +26,6 @@ export interface CommonMessageInputProps {
   fileUpload?: "image" | "all";
   /** Option to disable the input from composing and sending messages. */
   disabled?: boolean;
-  /** Option to hide the Send button. */
-  hideSendButton?: boolean;
   /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
   /** Callback to handle an event when the text value changes. */

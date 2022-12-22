@@ -78,7 +78,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       const asset = result.assets[0];
 
       setModalVisible(false);
-      setFile({ mimeType: "image/*", name: asset.fileName || asset.assetId, uri: asset.uri });
+      const fileName = asset.fileName || asset.uri.substring(asset.uri.lastIndexOf("/") + 1);
+      setFile({ mimeType: "image/*", name: fileName, uri: asset.uri });
       setText(asset.fileName || asset.assetId);
     } catch (e) {
       onError(e);
@@ -206,7 +207,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 MessageInput.defaultProps = {
   disabled: false,
   fileUpload: undefined,
-  hideSendButton: false,
   placeholder: "Send message",
   senderInfo: false,
   typingIndicator: false,

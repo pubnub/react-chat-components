@@ -1,15 +1,8 @@
-import { ReactElement, ReactNode, useCallback, useEffect, useState } from "react";
+import { ReactNode, useCallback, useEffect, useState } from "react";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
-import {
-  isFilePayload,
-  UserEntity,
-  MessageEnvelope,
-  EmojiPickerElementProps,
-  FileAttachment,
-  ProperFetchMessagesResponse,
-} from "../types";
-import { usePrevious } from "../helpers";
+import { UserEntity, MessageEnvelope, FileAttachment, ProperFetchMessagesResponse } from "../types";
+import { usePrevious, isFilePayload } from "../helpers";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
@@ -36,8 +29,6 @@ export interface CommonMessageListProps {
   enableReactions?: boolean;
   /** Option to provide custom welcome messages to replace the default ones. Set to "false" to disable it. */
   welcomeMessages?: false | MessageEnvelope | MessageEnvelope[];
-  /** Option to enable message reactions. Pass it in the emoji picker component. For more details, refer to the Emoji Pickers section in the docs. */
-  reactionsPicker?: ReactElement<EmojiPickerElementProps>;
   /** Option to provide an extra actions renderer to add custom action buttons to each message. */
   extraActionsRenderer?: (message: MessageEnvelope) => JSX.Element;
   /** Option to provide a custom message item renderer if themes and CSS variables aren't enough. */
@@ -77,6 +68,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   const [unreadMessages, setUnreadMessages] = useState(0);
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [reactingToMessage, setReactingToMessage] = useState(null);
+  const [emojiPickerShown, setEmojiPickerShown] = useState(false);
 
   /*
   /* Helper functions
@@ -165,11 +157,11 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     setPaginationEnd,
   ]);
 
-  const addReaction = (reaction: string, messageTimetoken) => {
+  const addReaction = async (reaction: string, messageTimetoken: string | number) => {
     try {
-      pubnub.addMessageAction({
+      await pubnub.addMessageAction({
         channel,
-        messageTimetoken,
+        messageTimetoken: String(messageTimetoken),
         action: {
           type: "reaction",
           value: reaction,
@@ -180,9 +172,9 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     }
   };
 
-  const removeReaction = (reaction: string, messageTimetoken, actionTimetoken) => {
+  const removeReaction = async (reaction: string, messageTimetoken, actionTimetoken) => {
     try {
-      pubnub.removeMessageAction({ channel, messageTimetoken, actionTimetoken });
+      await pubnub.removeMessageAction({ channel, messageTimetoken, actionTimetoken });
     } catch (e) {
       onError(e);
     }
@@ -204,6 +196,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   return {
     addReaction,
     channel,
+    emojiPickerShown,
     fetchHistory,
     fetchingMessages,
     getTime,
@@ -218,6 +211,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     reactingToMessage,
     removeReaction,
     scrolledBottom,
+    setEmojiPickerShown,
     setReactingToMessage,
     setScrolledBottom,
     setUnreadMessages,

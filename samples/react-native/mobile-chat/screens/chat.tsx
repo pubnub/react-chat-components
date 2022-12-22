@@ -1,7 +1,15 @@
 import React from "react";
-import { Text, View, KeyboardAvoidingView, Button, useColorScheme, Platform } from "react-native";
-import { MessageInput, MessageList, TypingIndicator } from "@pubnub/react-native-chat-components";
+import { View, KeyboardAvoidingView, useColorScheme, Platform, Modal } from "react-native";
+import {
+  MessageInput,
+  MessageList,
+  TypingIndicator,
+  EmojiPickerElementProps,
+} from "@pubnub/react-native-chat-components";
 import { useHeaderHeight } from "@react-navigation/elements";
+import EmojiPicker from "rn-emoji-keyboard";
+
+import EmojiSelector from "react-native-emoji-selector";
 
 export function ChatScreen(): JSX.Element {
   const headerHeight = useHeaderHeight();
@@ -17,6 +25,22 @@ export function ChatScreen(): JSX.Element {
       >
         <MessageList
           fetchMessages={25}
+          enableReactions
+          reactionsPicker={
+            // <EmojiSelectorAdapter />
+            <EmojiPicker
+              open={false}
+              onClose={() => {
+                return;
+              }}
+              onEmojiSelected={() => {
+                return;
+              }}
+              disableSafeArea
+              defaultHeight="60%"
+              theme={isDark ? darkEmojiPickerTheme : undefined}
+            />
+          }
           // extraActionsRenderer={(msg) => <Button title="EA" onPress={() => console.log(msg)} />}
           // filter={(msg) => msg.message.text === "3"}
           // messageRenderer={(env) => <Text>{env.message.message.text}</Text>}
@@ -47,3 +71,30 @@ export function ChatScreen(): JSX.Element {
     </View>
   );
 }
+
+const darkEmojiPickerTheme = {
+  backdrop: "#16161888",
+  knob: "#fff",
+  container: "#2a2a39",
+  header: "#fff",
+  skinTonesContainer: "#252427",
+  category: {
+    icon: "#fff",
+    iconActive: "#1c1c28",
+    container: "#1c1c28",
+    containerActive: "#fff",
+  },
+};
+
+const EmojiSelectorAdapter = (props: EmojiPickerElementProps) => {
+  return props.open ? (
+    <Modal>
+      <EmojiSelector
+        onEmojiSelected={(emoji) => {
+          if (props.onEmojiSelected) props.onEmojiSelected({ emoji });
+          if (props.onClose) props.onClose();
+        }}
+      />
+    </Modal>
+  ) : null;
+};
