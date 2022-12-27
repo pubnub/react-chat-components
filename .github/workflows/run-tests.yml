@@ -42,8 +42,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: pubnub/chat-components-e2e-tests
-          # This after Playwright setup will be completed, should be set back to master.
-          ref: Playwright-setup-UI-1598
+          ref: master
           token: ${{ secrets.GH_TOKEN }}
       - name: Install e2e framework dependencies
         run: |
