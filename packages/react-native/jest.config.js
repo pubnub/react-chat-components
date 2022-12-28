@@ -1,5 +1,5 @@
 module.exports = {
-  preset: "react-native",
+  preset: "jest-expo",
   coveragePathIgnorePatterns: ["/node_modules/", "/test/", "/mock/"],
   setupFilesAfterEnv: ["@testing-library/jest-native/extend-expect"],
   testEnvironment: "node",
@@ -9,4 +9,7 @@ module.exports = {
     "^.+/((@)?react-native)/.+\\.(js|jsx)$": "babel-jest",
     "^.+\\.(js|ts|jsx|tsx)$": "@swc/jest",
   },
+  transformIgnorePatterns: [
+    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+  ],
 };

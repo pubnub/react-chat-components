@@ -49,6 +49,7 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
     if (!isImage) {
       return;
     }
+
     Image.getSize(
       file.url,
       (_, height) => {
@@ -92,6 +93,7 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
   const downloadFile = async () => {
     try {
       setIsDownloading(true);
+      console.log("Platform.OS", Platform.OS);
       const { uri, status, headers } = await downloadResumable.downloadAsync();
 
       if (status !== 200) {
@@ -162,11 +164,16 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
           source={{ uri: file.url }}
           style={[{ height: imageHeight }, style.imageFile]}
           resizeMode="cover"
+          testID={`message-list-image-${file.id}`}
         />
       )}
       {loadError && <Text>Unable to load file from the server</Text>}
       {!loadError && !isDownloading && (
-        <TouchableOpacity style={style.fileDownloadContainer} onPress={downloadFile}>
+        <TouchableOpacity
+          style={style.fileDownloadContainer}
+          testID="message-list-file-download-button"
+          onPress={downloadFile}
+        >
           <Text style={style.fileNameText}>{file.name}</Text>
           <Image source={{ uri: DownloadIcon }} style={style.downloadIconStyle} />
         </TouchableOpacity>
