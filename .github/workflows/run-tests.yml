@@ -119,9 +119,9 @@ jobs:
           path: react/testing_apps/react-chat-components
       - name: Update demo application keys
         run:
-          cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/getting-started/src/
-          sed -i '' -e "s/\"myPublishKey\",/\"$REACT_APP_PUB_KEY\",/g" getting-started-react-native.tsx
-          sed -i '' -e "s/\"mySubscribeKey\",/\"$REACT_APP_SUB_KEY\",/g" getting-started-react-native.tsx
+          cd "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/"
+          echo "REACT_APP_PUB_KEY=${$REACT_APP_PUB_KEY}" >> ".env"
+          echo "REACT_APP_SUB_KEY=${$REACT_APP_SUB_KEY}" >> ".env"
       - name: Cache React Chat Component dependencies
         uses: actions/cache@v3
         with:
@@ -130,15 +130,15 @@ jobs:
           path: 'react/testing_apps/react-chat-components/**/node_modules'
       - name: Install React Chat Component dependencies
         run: |
-          cd ${{ github.workspace }}/react/testing_apps/react-chat-components
+          cd "${{ github.workspace }}/react/testing_apps/react-chat-components"
           yarn install --prefer-offline --frozen-lockfile
       - name: Test application setup and run
         run: |
-          cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/getting-started
+          cd "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat"
           yarn run start &
       - name: Run e2e tests
         run: |
-          cd ${{ github.workspace }}/react
+          cd "${{ github.workspace }}/react"
           npx playwright test
       - name: Expose e2e test report
         if: always()
