@@ -135,7 +135,6 @@ jobs:
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/getting-started
-          yarn run setup
           yarn run start &
       - name: Run e2e tests
         run: |
