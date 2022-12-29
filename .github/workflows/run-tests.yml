@@ -74,10 +74,12 @@ jobs:
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
-          yarn run setup
-          yarn run start &
+          NODE_OPTIONS=--openssl-legacy-provider yarn run setup
+          NODE_OPTIONS=--openssl-legacy-provider yarn run start &
       - name: Run e2e tests
         run: |
+          # Give some time for app to start
+          sleep 5
           cd ${{ github.workspace }}/react
           npx playwright test
       - name: Expose e2e test report
@@ -135,9 +137,10 @@ jobs:
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
-          yarn run start &
+          NODE_OPTIONS=--openssl-legacy-provider yarn run start &
       - name: Run e2e tests
         run: |
+          # Give some time for app to start
           cd ${{ github.workspace }}/react
           npx playwright test
       - name: Expose e2e test report
