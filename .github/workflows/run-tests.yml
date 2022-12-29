@@ -75,12 +75,12 @@ jobs:
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
           yarn run setup
-          yarn run start > app_run.txt 2>&1 &
+          yarn run start > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/app_run.txt" 2>&1 &
+          sleep 5 # Give some time for app to start
       - name: Run e2e tests
         run: |
-          # Give some time for app to start
-          sleep 5
-          cat app_run.txt
+          ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
+          cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/app_run.txt"
           cd ${{ github.workspace }}/react
           npx playwright test
       - name: Expose e2e test report
@@ -138,12 +138,12 @@ jobs:
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
-          yarn run start > app_run.txt 2>&1 &
+          yarn run start > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt" 2>&1 &
+          sleep 5 # Give some time for app to start
       - name: Run e2e tests
         run: |
-          # Give some time for app to start
-          sleep 5
-          cat app_run.txt
+          ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
+          cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt"
           cd ${{ github.workspace }}/react
           npx playwright test
       - name: Expose e2e test report
