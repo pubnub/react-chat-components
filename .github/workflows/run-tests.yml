@@ -82,7 +82,8 @@ jobs:
           ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
           cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/app_run.txt"
           cd ${{ github.workspace }}/react
-          npx playwright test
+          npx playwright test ./tests/message-list.spec.ts
+          #npx playwright test
       - name: Expose e2e test report
         if: always()
         uses: actions/upload-artifact@v3
@@ -145,7 +146,8 @@ jobs:
           ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
           cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt"
           cd ${{ github.workspace }}/react
-          npx playwright test
+          npx playwright test ./tests/message-list-native.spec.ts
+          #npx playwright test
       - name: Expose e2e test report
         if: always()
         uses: actions/upload-artifact@v3
