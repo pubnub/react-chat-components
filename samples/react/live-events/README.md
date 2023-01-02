@@ -1,6 +1,6 @@
 # Live Events Chat
 
-`live-events` is an app that simulates live events. You can switch between multiple chananels, send messages, view channel occupancy and the participant list. The app comes with the light and dark themes.
+`live-events` is an app that simulates live events. You can switch between multiple channels, send messages, view channel occupancy and the participant list. The app comes with the light and dark themes.
 
 ![Life event chat app for React](screenshot.png)
 
