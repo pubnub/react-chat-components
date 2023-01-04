@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.18.0
+version: v0.19.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-01-02
+    version: v0.19.0
+    changes:
+      - type: feature
+        text: "MessageList - add message reactions on React Native."
   - date: 2022-12-05
     version: v0.18.0
     changes:
