@@ -5,13 +5,11 @@
   "description": "This monorepository uses yarn workspaces to crosslink dependencies between components library and sample applications.",
   "main": "index.js",
   "license": "MIT",
-  "workspaces": {
-    "packages": [
-      "data",
-      "packages/*",
-      "samples/*/*"
-    ]
-  },
+  "workspaces": [
+    "data",
+    "packages/*",
+    "samples/*/*"
+  ],
   "engines": {
     "npm": ">= 8.5.0",
     "yarn": ">= 1.22.0"

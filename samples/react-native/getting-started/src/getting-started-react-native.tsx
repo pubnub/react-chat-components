@@ -8,8 +8,8 @@ import { Chat, MessageList, MessageInput } from "@pubnub/react-native-chat-compo
 /* Creates and configures your PubNub instance. Be sure to replace "myPublishKey" and "mySubscribeKey"
   with your own keyset. If you wish, modify the default "myFirstUser" uuid value for the chat user. */
 const pubnub = new PubNub({
-  publishKey: "pub-c-0457cb83-0786-43df-bc70-723b16a6e816",
-  subscribeKey: "sub-c-e654122d-85b5-49a6-a3dd-8ebc93c882de",
+  publishKey: "myPublishKey",
+  subscribeKey: "mySubscribeKey",
   userId: "myFirstUser",
 });
 const currentChannel = "Default";
@@ -20,11 +20,11 @@ export function GettingStartedReactNative(): JSX.Element {
     <PubNubProvider client={pubnub}>
       {/* PubNubProvider is a part of the PubNub React SDK and allows you to access PubNub instance
         in components down the tree. */}
-      <Chat {...{ currentChannel, theme }} onError={console.log}>
+      <Chat {...{ currentChannel, theme }}>
         {/* Chat is an obligatory state provider. It allows you to configure some common component
           options, like the current channel and the general theme for the app. */}
-        <MessageList fetchMessages={20} />
-        <MessageInput fileUpload="all" />
+        <MessageList />
+        <MessageInput />
       </Chat>
     </PubNubProvider>
   );
