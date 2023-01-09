@@ -24,14 +24,17 @@ getSizeMock.mockImplementation((url, cb) => {
 });
 
 jest.mock("expo-media-library", () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require("../mock/file-mocks").EXPO_MEDIA_LIBRARY_MOCK;
 });
 
 jest.mock("expo-sharing", () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require("../mock/file-mocks").EXPO_SHARING_MOCK;
 });
 
 jest.mock("expo-file-system", () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require("../mock/file-mocks").EXPO_FILE_SYSTEM_MOCK;
 });
 
@@ -55,24 +58,24 @@ const pdfFile = {
 
 describe("Remote File", () => {
   beforeEach(() => {
-    // requestMediaLibraryPermissionMock.mockReset();
-    // [
-    //   "usePermissions",
-    //   "createAssetAsync",
-    //   "getAlbumAsync",
-    //   "createAlbumAsync",
-    //   "addAssetsToAlbumAsync",
-    // ].forEach((key) => {
-    //   EXPO_MEDIA_LIBRARY_MOCK[key].mockReset();
-    // });
-    //
-    // EXPO_SHARING_MOCK.shareAsync.mockReset();
-    //
-    // EXPO_FILE_SYSTEM_MOCK.StorageAccessFramework.requestDirectoryPermissionsAsync.mockReset();
-    // EXPO_FILE_SYSTEM_MOCK.StorageAccessFramework.createFileAsync.mockReset();
-    // EXPO_FILE_SYSTEM_MOCK.readAsStringAsync.mockReset();
-    // EXPO_FILE_SYSTEM_MOCK.writeAsStringAsync.mockReset();
-    // EXPO_FILE_SYSTEM_MOCK.createDownloadResumable.mockReset();
+    requestMediaLibraryPermissionMock.mockClear();
+    [
+      "usePermissions",
+      "createAssetAsync",
+      "getAlbumAsync",
+      "createAlbumAsync",
+      "addAssetsToAlbumAsync",
+    ].forEach((key) => {
+      EXPO_MEDIA_LIBRARY_MOCK[key].mockClear();
+    });
+
+    EXPO_SHARING_MOCK.shareAsync.mockClear();
+
+    EXPO_FILE_SYSTEM_MOCK.StorageAccessFramework.requestDirectoryPermissionsAsync.mockClear();
+    EXPO_FILE_SYSTEM_MOCK.StorageAccessFramework.createFileAsync.mockClear();
+    EXPO_FILE_SYSTEM_MOCK.readAsStringAsync.mockClear();
+    EXPO_FILE_SYSTEM_MOCK.writeAsStringAsync.mockClear();
+    EXPO_FILE_SYSTEM_MOCK.createDownloadResumable.mockClear();
   });
 
   test("accepts an image url and renders it", async () => {
