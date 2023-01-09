@@ -174,7 +174,9 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
           testID="message-list-file-download-button"
           onPress={downloadFile}
         >
-          <Text style={style.fileNameText}>{file.name}</Text>
+          <Text style={style.fileNameText} numberOfLines={1} ellipsizeMode="middle">
+            {file.name}
+          </Text>
           <Image source={{ uri: DownloadIcon }} style={style.downloadIconStyle} />
         </TouchableOpacity>
       )}

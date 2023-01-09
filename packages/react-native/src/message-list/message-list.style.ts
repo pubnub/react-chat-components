@@ -179,6 +179,7 @@ export default (theme: Themes): MessageListStyle => {
       flexDirection: "row",
       marginTop: 12,
       alignItems: "center",
+      maxWidth: 250,
     },
     fileNameText: {
       textDecorationLine: "underline",

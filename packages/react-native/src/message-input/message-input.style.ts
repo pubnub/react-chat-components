@@ -112,6 +112,7 @@ export default (theme: Themes): MessageInputStyle => {
     },
     fileUploadModalSheetContentHeaderText: {
       fontSize: 15,
+      lineHeight: 24,
     },
     fileUploadModalSheetContentCloseIconContainer: {
       position: "absolute",
@@ -136,6 +137,7 @@ export default (theme: Themes): MessageInputStyle => {
     fileUploadModalSheetContentTextStyle: {
       color: colors.actionsSheetLabelColor,
       fontSize: 16,
+      lineHeight: 24,
     },
   });
 };
