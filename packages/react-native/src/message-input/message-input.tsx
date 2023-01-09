@@ -16,10 +16,7 @@ import { FileModal } from "./file-modal";
 export type MessageInputProps = CommonMessageInputProps & {
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
   style?: MessageInputStyle;
-  fileModalRenderer?: ({
-    pickPhoto,
-    pickDocument,
-  }: {
+  fileModalRenderer?: (params: {
     pickPhoto: () => Promise<void>;
     pickDocument: () => Promise<void>;
     modalVisible: boolean;
