@@ -32,8 +32,8 @@ type RemoteImageProps = {
   sheetPosition: Animated.Value;
 };
 
-const OPACITY_ANIMATION_IN_TIME = 325;
-const OPACITY_ANIMATION_OUT_TIME = 295;
+const SHEET_POSITION_ANIMATION_IN_TIME = 625;
+const SHEET_POSITION_ANIMATION_OUT_TIME = 595;
 const EASING_OUT = Easing.bezier(0.25, 0.46, 0.45, 0.94);
 const EASING_IN = Easing.out(EASING_OUT);
 
@@ -77,14 +77,14 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
       Animated.timing(sheetPosition, {
         toValue: -300 - Dimensions.get("window").height / 2 + 80,
         easing: EASING_IN,
-        duration: OPACITY_ANIMATION_IN_TIME,
+        duration: SHEET_POSITION_ANIMATION_IN_TIME,
         useNativeDriver: true,
       }),
       Animated.delay(500),
       Animated.timing(sheetPosition, {
         toValue: 0,
         easing: EASING_OUT,
-        duration: OPACITY_ANIMATION_OUT_TIME,
+        duration: SHEET_POSITION_ANIMATION_OUT_TIME,
         useNativeDriver: true,
       }),
     ]).start();

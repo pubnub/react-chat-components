@@ -9,6 +9,7 @@ const lightColors = {
   actionsSheetBackground: "#FFFFFF",
   actionsSheetButtonIconTint: "#1F2937",
   actionsSheetLabelColor: "#1F2937",
+  sheetContentHeaderText: "#000000",
 };
 
 const darkColors = {
@@ -19,6 +20,7 @@ const darkColors = {
   actionsSheetBackground: "#000000",
   actionsSheetButtonIconTint: "#e4e5e5",
   actionsSheetLabelColor: "#e7eaec",
+  sheetContentHeaderText: "#ffffff",
 };
 
 export interface MessageInputStyle {
@@ -113,6 +115,7 @@ export default (theme: Themes): MessageInputStyle => {
     fileUploadModalSheetContentHeaderText: {
       fontSize: 15,
       lineHeight: 24,
+      color: colors.sheetContentHeaderText,
     },
     fileUploadModalSheetContentCloseIconContainer: {
       position: "absolute",

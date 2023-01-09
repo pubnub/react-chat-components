@@ -80,6 +80,7 @@ export const FileModal = ({
       onRequestClose={() => {
         setModalVisible(!modalVisible);
       }}
+      testID="message-input-file-modal-container"
     >
       <Pressable
         onPress={() => {
@@ -125,7 +126,11 @@ export const FileModal = ({
               />
               <Text style={style.fileUploadModalSheetContentTextStyle}>Photos</Text>
             </Pressable>
-            <Pressable style={style.fileUploadModalSheetContentButton} onPress={pickDocument}>
+            <Pressable
+              style={style.fileUploadModalSheetContentButton}
+              onPress={pickDocument}
+              testID="message-input-pick-document-option"
+            >
               <Image
                 source={{ uri: FileIcon }}
                 style={style.fileUploadModalSheetContentButtonIcon}

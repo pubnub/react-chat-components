@@ -129,13 +129,18 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         <View>
           <>
             {props.fileUpload === "image" ? (
-              <TouchableOpacity style={style.messageInputFileLabel} onPress={pickPhoto}>
+              <TouchableOpacity
+                style={style.messageInputFileLabel}
+                onPress={pickPhoto}
+                testID="message-input-photo-icon-container"
+              >
                 <Image source={{ uri: ImageIcon }} style={style.icon} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity
                 style={style.messageInputFileLabel}
                 onPress={() => setModalVisible(true)}
+                testID="message-input-file-icon-container"
               >
                 <Image source={{ uri: FileIcon }} style={style.icon} />
               </TouchableOpacity>

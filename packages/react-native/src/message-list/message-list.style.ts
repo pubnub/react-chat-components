@@ -11,6 +11,8 @@ const lightColors = {
   reactionActiveBackground: "rgba(239, 58, 67, 0.2)",
   downloadedSuccessBannerBackground: "rgba(0,0,0,0.9)",
   downloadedSuccessBannerText: "#ffffff",
+  downloadLinkText: "#000000",
+  downloadLinkIcon: "#000000",
 };
 
 const darkColors = {
@@ -23,6 +25,8 @@ const darkColors = {
   reactionActiveBackground: "rgba(239, 58, 67, 0.3)",
   downloadedSuccessBannerBackground: "rgba(224, 224, 224, 0.9)",
   downloadedSuccessBannerText: "#000000",
+  downloadLinkText: "#ffffff",
+  downloadLinkIcon: "#ffffff",
 };
 
 export interface MessageListStyle {
@@ -174,15 +178,18 @@ export default (theme: Themes): MessageListStyle => {
       width: 24,
       height: 24,
       marginLeft: 8,
+      tintColor: colors.downloadLinkIcon,
     },
     fileDownloadContainer: {
       flexDirection: "row",
       marginTop: 12,
       alignItems: "center",
       maxWidth: 250,
+      minHeight: 24,
     },
     fileNameText: {
       textDecorationLine: "underline",
+      color: colors.downloadLinkText,
     },
     downloadedSuccessBanner: {
       position: "absolute",
@@ -205,7 +212,8 @@ export default (theme: Themes): MessageListStyle => {
     },
     downloadingInProgressIconContainer: {
       alignItems: "flex-start",
-      marginTop: 8,
+      marginTop: 12,
+      minHeight: 24,
     },
   });
 };

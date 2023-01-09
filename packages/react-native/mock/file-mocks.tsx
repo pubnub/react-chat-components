@@ -38,3 +38,25 @@ export const EXPO_FILE_SYSTEM_MOCK = {
     };
   }),
 };
+
+export const EXPO_IMAGE_PICKER_MOCK = {
+  ...jest.requireActual("expo-image-picker"),
+  requestMediaLibraryPermissionsAsync: jest.fn(() => Promise.resolve({ granted: true })),
+  launchImageLibraryAsync: jest.fn(() =>
+    Promise.resolve({
+      canceled: false,
+      assets: [{ uri: "some_uri", fileName: "fileName" }],
+    })
+  ),
+};
+
+export const EXPO_DOCUMENT_PICKER_MOCK = {
+  getDocumentAsync: jest.fn(() =>
+    Promise.resolve({
+      type: "success",
+      name: "some_name",
+      uri: "some_uri",
+      mimeType: "some_mime_type",
+    })
+  ),
+};
