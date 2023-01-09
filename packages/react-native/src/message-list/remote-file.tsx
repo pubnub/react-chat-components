@@ -93,7 +93,7 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
   const downloadFile = async () => {
     try {
       setIsDownloading(true);
-      console.log("Platform.OS", Platform.OS);
+
       const { uri, status, headers } = await downloadResumable.downloadAsync();
 
       if (status !== 200) {
