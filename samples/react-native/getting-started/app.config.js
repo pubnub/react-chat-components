@@ -32,14 +32,4 @@ export default {
     REACT_APP_PUB_KEY: process.env.REACT_APP_PUB_KEY,
     REACT_APP_SUB_KEY: process.env.REACT_APP_SUB_KEY,
   },
-  plugins: [
-    [
-      "expo-image-picker",
-      {
-        photosPermission: "The app accesses your photos to let you share them with your friends.",
-        savePhotosPermission: "Allow $(PRODUCT_NAME) to save photos.",
-        isAccessMediaLocationEnabled: true,
-      },
-    ],
-  ],
 };
