@@ -9,8 +9,8 @@ const lightColors = {
   unreadColor: "#ffffff",
   reactionBorder: "#ced6e0",
   reactionActiveBackground: "rgba(239, 58, 67, 0.2)",
-  downloadedSuccessBannerBackground: "rgba(0,0,0,0.9)",
-  downloadedSuccessBannerText: "#ffffff",
+  downloadedSuccessBannerBackground: "rgba(224, 224, 224, 0.9)",
+  downloadedSuccessBannerText: "#000000",
   downloadLinkText: "#000000",
   downloadLinkIcon: "#000000",
 };
@@ -23,8 +23,8 @@ const darkColors = {
   unreadColor: "#2a2a39",
   reactionBorder: "#28293d",
   reactionActiveBackground: "rgba(239, 58, 67, 0.3)",
-  downloadedSuccessBannerBackground: "rgba(224, 224, 224, 0.9)",
-  downloadedSuccessBannerText: "#000000",
+  downloadedSuccessBannerBackground: "rgba(0,0,0,0.9)",
+  downloadedSuccessBannerText: "#ffffff",
   downloadLinkText: "#ffffff",
   downloadLinkIcon: "#ffffff",
 };
