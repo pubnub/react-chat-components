@@ -75,9 +75,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       const asset = result.assets[0];
 
       setModalVisible(false);
-      const fileName = asset.fileName || asset.uri.substring(asset.uri.lastIndexOf("/") + 1);
+      const fileName =
+        asset.fileName || asset.uri.substring(asset.uri.lastIndexOf("/") + 1, asset.uri.length);
       setFile({ mimeType: "image/*", name: fileName, uri: asset.uri });
-      setText(asset.fileName || asset.assetId);
+      setText(fileName);
     } catch (e) {
       onError(e);
     }
