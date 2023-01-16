@@ -122,6 +122,13 @@ export default function ModeratedChat(): JSX.Element {
     [currentChannel, refetchJoinedChannels, refetchChannelMemberships]
   );
 
+  // Just testing, will remove later
+  const getUser = async (uuid: string) => {
+    const response = await pubnub.objects.getUUIDMetadata({ uuid });
+    console.log("fetched and returned user data: ", response.data);
+    return response.data;
+  };
+
   const setAnotherCurrentChannel = (channelId: string) => {
     if (currentChannel.id === channelId) {
       const newCurrentChannel = joinedChannels?.find((ch) => ch.id !== channelId);
@@ -162,11 +169,12 @@ export default function ModeratedChat(): JSX.Element {
       {/* Current uuid is passed to channels prop to subscribe and listen to User metadata changes */}
       <Chat
         theme={theme}
-        users={allUsers}
+        // users={allUsers}
         currentChannel={currentChannel.id}
         channels={[...joinedChannels.map((c) => c.id), uuid]}
         onError={handleError}
         onMembership={(e) => refreshMemberships(e)}
+        getUser={getUser}
       >
         {showPublicChannelsModal && (
           <PublicChannelsModal
@@ -364,6 +372,7 @@ export default function ModeratedChat(): JSX.Element {
                           : "Send a Chat Message",
                       });
                     }}
+                    senderInfo={true}
                   />
                 </>
               )}
