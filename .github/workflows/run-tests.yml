@@ -71,12 +71,13 @@ jobs:
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
           yarn install --prefer-offline --frozen-lockfile
+          yarn add wait-port
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
           yarn run setup
           yarn run start > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/app_run.txt" 2>&1 &
-          sleep 5 # Give some time for app to start
+          wait-port 19006
       - name: Run e2e tests
         run: |
           ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
@@ -137,14 +138,14 @@ jobs:
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
           yarn install --prefer-offline --frozen-lockfile
+          yarn add wait-port
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
           yarn run web > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt" 2>&1 &
-          sleep 5 # Give some time for app to start
+          wait-port 19006
       - name: Run e2e tests
         run: |
-          sleep 10
           ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
           cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt"
           cd ${{ github.workspace }}/react
