@@ -140,10 +140,11 @@ jobs:
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
-          yarn run start > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt" 2>&1 &
+          yarn run web --port=19006 > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt" 2>&1 &
           sleep 5 # Give some time for app to start
       - name: Run e2e tests
         run: |
+          sleep 5
           ls -la "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat/"
           cat "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt"
           cd ${{ github.workspace }}/react
