@@ -71,7 +71,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
           yarn install --prefer-offline --frozen-lockfile
-          yarn add wait-port
+          yarn add wait-port --ignore-workspace-root-check
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
@@ -138,7 +138,7 @@ jobs:
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components
           yarn install --prefer-offline --frozen-lockfile
-          yarn add wait-port
+          yarn add wait-port --ignore-workspace-root-check
       - name: Test application setup and run
         run: |
           cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
