@@ -138,8 +138,9 @@ jobs:
           yarn add wait-port --ignore-workspace-root-check --prefer-offline --frozen-lockfile
       - name: Test application setup and run
         run: |
-          cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
+          cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react/group-chat
           yarn run setup
+          cd ${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat
           yarn run web > "${{ github.workspace }}/react/testing_apps/react-chat-components/samples/react-native/mobile-chat/app_run.txt" 2>&1 &
           npx wait-port 19006
       - name: Run e2e tests
