@@ -19,8 +19,10 @@ export const ErrorFunctionAtom = atom<{ function: (error: Error) => unknown }>({
   function: () => null,
 });
 
-export const MissingUserCallbackAtom = atom<{ function: (userId: string) => Promise<UserEntity> }>({
-  function: () => null,
+export const MissingUserCallbackAtom = atom<{
+  function?: (userId: string) => UserEntity | Promise<UserEntity>;
+}>({
+  function: undefined,
 });
 
 export const RequestMissingUserAtom = atom(null, async (get, set, userId: string) => {

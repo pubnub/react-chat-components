@@ -147,7 +147,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     channelGroups: channelGroupsProp = [],
     enablePresence: enablePresenceProp,
     users: usersProp = [],
-    getUser: getUserProp = () => null,
+    getUser: getUserProp,
     typingIndicatorTimeout: typingIndicatorTimeoutProp = 10,
     retryOptions: retryOptionsProp,
     onMessage: onMessageProp,
@@ -358,7 +358,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   }, [retryOnError, setRetryFunction]);
 
   useEffect(() => {
-    setMissingUserCallback({ function: (userId: string) => getUserProp(userId) });
+    if (getUserProp) setMissingUserCallback({ function: (userId: string) => getUserProp(userId) });
   }, [getUserProp, setMissingUserCallback]);
 
   /**
