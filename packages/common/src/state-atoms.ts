@@ -19,6 +19,19 @@ export const ErrorFunctionAtom = atom<{ function: (error: Error) => unknown }>({
   function: () => null,
 });
 
+export const MissingUserCallbackAtom = atom<{
+  function?: (userId: string) => UserEntity | Promise<UserEntity>;
+}>({
+  function: undefined,
+});
+
+export const RequestMissingUserAtom = atom(null, async (get, set, userId: string) => {
+  const missingUserCallback = get(MissingUserCallbackAtom).function;
+  if (!missingUserCallback) return;
+  const missingUser = await missingUserCallback(userId);
+  set(UsersMetaAtom, [...get(UsersMetaAtom), missingUser]);
+});
+
 export const CurrentChannelMessagesAtom = atom(
   (get) => (get(MessagesAtom) ? get(MessagesAtom)[get(CurrentChannelAtom)] || [] : []),
   (get, set, value) =>

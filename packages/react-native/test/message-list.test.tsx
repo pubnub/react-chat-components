@@ -6,6 +6,7 @@ import { MessageInput } from "../src/message-input/message-input";
 import { MessagePayload } from "@pubnub/common-chat-components";
 import { render, screen, act, fireEvent } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
+import users from "../../../data/users/users.json";
 
 const getSizeMock = jest.spyOn(Image, "getSize");
 getSizeMock.mockImplementation(() => { /* do nothing */ });
@@ -116,6 +117,17 @@ describe("Message List", () => {
     fireEvent.changeText(screen.getByTestId("message-input"), "Dolor Sit Amet");
     fireEvent.press(screen.getByTestId("message-input-send"));
     expect(await screen.findByText("1 new message")).not.toBeNull();
+  });
+
+  test("loads users when seen", async () => {
+    render(<MessageList fetchMessages={10} />, {
+      providerProps: {
+        currentChannel: "test-general",
+        getUser: (id) => users.find((u) => u.id === id),
+      },
+    });
+
+    expect(await screen.findByText("Luis Griffin")).not.toBeNull();
   });
 
   /** Reactions */

@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { usePubNub } from "pubnub-react";
-import { useAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { UserEntity, MessageEnvelope, FileAttachment, ProperFetchMessagesResponse } from "../types";
 import { usePrevious, isFilePayload } from "../helpers";
 import {
@@ -8,6 +8,7 @@ import {
   CurrentChannelMessagesAtom,
   CurrentChannelPaginationAtom,
   ErrorFunctionAtom,
+  RequestMissingUserAtom,
   RetryFunctionAtom,
   ThemeAtom,
   UsersMetaAtom,
@@ -55,6 +56,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   const [channel] = useAtom(CurrentChannelAtom);
   const prevChannel = usePrevious(channel);
   const [users] = useAtom(UsersMetaAtom);
+  const requestMissingUser = useSetAtom(RequestMissingUserAtom);
   const [theme] = useAtom(ThemeAtom);
   const [retryObj] = useAtom(RetryFunctionAtom);
   const [onErrorObj] = useAtom(ErrorFunctionAtom);
@@ -128,10 +130,18 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
       const response = (await retry(() =>
         pubnub.fetchMessages(options)
       )) as ProperFetchMessagesResponse;
-
-      const newMessages = (response?.channels[channel] || []).map((m) =>
-        m.messageType === 4 ? fetchFileUrl(m) : m
-      ) as MessageEnvelope[];
+      const newMessages = (response?.channels[channel] || []).map((m) => {
+        if (!users.find((u) => u.id === m.uuid)) requestMissingUser(m.uuid);
+        const reactions = m.actions?.reaction;
+        if (reactions) {
+          Object.values(reactions)
+            .flat()
+            .forEach((r) => {
+              if (!users.find((u) => u.id === r.uuid)) requestMissingUser(r.uuid);
+            });
+        }
+        return m.messageType === 4 ? fetchFileUrl(m) : m;
+      }) as MessageEnvelope[];
       const allMessages = [...messages, ...newMessages].sort(
         (a, b) => (a.timetoken as number) - (b.timetoken as number)
       );
@@ -152,9 +162,11 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     paginationEnd,
     props.fetchMessages,
     pubnub,
+    requestMissingUser,
     retry,
     setMessages,
     setPaginationEnd,
+    users,
   ]);
 
   const addReaction = async (reaction: string, messageTimetoken: string | number) => {

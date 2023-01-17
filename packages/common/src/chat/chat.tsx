@@ -15,6 +15,8 @@ import {
   CurrentChannelAtom,
   ErrorFunctionAtom,
   MessagesAtom,
+  MissingUserCallbackAtom,
+  RequestMissingUserAtom,
   RetryFunctionAtom,
   SubscribeChannelGroupsAtom,
   SubscribeChannelsAtom,
@@ -39,6 +41,8 @@ export interface ChatProps {
   enablePresence?: boolean;
   /** Option to provide an external list of user metadata. It's used to display information about senders on MessageList and TypingIndicator. */
   users?: UserEntity[];
+  /** Pass a callback function that will be called to get a User metadata in case it's not passed to the users option */
+  getUser?: (userId: string) => UserEntity | Promise<UserEntity>;
   /** Option to define a timeout in seconds for typing indicators to hide after the last typed character. */
   typingIndicatorTimeout?: number;
   /** Options for automatic retries on errors. */
@@ -122,9 +126,11 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const [, setTheme] = useAtom(ThemeAtom);
   const [, setErrorFunction] = useAtom(ErrorFunctionAtom);
   const [, setRetryFunction] = useAtom(RetryFunctionAtom);
+  const [, setMissingUserCallback] = useAtom(MissingUserCallbackAtom);
+  const [, requestMissingUser] = useAtom(RequestMissingUserAtom);
   const [, setTypingIndicator] = useAtom(TypingIndicatorAtom);
   const [, setTypingIndicatorTimeout] = useAtom(TypingIndicatorTimeoutAtom);
-  const [, setUsersMeta] = useAtom(UsersMetaAtom);
+  const [usersMeta, setUsersMeta] = useAtom(UsersMetaAtom);
   const [currentChannel, setCurrentChannel] = useAtom(CurrentChannelAtom);
   const [channels, setChannels] = useAtom(SubscribeChannelsAtom);
   const [channelGroups, setChannelGroups] = useAtom(SubscribeChannelGroupsAtom);
@@ -141,6 +147,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     channelGroups: channelGroupsProp = [],
     enablePresence: enablePresenceProp,
     users: usersProp = [],
+    getUser: getUserProp,
     typingIndicatorTimeout: typingIndicatorTimeoutProp = 10,
     retryOptions: retryOptionsProp,
     onMessage: onMessageProp,
@@ -179,8 +186,12 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
    */
 
   const handleMessage = useCallback(
-    (message: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken">>) => {
+    (
+      message: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken" | "publisher">>
+    ) => {
       try {
+        if (!usersMeta.find((u) => u.id === message.publisher))
+          requestMissingUser(message.publisher);
         setMessages((messages) => {
           const messagesClone = cloneDeep(messages) || {};
           messagesClone[message.channel] = messagesClone[message.channel] || [];
@@ -193,13 +204,15 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         onErrorProp(e as Error);
       }
     },
-    [onMessageProp, onErrorProp, setMessages]
+    [onErrorProp, onMessageProp, requestMissingUser, setMessages, usersMeta]
   );
 
   const handleSignalEvent = useCallback(
     (signal: SignalEvent) => {
       try {
         if (["typing_on", "typing_off"].includes(signal.message.type)) {
+          if (!usersMeta.find((u) => u.id === signal.publisher))
+            requestMissingUser(signal.publisher);
           setTypingIndicator((indicators) => {
             const indicatorsClone = cloneDeep(indicators);
             const value = signal.message.type === "typing_on" ? signal.timetoken : null;
@@ -213,7 +226,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         onErrorProp(e as Error);
       }
     },
-    [onSignalProp, onErrorProp, setTypingIndicator]
+    [onErrorProp, onSignalProp, requestMissingUser, setTypingIndicator, usersMeta]
   );
 
   const handlePresenceEvent = useCallback(
@@ -243,6 +256,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   const handleAction = useCallback(
     (action: MessageActionEvent) => {
       try {
+        if (!usersMeta.find((u) => u.id === action.publisher)) requestMissingUser(action.publisher);
         setMessages((messages) => {
           if (!messages || !messages[action.channel]) return messages;
 
@@ -272,12 +286,13 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         onErrorProp(e as Error);
       }
     },
-    [onMessageActionProp, onErrorProp, setMessages]
+    [onErrorProp, onMessageActionProp, requestMissingUser, setMessages, usersMeta]
   );
 
   const handleFileEvent = useCallback(
     (event: FileEvent) => {
       try {
+        if (!usersMeta.find((u) => u.id === event.publisher)) requestMissingUser(event.publisher);
         setMessages((messages) => {
           const { file, message, ...payload } = event;
           const newMessage = { ...payload, message: { file, message }, messageType: 4 };
@@ -292,7 +307,7 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         onErrorProp(e as Error);
       }
     },
-    [onFileProp, onErrorProp, setMessages]
+    [onErrorProp, onFileProp, requestMissingUser, setMessages, usersMeta]
   );
 
   const handleStatusEvent = useCallback(
@@ -341,6 +356,10 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
   useEffect(() => {
     setRetryFunction({ function: (fn) => retryOnError(fn) });
   }, [retryOnError, setRetryFunction]);
+
+  useEffect(() => {
+    if (getUserProp) setMissingUserCallback({ function: (userId: string) => getUserProp(userId) });
+  }, [getUserProp, setMissingUserCallback]);
 
   /**
    * Lifecycle: use currentChannel for subscriptions when neither channels nor channelGroups is passed
@@ -397,8 +416,9 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
     if (!pubnub) return;
 
     const listener = {
-      message: (m: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken">>) =>
-        handleMessage(m),
+      message: (
+        m: Required<Pick<MessageEnvelope, "channel" | "message" | "timetoken" | "publisher">>
+      ) => handleMessage(m),
       messageAction: (m: MessageActionEvent) => handleAction(m),
       presence: (e: PresenceEvent) => handlePresenceEvent(e),
       objects: (e: BaseObjectsEvent) => handleObjectsEvent(e),

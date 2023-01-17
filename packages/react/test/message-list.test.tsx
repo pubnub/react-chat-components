@@ -5,6 +5,7 @@ import { MessagePayload } from "@pubnub/common-chat-components";
 import { render, screen, act } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
 import userEvent from "@testing-library/user-event";
+import users from "../../../data/users/users.json";
 
 describe("Message List", () => {
   test("renders with custom welcome messages", async () => {
@@ -129,6 +130,17 @@ describe("Message List", () => {
 
     expect(await screen.findByText("Test Message")).toBeVisible();
     expect(await screen.findByText("1 new message")).toBeVisible();
+  });
+
+  test("loads users when seen", async () => {
+    render(<MessageList fetchMessages={10} />, {
+      providerProps: {
+        currentChannel: "test-general",
+        getUser: (id) => users.find((u) => u.id === id),
+      },
+    });
+
+    expect(await screen.findByText("Luis Griffin")).toBeVisible();
   });
 
   /** Fetching files */
