@@ -9,7 +9,7 @@
     "data",
     "packages/*",
     "samples/*/*",
-    "load-tests"
+    "load-tests/*"
   ],
   "engines": {
     "npm": ">= 8.5.0",

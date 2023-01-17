@@ -1,0 +1,8 @@
+port = 8090
+
+contracts = "../contracts/**/*.ts"
+
+[server]
+https = true
+key = './localhost-key.pem'
+cert = './localhost.pem'

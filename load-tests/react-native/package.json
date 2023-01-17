@@ -1,0 +1,28 @@
+{
+  "name": "reactnativeloadtest",
+  "version": "1.0.0",
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "concurrently 'expo start' 'tomato'",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "ios-2": "concurrently 'expo start --ios' 'tomato'",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-navigation/native": "^6.1.2",
+    "@react-navigation/native-stack": "^6.9.8",
+    "expo": "~47.0.12",
+    "expo-status-bar": "~1.4.2",
+    "react": "18.1.0",
+    "@pubnub/tomato": "1.7.0",
+    "react-native": "0.70.5",
+    "react-native-safe-area-context": "4.4.1",
+    "react-native-screens": "~3.18.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.9",
+    "concurrently": "^7.6.0"
+  },
+  "private": true
+}

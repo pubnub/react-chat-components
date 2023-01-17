@@ -1,0 +1,1 @@
+Generate your own TLS certificate: https://pubnub.atlassian.net/wiki/spaces/CHAT/pages/2805104688/React+Native+Message+List+test+results
