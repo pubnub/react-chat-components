@@ -6,7 +6,6 @@
     "start": "concurrently 'expo start' 'tomato'",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "ios-2": "concurrently 'expo start --ios' 'tomato'",
     "web": "expo start --web"
   },
   "dependencies": {
