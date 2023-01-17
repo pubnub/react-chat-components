@@ -11,6 +11,7 @@ import {
   MessageEnvelope,
   MessageInput,
   MessageList,
+  MessagePayload,
   TypingIndicator,
   useChannelMembers,
   useChannels,
@@ -358,7 +359,7 @@ export default function ModeratedChat(): JSX.Element {
                     placeholder={isUserMuted ? "You were muted from this channel" : "Send message"}
                     onSend={(message) => {
                       actionCompleted({
-                        action: containsEmoji({ testString: message.text })
+                        action: containsEmoji({ testString: (message as MessagePayload).text })
                           ? "Send a Message with an Emoji"
                           : "Send a Chat Message",
                       });

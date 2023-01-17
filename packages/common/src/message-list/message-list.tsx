@@ -1,14 +1,8 @@
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import { usePubNub } from "pubnub-react";
 import { useAtom } from "jotai";
-import {
-  isFilePayload,
-  UserEntity,
-  MessageEnvelope,
-  FileAttachment,
-  ProperFetchMessagesResponse,
-} from "../types";
-import { usePrevious } from "../helpers";
+import { UserEntity, MessageEnvelope, FileAttachment, ProperFetchMessagesResponse } from "../types";
+import { usePrevious, isFilePayload } from "../helpers";
 import {
   CurrentChannelAtom,
   CurrentChannelMessagesAtom,
@@ -134,6 +128,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
       const response = (await retry(() =>
         pubnub.fetchMessages(options)
       )) as ProperFetchMessagesResponse;
+
       const newMessages = (response?.channels[channel] || []).map((m) =>
         m.messageType === 4 ? fetchFileUrl(m) : m
       ) as MessageEnvelope[];

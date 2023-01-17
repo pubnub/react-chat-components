@@ -12,11 +12,11 @@ import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-cha
 import { EmojiPickerElementProps } from "../types";
 import { useOuterClick, useResizeObserver } from "../helpers";
 import EmojiIcon from "../icons/emoji.svg";
-import FileIcon from "../icons/file.svg";
-import ImageIcon from "../icons/image.svg";
-import XCircleIcon from "../icons/x-circle.svg";
 import SpinnerIcon from "../icons/spinner.svg";
 import AirplaneIcon from "../icons/airplane.svg";
+import FileIcon from "../icons/file.svg";
+import XCircleIcon from "../icons/x-circle.svg";
+import ImageIcon from "../icons/image.svg";
 import "./message-input.scss";
 
 export type MessageInputProps = CommonMessageInputProps & {

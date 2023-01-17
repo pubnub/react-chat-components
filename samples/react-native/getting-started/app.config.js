@@ -16,8 +16,10 @@ export default {
   assetBundlePatterns: ["**/*"],
   ios: {
     supportsTablet: true,
+    bundleIdentifier: "com.pubnub.gettingstarted",
   },
   android: {
+    package: "com.pubnub.gettingstarted",
     adaptiveIcon: {
       foregroundImage: "./assets/adaptive-icon.png",
       backgroundColor: "#FFFFFF",
