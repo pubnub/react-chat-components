@@ -17,6 +17,7 @@ import {
   NativeSyntheticEvent,
   Platform,
   Pressable,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -28,15 +29,16 @@ import {
   getPredefinedColor,
   isFilePayload,
   useMessageListCore,
+  FileAttachment,
 } from "@pubnub/common-chat-components";
 import createDefaultStyle, { MessageListStyle } from "./message-list.style";
 import { EmojiPickerElementProps } from "../types";
 import { useStyle, useRotation } from "../helpers";
 import SpinnerIcon from "../icons/spinner.png";
-import ViewReactNativeStyleAttributes from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import { RemoteFile } from "./remote-file";
+import { doAndroidHackWorkaround } from "./android-hack-workaround";
 
-// Workaround for workaround for: https://github.com/facebook/react-native/issues/30034
-ViewReactNativeStyleAttributes.scaleY = true;
+doAndroidHackWorkaround();
 
 export type MessageListProps = CommonMessageListProps & {
   /** Option to pass in a component that will be used for picking message reactions. For more details, refer to the Message Reactions section in the docs. */
@@ -88,6 +90,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
 
   const [reverseMessages, setReverseMessages] = useState([...messages].reverse());
   const [spinnerShown, setSpinnerShown] = useState(false);
+  const [sheetPosition] = useState(new Animated.Value(0));
   const shouldShownSpinner = props.fetchMessages && !paginationEnd;
   const isAndroid = Platform.OS === "android";
 
@@ -207,6 +210,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const message = isFilePayload(envelope.message) ? envelope.message.message : envelope.message;
     const user = message?.sender || getUser(uuid);
     const actions = envelope.actions;
+    const file = isFilePayload(envelope.message) && envelope.message.file;
     const editedText = (Object.entries(actions?.updated || {}).pop() || []).shift() as string;
 
     if (props.messageRenderer && (props.filter ? props.filter(envelope) : true))
@@ -238,10 +242,17 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
             ) : (
               <Text style={style.messageBubble}>{editedText || message?.text}</Text>
             ))}
+          <View>{file && file.name && renderFile(file)}</View>
           <View>{props.enableReactions && renderReactions(envelope)}</View>
         </View>
       </>
     );
+  };
+
+  const renderFile = (file: FileAttachment) => {
+    if (props.fileRenderer) return props.fileRenderer(file);
+
+    return <RemoteFile style={style} file={file} onError={onError} sheetPosition={sheetPosition} />;
   };
 
   const renderReactions = (envelope: MessageEnvelope) => {
@@ -326,6 +337,14 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           open: emojiPickerShown,
           onClose: () => setEmojiPickerShown(false),
         })}
+      {props.fileRenderer ? null : (
+        <Animated.View
+          style={[style.downloadedSuccessBanner, { transform: [{ translateY: sheetPosition }] }]}
+        >
+          <View style={[StyleSheet.absoluteFill, style.downloadedSuccessBannerContent]} />
+          <Text style={style.downloadedSuccessBannerText}>File downloaded successfully</Text>
+        </Animated.View>
+      )}
     </>
   );
 };

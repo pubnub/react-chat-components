@@ -10,6 +10,7 @@ import {
   UsersMetaAtom,
   ErrorFunctionAtom,
 } from "../state-atoms";
+import { UriFileInput } from "pubnub";
 
 export interface CommonMessageInputProps {
   /** Option to set a placeholder message to display in the text window. */
@@ -32,7 +33,7 @@ export interface CommonMessageInputProps {
   /** Callback to modify message content before sending it. This only works for text messages, not files. */
   onBeforeSend?: (value: MessagePayload) => MessagePayload;
   /** Callback for extra actions after sending a message. */
-  onSend?: (value: MessagePayload | File) => void;
+  onSend?: (value: MessagePayload | File | UriFileInput) => void;
   /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
 }
@@ -45,7 +46,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   const pubnub = usePubNub();
 
   const [text, setText] = useState(props.draftMessage || "");
-  const [file, setFile] = useState<File>(null);
+  const [file, setFile] = useState<File | UriFileInput>(null);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
   const [loader, setLoader] = useState(false);
   const [users] = useAtom(UsersMetaAtom);

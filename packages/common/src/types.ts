@@ -46,10 +46,6 @@ export interface FilePayload {
   file: FileAttachment;
 }
 
-export function isFilePayload(message: MessagePayload | FilePayload): message is FilePayload {
-  return (message as FilePayload).file !== undefined;
-}
-
 export interface FileAttachment {
   id: string;
   name: string;

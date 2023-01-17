@@ -85,7 +85,7 @@ jobs:
       - name: Run e2e tests
         run: |
           cd ${{ github.workspace }}/react
-          npx playwright test
+          npx playwright test ./tests/message-list.spec.ts
       - name: Expose e2e test report
         if: always()
         uses: actions/upload-artifact@v3

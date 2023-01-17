@@ -8,6 +8,7 @@ import {
   MemberList,
   MessagePayload,
 } from "@pubnub/react-chat-components";
+import type { UriFileInput } from "pubnub";
 
 import { ReactComponent as ExpandIcon } from "../assets/expand.svg";
 import { ReactComponent as ChatIcon } from "../assets/chat.svg";
@@ -30,9 +31,9 @@ const ChatView = ({
   const members = channelOccupants?.map((o) => o.uuid);
   const [showMembers, setShowMembers] = useState(false);
 
-  const completeDemoAction = (message: MessagePayload | File) => {
-    if (message.type === "default") {
-      if (containsEmoji({ testString: message.text }))
+  const completeDemoAction = (message: MessagePayload | File | UriFileInput) => {
+    if ((message as MessagePayload | File).type === "default") {
+      if (containsEmoji({ testString: (message as MessagePayload | File).text }))
         actionCompleted({ action: "Send a Message with an Emoji", blockDuplicateCalls: true });
       else actionCompleted({ action: "Send Text Message", blockDuplicateCalls: true });
     }

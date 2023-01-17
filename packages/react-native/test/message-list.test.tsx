@@ -1,11 +1,16 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, Image } from "react-native";
 
 import { MessageList } from "../src/message-list/message-list";
 import { MessageInput } from "../src/message-input/message-input";
 import { MessagePayload } from "@pubnub/common-chat-components";
 import { render, screen, act, fireEvent } from "../mock/custom-renderer";
 import { Picker } from "../mock/emoji-picker-mock";
+
+const getSizeMock = jest.spyOn(Image, "getSize");
+getSizeMock.mockImplementation(() => {
+  /* do nothing */
+});
 
 describe("Message List", () => {
   jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");

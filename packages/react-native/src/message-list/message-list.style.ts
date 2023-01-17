@@ -1,4 +1,4 @@
-import { ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
+import { Dimensions, ImageStyle, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { Themes } from "@pubnub/common-chat-components";
 
 const lightColors = {
@@ -9,6 +9,10 @@ const lightColors = {
   unreadColor: "#ffffff",
   reactionBorder: "#ced6e0",
   reactionActiveBackground: "rgba(239, 58, 67, 0.2)",
+  downloadedSuccessBannerBackground: "rgba(224, 224, 224, 0.9)",
+  downloadedSuccessBannerText: "#000000",
+  downloadLinkText: "#000000",
+  downloadLinkIcon: "#000000",
 };
 
 const darkColors = {
@@ -19,6 +23,10 @@ const darkColors = {
   unreadColor: "#2a2a39",
   reactionBorder: "#28293d",
   reactionActiveBackground: "rgba(239, 58, 67, 0.3)",
+  downloadedSuccessBannerBackground: "rgba(0,0,0,0.9)",
+  downloadedSuccessBannerText: "#ffffff",
+  downloadLinkText: "#ffffff",
+  downloadLinkIcon: "#ffffff",
 };
 
 export interface MessageListStyle {
@@ -46,6 +54,14 @@ export interface MessageListStyle {
   spinnerWrapper?: ViewStyle;
   unread?: ViewStyle;
   unreadText?: TextStyle;
+  imageFile?: ImageStyle;
+  fileNameText?: TextStyle;
+  downloadIconStyle?: ImageStyle;
+  fileDownloadContainer?: ViewStyle;
+  downloadedSuccessBanner?: ViewStyle;
+  downloadedSuccessBannerContent?: ViewStyle;
+  downloadedSuccessBannerText?: TextStyle;
+  downloadingInProgressIconContainer?: ViewStyle;
 }
 
 export default (theme: Themes): MessageListStyle => {
@@ -154,6 +170,50 @@ export default (theme: Themes): MessageListStyle => {
     unreadText: {
       color: colors.unreadColor,
       fontSize: 13,
+    },
+    imageFile: {
+      width: "100%",
+    },
+    downloadIconStyle: {
+      width: 24,
+      height: 24,
+      marginLeft: 8,
+      tintColor: colors.downloadLinkIcon,
+    },
+    fileDownloadContainer: {
+      flexDirection: "row",
+      marginTop: 12,
+      alignItems: "center",
+      maxWidth: 250,
+      minHeight: 24,
+    },
+    fileNameText: {
+      textDecorationLine: "underline",
+      color: colors.downloadLinkText,
+    },
+    downloadedSuccessBanner: {
+      position: "absolute",
+      left: Dimensions.get("window").width / 2 - 80,
+      bottom: -300,
+      width: 160,
+      height: 160,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 8,
+      overflow: "hidden",
+      zIndex: 10,
+    },
+    downloadedSuccessBannerContent: {
+      backgroundColor: colors.downloadedSuccessBannerBackground,
+    },
+    downloadedSuccessBannerText: {
+      color: colors.downloadedSuccessBannerText,
+      textAlign: "center",
+    },
+    downloadingInProgressIconContainer: {
+      alignItems: "flex-start",
+      marginTop: 12,
+      minHeight: 24,
     },
   });
 };
