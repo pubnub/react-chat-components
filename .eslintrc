@@ -19,7 +19,5 @@
     "plugin:prettier/recommended",
     "prettier"
   ],
-  "rules": {
-    "react/react-in-jsx-scope": 0
-  }
+  "rules": {}
 }
