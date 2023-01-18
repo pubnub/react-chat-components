@@ -16,6 +16,7 @@ keys.json
 ##################
 .github/.release
 .turbo
+.parcel-cache
 
 # misc
 TODO.md
@@ -33,6 +34,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 .idea
+*.pem
 
 ios/
 android/

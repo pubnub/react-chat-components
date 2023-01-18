@@ -9,7 +9,9 @@ import { Picker } from "../mock/emoji-picker-mock";
 import users from "../../../data/users/users.json";
 
 const getSizeMock = jest.spyOn(Image, "getSize");
-getSizeMock.mockImplementation(() => { /* do nothing */ });
+getSizeMock.mockImplementation(() => {
+  /* do nothing */
+});
 
 describe("Message List", () => {
   jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper");
