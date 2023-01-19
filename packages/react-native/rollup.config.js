@@ -1,4 +1,5 @@
-import { main, module, version } from "./package.json";
+// import { main, module, version } from "./package.json";
+import packageJson from "./package.json";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
@@ -44,19 +45,15 @@ export default [
     input: "./src/index.ts",
     output: [
       {
-        file: main,
+        file: packageJson["react-native"],
         format: "cjs",
-      },
-      {
-        file: module,
-        format: "esm",
       },
     ],
     plugins: [
       replace({
         preventAssignment: true,
         __PLATFORM__: "RNCC",
-        __VERSION__: version,
+        __VERSION__: packageJson["version"],
       }),
       peerDepsExternal(),
       loadBrowserCryptoModule(),
@@ -76,7 +73,7 @@ export default [
     input: "./src/index.ts",
     output: [
       {
-        file: "dist/index.web.js",
+        file: packageJson["main"],
         format: "cjs",
         plugins: [
           getBabelOutputPlugin({
@@ -86,7 +83,7 @@ export default [
         ],
       },
       {
-        file: "dist/index.es.web.js",
+        file: packageJson["module"],
         format: "esm",
         plugins: [
           getBabelOutputPlugin({
@@ -100,7 +97,7 @@ export default [
       replace({
         preventAssignment: true,
         __PLATFORM__: "RNCC",
-        __VERSION__: version,
+        __VERSION__: packageJson["version"],
       }),
       peerDepsExternal(),
       loadBrowserCryptoModule(),
@@ -109,7 +106,7 @@ export default [
         browser: true,
         extensions: [
           ".web.tsx",
-          "web.ts",
+          ".web.ts",
           ".web.js",
           ".tsx",
           ".ts",

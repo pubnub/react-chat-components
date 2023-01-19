@@ -53,6 +53,7 @@ export const RemoteFile = ({ style, file, onError, sheetPosition }: RemoteImageP
     Image.getSize(
       file.url,
       (_, height) => {
+        console.log("height!?", height);
         if (height < 300) {
           setImageHeight(height);
         } else {
