@@ -1,5 +1,4 @@
-// import { main, module, version } from "./package.json";
-import packageJson from "./package.json";
+import { version } from "./package.json";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
@@ -7,6 +6,7 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
+import env from "rollup-plugin-import-meta-env";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 
@@ -45,15 +45,23 @@ export default [
     input: "./src/index.ts",
     output: [
       {
-        file: packageJson["react-native"],
+        file: "dist/commonjs/index.js",
         format: "cjs",
+      },
+      {
+        file: "dist/module/index.es.js",
+        format: "esm",
+      },
+      {
+        file: "dist/index.d.ts",
+        format: "es",
       },
     ],
     plugins: [
       replace({
         preventAssignment: true,
         __PLATFORM__: "RNCC",
-        __VERSION__: packageJson["version"],
+        __VERSION__: version,
       }),
       peerDepsExternal(),
       loadBrowserCryptoModule(),
@@ -67,13 +75,22 @@ export default [
       json(),
       ts(),
       optimizeLodashImports(),
+      env(
+        {
+          PROD: true,
+          DEV: false,
+        },
+        {
+          mode: "production",
+        }
+      ),
     ],
   },
   {
     input: "./src/index.ts",
     output: [
       {
-        file: packageJson["main"],
+        file: "dist/commonjs/index.web.js",
         format: "cjs",
         plugins: [
           getBabelOutputPlugin({
@@ -83,7 +100,7 @@ export default [
         ],
       },
       {
-        file: packageJson["module"],
+        file: "dist/module/index.es.web.js",
         format: "esm",
         plugins: [
           getBabelOutputPlugin({
@@ -97,7 +114,7 @@ export default [
       replace({
         preventAssignment: true,
         __PLATFORM__: "RNCC",
-        __VERSION__: packageJson["version"],
+        __VERSION__: version,
       }),
       peerDepsExternal(),
       loadBrowserCryptoModule(),
@@ -119,6 +136,15 @@ export default [
       json(),
       ts(),
       optimizeLodashImports(),
+      env(
+        {
+          PROD: true,
+          DEV: false,
+        },
+        {
+          mode: "production",
+        }
+      ),
     ],
   },
 ];
