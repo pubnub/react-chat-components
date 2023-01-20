@@ -2879,20 +2879,6 @@
     chrome-trace-event "^1.0.2"
     nullthrows "^1.1.1"
 
-"@pubnub/react-native-chat-components@*":
-  version "0.20.0"
-  resolved "https://registry.yarnpkg.com/@pubnub/react-native-chat-components/-/react-native-chat-components-0.20.0.tgz#005e944bfd7197579e856e691a3b31eca07efd70"
-  integrity sha512-STvA8nsPiJH3Q6ccurpKksShzn2ci5GYGOXYE3Pn9Fbou68cZUBWZ1pf/hCPVaFNPvyytc6ufWNByrS6IzjG2w==
-  dependencies:
-    expo-document-picker "11.0.1"
-    expo-file-system "15.1.1"
-    expo-image-picker "14.0.2"
-    expo-media-library "15.0.0"
-    expo-sharing "11.0.1"
-    jotai "1.8.3"
-    lodash "^4.17.0"
-    react-native-uuid "^2.0.1"
-
 "@pubnub/tomato@1.7.0":
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/@pubnub/tomato/-/tomato-1.7.0.tgz#c712b0a41c5ec650729e21cc2436c65f13f3e4f6"
