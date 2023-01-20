@@ -6,7 +6,6 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import image from "@rollup/plugin-image";
 import replace from "@rollup/plugin-replace";
 import ts from "rollup-plugin-ts";
-import env from "rollup-plugin-import-meta-env";
 import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 
@@ -75,15 +74,6 @@ export default [
       json(),
       ts(),
       optimizeLodashImports(),
-      env(
-        {
-          PROD: true,
-          DEV: false,
-        },
-        {
-          mode: "production",
-        }
-      ),
     ],
   },
   {
@@ -136,15 +126,6 @@ export default [
       json(),
       ts(),
       optimizeLodashImports(),
-      env(
-        {
-          PROD: true,
-          DEV: false,
-        },
-        {
-          mode: "production",
-        }
-      ),
     ],
   },
 ];
