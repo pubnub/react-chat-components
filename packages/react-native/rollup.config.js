@@ -1,4 +1,4 @@
-import { main, module, version } from "./package.json";
+import { version } from "./package.json";
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
 import json from "@rollup/plugin-json";
@@ -44,12 +44,16 @@ export default [
     input: "./src/index.ts",
     output: [
       {
-        file: main,
+        file: "dist/commonjs/index.js",
         format: "cjs",
       },
       {
-        file: module,
+        file: "dist/module/index.es.js",
         format: "esm",
+      },
+      {
+        file: "dist/index.d.ts",
+        format: "es",
       },
     ],
     plugins: [
@@ -76,7 +80,7 @@ export default [
     input: "./src/index.ts",
     output: [
       {
-        file: "dist/index.web.js",
+        file: "dist/commonjs/index.web.js",
         format: "cjs",
         plugins: [
           getBabelOutputPlugin({
@@ -86,7 +90,7 @@ export default [
         ],
       },
       {
-        file: "dist/index.es.web.js",
+        file: "dist/module/index.es.web.js",
         format: "esm",
         plugins: [
           getBabelOutputPlugin({
@@ -109,7 +113,7 @@ export default [
         browser: true,
         extensions: [
           ".web.tsx",
-          "web.ts",
+          ".web.ts",
           ".web.js",
           ".tsx",
           ".ts",

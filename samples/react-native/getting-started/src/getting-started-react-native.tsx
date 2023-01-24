@@ -12,6 +12,7 @@ const pubnub = new PubNub({
   subscribeKey: "mySubscribeKey",
   userId: "myFirstUser",
 });
+
 const currentChannel = "Default";
 const theme = "light";
 
