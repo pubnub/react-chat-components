@@ -49,7 +49,6 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
       try {
         if (totalCount && channels.length >= totalCount) return;
         const response = await pubnub.objects.getMemberships(paginatedOptions);
-        console.log("response", response);
         if (ignoreRequest) return;
         setDoFetch(false);
         setChannels((channels) => [
