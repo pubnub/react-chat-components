@@ -53,7 +53,16 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
         setDoFetch(false);
         setChannels((channels) => [
           ...channels,
-          ...(response.data.map((m) => m.channel) as ChannelEntity[]),
+          ...(response.data.map((m) => {
+            if (m.custom) {
+              return {
+                ...m.channel,
+                custom: m.custom,
+              };
+            }
+
+            return m.channel;
+          }) as ChannelEntity[]),
         ]);
         setTotalCount(response.totalCount);
         setPage(response.next);
