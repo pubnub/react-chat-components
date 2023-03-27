@@ -1,6 +1,6 @@
 {
   "name": "@pubnub/react-native-chat-components",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "PubNub Chat Components is a development kit of React Native components that aims to help you to easily build Chat applications using PubNub infrastructure. It removes the complexicity of picking an adequate Chat engine, learning its APIs and dealing with its low-level internals. As the same time it allows you to create apps of various use cases, with different functionalities and customizable looks.",
   "author": "PubNub <support@pubnub.com>",
   "main": "dist/commonjs/index",
