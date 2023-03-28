@@ -9,6 +9,10 @@ export type Themes = "light" | "dark" | "support" | "support-dark" | "event" | "
 
 export type ChannelEntity = ChannelMetadataObject<ObjectCustom>;
 
+export type UserChannelMembershipEntity = ChannelEntity & {
+  membership?: ObjectCustom;
+};
+
 export type UserEntity = UUIDMetadataObject<ObjectCustom>;
 
 export interface MessageEnvelope {
