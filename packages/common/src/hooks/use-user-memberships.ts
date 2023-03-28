@@ -2,15 +2,15 @@ import { useState, useEffect, useMemo } from "react";
 import { GetMembershipsParametersv2 } from "pubnub";
 import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
-import { ChannelEntity } from "../types";
+import { ChannelEntityWithMembership } from "../types";
 
-type HookReturnValue = [ChannelEntity[], () => void, () => void, number, Error];
+type HookReturnValue = [ChannelEntityWithMembership[], () => void, () => void, number, Error];
 
 export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
 
   const pubnub = usePubNub();
-  const [channels, setChannels] = useState<ChannelEntity[]>([]);
+  const [channels, setChannels] = useState<ChannelEntityWithMembership[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState("");
   const [error, setError] = useState<Error>();
@@ -49,20 +49,22 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
       try {
         if (totalCount && channels.length >= totalCount) return;
         const response = await pubnub.objects.getMemberships(paginatedOptions);
+
         if (ignoreRequest) return;
         setDoFetch(false);
         setChannels((channels) => [
           ...channels,
           ...(response.data.map((m) => {
+            const returnObject = {
+              ...m.channel,
+            } as ChannelEntityWithMembership;
+
             if (m.custom) {
-              return {
-                ...m.channel,
-                custom: m.custom,
-              };
+              returnObject.membership = m.custom;
             }
 
-            return m.channel;
-          }) as ChannelEntity[]),
+            return returnObject;
+          }) as ChannelEntityWithMembership[]),
         ]);
         setTotalCount(response.totalCount);
         setPage(response.next);

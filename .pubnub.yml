@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.21.0
+version: v0.22.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-03-28
+    version: v0.22.0
+    changes:
+      - type: feature
+        text: "UseUserMemberships hook and useChannelMembers - make sure that both channel and user custom metadata fields are present in the hooks' responses."
   - date: 2023-03-27
     version: v0.21.0
     changes:

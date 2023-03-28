@@ -11,6 +11,14 @@ export type ChannelEntity = ChannelMetadataObject<ObjectCustom>;
 
 export type UserEntity = UUIDMetadataObject<ObjectCustom>;
 
+export type ChannelEntityWithMembership = ChannelEntity & {
+  membership?: ObjectCustom;
+};
+
+export type UserEntityWithMembership = UserEntity & {
+  membership?: ObjectCustom;
+};
+
 export interface MessageEnvelope {
   channel?: string;
   message: MessagePayload | FilePayload;
