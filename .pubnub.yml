@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.22.0
+version: v0.23.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-04-04
+    version: v0.23.0
+    changes:
+      - type: bug
+        text: "Fix not being able to click on emojis on the last message of the Message List."
   - date: 2023-03-28
     version: v0.22.0
     changes:

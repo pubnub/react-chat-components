@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { usePubNub } from "pubnub-react";
-import { useAtom } from "jotai";
 import { isEqual } from "lodash";
+import { useAtom } from "jotai";
 import {
   CurrentChannelTypingIndicatorAtom,
   ThemeAtom,
