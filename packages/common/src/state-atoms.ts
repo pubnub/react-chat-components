@@ -39,12 +39,15 @@ export const CurrentChannelMessagesAtom = atom(
 );
 
 export const CurrentChannelPaginationAtom = atom(
-  (get) => get(PaginationAtom)[get(CurrentChannelAtom)] || false,
-  (get, set, value) =>
-    set(
+  (get) => {
+    return get(PaginationAtom)[get(CurrentChannelAtom)] || false;
+  },
+  (get, set, value) => {
+    return set(
       PaginationAtom,
       Object.assign({}, get(PaginationAtom), { [get(CurrentChannelAtom)]: value })
-    )
+    );
+  }
 );
 
 export const CurrentChannelTypingIndicatorAtom = atom(
