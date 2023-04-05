@@ -119,7 +119,7 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   );
 
   const fetchHistory = useCallback(async () => {
-    if (!props.fetchMessages || paginationEnd || fetchingMessages) return;
+    if (!props.fetchMessages || paginationEnd) return;
     setFetchingMessages(true);
     try {
       const options = {
@@ -159,7 +159,6 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   }, [
     channel,
     fetchFileUrl,
-    fetchingMessages,
     messages,
     onError,
     paginationEnd,

@@ -137,7 +137,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
    * Lifecycle
    */
   useEffect(() => {
-    if (!isSpinnerVisible || wasSpinnerVisible || !initMessagesLoaded[channel]) return;
+    if (!isSpinnerVisible || wasSpinnerVisible || !initMessagesLoaded[channel] || fetchingMessages)
+      return;
     fetchMoreHistory();
 
     async function fetchMoreHistory() {
@@ -146,7 +147,14 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       if (firstMessage && listRef.current?.scroll)
         listRef.current?.scroll({ top: firstMessage.offsetTop });
     }
-  }, [fetchHistory, isSpinnerVisible, wasSpinnerVisible, initMessagesLoaded, channel]);
+  }, [
+    fetchHistory,
+    isSpinnerVisible,
+    wasSpinnerVisible,
+    initMessagesLoaded,
+    channel,
+    fetchingMessages,
+  ]);
 
   useEffect(() => {
     if (isBottomVisible) setUnreadMessages(0);
