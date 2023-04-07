@@ -30,7 +30,13 @@ describe("Message Input", () => {
 
     await userEvent.type(screen.getByPlaceholderText("Send message"), "Changed Value");
 
-    expect(handleChange).toHaveBeenCalledWith("Changed Value");
+    expect(handleChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        target: expect.objectContaining({
+          value: "Changed Value",
+        }),
+      })
+    );
   });
 
   test("renders custom placeholders", () => {
