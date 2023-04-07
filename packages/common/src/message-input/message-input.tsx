@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
 import uuid from "react-native-uuid";
@@ -28,8 +28,6 @@ export interface CommonMessageInputProps {
   disabled?: boolean;
   /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
-  /** Callback to handle an event when the text value changes. */
-  onChange?: (value: string) => void;
   /** Callback to modify message content before sending it. This only works for text messages, not files. */
   onBeforeSend?: (value: MessagePayload) => MessagePayload;
   /** Callback for extra actions after sending a message. */
@@ -126,22 +124,6 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
   };
 
   /*
-  /* Event handlers
-  */
-
-  const handleInputChange = (newText: string) => {
-    try {
-      if (props.typingIndicator) {
-        newText.length ? startTypingIndicator() : stopTypingIndicator();
-      }
-      props.onChange && props.onChange(newText);
-      setText(newText);
-    } catch (e) {
-      onError(e);
-    }
-  };
-
-  /*
   /* Lifecycle
   */
   useEffect(() => {
@@ -160,7 +142,6 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     clearInput,
     file,
     setFile,
-    handleInputChange,
     isValidInputText,
     loader,
     onError,
@@ -168,5 +149,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     setText,
     text,
     theme,
+    startTypingIndicator,
+    stopTypingIndicator,
   };
 };

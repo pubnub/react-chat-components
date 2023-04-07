@@ -24,6 +24,10 @@ export type MessageInputProps = CommonMessageInputProps & {
   hideSendButton?: boolean;
   /** Option to pass in an emoji picker if you want it to be rendered in the input. For more details, refer to the Emoji Pickers section in the docs. */
   emojiPicker?: ReactElement<EmojiPickerElementProps>;
+  /** Callback to handle an event when the text value changes. */
+  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+  /** Callback to handle an event when the key is pressed in textarea. */
+  onKeyPress?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 };
 
 /**
@@ -35,7 +39,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     clearInput,
     file,
     setFile,
-    handleInputChange,
     isValidInputText,
     loader,
     onError,
@@ -43,6 +46,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     setText,
     text,
     theme,
+    startTypingIndicator,
+    stopTypingIndicator,
   } = useMessageInputCore(props);
 
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
@@ -73,6 +78,19 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   /* Event handlers
   */
 
+  const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    try {
+      const { value: newText } = event.target;
+      if (props.typingIndicator) {
+        newText.length ? startTypingIndicator() : stopTypingIndicator();
+      }
+      props.onChange && props.onChange(event);
+      setText(newText);
+    } catch (e) {
+      onError(e);
+    }
+  };
+
   const handleKeyPress = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     try {
       if (event.key === "Enter" && !event.shiftKey) {
@@ -80,6 +98,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         sendMessage();
         if (fileRef.current) fileRef.current.value = "";
       }
+      props.onKeyPress(event);
     } catch (e) {
       onError(e);
     }
@@ -188,10 +207,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           className="pn-msg-input__textarea"
           data-testid="message-input"
           disabled={props.disabled || !!file}
-          onChange={(e) => {
-            handleInputChange(e.target.value);
-          }}
-          onKeyPress={(e) => handleKeyPress(e)}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
           placeholder={props.placeholder}
           ref={inputRef}
           rows={1}
