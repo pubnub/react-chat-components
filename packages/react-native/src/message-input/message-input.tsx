@@ -22,6 +22,7 @@ export type MessageInputProps = CommonMessageInputProps & {
     modalVisible: boolean;
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   }) => JSX.Element;
+  onChange?: (newText: string) => void;
 };
 
 /**
@@ -30,7 +31,8 @@ export type MessageInputProps = CommonMessageInputProps & {
  */
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
   const {
-    handleInputChange,
+    startTypingIndicator,
+    stopTypingIndicator,
     isValidInputText,
     loader,
     sendMessage,
@@ -104,6 +106,18 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const handleRemoveFile = () => {
     setFile(null);
     setText("");
+  };
+
+  const handleInputChange = (newText: string) => {
+    try {
+      if (props.typingIndicator) {
+        newText.length ? startTypingIndicator() : stopTypingIndicator();
+      }
+      props.onChange && props.onChange(newText);
+      setText(newText);
+    } catch (e) {
+      onError(e);
+    }
   };
 
   /*
