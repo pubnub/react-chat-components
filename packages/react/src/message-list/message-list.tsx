@@ -65,6 +65,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     theme,
     unreadMessages,
     users,
+    initMessagesLoaded,
   } = useMessageListCore(props);
 
   const lastMessageUniqueReactions = Object.keys(messages.slice(-1)[0]?.actions?.reaction || {});
@@ -136,7 +137,8 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
    * Lifecycle
    */
   useEffect(() => {
-    if (!isSpinnerVisible || wasSpinnerVisible || !messages.length || fetchingMessages) return;
+    if (!isSpinnerVisible || wasSpinnerVisible || !initMessagesLoaded[channel] || fetchingMessages)
+      return;
     fetchMoreHistory();
 
     async function fetchMoreHistory() {
@@ -147,11 +149,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     }
   }, [
     fetchHistory,
-    fetchingMessages,
     isSpinnerVisible,
-    messages,
-    paginationEnd,
     wasSpinnerVisible,
+    initMessagesLoaded,
+    channel,
+    fetchingMessages,
   ]);
 
   useEffect(() => {

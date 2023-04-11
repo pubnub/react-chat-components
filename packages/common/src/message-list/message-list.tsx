@@ -71,6 +71,8 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   const [fetchingMessages, setFetchingMessages] = useState(false);
   const [reactingToMessage, setReactingToMessage] = useState(null);
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
+  // https://pubnub.atlassian.net/browse/UI-1843
+  const [initMessagesLoaded, setInitMessagesLoaded] = useState({});
 
   /*
   /* Helper functions
@@ -195,8 +197,12 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   useEffect(() => {
     if (!pubnub || !channel) return;
     if (channel === prevChannel) return;
-    if (!messages?.length) fetchHistory();
-  }, [channel, fetchHistory, messages?.length, prevChannel, pubnub]);
+    if (!initMessagesLoaded[channel]) {
+      fetchHistory().then(() => {
+        setInitMessagesLoaded((curr) => ({ ...curr, [channel]: true }));
+      });
+    }
+  }, [channel, fetchHistory, initMessagesLoaded, messages.length, prevChannel, pubnub]);
 
   useEffect(() => {
     if (!messages?.length || scrolledBottom) return;
@@ -230,5 +236,6 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     theme,
     unreadMessages,
     users,
+    initMessagesLoaded,
   };
 };
