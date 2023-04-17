@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.24.0
+version: v0.25.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-04-17
+    version: v0.25.0
+    changes:
+      - type: feature
+        text: "Remove a warning about missing onKeyPress."
   - date: 2023-04-11
     version: v0.24.0
     changes:
