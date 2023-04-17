@@ -98,7 +98,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         sendMessage();
         if (fileRef.current) fileRef.current.value = "";
       }
-      props.onKeyPress(event);
+      props.onKeyPress && props.onKeyPress(event);
     } catch (e) {
       onError(e);
     }
