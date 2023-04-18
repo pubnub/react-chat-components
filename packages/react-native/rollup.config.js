@@ -14,6 +14,9 @@ function loadBrowserCryptoModule() {
     name: "browser-crypto-module-resolver",
     resolveId(source) {
       if (source === "./lib/rng") {
+        return "../../node_modules/expo-file-system/node_modules/uuid/lib/rng-browser.js";
+      }
+      if (source === "./rng") {
         return "../../node_modules/uuid/dist/rng-browser.js";
       }
       return null;
