@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.25.0
+version: v0.26.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-04-18
+    version: v0.26.0
+    changes:
+      - type: feature
+        text: "ReactNative - support for Expo 48. Previous Expo versions are no longer guaranteed to work correctly."
   - date: 2023-04-17
     version: v0.25.0
     changes:
