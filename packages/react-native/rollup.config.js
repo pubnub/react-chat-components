@@ -12,11 +12,11 @@ import { getBabelOutputPlugin } from "@rollup/plugin-babel";
 function loadBrowserCryptoModule() {
   return {
     name: "browser-crypto-module-resolver",
-    resolveId(source) {
+    resolveId(source, importer) {
       if (source === "./lib/rng") {
         return "../../node_modules/expo-file-system/node_modules/uuid/lib/rng-browser.js";
       }
-      if (source === "./rng") {
+      if (source === "./rng" && !importer.includes("react-native-uuid")) {
         return "../../node_modules/uuid/dist/rng-browser.js";
       }
       return null;

@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.26.0
+version: v0.27.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-04-19
+    version: v0.27.0
+    changes:
+      - type: feature
+        text: "ReactNative - Fix uuid not being bundled correctly."
   - date: 2023-04-18
     version: v0.26.0
     changes:
