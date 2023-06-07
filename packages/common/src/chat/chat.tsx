@@ -195,7 +195,8 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
         setMessages((messages) => {
           const messagesClone = cloneDeep(messages) || {};
           messagesClone[message.channel] = messagesClone[message.channel] || [];
-          messagesClone[message.channel].push(message);
+          const hasMessage = messagesClone[message.channel].findIndex(m => m.timetoken === message.timetoken) > -1;
+          if (!hasMessage) messagesClone[message.channel].push(message);
           return messagesClone;
         });
 
@@ -298,7 +299,8 @@ export const ChatInternal: FC<ChatProps> = (props: ChatProps) => {
           const newMessage = { ...payload, message: { file, message }, messageType: 4 };
           const messagesClone = cloneDeep(messages) || {};
           messagesClone[newMessage.channel] = messagesClone[newMessage.channel] || [];
-          messagesClone[newMessage.channel].push(newMessage);
+          const hasMessage = messagesClone[message.channel].findIndex(m => m.timetoken === message.timetoken) > -1;
+          if (!hasMessage) messagesClone[message.channel].push(message);
           return messagesClone;
         });
 
