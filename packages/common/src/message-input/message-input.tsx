@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { usePubNub } from "pubnub-react";
 import uuid from "react-native-uuid";
@@ -28,6 +28,8 @@ export interface CommonMessageInputProps {
   disabled?: boolean;
   /** Custom UI component to override default display for the Send button. */
   sendButton?: JSX.Element | string;
+  /** Option to move action buttons (eg. file upload icon) to the right of the text input. */
+  actionsAfterInput?: boolean;
   /** Callback to modify message content before sending it. This only works for text messages, not files. */
   onBeforeSend?: (value: MessagePayload) => MessagePayload;
   /** Callback for extra actions after sending a message. */

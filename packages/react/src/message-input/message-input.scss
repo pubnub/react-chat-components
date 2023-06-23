@@ -3,12 +3,16 @@
 ** ********************* */
 :root {
   --msg-input__background: var(--chat--light__background--1);
-  --msg-input__padding: 10px 18px;
-  --msg-input__emoji-picker__bottom: 14px;
-  --msg-input__emoji-picker__left: 10px;
+  --msg-input__padding: 10px 9px;
+  --msg-input__emoji-picker__bottom: 16px;
+  --msg-input__emoji-picker__left: 16px;
+  --msg-input__emoji-picker__right: 95px;
+  --msg-input__icon__background: none;
+  --msg-input__icon__border: none;
   --msg-input__icon__color: var(--chat--light__color--2);
-  --msg-input__icon__margin: 0 18px 0 0;
   --msg-input__icon__fontSize: 13px;
+  --msg-input__icon__margin: 0 9px;
+  --msg-input__icon__padding: 0;
   --msg-input__send__background: transparent;
   --msg-input__send__border: none;
   --msg-input__send__borderRadius: 5px;
@@ -17,7 +21,7 @@
   --msg-input__send__fontFamily: inherit;
   --msg-input__send__fontSize: 13px;
   --msg-input__send__fontWeight: bold;
-  --msg-input__send__margin: 0 0 0 18px;
+  --msg-input__send__margin: 0 9px;
   --msg-input__send__minWidth: 0;
   --msg-input__send__padding: 0;
   --msg-input--disabled__placeholder__color: rgba(var(--chat--light__color--2-rgb), 0.5);
@@ -37,6 +41,7 @@
   --msg-input__textarea__lineHeight: 18px;
   --msg-input__textarea__outline: none;
   --msg-input__textarea__padding: 6px 14px 8px;
+  --msg-input__textarea__margin: 0 9px;
   --msg-input__textarea__resize: none;
   --msg-input__textarea__width: 100%;
   --msg-input__textarea__overflow: hidden;
@@ -67,11 +72,12 @@
     font-size: var(--msg-input__textarea__fontSize);
     height: var(--msg-input__textarea__height);
     line-height: var(--msg-input__textarea__lineHeight);
+    margin: var(--msg-input__textarea__margin);
     outline: var(--msg-input__textarea__outline);
+    overflow: var(--msg-input__textarea__overflow);
     padding: var(--msg-input__textarea__padding);
     resize: var(--msg-input__textarea__resize);
     width: var(--msg-input__textarea__width);
-    overflow: var(--msg-input__textarea__overflow);
 
     &:focus-within {
       outline: var(--msg-input__textarea--focus__outline);
@@ -95,7 +101,6 @@
     font-weight: var(--msg-input__send__fontWeight);
     margin: var(--msg-input__send__margin);
     min-width: var(--msg-input__send__minWidth);
-    outline: none;
     padding: var(--msg-input__send__padding);
     white-space: nowrap;
 
@@ -107,6 +112,7 @@
   &__emoji-picker {
     bottom: var(--msg-input__emoji-picker__bottom);
     left: var(--msg-input__emoji-picker__left);
+    right: var(--msg-input__emoji-picker__right);
     position: absolute;
   }
 
@@ -114,11 +120,14 @@
     align-items: center;
     display: flex;
 
-    & > * {
-      cursor: pointer;
+    button {
+      background: var(--msg-input__icon__background);
+      border: var(--msg-input__icon__border);
       color: var(--msg-input__icon__color);
+      cursor: pointer;
       font-size: var(--msg-input__icon__fontSize);
       margin: var(--msg-input__icon__margin);
+      padding: var(--msg-input__icon__padding);
     }
   }
 

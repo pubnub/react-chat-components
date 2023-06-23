@@ -51,7 +51,7 @@ export default (theme: Themes): MessageInputStyle => {
   return StyleSheet.create<MessageInputStyle>({
     messageInputWrapper: {
       backgroundColor: colors.wrapperBackground,
-      paddingHorizontal: 16,
+      paddingHorizontal: 8,
       paddingVertical: 10,
       flexDirection: "row",
       alignItems: "center",
@@ -59,12 +59,12 @@ export default (theme: Themes): MessageInputStyle => {
     messageInputFileLabel: {
       width: 20,
       height: 20,
-      marginRight: 18,
+      marginHorizontal: 9,
     },
     messageInputRemoveFileLabel: {
       width: 20,
       height: 20,
-      marginRight: 18,
+      marginHorizontal: 9,
     },
     messageInput: {
       backgroundColor: colors.inputBackground,
@@ -74,13 +74,14 @@ export default (theme: Themes): MessageInputStyle => {
       paddingTop: 8,
       paddingBottom: 10,
       fontSize: 16,
+      marginHorizontal: 9,
       flex: 1,
     },
     messageInputPlaceholder: {
       color: colors.inputPlaceholder,
     },
     sendButton: {
-      marginLeft: 16,
+      marginHorizontal: 9,
     },
     sendButtonActive: {},
     icon: {
@@ -88,7 +89,7 @@ export default (theme: Themes): MessageInputStyle => {
       width: 20,
     },
     extraActions: {
-      marginRight: 16,
+      marginRight: 8,
     },
     fileUploadModalContent: {
       flex: 1,
