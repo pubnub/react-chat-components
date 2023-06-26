@@ -54,7 +54,7 @@ jobs:
         id: playwright-browsers-cache
         uses: actions/cache@v3
         with:
-          key: ${{ runner.os }}-playwright-${{ hashFiles('react/package-lock.json') }}
+          key: ${{ runner.os }}-playwright-${{ hashFiles('react/yarn.lock') }}
           restore-keys: ${{ runner.os }}-playwright-
           path: ~/.cache/ms-playwright
       - name: Clear Playwright cache
