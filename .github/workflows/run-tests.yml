@@ -59,6 +59,8 @@ jobs:
           path: ~/.cache/ms-playwright
       - name: Clear Playwright cache
         run: npx playwright install-deps
+      - name: Install project dependencies
+        run: npm install
       - name: Install Playwright browsers
         run: npx playwright@1.35.0 install
       - name: Checkout repository
