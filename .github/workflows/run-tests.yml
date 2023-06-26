@@ -58,7 +58,6 @@ jobs:
           restore-keys: ${{ runner.os }}-playwright-
           path: ~/.cache/ms-playwright
       - name: Install Playwright browsers
-        if: steps.playwright-browsers-cache.outputs.cache-hit != 'true'
         run: npx playwright install
       - name: Checkout repository
         uses: actions/checkout@v3
