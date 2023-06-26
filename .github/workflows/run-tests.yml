@@ -59,6 +59,8 @@ jobs:
           path: ~/.cache/ms-playwright
       - name: Install Playwright browsers
         run: npx playwright install
+      - name: Print Playwright browsers path
+        run: echo $(ls ~/.cache/ms-playwright/)
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
