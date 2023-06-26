@@ -50,6 +50,15 @@ jobs:
           [[ -d "$RCC_PATH" ]] &&  rm -rf "$RCC_PATH"
           cd ${{ github.workspace }}/react
           npm ci
+      - name: Cache Playwright browsers
+        id: playwright-browsers-cache
+        uses: actions/cache@v3
+        with:
+          key: ${{ runner.os }}-playwright-${{ hashFiles('react/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-playwright-
+          path: ~/.cache/ms-playwright
+      - name: Clear Playwright cache
+        run: npx playwright install-deps
       - name: Install Playwright browsers
         run: npx playwright install
       - name: Checkout repository
