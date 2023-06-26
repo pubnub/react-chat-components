@@ -57,13 +57,14 @@ jobs:
           key: ${{ runner.os }}-playwright-${{ hashFiles('react/package-lock.json') }}
           restore-keys: ${{ runner.os }}-playwright-
           path: ~/.cache/ms-playwright
-          fail-on-cache-miss: true
       - name: Clear Playwright cache
         run: npx playwright install-deps
       - name: Install project dependencies
         run: npm install
       - name: Install Playwright browsers
-        run: npx playwright@1.35.0 install
+        run: |
+          npm install
+          npx playwright install
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
