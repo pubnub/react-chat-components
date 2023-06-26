@@ -60,7 +60,7 @@ jobs:
       - name: Clear Playwright cache
         run: npx playwright install-deps
       - name: Install Playwright browsers
-        run: npx playwright install
+        run: npx playwright@1.35.0 install
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
