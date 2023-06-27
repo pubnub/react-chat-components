@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.27.0
+version: v0.28.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-06-27
+    version: v0.28.0
+    changes:
+      - type: feature
+        text: "MessageInput - actionsAfterInput option to reorder elements."
   - date: 2023-04-19
     version: v0.27.0
     changes:
