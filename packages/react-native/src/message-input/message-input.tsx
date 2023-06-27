@@ -141,31 +141,32 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderFileUpload = () => {
     return (
       <>
-        <View>
-          <>
-            {props.fileUpload === "image" ? (
-              <TouchableOpacity
-                style={style.messageInputFileLabel}
-                onPress={pickPhoto}
-                testID="message-input-photo-icon-container"
-              >
-                <Image source={{ uri: ImageIcon }} style={style.icon} />
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity
-                style={style.messageInputFileLabel}
-                onPress={() => setModalVisible(true)}
-                testID="message-input-file-icon-container"
-              >
-                <Image source={{ uri: FileIcon }} style={style.icon} />
-              </TouchableOpacity>
-            )}
-          </>
-        </View>
-        {file && (
+        {file ? (
           <TouchableOpacity style={style.messageInputRemoveFileLabel} onPress={handleRemoveFile}>
             <Image source={{ uri: XCircleIcon }} style={style.icon} />
           </TouchableOpacity>
+        ) : (
+          <View>
+            <>
+              {props.fileUpload === "image" ? (
+                <TouchableOpacity
+                  style={style.messageInputFileLabel}
+                  onPress={pickPhoto}
+                  testID="message-input-photo-icon-container"
+                >
+                  <Image source={{ uri: ImageIcon }} style={style.icon} />
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={style.messageInputFileLabel}
+                  onPress={() => setModalVisible(true)}
+                  testID="message-input-file-icon-container"
+                >
+                  <Image source={{ uri: FileIcon }} style={style.icon} />
+                </TouchableOpacity>
+              )}
+            </>
+          </View>
         )}
       </>
     );
@@ -187,13 +188,19 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     );
   };
 
-  return (
-    <View style={style.messageInputWrapper}>
-      {renderFileModal()}
+  const renderActions = () => (
+    <>
       {!props.disabled && props.fileUpload && renderFileUpload()}
       {props.extraActionsRenderer && (
         <View style={style.extraActions}>{props.extraActionsRenderer()}</View>
       )}
+    </>
+  );
+
+  return (
+    <View style={style.messageInputWrapper}>
+      {renderFileModal()}
+      {!props.actionsAfterInput && renderActions()}
       <TextInput
         testID="message-input"
         autoComplete="off"
@@ -205,6 +212,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         editable={!props.disabled && file == null}
         value={text}
       />
+      {props.actionsAfterInput && renderActions()}
       {!props.disabled && (
         <View style={style.sendButton}>
           {loader ? (

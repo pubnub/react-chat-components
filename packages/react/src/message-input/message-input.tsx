@@ -147,46 +147,64 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   */
 
   const renderFileUpload = () => {
+    const addTitle = "Add a file";
+    const removeTitle = "Remove the file";
     return (
       <>
-        <div>
-          <label htmlFor="file-upload" className="pn-msg-input__fileLabel" title="Add a file">
-            {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
-          </label>
-          <input
-            accept={props.fileUpload === "image" ? "image/*" : "*"}
-            className="pn-msg-input__fileInput"
-            data-testid="file-upload"
-            id="file-upload"
-            onChange={handleFileChange}
-            ref={fileRef}
-            type="file"
-          />
-        </div>
-        {file && (
-          <div title="Remove the file" onClick={handleRemoveFile}>
+        {file ? (
+          <button aria-label={removeTitle} title={removeTitle} onClick={handleRemoveFile}>
             <XCircleIcon />
-          </div>
+          </button>
+        ) : (
+          <>
+            <button aria-label={addTitle} title={addTitle} onClick={() => fileRef.current.click()}>
+              {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
+            </button>
+            <input
+              accept={props.fileUpload === "image" ? "image/*" : "*"}
+              className="pn-msg-input__fileInput"
+              data-testid="file-upload"
+              id="file-upload"
+              onChange={handleFileChange}
+              ref={fileRef}
+              type="file"
+            />
+          </>
         )}
       </>
     );
   };
 
   const renderEmojiPicker = () => {
+    const title = "Add an emoji";
     return (
       <>
-        <div onClick={() => setEmojiPickerShown(true)} title="Add an emoji">
+        <button aria-label={title} title={title} onClick={() => setEmojiPickerShown(true)}>
           <EmojiIcon />
-        </div>
+        </button>
 
         {emojiPickerShown && (
-          <div className="pn-msg-input__emoji-picker" ref={pickerRef}>
+          <div
+            className="pn-msg-input__emoji-picker"
+            ref={pickerRef}
+            style={props.actionsAfterInput ? { left: "unset" } : { right: "unset" }}
+          >
             {React.cloneElement(props.emojiPicker, { onEmojiSelect: handleEmojiInsertion })}
           </div>
         )}
       </>
     );
   };
+
+  const renderActions = () => (
+    <div className="pn-msg-input__icons">
+      <div className="pn-msg-input__emoji-toggle">
+        {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+      </div>
+      {!props.disabled && props.fileUpload && renderFileUpload()}
+      {props.extraActionsRenderer && props.extraActionsRenderer()}
+    </div>
+  );
 
   return (
     <div
@@ -195,14 +213,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       }`}
     >
       <div className="pn-msg-input__wrapper">
-        <div className="pn-msg-input__icons">
-          <div className="pn-msg-input__emoji-toggle">
-            {!props.disabled && props.emojiPicker && renderEmojiPicker()}
-          </div>
-          {!props.disabled && props.fileUpload && renderFileUpload()}
-          {props.extraActionsRenderer && props.extraActionsRenderer()}
-        </div>
-
+        {!props.actionsAfterInput && renderActions()}
         <textarea
           className="pn-msg-input__textarea"
           data-testid="message-input"
@@ -214,12 +225,13 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           rows={1}
           value={text}
         />
-
+        {props.actionsAfterInput && renderActions()}
         {!props.hideSendButton && !props.disabled && (
           <button
             className={`pn-msg-input__send ${isValidInputText() && "pn-msg-input__send--active"}`}
             disabled={loader || props.disabled}
             onClick={handleSendClick}
+            aria-label="Send"
             title="Send"
           >
             {loader ? <SpinnerIcon /> : props.sendButton}
