@@ -7,6 +7,8 @@ import React, {
   useEffect,
   useRef,
   useState,
+  DetailedHTMLProps,
+  TextareaHTMLAttributes,
 } from "react";
 import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
 import { EmojiPickerElementProps } from "../types";
@@ -28,7 +30,18 @@ export type MessageInputProps = CommonMessageInputProps & {
   onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
   /** Callback to handle an event when the key is pressed in textarea. */
   onKeyPress?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
-};
+} & Omit<
+    DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>,
+    | "className"
+    | "data-testid"
+    | "disabled"
+    | "onChange"
+    | "onKeyPress"
+    | "placeholder"
+    | "ref"
+    | "rows"
+    | "value"
+  >;
 
 /**
  * Allows users to compose messages using text and emojis
@@ -48,6 +61,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     theme,
     startTypingIndicator,
     stopTypingIndicator,
+    fileUpload,
+    sendButton,
+    hideSendButton,
+    ...otherTextAreaProps
   } = useMessageInputCore(props);
 
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
@@ -158,10 +175,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         ) : (
           <>
             <button aria-label={addTitle} title={addTitle} onClick={() => fileRef.current.click()}>
-              {props.fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
+              {fileUpload === "image" ? <ImageIcon /> : <FileIcon />}
             </button>
             <input
-              accept={props.fileUpload === "image" ? "image/*" : "*"}
+              accept={fileUpload === "image" ? "image/*" : "*"}
               className="pn-msg-input__fileInput"
               data-testid="file-upload"
               id="file-upload"
@@ -201,7 +218,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       <div className="pn-msg-input__emoji-toggle">
         {!props.disabled && props.emojiPicker && renderEmojiPicker()}
       </div>
-      {!props.disabled && props.fileUpload && renderFileUpload()}
+      {!props.disabled && fileUpload && renderFileUpload()}
       {props.extraActionsRenderer && props.extraActionsRenderer()}
     </div>
   );
@@ -215,6 +232,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       <div className="pn-msg-input__wrapper">
         {!props.actionsAfterInput && renderActions()}
         <textarea
+          {...otherTextAreaProps}
           className="pn-msg-input__textarea"
           data-testid="message-input"
           disabled={props.disabled || !!file}
@@ -226,7 +244,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           value={text}
         />
         {props.actionsAfterInput && renderActions()}
-        {!props.hideSendButton && !props.disabled && (
+        {!hideSendButton && !props.disabled && (
           <button
             className={`pn-msg-input__send ${isValidInputText() && "pn-msg-input__send--active"}`}
             disabled={loader || props.disabled}
@@ -234,7 +252,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
             aria-label="Send"
             title="Send"
           >
-            {loader ? <SpinnerIcon /> : props.sendButton}
+            {loader ? <SpinnerIcon /> : sendButton}
           </button>
         )}
       </div>

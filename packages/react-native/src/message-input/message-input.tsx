@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { View, Image, TouchableOpacity, TextInput, Animated } from "react-native";
+import { View, Image, TouchableOpacity, TextInput, Animated, TextInputProps } from "react-native";
 import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
 import { getDocumentAsync } from "expo-document-picker";
 import { useStyle, useRotation } from "../helpers";
@@ -12,6 +12,8 @@ import ImageIcon from "../icons/image.png";
 import XCircleIcon from "../icons/x-circle.png";
 import * as ImagePicker from "expo-image-picker";
 import { FileModal } from "./file-modal";
+import { NativeSyntheticEvent } from "react-native/Libraries/Types/CoreEventTypes";
+import { TextInputKeyPressEventData } from "react-native/Libraries/Components/TextInput/TextInput";
 
 export type MessageInputProps = CommonMessageInputProps & {
   /** Options to provide custom StyleSheet for the component. It will be merged with the default styles. */
@@ -23,7 +25,19 @@ export type MessageInputProps = CommonMessageInputProps & {
     setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   }) => JSX.Element;
   onChange?: (newText: string) => void;
-};
+  sendMessageOnSubmitEditing?: boolean;
+} & Omit<
+    TextInputProps,
+    | "testID"
+    | "autoComplete"
+    | "multiline"
+    | "onChangeText"
+    | "placeholder"
+    | "style"
+    | "placeholderTextColor"
+    | "editable"
+    | "value"
+  >;
 
 /**
  * Allows users to compose messages using text and emojis
@@ -42,6 +56,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     file,
     setText,
     onError,
+    ...otherTextInputProps
   } = useMessageInputCore(props);
   const style = useStyle<MessageInputStyle>({
     theme,
@@ -117,6 +132,14 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       setText(newText);
     } catch (e) {
       onError(e);
+    }
+  };
+
+  const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+    props.onKeyPress && props.onKeyPress(e);
+
+    if (e.nativeEvent.key == "Enter" && props.sendMessageOnSubmitEditing) {
+      sendMessage();
     }
   };
 
@@ -202,6 +225,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       {renderFileModal()}
       {!props.actionsAfterInput && renderActions()}
       <TextInput
+        {...otherTextInputProps}
         testID="message-input"
         autoComplete="off"
         multiline={true}
@@ -211,6 +235,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         placeholderTextColor={style.messageInputPlaceholder.color}
         editable={!props.disabled && file == null}
         value={text}
+        onKeyPress={handleKeyPress}
       />
       {props.actionsAfterInput && renderActions()}
       {!props.disabled && (
