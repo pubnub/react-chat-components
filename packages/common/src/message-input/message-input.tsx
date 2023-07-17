@@ -42,10 +42,12 @@ export interface CommonMessageInputProps {
  * Allows users to compose messages using text and emojis
  * and automatically publish them on PubNub channels upon sending.
  */
-export const useMessageInputCore = (props: CommonMessageInputProps) => {
+export const useMessageInputCore = <T extends CommonMessageInputProps>(props: T) => {
   const pubnub = usePubNub();
 
-  const [text, setText] = useState(props.draftMessage || "");
+  const { draftMessage, senderInfo, onSend, onBeforeSend, typingIndicator, ...inputProps } = props;
+
+  const [text, setText] = useState(draftMessage || "");
   const [file, setFile] = useState<File | UriFileInput>(null);
   const [typingIndicatorSent, setTypingIndicatorSent] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -75,21 +77,21 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
         id: uuid.v4(),
         text: file ? "" : text,
         type: file ? "" : "default",
-        ...(props.senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
+        ...(senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
         createdAt: new Date().toISOString(),
       } as MessagePayload;
       setLoader(true);
 
       if (file) {
         await pubnub.sendFile({ channel, file, message });
-        props.onSend && props.onSend(file);
+        onSend && onSend(file);
       } else if (text) {
-        if (props.onBeforeSend) message = props.onBeforeSend(message) || message;
+        if (onBeforeSend) message = onBeforeSend(message) || message;
         await pubnub.publish({ channel, message });
-        props.onSend && props.onSend(message);
+        onSend && onSend(message);
       }
 
-      if (props.typingIndicator) stopTypingIndicator();
+      if (typingIndicator) stopTypingIndicator();
       clearInput();
     } catch (e) {
       onError(e);
@@ -153,5 +155,6 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
     theme,
     startTypingIndicator,
     stopTypingIndicator,
+    ...inputProps,
   };
 };
