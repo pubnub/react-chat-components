@@ -247,10 +247,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         {props.actionsAfterInput && renderActions()}
         {!hideSendButton && !props.disabled && (
           <button
+            aria-label="Send"
             className={`pn-msg-input__send ${isValidInputText() && "pn-msg-input__send--active"}`}
             disabled={loader || props.disabled}
             onClick={handleSendClick}
-            aria-label="Send"
             title="Send"
           >
             {loader ? <SpinnerIcon /> : sendButton}
