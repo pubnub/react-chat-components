@@ -142,6 +142,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         if (!("native" in emoji)) return;
         setText((text) => text + emoji.native);
         setEmojiPickerShown(false);
+        if (fileRef.current) inputRef.current.focus();
       } catch (e) {
         onError(e);
       }
