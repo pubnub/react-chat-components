@@ -1,12 +1,21 @@
 ---
 name: pubnub-react-chat-components
-version: v0.28.0
+version: v0.29.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-07-17
+    version: v0.29.0
+    changes:
+      - type: feature
+        text: "MessageInput - allow passing default input field attributes."
+      - type: feature
+        text: "MessageInput - new sendMessageOnSubmitEditing option in React Native."
+      - type: feature
+        text: "MessageInput - focus on the field after selecting emoji in React."
   - date: 2023-06-27
     version: v0.28.0
     changes:
