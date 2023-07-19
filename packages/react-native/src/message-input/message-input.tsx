@@ -45,6 +45,25 @@ export type MessageInputProps = CommonMessageInputProps & {
  */
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
   const {
+    actionsAfterInput,
+    disabled,
+    draftMessage,
+    extraActionsRenderer,
+    fileModalRenderer,
+    fileUpload,
+    onBeforeSend,
+    onChange,
+    onKeyPress,
+    onSend,
+    placeholder,
+    sendButton,
+    sendMessageOnSubmitEditing,
+    senderInfo,
+    typingIndicator,
+    ...otherTextInputProps
+  } = props;
+
+  const {
     startTypingIndicator,
     stopTypingIndicator,
     isValidInputText,
@@ -56,8 +75,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     file,
     setText,
     onError,
-    ...otherTextInputProps
-  } = useMessageInputCore(props);
+  } = useMessageInputCore({ draftMessage, senderInfo, onSend, onBeforeSend, typingIndicator });
+
   const style = useStyle<MessageInputStyle>({
     theme,
     createDefaultStyle,
@@ -125,10 +144,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const handleInputChange = (newText: string) => {
     try {
-      if (props.typingIndicator) {
+      if (typingIndicator) {
         newText.length ? startTypingIndicator() : stopTypingIndicator();
       }
-      props.onChange && props.onChange(newText);
+      onChange && onChange(newText);
       setText(newText);
     } catch (e) {
       onError(e);
@@ -136,9 +155,9 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   const handleKeyPress = (e: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
-    props.onKeyPress && props.onKeyPress(e);
+    onKeyPress && onKeyPress(e);
 
-    if (e.nativeEvent.key == "Enter" && props.sendMessageOnSubmitEditing) {
+    if (e.nativeEvent.key == "Enter" && sendMessageOnSubmitEditing) {
       sendMessage();
     }
   };
@@ -150,8 +169,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderSendButton = () => {
     return (
       <TouchableOpacity onPress={sendMessage} testID="message-input-send">
-        {props.sendButton ? (
-          props.sendButton
+        {sendButton ? (
+          sendButton
         ) : isValidInputText() ? (
           <Image style={style.icon} source={{ uri: AirplaneActiveIcon }} />
         ) : (
@@ -171,7 +190,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         ) : (
           <View>
             <>
-              {props.fileUpload === "image" ? (
+              {fileUpload === "image" ? (
                 <TouchableOpacity
                   style={style.messageInputFileLabel}
                   onPress={pickPhoto}
@@ -196,8 +215,8 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   };
 
   const renderFileModal = () => {
-    if (props.fileModalRenderer) {
-      return props.fileModalRenderer({ pickDocument, pickPhoto, modalVisible, setModalVisible });
+    if (fileModalRenderer) {
+      return fileModalRenderer({ pickDocument, pickPhoto, modalVisible, setModalVisible });
     }
 
     return (
@@ -213,32 +232,30 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const renderActions = () => (
     <>
-      {!props.disabled && props.fileUpload && renderFileUpload()}
-      {props.extraActionsRenderer && (
-        <View style={style.extraActions}>{props.extraActionsRenderer()}</View>
-      )}
+      {!disabled && fileUpload && renderFileUpload()}
+      {extraActionsRenderer && <View style={style.extraActions}>{extraActionsRenderer()}</View>}
     </>
   );
 
   return (
     <View style={style.messageInputWrapper}>
       {renderFileModal()}
-      {!props.actionsAfterInput && renderActions()}
+      {!actionsAfterInput && renderActions()}
       <TextInput
         {...otherTextInputProps}
         testID="message-input"
         autoComplete="off"
         multiline={true}
         onChangeText={handleInputChange}
-        placeholder={props.placeholder}
+        placeholder={placeholder}
         style={style.messageInput}
         placeholderTextColor={style.messageInputPlaceholder.color}
-        editable={!props.disabled && file == null}
+        editable={!disabled && file == null}
         value={text}
         onKeyPress={handleKeyPress}
       />
-      {props.actionsAfterInput && renderActions()}
-      {!props.disabled && (
+      {actionsAfterInput && renderActions()}
+      {!disabled && (
         <View style={style.sendButton}>
           {loader ? (
             <Animated.Image

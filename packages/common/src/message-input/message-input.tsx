@@ -42,10 +42,9 @@ export interface CommonMessageInputProps {
  * Allows users to compose messages using text and emojis
  * and automatically publish them on PubNub channels upon sending.
  */
-export const useMessageInputCore = <T extends CommonMessageInputProps>(props: T) => {
+export const useMessageInputCore = (props: CommonMessageInputProps) => {
   const pubnub = usePubNub();
-
-  const { draftMessage, senderInfo, onSend, onBeforeSend, typingIndicator, ...inputProps } = props;
+  const { draftMessage, senderInfo, onSend, onBeforeSend, typingIndicator } = props;
 
   const [text, setText] = useState(draftMessage || "");
   const [file, setFile] = useState<File | UriFileInput>(null);
@@ -155,6 +154,5 @@ export const useMessageInputCore = <T extends CommonMessageInputProps>(props: T)
     theme,
     startTypingIndicator,
     stopTypingIndicator,
-    ...inputProps,
   };
 };
