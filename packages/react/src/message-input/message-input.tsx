@@ -49,6 +49,25 @@ export type MessageInputProps = CommonMessageInputProps & {
  */
 export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) => {
   const {
+    actionsAfterInput,
+    disabled,
+    draftMessage,
+    emojiPicker,
+    extraActionsRenderer,
+    fileUpload,
+    hideSendButton,
+    onBeforeSend,
+    onChange,
+    onKeyPress,
+    onSend,
+    placeholder,
+    sendButton,
+    senderInfo,
+    typingIndicator,
+    ...otherTextAreaProps
+  } = props;
+
+  const {
     clearInput,
     file,
     setFile,
@@ -61,11 +80,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     theme,
     startTypingIndicator,
     stopTypingIndicator,
-    fileUpload,
-    sendButton,
-    hideSendButton,
-    ...otherTextAreaProps
-  } = useMessageInputCore(props);
+  } = useMessageInputCore({ draftMessage, senderInfo, onSend, onBeforeSend, typingIndicator });
 
   const [emojiPickerShown, setEmojiPickerShown] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -98,10 +113,10 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const handleInputChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     try {
       const { value: newText } = event.target;
-      if (props.typingIndicator) {
+      if (typingIndicator) {
         newText.length ? startTypingIndicator() : stopTypingIndicator();
       }
-      props.onChange && props.onChange(event);
+      onChange && onChange(event);
       setText(newText);
     } catch (e) {
       onError(e);
@@ -115,7 +130,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         sendMessage();
         if (fileRef.current) fileRef.current.value = "";
       }
-      props.onKeyPress && props.onKeyPress(event);
+      onKeyPress && onKeyPress(event);
     } catch (e) {
       onError(e);
     }
@@ -142,7 +157,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
         if (!("native" in emoji)) return;
         setText((text) => text + emoji.native);
         setEmojiPickerShown(false);
-        if (fileRef.current) inputRef.current.focus();
+        if (inputRef.current) inputRef.current.focus();
       } catch (e) {
         onError(e);
       }
@@ -205,9 +220,9 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
           <div
             className="pn-msg-input__emoji-picker"
             ref={pickerRef}
-            style={props.actionsAfterInput ? { left: "unset" } : { right: "unset" }}
+            style={actionsAfterInput ? { left: "unset" } : { right: "unset" }}
           >
-            {React.cloneElement(props.emojiPicker, { onEmojiSelect: handleEmojiInsertion })}
+            {React.cloneElement(emojiPicker, { onEmojiSelect: handleEmojiInsertion })}
           </div>
         )}
       </>
@@ -217,39 +232,37 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
   const renderActions = () => (
     <div className="pn-msg-input__icons">
       <div className="pn-msg-input__emoji-toggle">
-        {!props.disabled && props.emojiPicker && renderEmojiPicker()}
+        {!disabled && emojiPicker && renderEmojiPicker()}
       </div>
-      {!props.disabled && fileUpload && renderFileUpload()}
-      {props.extraActionsRenderer && props.extraActionsRenderer()}
+      {!disabled && fileUpload && renderFileUpload()}
+      {extraActionsRenderer && extraActionsRenderer()}
     </div>
   );
 
   return (
     <div
-      className={`pn-msg-input pn-msg-input--${theme} ${
-        props.disabled ? "pn-msg-input--disabled" : ""
-      }`}
+      className={`pn-msg-input pn-msg-input--${theme} ${disabled ? "pn-msg-input--disabled" : ""}`}
     >
       <div className="pn-msg-input__wrapper">
-        {!props.actionsAfterInput && renderActions()}
+        {!actionsAfterInput && renderActions()}
         <textarea
           {...otherTextAreaProps}
           className="pn-msg-input__textarea"
           data-testid="message-input"
-          disabled={props.disabled || !!file}
+          disabled={disabled || !!file}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
-          placeholder={props.placeholder}
+          placeholder={placeholder}
           ref={inputRef}
           rows={1}
           value={text}
         />
-        {props.actionsAfterInput && renderActions()}
-        {!hideSendButton && !props.disabled && (
+        {actionsAfterInput && renderActions()}
+        {!hideSendButton && !disabled && (
           <button
             aria-label="Send"
             className={`pn-msg-input__send ${isValidInputText() && "pn-msg-input__send--active"}`}
-            disabled={loader || props.disabled}
+            disabled={loader || disabled}
             onClick={handleSendClick}
             title="Send"
           >
