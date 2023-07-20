@@ -1,12 +1,19 @@
 ---
 name: pubnub-react-chat-components
-version: v0.29.0
+version: v0.30.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-07-20
+    version: v0.30.0
+    changes:
+      - type: bug
+        text: "Focusing on EmojiInput after selecting emoji only worked in certain cases."
+      - type: bug
+        text: "Console warnings about unknown attributes in MessageInput."
   - date: 2023-07-17
     version: v0.29.0
     changes:
