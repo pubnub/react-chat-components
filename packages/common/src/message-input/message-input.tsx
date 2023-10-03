@@ -36,6 +36,8 @@ export interface CommonMessageInputProps {
   onSend?: (value: MessagePayload | File | UriFileInput) => void;
   /** Option to provide an extra actions renderer to add custom action buttons to the input. */
   extraActionsRenderer?: () => JSX.Element;
+  /** Callback to render custom file preview JSX Element */
+  filePreviewRenderer?: (file: File | UriFileInput) => JSX.Element | null;
 }
 
 /**
@@ -74,7 +76,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       if (!file && !isValidInputText()) return;
       let message = {
         id: uuid.v4(),
-        text: file ? "" : text,
+        text,
         type: file ? "" : "default",
         ...(senderInfo && { sender: users.find((u) => u.id === pubnub.getUUID()) }),
         createdAt: new Date().toISOString(),

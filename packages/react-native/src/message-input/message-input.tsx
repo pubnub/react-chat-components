@@ -1,5 +1,13 @@
 import React, { FC, useState } from "react";
-import { View, Image, TouchableOpacity, TextInput, Animated, TextInputProps } from "react-native";
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  TextInput,
+  Animated,
+  TextInputProps,
+  Text,
+} from "react-native";
 import { CommonMessageInputProps, useMessageInputCore } from "@pubnub/common-chat-components";
 import { getDocumentAsync } from "expo-document-picker";
 import { useStyle, useRotation } from "../helpers";
@@ -60,6 +68,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     sendMessageOnSubmitEditing,
     senderInfo,
     typingIndicator,
+    filePreviewRenderer,
     ...otherTextInputProps
   } = props;
 
@@ -114,7 +123,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       const fileName =
         asset.fileName || asset.uri.substring(asset.uri.lastIndexOf("/") + 1, asset.uri.length);
       setFile({ mimeType: "image/*", name: fileName, uri: asset.uri });
-      setText(fileName);
     } catch (e) {
       onError(e);
     }
@@ -131,7 +139,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       }
       setModalVisible(false);
       setFile({ mimeType: result.mimeType, name: result.name, uri: result.uri });
-      setText(result.name);
     } catch (e) {
       onError(e);
     }
@@ -237,36 +244,55 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     </>
   );
 
+  const renderFilePreview = () => {
+    if (filePreviewRenderer) {
+      return filePreviewRenderer(file);
+    }
+
+    if (!file) {
+      return null;
+    }
+
+    return (
+      <View style={style.filePreviewContainer}>
+        <Text>{file.name}</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={style.messageInputWrapper}>
-      {renderFileModal()}
-      {!actionsAfterInput && renderActions()}
-      <TextInput
-        {...otherTextInputProps}
-        testID="message-input"
-        autoComplete="off"
-        multiline={true}
-        onChangeText={handleInputChange}
-        placeholder={placeholder}
-        style={style.messageInput}
-        placeholderTextColor={style.messageInputPlaceholder.color}
-        editable={!disabled && file == null}
-        value={text}
-        onKeyPress={handleKeyPress}
-      />
-      {actionsAfterInput && renderActions()}
-      {!disabled && (
-        <View style={style.sendButton}>
-          {loader ? (
-            <Animated.Image
-              style={[style.icon, { transform: [{ rotate }] }]}
-              source={{ uri: SpinnerIcon }}
-            />
-          ) : (
-            renderSendButton()
-          )}
-        </View>
-      )}
+      {renderFilePreview()}
+      <View style={style.messageInputContent}>
+        {renderFileModal()}
+        {!actionsAfterInput && renderActions()}
+        <TextInput
+          {...otherTextInputProps}
+          testID="message-input"
+          autoComplete="off"
+          multiline={true}
+          onChangeText={handleInputChange}
+          placeholder={placeholder}
+          style={style.messageInput}
+          placeholderTextColor={style.messageInputPlaceholder.color}
+          editable={!disabled}
+          value={text}
+          onKeyPress={handleKeyPress}
+        />
+        {actionsAfterInput && renderActions()}
+        {!disabled && (
+          <View style={style.sendButton}>
+            {loader ? (
+              <Animated.Image
+                style={[style.icon, { transform: [{ rotate }] }]}
+                source={{ uri: SpinnerIcon }}
+              />
+            ) : (
+              renderSendButton()
+            )}
+          </View>
+        )}
+      </View>
     </View>
   );
 };

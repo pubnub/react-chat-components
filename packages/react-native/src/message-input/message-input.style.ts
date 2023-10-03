@@ -25,6 +25,7 @@ const darkColors = {
 
 export interface MessageInputStyle {
   messageInputWrapper?: ViewStyle;
+  messageInputContent?: ViewStyle;
   messageInput?: ViewStyle;
   messageInputPlaceholder?: TextStyle;
   messageInputFileLabel?: ViewStyle;
@@ -43,6 +44,7 @@ export interface MessageInputStyle {
   fileUploadModalSheetContentButton?: ViewStyle;
   fileUploadModalSheetContentButtonIcon?: ImageStyle;
   fileUploadModalSheetContentTextStyle?: ViewStyle;
+  filePreviewContainer?: ViewStyle;
 }
 
 export default (theme: Themes): MessageInputStyle => {
@@ -53,6 +55,9 @@ export default (theme: Themes): MessageInputStyle => {
       backgroundColor: colors.wrapperBackground,
       paddingHorizontal: 8,
       paddingVertical: 10,
+      flexDirection: "column",
+    },
+    messageInputContent: {
       flexDirection: "row",
       alignItems: "center",
     },
@@ -142,6 +147,9 @@ export default (theme: Themes): MessageInputStyle => {
       color: colors.actionsSheetLabelColor,
       fontSize: 16,
       lineHeight: 24,
+    },
+    filePreviewContainer: {
+      marginBottom: 8,
     },
   });
 };
