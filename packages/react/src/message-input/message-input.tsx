@@ -141,7 +141,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     try {
       const file = event.target.files[0];
       setFile(file);
-      // setText(file.name);
     } catch (e) {
       onError(e);
     }
