@@ -167,7 +167,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const handleRemoveFile = () => {
     autoSize();
-    clearInput();
+    setFile(null);
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -248,7 +248,11 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
       return null;
     }
 
-    return <div className="pn-msg-input__file-preview-container">{file.name}</div>;
+    return (
+      <div className="pn-msg-input__file-preview-container" data-testid="file-preview-container">
+        {file.name}
+      </div>
+    );
   };
 
   return (

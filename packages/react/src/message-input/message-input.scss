@@ -46,6 +46,8 @@
   --msg-input__textarea__resize: none;
   --msg-input__textarea__width: 100%;
   --msg-input__textarea__overflow: hidden;
+  --msg__preview__color: var(--chat--light__color--1);
+  --msg__preview__fontSize: 14px;
 }
 
 /* ************************
@@ -112,6 +114,8 @@
 
   &__file-preview-container {
     margin: var(--msg-input__file-preview-container__margin);
+    color: var(--msg__preview__color);
+    font-size: var(--msg__preview__fontSize);
   }
 
   &__emoji-picker {
@@ -173,4 +177,5 @@
   --msg-input__textarea__background: var(--chat--dark__background--2);
   --msg-input--disabled__textarea__background: rgba(var(--chat--dark__background--2-rgb), 0.5);
   --msg-input__textarea__color: var(--chat--dark__color--1);
+  --msg__preview__color: var(--chat--dark__color--1);
 }

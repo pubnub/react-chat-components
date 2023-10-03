@@ -146,7 +146,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const handleRemoveFile = () => {
     setFile(null);
-    setText("");
   };
 
   const handleInputChange = (newText: string) => {
@@ -255,7 +254,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
     return (
       <View style={style.filePreviewContainer}>
-        <Text>{file.name}</Text>
+        <Text style={style.filePreviewText}>{file.name}</Text>
       </View>
     );
   };

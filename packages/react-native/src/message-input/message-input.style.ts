@@ -10,6 +10,7 @@ const lightColors = {
   actionsSheetButtonIconTint: "#1F2937",
   actionsSheetLabelColor: "#1F2937",
   sheetContentHeaderText: "#000000",
+  messagePreview: "#585858",
 };
 
 const darkColors = {
@@ -21,6 +22,7 @@ const darkColors = {
   actionsSheetButtonIconTint: "#e4e5e5",
   actionsSheetLabelColor: "#e7eaec",
   sheetContentHeaderText: "#ffffff",
+  messagePreview: "rgba(228, 228, 235, 0.8)",
 };
 
 export interface MessageInputStyle {
@@ -45,6 +47,7 @@ export interface MessageInputStyle {
   fileUploadModalSheetContentButtonIcon?: ImageStyle;
   fileUploadModalSheetContentTextStyle?: ViewStyle;
   filePreviewContainer?: ViewStyle;
+  filePreviewText?: TextStyle;
 }
 
 export default (theme: Themes): MessageInputStyle => {
@@ -150,6 +153,10 @@ export default (theme: Themes): MessageInputStyle => {
     },
     filePreviewContainer: {
       marginBottom: 8,
+    },
+    filePreviewText: {
+      color: colors.messagePreview,
+      fontSize: 14,
     },
   });
 };
