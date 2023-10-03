@@ -15,7 +15,6 @@ import {
   ListRenderItem,
   NativeScrollEvent,
   NativeSyntheticEvent,
-  Platform,
   Pressable,
   StyleSheet,
   Text,
@@ -36,9 +35,6 @@ import { EmojiPickerElementProps } from "../types";
 import { useStyle, useRotation } from "../helpers";
 import SpinnerIcon from "../icons/spinner.png";
 import { RemoteFile } from "./remote-file";
-import { doAndroidHackWorkaround } from "./android-hack-workaround";
-
-doAndroidHackWorkaround();
 
 export type MessageListProps = CommonMessageListProps & {
   /** Option to pass in a component that will be used for picking message reactions. For more details, refer to the Message Reactions section in the docs. */
@@ -92,7 +88,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const [spinnerShown, setSpinnerShown] = useState(false);
   const [sheetPosition] = useState(new Animated.Value(0));
   const shouldShownSpinner = props.fetchMessages && !paginationEnd;
-  const isAndroid = Platform.OS === "android";
 
   const rotate = useRotation(shouldShownSpinner && spinnerShown);
   const listRef = useRef<FlatList>(null);
@@ -178,8 +173,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const renderItem: ListRenderItem<MessageEnvelope> = ({ item }) => {
     const envelope = item;
     if (envelope.timetoken === "spinner-element") return renderSpinner();
-    if (envelope.timetoken === "children-element")
-      return <View style={isAndroid && { scaleY: -1 }}>{props.children}</View>;
+    if (envelope.timetoken === "children-element") return <View>{props.children}</View>;
     const uuid = envelope.uuid || envelope.publisher || "";
     const actions = envelope.actions;
     const deleted = !!Object.keys(actions?.deleted || {}).length;
@@ -193,7 +187,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
           style.message,
           props.enableReactions && pressed && style.messagePressed,
           isOwn && style.messageOwn,
-          isAndroid && { scaleY: -1 },
         ]}
         onLongPress={() => handleOpenReactions(envelope.timetoken)}
       >
@@ -315,7 +308,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       )}
       <FlatList
         testID="message-list"
-        style={[style.messageList, isAndroid && { scaleY: -1 }]}
+        style={style.messageList}
         contentContainerStyle={style.messageListScroller}
         data={[
           { timetoken: "children-element", message: { id: "children-element" } },
@@ -327,8 +320,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         ref={listRef}
         onEndReached={() => fetchHistory()}
         onScroll={handleScroll}
-        // Workaround for: https://github.com/facebook/react-native/issues/30034
-        inverted={!isAndroid}
+        inverted={true}
         onViewableItemsChanged={onViewableItemsChanged}
       />
       {props.reactionsPicker &&

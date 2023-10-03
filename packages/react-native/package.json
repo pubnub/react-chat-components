@@ -59,7 +59,7 @@
     "pubnub-react": "3.0.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-native": "0.71.6",
+    "react-native": "0.72.4",
     "react-test-renderer": "18.2.0",
     "rollup": "2.79.0",
     "rollup-plugin-peer-deps-external": "2.2.4",
