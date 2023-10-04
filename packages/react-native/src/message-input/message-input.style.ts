@@ -153,6 +153,7 @@ export default (theme: Themes): MessageInputStyle => {
     },
     filePreviewContainer: {
       marginBottom: 8,
+      marginLeft: 10,
     },
     filePreviewText: {
       color: colors.messagePreview,
