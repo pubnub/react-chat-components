@@ -10,6 +10,7 @@ const lightColors = {
   actionsSheetButtonIconTint: "#1F2937",
   actionsSheetLabelColor: "#1F2937",
   sheetContentHeaderText: "#000000",
+  messagePreview: "#585858",
 };
 
 const darkColors = {
@@ -21,10 +22,12 @@ const darkColors = {
   actionsSheetButtonIconTint: "#e4e5e5",
   actionsSheetLabelColor: "#e7eaec",
   sheetContentHeaderText: "#ffffff",
+  messagePreview: "rgba(228, 228, 235, 0.8)",
 };
 
 export interface MessageInputStyle {
   messageInputWrapper?: ViewStyle;
+  messageInputContent?: ViewStyle;
   messageInput?: ViewStyle;
   messageInputPlaceholder?: TextStyle;
   messageInputFileLabel?: ViewStyle;
@@ -43,6 +46,8 @@ export interface MessageInputStyle {
   fileUploadModalSheetContentButton?: ViewStyle;
   fileUploadModalSheetContentButtonIcon?: ImageStyle;
   fileUploadModalSheetContentTextStyle?: ViewStyle;
+  filePreviewContainer?: ViewStyle;
+  filePreviewText?: TextStyle;
 }
 
 export default (theme: Themes): MessageInputStyle => {
@@ -53,6 +58,9 @@ export default (theme: Themes): MessageInputStyle => {
       backgroundColor: colors.wrapperBackground,
       paddingHorizontal: 8,
       paddingVertical: 10,
+      flexDirection: "column",
+    },
+    messageInputContent: {
       flexDirection: "row",
       alignItems: "center",
     },
@@ -142,6 +150,14 @@ export default (theme: Themes): MessageInputStyle => {
       color: colors.actionsSheetLabelColor,
       fontSize: 16,
       lineHeight: 24,
+    },
+    filePreviewContainer: {
+      marginBottom: 8,
+      marginLeft: 10,
+    },
+    filePreviewText: {
+      color: colors.messagePreview,
+      fontSize: 14,
     },
   });
 };

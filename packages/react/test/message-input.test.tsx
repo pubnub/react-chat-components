@@ -192,7 +192,11 @@ describe("Message Input", () => {
 
     expect(fileInput.files[0]).toBe(file);
     expect(fileInput.files).toHaveLength(1);
-    expect(input).toHaveValue("hello.png");
+    expect(input).toHaveValue("");
+
+    const filePreviewContainer = screen.getByTestId("file-preview-container") as HTMLDivElement;
+
+    expect(filePreviewContainer.innerHTML).toBe("hello.png");
   });
 
   test("clears the file", async () => {
@@ -205,6 +209,9 @@ describe("Message Input", () => {
     await userEvent.click(screen.getByTitle("Remove the file"));
 
     expect(input).toHaveValue("");
+    const filePreviewContainer = screen.queryByTestId("file-preview-container") as HTMLDivElement;
+
+    expect(filePreviewContainer).toBeNull();
   });
 
   test("sends the file", async () => {
