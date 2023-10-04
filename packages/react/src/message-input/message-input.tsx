@@ -64,6 +64,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     sendButton,
     senderInfo,
     typingIndicator,
+    filePreviewRenderer,
     ...otherTextAreaProps
   } = props;
 
@@ -140,7 +141,6 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     try {
       const file = event.target.files[0];
       setFile(file);
-      setText(file.name);
     } catch (e) {
       onError(e);
     }
@@ -167,7 +167,7 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
 
   const handleRemoveFile = () => {
     autoSize();
-    clearInput();
+    setFile(null);
     if (fileRef.current) fileRef.current.value = "";
   };
 
@@ -239,17 +239,34 @@ export const MessageInput: FC<MessageInputProps> = (props: MessageInputProps) =>
     </div>
   );
 
+  const renderFilePreview = () => {
+    if (filePreviewRenderer) {
+      return filePreviewRenderer(file);
+    }
+
+    if (!file) {
+      return null;
+    }
+
+    return (
+      <div className="pn-msg-input__file-preview-container" data-testid="file-preview-container">
+        {file.name}
+      </div>
+    );
+  };
+
   return (
     <div
       className={`pn-msg-input pn-msg-input--${theme} ${disabled ? "pn-msg-input--disabled" : ""}`}
     >
+      {renderFilePreview()}
       <div className="pn-msg-input__wrapper">
         {!actionsAfterInput && renderActions()}
         <textarea
           {...otherTextAreaProps}
           className="pn-msg-input__textarea"
           data-testid="message-input"
-          disabled={disabled || !!file}
+          disabled={disabled}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           placeholder={placeholder}
