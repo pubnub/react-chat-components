@@ -17,7 +17,7 @@ defaults:
 jobs:
   tests:
     name: Run builtin test cases
-    runs-on: ubuntu-latest
+    runs-on: macos-13
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
