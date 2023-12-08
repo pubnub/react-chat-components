@@ -4,7 +4,7 @@ import { usePubNub } from "pubnub-react";
 import { cloneDeep } from "lodash";
 
 type ChannelsOccupancy = HereNowResponse["channels"];
-type HookReturnValue = [ChannelsOccupancy, () => void, number, Error];
+type HookReturnValue = [ChannelsOccupancy, () => void, number, Error, boolean];
 
 export const usePresence = (options: HereNowParameters = {}): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
@@ -97,5 +97,5 @@ export const usePresence = (options: HereNowParameters = {}): HookReturnValue =>
     };
   }, [pubnub, options.includeUUIDs]);
 
-  return [presence, resetHook, total, error];
+  return [presence, resetHook, total, error, doFetch];
 };

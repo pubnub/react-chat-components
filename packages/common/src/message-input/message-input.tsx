@@ -84,6 +84,7 @@ export const useMessageInputCore = (props: CommonMessageInputProps) => {
       setLoader(true);
 
       if (file) {
+        console.log("file", file);
         await pubnub.sendFile({ channel, file, message });
         onSend && onSend(file);
       } else if (text) {

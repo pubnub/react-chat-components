@@ -4,7 +4,7 @@ import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { ChannelEntity } from "../types";
 
-type HookReturnValue = [ChannelEntity[], () => void, number, Error];
+type HookReturnValue = [ChannelEntity[], () => void, number, Error, boolean];
 
 export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
@@ -79,5 +79,5 @@ export const useChannels = (options: GetAllMetadataParameters = {}): HookReturnV
     };
   }, [pubnub]);
 
-  return [channels, fetchMoreChannels, totalCount, error];
+  return [channels, fetchMoreChannels, totalCount, error, doFetch];
 };

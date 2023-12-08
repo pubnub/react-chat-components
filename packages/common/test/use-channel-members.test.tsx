@@ -5,6 +5,7 @@ import { PubNubProvider } from "pubnub-react";
 import { useChannelMembers } from "../src/hooks";
 import { PubNubMock } from "../mock/pubnub-mock";
 import users from "../../../data/users/users.json";
+import { expect } from "@playwright/test";
 
 const pubnub = new PubNubMock({});
 const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;
@@ -14,14 +15,16 @@ describe("useChannelMembers", () => {
     const { result } = renderHook(() => useChannelMembers({ channel: "test-channel" }), {
       wrapper,
     });
+    expect(result.current[5]).toBe(true);
 
     await waitFor(() => {
-      const [receivedMembers, fetchMore, resetHook, total, error] = result.current;
+      const [receivedMembers, fetchMore, resetHook, total, error, loading] = result.current;
       expect(receivedMembers).toHaveLength(users.length);
       expect(typeof fetchMore).toEqual("function");
       expect(typeof resetHook).toEqual("function");
       expect(total).toEqual(users.length);
       expect(error).toEqual(undefined);
+      expect(loading).toBe(false);
     });
   });
 

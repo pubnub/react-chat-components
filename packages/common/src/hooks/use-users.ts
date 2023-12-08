@@ -4,7 +4,7 @@ import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
-type HookReturnValue = [UserEntity[], () => void, number, Error];
+type HookReturnValue = [UserEntity[], () => void, number, Error, boolean];
 
 export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValue => {
   const pubnub = usePubNub();
@@ -79,5 +79,5 @@ export const useUsers = (options: GetAllMetadataParameters = {}): HookReturnValu
     };
   }, [pubnub]);
 
-  return [users, fetchMoreUsers, totalCount, error];
+  return [users, fetchMoreUsers, totalCount, error, doFetch];
 };
