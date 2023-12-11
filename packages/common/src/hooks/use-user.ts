@@ -4,7 +4,7 @@ import { usePubNub } from "pubnub-react";
 import { cloneDeep } from "lodash";
 import { UserEntity } from "../types";
 
-export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error] => {
+export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, Error, boolean] => {
   const jsonOptions = JSON.stringify(options);
 
   const pubnub = usePubNub();
@@ -68,5 +68,5 @@ export const useUser = (options: GetUUIDMetadataParameters = {}): [UserEntity, E
     };
   }, [pubnub]);
 
-  return [user, error];
+  return [user, error, doFetch];
 };

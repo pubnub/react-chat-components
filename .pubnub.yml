@@ -1,12 +1,17 @@
 ---
 name: pubnub-react-chat-components
-version: v0.32.0
+version: v0.33.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2023-12-11
+    version: v0.33.0
+    changes:
+      - type: feature
+        text: "Expose "isLoading" flags to hooks."
   - date: 2023-10-05
     version: v0.32.0
     changes:

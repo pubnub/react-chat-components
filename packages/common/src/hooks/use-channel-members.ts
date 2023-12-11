@@ -4,7 +4,7 @@ import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { UserEntityWithMembership } from "../types";
 
-type HookReturnValue = [UserEntityWithMembership[], () => void, () => void, number, Error];
+type HookReturnValue = [UserEntityWithMembership[], () => void, () => void, number, Error, boolean];
 
 export const useChannelMembers = (options: GetChannelMembersParameters): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
@@ -110,5 +110,5 @@ export const useChannelMembers = (options: GetChannelMembersParameters): HookRet
     };
   }, [pubnub, paginatedOptions.channel]);
 
-  return [members, fetchMoreMembers, resetHook, totalCount, error];
+  return [members, fetchMoreMembers, resetHook, totalCount, error, doFetch];
 };

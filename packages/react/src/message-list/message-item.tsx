@@ -43,6 +43,7 @@ export type ItemProps = Pick<
 export const MessageListItem = React.memo(Item, (prev, next) => {
   if (prev.envelope.timetoken !== next.envelope.timetoken) return false;
   if (!isEqual(prev.envelope.actions, next.envelope.actions)) return false;
+  if (!isEqual(prev.users, next.users)) return false;
   return true;
 });
 

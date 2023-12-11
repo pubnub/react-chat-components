@@ -4,7 +4,14 @@ import { usePubNub } from "pubnub-react";
 import { merge, cloneDeep } from "lodash";
 import { ChannelEntityWithMembership } from "../types";
 
-type HookReturnValue = [ChannelEntityWithMembership[], () => void, () => void, number, Error];
+type HookReturnValue = [
+  ChannelEntityWithMembership[],
+  () => void,
+  () => void,
+  number,
+  Error,
+  boolean
+];
 
 export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): HookReturnValue => {
   const jsonOptions = JSON.stringify(options);
@@ -111,5 +118,5 @@ export const useUserMemberships = (options: GetMembershipsParametersv2 = {}): Ho
     };
   }, [pubnub, paginatedOptions.uuid]);
 
-  return [channels, fetchMoreMemberships, resetHook, totalCount, error];
+  return [channels, fetchMoreMemberships, resetHook, totalCount, error, doFetch];
 };

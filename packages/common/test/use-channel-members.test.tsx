@@ -14,14 +14,16 @@ describe("useChannelMembers", () => {
     const { result } = renderHook(() => useChannelMembers({ channel: "test-channel" }), {
       wrapper,
     });
+    expect(result.current[5]).toBe(true);
 
     await waitFor(() => {
-      const [receivedMembers, fetchMore, resetHook, total, error] = result.current;
+      const [receivedMembers, fetchMore, resetHook, total, error, loading] = result.current;
       expect(receivedMembers).toHaveLength(users.length);
       expect(typeof fetchMore).toEqual("function");
       expect(typeof resetHook).toEqual("function");
       expect(total).toEqual(users.length);
       expect(error).toEqual(undefined);
+      expect(loading).toBe(false);
     });
   });
 

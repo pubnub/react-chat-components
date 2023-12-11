@@ -12,13 +12,15 @@ const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</Pu
 describe("useChannels", () => {
   test("fetches and returns the full list of channels", async () => {
     const { result } = renderHook(() => useChannels(), { wrapper });
+    expect(result.current[4]).toBe(true);
 
     await waitFor(() => {
-      const [receivedChannels, fetchMore, total, error] = result.current;
+      const [receivedChannels, fetchMore, total, error, loading] = result.current;
       expect(receivedChannels).toHaveLength(channels.length);
       expect(typeof fetchMore).toEqual("function");
       expect(total).toEqual(channels.length);
       expect(error).toEqual(undefined);
+      expect(loading).toEqual(false);
     });
   });
 
@@ -27,9 +29,10 @@ describe("useChannels", () => {
     const { result } = renderHook(() => useChannels({ limit }), { wrapper });
 
     await waitFor(() => {
-      const [receivedChannels, fetchMore, total] = result.current;
+      const [receivedChannels, fetchMore, total, , loading] = result.current;
       expect(receivedChannels).toHaveLength(limit);
       expect(total).toEqual(channels.length);
+      expect(loading).toEqual(false);
       fetchMore();
     });
 
