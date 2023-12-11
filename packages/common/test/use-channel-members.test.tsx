@@ -5,7 +5,6 @@ import { PubNubProvider } from "pubnub-react";
 import { useChannelMembers } from "../src/hooks";
 import { PubNubMock } from "../mock/pubnub-mock";
 import users from "../../../data/users/users.json";
-import { expect } from "@playwright/test";
 
 const pubnub = new PubNubMock({});
 const wrapper = ({ children }) => <PubNubProvider client={pubnub}>{children}</PubNubProvider>;
