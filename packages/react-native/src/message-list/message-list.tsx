@@ -56,20 +56,25 @@ export type MessageListProps = CommonMessageListProps & {
 export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const {
     addReaction,
+    channel,
     emojiPickerShown,
     fetchHistory,
+    fetchingMessages,
     getTime,
     getUser,
+    initMessagesLoaded,
     isOwnMessage,
     messages,
     onError,
     paginationEnd,
+    prevChannel,
     prevMessages,
     pubnub,
     reactingToMessage,
     removeReaction,
     scrolledBottom,
     setEmojiPickerShown,
+    setInitMessagesLoaded,
     setReactingToMessage,
     setScrolledBottom,
     setUnreadMessages,
@@ -88,9 +93,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   const [spinnerShown, setSpinnerShown] = useState(false);
   const [sheetPosition] = useState(new Animated.Value(0));
   const shouldShownSpinner = props.fetchMessages && !paginationEnd;
+  const currentChannelInitMessagesLoaded = initMessagesLoaded[channel];
 
   const rotate = useRotation(shouldShownSpinner && spinnerShown);
   const listRef = useRef<FlatList>(null);
+  const listHeight = useRef(0);
 
   /**
    * Commands
@@ -146,6 +153,21 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
    * Lifecycle
    */
   useEffect(() => {
+    if (!currentChannelInitMessagesLoaded && channel !== prevChannel) {
+      fetchHistory();
+    }
+  }, [
+    channel,
+    currentChannelInitMessagesLoaded,
+    fetchHistory,
+    messages.length,
+    paginationEnd,
+    pubnub,
+    prevChannel,
+    setInitMessagesLoaded,
+  ]);
+
+  useEffect(() => {
     if (!scrolledBottom) return;
     if (prevMessages.length !== messages.length) scrollToBottom();
   }, [messages.length, prevMessages.length, scrollToBottom, scrolledBottom]);
@@ -179,7 +201,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     const deleted = !!Object.keys(actions?.deleted || {}).length;
     const isOwn = isOwnMessage(uuid);
 
-    if (deleted) return;
+    if (deleted && !props.renderDeleted) return;
 
     return (
       <Pressable
@@ -309,7 +331,6 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       <FlatList
         testID="message-list"
         style={style.messageList}
-        contentContainerStyle={style.messageListScroller}
         data={[
           { timetoken: "children-element", message: { id: "children-element" } },
           ...reverseMessages,
@@ -318,10 +339,26 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
         renderItem={renderItem}
         keyExtractor={(envelope) => envelope.timetoken as string}
         ref={listRef}
-        onEndReached={() => fetchHistory()}
+        onEndReached={() => {
+          if (!fetchingMessages) fetchHistory();
+        }}
         onScroll={handleScroll}
         inverted={true}
         onViewableItemsChanged={onViewableItemsChanged}
+        onContentSizeChange={(_, contentHeight) => {
+          if (
+            contentHeight <= listHeight.current &&
+            !paginationEnd &&
+            !currentChannelInitMessagesLoaded
+          ) {
+            if (!fetchingMessages) fetchHistory();
+          } else {
+            setInitMessagesLoaded((curr) => ({ ...curr, [channel]: true }));
+          }
+        }}
+        onLayout={(ev) => {
+          listHeight.current = ev.nativeEvent.layout.height;
+        }}
       />
       {props.reactionsPicker &&
         cloneElement(props.reactionsPicker, {

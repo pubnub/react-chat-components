@@ -1,12 +1,19 @@
 ---
 name: pubnub-react-chat-components
-version: v0.33.0
+version: v0.34.0
 scm: github.com/pubnub/react-chat-components
 schema: 1
 files:
   - lib/dist/index.js
   - lib/dist/index.es.js
 changelog:
+  - date: 2024-05-16
+    version: v0.34.0
+    changes:
+      - type: feature
+        text: "Add option to render deleted messages instead of filtering them out."
+      - type: bug
+        text: "Screen might not be filled with messages on init."
   - date: 2023-12-11
     version: v0.33.0
     changes:

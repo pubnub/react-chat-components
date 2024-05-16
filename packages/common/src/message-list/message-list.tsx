@@ -40,6 +40,8 @@ export interface CommonMessageListProps {
   fileRenderer?: (file: FileAttachment) => JSX.Element;
   /** This option only works when you use either `messageRenderer` or `bubbleRenderer`. It allows you to apply one of the custom renderers only to the messages selected by the filter. */
   filter?: (message: MessageEnvelope) => boolean;
+  /** Enable this to render deleted messages instead of filtering them out. They can be then customized with one of the renderers. */
+  renderDeleted?: boolean;
 }
 
 /**
@@ -195,16 +197,6 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
   };
 
   useEffect(() => {
-    if (!pubnub || !channel) return;
-    if (channel === prevChannel) return;
-    if (!initMessagesLoaded[channel]) {
-      fetchHistory().then(() => {
-        setInitMessagesLoaded((curr) => ({ ...curr, [channel]: true }));
-      });
-    }
-  }, [channel, fetchHistory, initMessagesLoaded, messages.length, prevChannel, pubnub]);
-
-  useEffect(() => {
     if (!messages?.length || scrolledBottom) return;
     if (messages.length - prevMessages.length !== 1) return;
     if (Number(messages.slice(-1)[0]?.timetoken) > Number(prevMessages.slice(-1)[0]?.timetoken))
@@ -237,5 +229,6 @@ export const useMessageListCore = (props: CommonMessageListProps) => {
     unreadMessages,
     users,
     initMessagesLoaded,
+    setInitMessagesLoaded,
   };
 };

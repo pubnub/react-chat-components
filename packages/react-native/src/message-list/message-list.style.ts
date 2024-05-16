@@ -71,10 +71,6 @@ export default (theme: Themes): MessageListStyle => {
     messageList: {
       backgroundColor: colors.messageListBackground,
     },
-    messageListScroller: {
-      backgroundColor: colors.messageListBackground,
-      flexGrow: 1,
-    },
     message: {
       flexDirection: "row",
       paddingHorizontal: 16,

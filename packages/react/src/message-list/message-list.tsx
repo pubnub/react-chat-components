@@ -66,8 +66,11 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     unreadMessages,
     users,
     initMessagesLoaded,
+    setInitMessagesLoaded,
   } = useMessageListCore(props);
 
+  const currentChannelInitMessagesLoaded = initMessagesLoaded[channel];
+  const previousMessagesLength = usePrevious(messages.length);
   const lastMessageUniqueReactions = Object.keys(messages.slice(-1)[0]?.actions?.reaction || {});
   const prevLastMessageUniqueReactions = usePrevious(lastMessageUniqueReactions);
 
@@ -137,9 +140,40 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
    * Lifecycle
    */
   useEffect(() => {
-    if (!isSpinnerVisible || wasSpinnerVisible || !initMessagesLoaded[channel] || fetchingMessages)
-      return;
-    fetchMoreHistory();
+    const { scrollHeight, clientHeight } = listRef.current;
+    const hasScroll = scrollHeight > clientHeight;
+    if (!currentChannelInitMessagesLoaded && (paginationEnd || hasScroll))
+      setInitMessagesLoaded((curr) => ({ ...curr, [channel]: true }));
+    if (
+      pubnub &&
+      channel &&
+      !currentChannelInitMessagesLoaded &&
+      !paginationEnd &&
+      (channel !== prevChannel || (!hasScroll && messages.length !== previousMessagesLength))
+    ) {
+      fetchHistory();
+    }
+  }, [
+    channel,
+    currentChannelInitMessagesLoaded,
+    fetchHistory,
+    messages.length,
+    paginationEnd,
+    prevChannel,
+    previousMessagesLength,
+    pubnub,
+    setInitMessagesLoaded,
+  ]);
+
+  useEffect(() => {
+    if (
+      isSpinnerVisible &&
+      !wasSpinnerVisible &&
+      currentChannelInitMessagesLoaded &&
+      !fetchingMessages
+    ) {
+      fetchMoreHistory();
+    }
 
     async function fetchMoreHistory() {
       const firstMessage = listRef.current?.querySelector(".pn-msg") as HTMLDivElement;
@@ -151,8 +185,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     fetchHistory,
     isSpinnerVisible,
     wasSpinnerVisible,
-    initMessagesLoaded,
-    channel,
+    currentChannelInitMessagesLoaded,
     fetchingMessages,
   ]);
 
@@ -201,6 +234,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
       filter: props.filter,
       messageRenderer: props.messageRenderer,
       reactionsPicker: props.reactionsPicker,
+      renderDeleted: props.renderDeleted,
     },
     pubnub,
     reactingToMessage,
