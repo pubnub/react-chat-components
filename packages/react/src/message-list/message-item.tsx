@@ -36,6 +36,7 @@ export type ItemProps = Pick<
     | "filter"
     | "messageRenderer"
     | "reactionsPicker"
+    | "renderDeleted"
   >;
   scrollToBottom: () => void;
 };
@@ -72,11 +73,12 @@ function Item({
     filter,
     messageRenderer,
     reactionsPicker,
+    renderDeleted,
   } = listProps;
 
   const actions = envelope.actions;
   const deleted = !!Object.keys(actions?.deleted || {}).length;
-  if (deleted) return;
+  if (deleted && !renderDeleted) return;
   const uuid = envelope.uuid || envelope.publisher || "";
   const currentUserClass = isOwnMessage(uuid) ? "pn-msg--own" : "";
   const message = isFilePayload(envelope.message) ? envelope.message.message : envelope.message;
