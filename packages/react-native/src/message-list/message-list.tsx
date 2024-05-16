@@ -67,6 +67,7 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
     messages,
     onError,
     paginationEnd,
+    prevChannel,
     prevMessages,
     pubnub,
     reactingToMessage,
@@ -151,6 +152,21 @@ export const MessageList: FC<MessageListProps> = (props: MessageListProps) => {
   /**
    * Lifecycle
    */
+  useEffect(() => {
+    if (!currentChannelInitMessagesLoaded && channel !== prevChannel) {
+      fetchHistory();
+    }
+  }, [
+    channel,
+    currentChannelInitMessagesLoaded,
+    fetchHistory,
+    messages.length,
+    paginationEnd,
+    pubnub,
+    prevChannel,
+    setInitMessagesLoaded,
+  ]);
+
   useEffect(() => {
     if (!scrolledBottom) return;
     if (prevMessages.length !== messages.length) scrollToBottom();
