@@ -49,7 +49,8 @@ export const useMessages = (options: FetchMessagesParameters): HookReturnValue =
       setMessages((messages) => {
         const messagesClone = cloneDeep(messages);
         if (!messagesClone[message.channel]) messagesClone[message.channel] = [];
-        messagesClone[message.channel].push(message);
+        const hasMessage = messagesClone[message.channel].findIndex(m => m.timetoken === message.timetoken) > -1;
+        if (!hasMessage) messagesClone[message.channel].push(message);
         return messagesClone;
       });
     } catch (e) {
