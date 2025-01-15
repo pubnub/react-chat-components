@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "expo-document-picker": "11.2.2",
-    "expo-file-system": "15.2.2",
+    "expo-file-system": "17.0.1",
     "expo-image-picker": "14.1.1",
     "expo-media-library": "15.2.3",
     "expo-sharing": "11.2.2",
